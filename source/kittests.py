@@ -6256,6 +6256,58 @@ def smirk_one_corner():
     return ok, f"the near corner raised {lift} px over the old mood's (a smirk: 6 or more; the old mood: none)"
 
 
+@test
+def seeing_views_see_a_vanish():
+    """seeing.py (seeing-five-candidates option 1, Sam's Y 26 Nov): a made-up film paints a sorted item list (as Grand
+    Theft Autism's street does): a 'person' square walks right and vanishes mid-frame at frame 3 (GTA v5 note 5's
+    kind), a 'wall' stays. The item wrapper must record both as layers, the who-is-where events must name the
+    vanish, the movement measure must print an unexplained change at that frame, and every sheet must be saved."""
+    import tempfile
+    import types
+    import seeing as SE
+    from PIL import Image, ImageDraw
+    mod = types.ModuleType('seeing_kit_film')
+    mod.__file__ = os.path.join(HERE, 'seeing_kit_film.py')     # counts as the film's own code
+    mod.FPS = 12
+
+    def world4(t):
+        img = Image.new('RGB', (1080, 1920), (200, 220, 240))
+        i = int(round(t * 12))
+        items = [('wall', 30.0, lambda im: ImageDraw.Draw(im).rectangle((700, 600, 1000, 1400), fill=(120, 90, 70)))]
+        if i < 3:
+            x = 200 + 40 * i
+            items.append(('person 1', 10.0, lambda im, x=x: ImageDraw.Draw(im).rectangle(
+                (x, 800, x + 160, 1300), fill=(30, 30, 160))))
+        for e in mod.sorted(items, key=lambda e: -e[1]):
+            e[2](img)
+        return img
+    mod.world4 = world4
+    mod.sorted = sorted
+    mod.picture = world4
+    sys.modules['seeing_kit_film'] = mod
+    out = tempfile.mkdtemp()
+    here = os.getcwd()
+    path = list(sys.path)
+    try:
+        SE.frames(HERE, 'seeing_kit_film', 0.0, 6 / 12, out)
+    finally:
+        os.chdir(here)
+        sys.path[:] = path
+        sys.modules.pop('seeing_kit_film', None)
+    _, painted, meta = SE.load_layers(os.path.join(out, 'layers', '001.npz'))
+    names = [L['name'] for L in meta]
+    if names != ['wall', 'person 1']:
+        return False, f'layers recorded: {names} (want wall, person 1)'
+    wev = [m for t, m in SE.whereis_events(out) if 'vanished' in m]
+    mev, F = SE.motion_events(out)
+    at3 = [m for t, m in mev if abs(t - 3 / 12) < 1e-3 and 'unexplained' in m]
+    SE.views(out, ('plain', 'whereis', 'motion'))
+    sheets = [v for v in ('plain', 'whereis', 'motion') if os.path.exists(os.path.join(out, v + '.jpg'))]
+    ok = bool(wev) and bool(at3) and len(sheets) == 3
+    return ok, (f'who-is-where: {wev[:1] or "no vanish"}; movement at the vanish: {at3[:1] or "nothing"}; '
+                f'sheets {sheets}')
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
