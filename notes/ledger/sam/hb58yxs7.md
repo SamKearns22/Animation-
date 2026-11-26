@@ -22,3 +22,7 @@ Purpose: better checks. Removing dead checks. Improving ‘first time’ success
 How are you judging too small on a phone? Show me a nod that’s too small on a phone
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-26T21:58:09
+The leg gap you previously fixed is back, why
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
