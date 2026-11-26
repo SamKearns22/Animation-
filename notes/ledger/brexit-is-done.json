@@ -23396,6 +23396,8 @@
   }
  },
  "notes_tags": {
+  "25": "why: chat 38 made his trousers the jacket's colour (a suit as one cloth); the seated legs' drawing shows the lap and crotch by the trousers' different tone, so the line between the legs ran up into the jacket (castsheet crotch check: blair 0.51)",
+  "26": "why no check saw it: movesize and HEAD_MIN measure how far and how fast the eyes move, never HOW the head moves; the kit's nod (views.Rolled dy = nod x 5, plus 'down') slides the whole head down and up: a bob",
   "9": "none (a wish, not a fault)",
   "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)"
  },
@@ -23713,6 +23715,11 @@
    "date": "2026-11-26",
    "spent": 61.63,
    "forecast": 68.6
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 67.23,
+   "forecast": 74.2
   }
  ]
 }
