@@ -1,0 +1,32 @@
+== critique, round 6 pass 1 (2026-11-26): 7 fault(s), 2 can't tell
+-- look.md --
+1: Grey-haired man in purple jacket sits in chair, mouth open talking, hand raised; dark wood panel wall.
+2: Same man, mouth closed, hand low on lap, other arm out; calm, looking sideways.
+3: Woman in white hard hat, orange vest, braids, glasses stands before construction site; bloody dogs fighting behind.
+4: Same woman, slightly turned, mouth closed, serious; dogs brawling, blood on ground behind her.
+5: Grey-haired man in dark suit, red tie, in armchair in library; dogs snarl, woman in red dress.
+6: Same man, worried; grey wolf-like dog leaps across floor, dark-clad man runs behind; spilled plate.
+7: Same man, mouth open shocked, arm flung out; white bloody dog lunges at left, chandelier above.
+-- result.md --
+## Faults
+FAULT P7 [5-7]: Blair seated in the armchair - two round knee balls sit side by side at the lens over the chair front, with no thigh or lap, and no bottom visible on the seat.
+FAULT P2 [7]: Blair - the brief says "grin then lunge" but he shows a wide-open shouting mouth (reads as shock) and his body does not lunge, only the arms spread.
+FAULT P2 [5-6]: Blair - blank, mildly worried face with a gaze off to the side. It does not react to the chase, which is the acting beat.
+FAULT P3 [7]: Blair's arms - both go out as stiff horizontal chicken wings from the shoulder with ball hands, with a step at the shoulder line. They look broken, not like a natural bend at the elbow.
+FAULT S1 [3-4]: Kemi blocks the middle of the frame. The background workers and the dog pile are tiny, grey and cluttered, so the "background actions" the brief asks for do not read at phone size.
+FAULT O4 [5]: the guests and runners behind Blair are tiny and half cut off at the left edge. The dogs among them are smaller than a person would allow, so the scale is wrong.
+FAULT P7 [1-2]: May's legs are dark on a dark floor and merge into one rounded blob under the jacket. The thigh and lap are not readable, and her chair has a single stem with no visible seat edge.
+CAN'T TELL A4 [1-2]: the brief puts Hook Text above May, and no panel shows it. A frame with Hook Text on is needed.
+CAN'T TELL A2/P4/S3 [1-7]: every panel says "(no reference)", so faces, hair and set cannot be compared. References are needed beside each panel.
+CAN'T TELL P11 [3-4]: Kemi's neck is hidden by her braids and the hat is large. A full-size head crop would show it.
+
+## Checked
+1-7
+
+## Cold look
+I called May "a grey-haired man in a purple jacket". She is a woman, so that is wrong on 1 and 2. I missed the Hook Text on 1, which is absent. On 7 I read the lunge as the dog's, not Blair's. On 5-6 I read him as worried, not chasing or reacting.
+
+## Not on the list
+- Blood on the dogs and bodies on the ground at the site read as gore, not satire. Suggested line: "Violence level suits the channel's tone at phone size."
+- The pose is the same in every panel of a shot (Blair 5-7), so it reads as a static puppet. Suggested line: "Each beat changes the body, not only the arms and mouth."
+

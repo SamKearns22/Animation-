@@ -59,6 +59,7 @@ PROMISES = {
     'watcher.py stop': ('every promise here is checked at the end of every reply; a daily line shows it is alive', 'live hooks'),
     # handover checks (source/handover.py)
     'model_faults': ('a Next line never joins Opus work with Sonnet work', 'named: the old word check; replaced by modelguard.py once it has caught everything this caught'),
+    'kept_report_faults': ('a kept animatic or clean render has its body-check record beside it, found at hand-over, not at the send', 'kittest kept_report_travels'),
     'draft_faults': ('the latest animatic and its clean render are on GitHub', 'named: its own fault line in handover end is the proof'),
     'quick_faults': ('handover end runs the quick film checks', 'named: its own fault line in handover end is the proof'),
     'finder_faults': ('a chat that edited a film\'s code without the finder is named at handover', 'kittest finder_reminder_per_chat'),

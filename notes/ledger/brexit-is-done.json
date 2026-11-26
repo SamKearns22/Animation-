@@ -13955,6 +13955,26 @@
      "6-10 P2: whether Blair looks at the off-frame left interviewer. A face crop with the nose and pupils at full size would show it.",
      "11-12 M2: the red times are unreadable. A strip with larger time labels would show it."
     ]
+   },
+   {
+    "round": 6,
+    "pass": 1,
+    "stage": "animatic",
+    "date": "2026-11-26",
+    "hunt": 1,
+    "faults": 7,
+    "cant_tell": 2,
+    "open": [
+     "5-7 P7: Blair seated in the armchair - two round knee balls sit side by side at the lens over the chair front, with no thigh or lap, and no bottom visible on th",
+     "7 P2: Blair - the brief says \"grin then lunge\" but he shows a wide-open shouting mouth (reads as shock) and his body does not lunge, only the arms spread.",
+     "5-6 P2: Blair - blank, mildly worried face with a gaze off to the side. It does not react to the chase, which is the acting beat.",
+     "7 P3: Blair's arms - both go out as stiff horizontal chicken wings from the shoulder with ball hands, with a step at the shoulder line. They look broken, not li",
+     "3-4 S1: Kemi blocks the middle of the frame. The background workers and the dog pile are tiny, grey and cluttered, so the \"background actions\" the brief asks fo",
+     "5 O4: the guests and runners behind Blair are tiny and half cut off at the left edge. The dogs among them are smaller than a person would allow, so the scale is",
+     "1-2 P7: May's legs are dark on a dark floor and merge into one rounded blob under the jacket. The thigh and lap are not readable, and her chair has a single ste",
+     "1-7 A2 P4 S3: every panel says \"(no reference)\", so faces, hair and set cannot be compared. References are needed beside each panel.",
+     "3-4 P11: Kemi's neck is hidden by her braids and the hat is large. A full-size head crop would show it."
+    ]
    }
   ],
   "lines": {
@@ -13963,7 +13983,7 @@
     "false": 1
    },
    "P2": {
-    "faults": 10,
+    "faults": 12,
     "false": 1
    },
    "P4": {
@@ -13995,7 +14015,7 @@
     "false": 0
    },
    "P3": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P5": {
@@ -14003,7 +14023,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 4,
+    "faults": 6,
     "false": 0
    },
    "P10": {
@@ -14016,6 +14036,14 @@
    },
    "M3": {
     "faults": 2,
+    "false": 0
+   },
+   "S1": {
+    "faults": 1,
+    "false": 0
+   },
+   "O4": {
+    "faults": 1,
     "false": 0
    }
   }
