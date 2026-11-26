@@ -45,3 +45,6 @@ Well, I mean, why didn't it decide it was fine this time? Why does it need a new
 ### 2026-11-26T20:23:19
 1. Is it a fault or are the characters contextually doing something that requires overlap?
 
+### 2026-11-26T20:24:59
+So it seems like the check isn't being balanced against _what the scene is trying to achieve_
+
