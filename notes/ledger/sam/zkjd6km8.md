@@ -54,3 +54,7 @@ Now, tell me about heavy reading. Are we doing heavy reading and can it be fixed
 ### 2026-11-26T23:11:07
 yes, obviously! It should cover everything in the project that we use!! How was this missed??
 
+### 2026-11-26T23:11:52
+3. Why not?
+4. Why would you only party keep to it?
+
