@@ -38,7 +38,8 @@ E keep: kittests; critique and judges (+ column "Sam noted it too?"); R7 seated 
 - Done: listing tool + kittest + catalogue row; evidence gathered; report sent to Sam.
 - Next: on Sam's answers, a tool chat (Opus medium) does the Y'd items one at a time, A first, each with its
   kittest and a "Lost:" line; nothing is deleted without his Y.
-- Needs Sam: Q1-Q5 in the report.
+- Sam's answers: Q1 Y (26 Nov: move group A into the kit, one at a time, each with its kittest).
+- Needs Sam: Q2-Q5 in the report (going one at a time, in simple words, Sam 26 Nov).
 - Read: guides/job-packs.md "A tool job"; this file; the report.
 - Open rule requests: none.
 - COST: a tool job, no film estimate.
