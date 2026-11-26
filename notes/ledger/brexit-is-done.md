@@ -124,4 +124,5 @@ A new chat's start and re-learning cost 17% of the film (8.06% of a week over 21
 - No bum/circular knees | castsheet.seated_faults (built now); P7 by hand only
 
 ## Checks (runs, faults, by kind)
+- pre-flight: 1 runs, 0 faults
 - quick check: 7 runs, 257 faults (drawing 175, caption 30, other 26, blair 7, may 7, benchmark 4, house style 4, plan 4)
