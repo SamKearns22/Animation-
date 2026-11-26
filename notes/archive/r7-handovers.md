@@ -212,3 +212,18 @@ Read: the pose kit job pack (guides/pose-kits.md); notes/proposals/pose-kit-form
 Locked by Sam: May mode 'body' front and side; both three-quarters and shoes as on c10c (OKed 26 Nov); 'upright' as it
 was (jacket point stays); 'upright, apart' as on c11 (OKed 26 Nov); her posted outfit; Open Wounds' seated frames (switch off); the bum/seat. Kemi/Blair: look only.
 For Claude: handover end's "SENTENCE lost" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's. 2c60330e is double-booked (r7 0.11, proposal-route 0.08; not in R7's handovers, left). Branch claude/r7-chat12-pose-kit-format, main line pushed.
+
+## Where things stand (chat 13, 26 Nov, session_01U3pKR3Mffgt6rF7Fmf6ev4)
+Rules that bite next: 87 (two flat rounds stop), 5 (each note a check proven on Sam's frame first), Locked (May's look moves only for these 5 notes; show her before and after).
+Done: Learn (notes/learn/pose-kit/learn.md); Kemi's vest ends halfway through the navy on Sam's Y (views.SHORT_TOP_RISE, check
+short_top_faults, kittest short_top_hem; May and Blair 0 pixels changed). Sheet sent: notes/learn/pose-kit/kemi-short-top-r7c13.jpg.
+Next: chat 14, Opus medium (a round of Sam's notes): the 5 notes in "Sam's notes, 26 Nov (on Kemi's sheets)" below: check
+first on each of Sam's frames, fix in solid_seat (shared), run on May/Kemi/Blair, one sheet of four views per person with before
+and after; Sam's "Added:" line for May's look moving. Then C2 asked again, naming notes/proposals/pose-kit-format.md.
+Needs Sam: Q1 the full kit check (Y/N; my pick N, the final runs it). Y/N to C2 later.
+Read: guides/pose-kits.md; the 5 notes below; solid_seat.py MAP + draw() + lay_over(); learn.md section 2 (which checks carry).
+Open rule requests: none.
+Locked by Sam: May mode 'body' front, side, both three-quarters, shoes (c10c), 'upright' (jacket point), 'upright, apart' (c11):
+only these 5 notes may move them; her posted outfit; Open Wounds' seated frames (switch off); the bum/seat. Kemi/Blair: posted films untouched.
+For Claude: sheets via notes/learn/pose-kit/learn_sheet.py OUTDIR (add 'short top' check); kittest short_top_hem. Cost: R7 28.5% of a 6% estimate (Sam told). GTA branches not R7's, left.
+

@@ -618,7 +618,8 @@ def stray_ink():
     sp = SH.cast['kemi']
     sam = SO.stray_ink(Image.open('notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair.jpg'), sp)
     hit = [e for e in sam if 150 < e[1] < 200 and 200 < e[0] < 360]          # the line itself (not the hand's edge)
-    im = SH.tile('kemi', 90, 'upright', full=True)[0].crop((440, 1400, 720, 1470))   # under the hem, the bottom
+    im = SH.tile('kemi', 90, 'upright', full=True)[0].crop((480, 1400, 720, 1470))   # under the hem, where the line was
+    #   (from 480: the bottom's back corner on the seat has a small step of its own, open in notes/r7.md, chat 14)
     now = SO.stray_ink(im, sp)
     return bool(hit) and not now, f"Sam's frame: {hit or 'MISSED'}; Kemi's bottom now: {now}"
 

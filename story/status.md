@@ -1,3 +1,3 @@
-Open Wounds: chat 25 fixed the runners' far arm (it stuck out of their backs) in the shared kit; the body check passes.
-Next: chat 26 (Sonnet) redraws the clean render, gets a fresh look, finishes and sends the animatic, then stops.
-Sam: nothing needed until the animatic arrives.
+R7 (seated full body): chat 14 fixed Sam's 5 notes (far leg, stray line, crotch tick, rugged knees, chair back) on May, Kemi and Blair; before/after sheets sent.
+Next: Sam's notes on the sheets, then the one pose command (C2) if he says Y.
+Sam: look at the three sheets; Q1 (full kit check) and C2 Y/N.
