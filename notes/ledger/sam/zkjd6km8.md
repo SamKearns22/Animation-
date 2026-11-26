@@ -48,3 +48,6 @@ Stop telling me chats are long unless you are admitting that your own tool is br
 ### 2026-11-26T23:08:38
 Now, tell me about heavy reading. Are we doing heavy reading and can it be fixed?
 
+### 2026-11-26T23:09:54
+1. Are you saying that we aren’t using the code searching tool that you assured me we were using
+
