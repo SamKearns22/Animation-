@@ -264,7 +264,7 @@ def lips(p, f, L, sp, lip_c, fx_my):
                            (0.0, bl), (-hw * 0.5, bl - 0.01)]), 3)
         p.poly(top, dk(lip_c, 0.86), INK, 1.5)
         p.poly(bot, lip_c, INK, 1.5)
-        p.line(curve(pts([(-hw, l13 - 0.006 * smile), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.002 - 0.006 * k),
+        p.line(curve(pts([(-hw, l13 - 0.006 * smile), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.004 - 0.008 * k),
                             (rx, ry - 0.002 * k)]), 3), INK, 2.2)
         if k > 0.2:                                             # the crease the pulled corner presses into the cheek
             p.line(curve(pts([(rx + 0.012, ry - 0.018 * k), (rx + 0.02, ry + 0.004), (rx + 0.012, ry + 0.022 * k)]), 3),

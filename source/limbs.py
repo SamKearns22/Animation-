@@ -28,6 +28,7 @@ sys.path.insert(0, HERE)
 from ink import curve  # noqa: E402
 
 INK = (24, 20, 22)
+RIM_ON = [True]     # views.sleeved_arm sets it per view: front-on and from behind the arms hang beside the body
 DARK_RIM = 2.2      # a dark sleeve's lit edge (body units, about 2 px at house size): the arm reads on dark cloth
 
 
@@ -267,7 +268,7 @@ def install(B):
             # a dark sleeve keeps the jacket's own colour (Sam, 26 Nov, Open Wounds note 24.3: "Tony's suit sleeves
             # are a different colour to the jacket"; chat 14 had lifted the whole sleeve so a black arm read over a
             # black jacket): a thin lit edge inside the ink does that job, as cloth catches light at its turn
-            rim = DARK_RIM if sum(sleeve[:3]) < 200 else 0.0
+            rim = DARK_RIM if sum(sleeve[:3]) < 200 and RIM_ON[0] else 0.0   # turned views only (as the old lift)
             rings = ((INK, o), (_lit(sleeve), 0.0), (sleeve, -rim)) if rim else ((INK, o), (sleeve, 0.0))
             for col, extra in rings:                         # beaded), its outline underneath
                 for (x_, y_), r_ in zip(dense, hwd):

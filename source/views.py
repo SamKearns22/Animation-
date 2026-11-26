@@ -980,8 +980,11 @@ DARK_SLEEVE, DARK_SLEEVE_LIFT = 200, 0.0  # 0 since chat 38 (Sam's note 24.3): l
 
 def sleeved_arm(p, j2, side, sp, shape=None):
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
+    import limbs as LB
+    yaw = j2.get('yaw')
+    LB.RIM_ON[0] = yaw is None or 20 < abs(((yaw + 180) % 360) - 180) < 160   # as sleeve_colour's old 'turned'
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
-        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sleeve_colour(sp, j2.get('yaw')),
+        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sleeve_colour(sp, yaw),
               **({'w': sp['arm_w'], 'bulge': sp.get('arm_bulge', 0.0)} if 'arm_w' in sp else {}))
     if sp.get('bangles') and not PROBE:
         bangles(p, el, wr, sp.get('arm_w', 30), side)
