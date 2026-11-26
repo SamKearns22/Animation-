@@ -26,3 +26,6 @@ How are you judging too small on a phone? Show me a nod that’s too small on a 
 The leg gap you previously fixed is back, why
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-26T22:06:52
+1. It’s not a nod, it’s a head-bob.
+
