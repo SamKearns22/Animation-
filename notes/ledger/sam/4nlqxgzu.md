@@ -39,3 +39,8 @@ Hold on. Was that everything in the report?
 ### 2026-11-26T22:41:38
 I don't understand
 
+### 2026-11-26T22:42:38
+1. Y
+
+This is the way you should be explaining things in all messages to me according to our communication rules
+
