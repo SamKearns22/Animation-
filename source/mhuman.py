@@ -22,12 +22,26 @@ MH_DIR = os.environ.get('MAKEHUMAN_DATA', os.path.join(tempfile.gettempdir(), 'm
 
 
 def data_dir():
-    """MakeHuman's data folder, downloaded (about 140 MB) the first time it is needed."""
+    """MakeHuman's data folder, downloaded (about 140 MB) the first time it is needed.
+    One download for the whole machine (check audit B7, 26 Nov): many drawing workers can ask at once (kitinputs'
+    survey draws in a pool), so the first takes a lock, clones into a scratch folder and moves it into place whole;
+    the rest wait on the lock and find the finished copy. A half-made copy is never left where the next run looks."""
     d = os.path.join(MH_DIR, 'makehuman', 'data')
-    if not os.path.exists(os.path.join(d, '3dobjs', 'base.obj')):
-        subprocess.run(['git', 'clone', '-q', '--depth', '1', '--filter=blob:none', '--sparse', MH_REPO, MH_DIR],
-                       check=True)
-        subprocess.run(['git', '-C', MH_DIR, 'sparse-checkout', 'set', 'makehuman/data'], check=True)
+    if os.path.exists(os.path.join(d, '3dobjs', 'base.obj')):
+        return d
+    import fcntl
+    import shutil
+    os.makedirs(os.path.dirname(MH_DIR) or '.', exist_ok=True)
+    with open(MH_DIR + '.lock', 'w') as lk:
+        fcntl.flock(lk, fcntl.LOCK_EX)
+        if not os.path.exists(os.path.join(d, '3dobjs', 'base.obj')):
+            tmp = MH_DIR + f'.part{os.getpid()}'
+            shutil.rmtree(tmp, ignore_errors=True)
+            subprocess.run(['git', 'clone', '-q', '--depth', '1', '--filter=blob:none', '--sparse', MH_REPO, tmp],
+                           check=True)
+            subprocess.run(['git', '-C', tmp, 'sparse-checkout', 'set', 'makehuman/data'], check=True)
+            shutil.rmtree(MH_DIR, ignore_errors=True)     # an old half-made copy from before this lock
+            os.rename(tmp, MH_DIR)
     return d
 
 
