@@ -28,6 +28,12 @@ sys.path.insert(0, HERE)
 from ink import curve  # noqa: E402
 
 INK = (24, 20, 22)
+RIM_ON = [True]     # views.sleeved_arm sets it per view: front-on and from behind the arms hang beside the body
+DARK_RIM = 2.2      # a dark sleeve's lit edge (body units, about 2 px at house size): the arm reads on dark cloth
+
+
+def _lit(c):
+    return tuple(int(round(v + (w - v) * 0.22)) for v, w in zip(c[:3], (150, 150, 162))) + tuple(c[3:])
 LENS = {}                                                   # {'side': 'L'}: that arm reaches towards the camera
 DRAW, NEXT = [0], [0]   # which person is being drawn (views.person counts up): an arm joins only the body drawn with it
 NOJOIN = [0]            # > 0: an arm drawn whole (round top, full outline), joining no body (views: over long hair)
@@ -259,7 +265,12 @@ def install(B):
             lay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
             q = B.Pen(lay, cam)
             ld = ImageDraw.Draw(lay)                         # a solid tube of true circles (a smooth edge, never
-            for col, extra in ((INK, o), (sleeve, 0.0)):    # beaded), its outline underneath
+            # a dark sleeve keeps the jacket's own colour (Sam, 26 Nov, Open Wounds note 24.3: "Tony's suit sleeves
+            # are a different colour to the jacket"; chat 14 had lifted the whole sleeve so a black arm read over a
+            # black jacket): a thin lit edge inside the ink does that job, as cloth catches light at its turn
+            rim = DARK_RIM if sum(sleeve[:3]) < 200 and RIM_ON[0] else 0.0   # turned views only (as the old lift)
+            rings = ((INK, o), (_lit(sleeve), 0.0), (sleeve, -rim)) if rim else ((INK, o), (sleeve, 0.0))
+            for col, extra in rings:                         # beaded), its outline underneath
                 for (x_, y_), r_ in zip(dense, hwd):
                     X_, Y_ = cam.P(x_, y_)
                     R_ = cam.S(r_ + extra)

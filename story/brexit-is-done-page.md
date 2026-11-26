@@ -74,87 +74,92 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 472: `soundtrack` Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi).
 - 489: `main` 
 
-## brexit_is_done_action.py (939 lines)
+## brexit_is_done_action.py (1018 lines)
 - 36: HERE (data)
-- 47: B (data)
-- 48: V (data)
-- 49: FEET (data)
-- 52: WOLF_SHOULDER (data)
-- 53: UNITS (data)
-- 54: ATTACK (data)
-- 55: LIFT_D (data)
-- 57: CROWD (data)
-- 58: WORKERS (data)
-- 59: GUESTS (data)
-- 62: `ease` 
-- 67: `lerp` 
-- 71: `keyed` A number from (time, value) keys, eased between them, held outside.
-- 82: `_ctx` Note 16: the house line weight (wolf.house_ctx), the people's own at the wolf's depth.
-- 88: `wolf_s` 
-- 92: `wolf_at` A kit wolf whose body middle stands over (x, d) at height z (m) through level camera L; returns its jaws.
-- 102: `wolf_front_at` 
-- 111: `scale_at` 
-- 115: `person_at` Someone standing on a floor at height z (m), depth d, across x (m) through L; returns the drawn joints.
-- 127: `_screen` views.person's returned points are in person units from the neck base: add the screen ones (key + '_px').
-- 138: `grip_hands` The circle hands drawn again over a held tube (chat 18, rule 41: the tube laid over two small hands hid them,
-- 156: `tube` A steel scaffold tube from a to b (screen), w px thick, one outline.
-- 170: LEAD (data)
-- 171: WA (data)
-- 172: WB (data)
-- 173: RUN_V (data)
-- 174: HIT (data)
-- 175: REACH (data)
-- 176: POUNCE (data)
-- 177: FEEDS (data)
-- 180: `_feed_u` Feeding: head down in the kill (worrying), a rip up to the sky (0.3 s), held with the hunk (0.3 s), back down.
-- 196: `_rips` 
-- 204: `_attack_wolf` One of the two (note 13): runs in from off frame left, crouches (0.15 s), springs a short pounce whose forepaw
-- 248: `_worker1_pose` Digging: bent over the shovel, the blade in the dirt, a push down on the handle every 0.6 s.
-- 260: `_shovel` The shovel: a wooden shaft from the top grip a to the blade's heel b (screen points), the blade beyond.
-- 276: `w1` W1 and the two wolves on him: returns [(depth, draw)]. u is shot time; the attack's clock starts LEAD s in.
-- 377: RUN_SPEED (data)
-- 380: `_runner_x` 
-- 384: `runner` W2 on the 9.6 m lift and the two wolves after him.
-- 448: BAR_MEN (data)
-- 454: LUNGES (data)
-- 455: STRIKE (data)
-- 456: CLANG (data)
-- 459: `_exchange` The latest exchange of wolf (or man) k at time u: (seconds into it, its number) or (None, -1).
-- 468: `_bar_man` Two hands on the tube at chest height. As his wolf lunges he gives ground (a step back, leaning away, the tube
-- 504: `bars` 
-- 585: WEAR (data)
-- 586: BLOODY (data)
-- 589: `milling` 
-- 626: DOOR (data)
-- 635: PASSES (data)
-- 653: PASSAGE_D (data)
-- 654: PASSAGE_X (data)
-- 657: `_from_passage` 
-- 668: ROOM_WOLF (data)
-- 669: TOSS (data)
-- 670: RUN_STEP (data)
-- 673: `_guest_pose` A running guest's yaw and joints: straight at us out of the doorway (front_run), three-quarter on a diagonal,
-- 686: `_beyond_door` 
-- 690: `tray_state` Where the tray and the three glasses are at shot time u: before TOSS on the butler's palm (None: drawn with
-- 714: `tray_movers` Every guest and wolf of the chase as moves.kicked / moves.trodden want them.
-- 719: `tray_track` Where the fallen tray lies at u, or None while it is in the air (the check moves.trodden reads it).
-- 725: `_tray` The silver tray: an ellipse in perspective (thin when level with the eye), tumbling in the air, flat on the
-- 761: `_ell` 
-- 767: `_flute` A champagne flute (stem, foot, bowl) of height 0.2 m * s px-per-m, turned `ang` radians.
-- 785: `_glass_down` A glass that has landed: shards flung a little way and still, champagne spreading into a wet pool.
-- 820: `lunger` Wp, the last pounce on Blair; the film cuts on the lunge (item 13, locked), before it reaches him. It closes
-- 866: LUNGE_CUT (data)
-- 867: LUNGE_LEN (data)
-- 868: LUNGE_COIL (data)
-- 869: LUNGE_CREEP (data)
-- 870: LUNGE_D (data)
-- 871: LUNGE_STALK (data)
-- 872: LUNGE_PATH (data)
-- 873: LUNGE_T (data)
-- 876: READ_TIMES (data)
-- 879: `room_actors` Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway).
-- 930: `set_cam` The level camera as a 3D set camera (lying.py's bodies and floor-placed people need one).
-- 936: `site_actors` Every background actor of shot 2 at shot time u: [(depth, draw)].
+- 48: B (data)
+- 49: V (data)
+- 50: FEET (data)
+- 53: WOLF_SHOULDER (data)
+- 54: UNITS (data)
+- 55: ATTACK (data)
+- 56: LIFT_D (data)
+- 58: CROWD (data)
+- 59: WORKERS (data)
+- 60: GUESTS (data)
+- 63: `ease` 
+- 68: `lerp` 
+- 72: `keyed` A number from (time, value) keys, eased between them, held outside.
+- 83: `_ctx` Note 16: the house line weight (wolf.house_ctx), the people's own at the wolf's depth.
+- 89: `wolf_s` 
+- 93: `wolf_at` A kit wolf whose body middle stands over (x, d) at height z (m) through level camera L; returns its jaws.
+- 103: `wolf_front_at` 
+- 112: `scale_at` 
+- 116: `person_at` Someone standing on a floor at height z (m), depth d, across x (m) through L; returns the drawn joints.
+- 128: `_screen` views.person's returned points are in person units from the neck base: add the screen ones (key + '_px').
+- 139: `grip_hands` The circle hands drawn again over a held tube (chat 18, rule 41: the tube laid over two small hands hid them,
+- 157: `tube` A steel scaffold tube from a to b (screen), w px thick, one outline.
+- 171: LEAD (data)
+- 172: WA (data)
+- 173: WB (data)
+- 174: RUN_V (data)
+- 175: HIT (data)
+- 176: REACH (data)
+- 177: POUNCE (data)
+- 178: FEEDS (data)
+- 181: `_feed_u` Feeding: head down in the kill (worrying), a rip up to the sky (0.3 s), held with the hunk (0.3 s), back down.
+- 197: `_rips` 
+- 205: `_attack_wolf` One of the two (note 13): runs in from off frame left, crouches (0.15 s), springs a short pounce whose forepaw
+- 249: `_worker1_pose` Digging: bent over the shovel, the blade in the dirt, a push down on the handle every 0.6 s.
+- 261: `_shovel` The shovel: a wooden shaft from the top grip a to the blade's heel b (screen points), the blade beyond.
+- 277: `w1` W1 and the two wolves on him: returns [(depth, draw)]. u is shot time; the attack's clock starts LEAD s in.
+- 378: RUN_SPEED (data)
+- 381: `_runner_x` 
+- 385: `runner` W2 on the 9.6 m lift and the two wolves after him.
+- 449: BAR_MEN (data)
+- 455: LUNGES (data)
+- 456: STRIKE (data)
+- 457: CLANG (data)
+- 460: `_exchange` The latest exchange of wolf (or man) k at time u: (seconds into it, its number) or (None, -1).
+- 469: `_bar_man` Two hands on the tube at chest height. As his wolf lunges he gives ground (a step back, leaning away, the tube
+- 505: `bars` 
+- 586: WEAR (data)
+- 587: BLOODY (data)
+- 590: `milling` 
+- 627: DOOR (data)
+- 636: PASSES (data)
+- 654: PASSAGE_D (data)
+- 655: PASSAGE_X (data)
+- 658: `_from_passage` 
+- 669: ROOM_WOLF (data)
+- 670: TOSS (data)
+- 671: RUN_STEP (data)
+- 674: `_guest_pose` A running guest's yaw and joints: straight at us out of the doorway (front_run), three-quarter on a diagonal,
+- 687: `_beyond_door` 
+- 691: `tray_state` Where the tray and the three glasses are at shot time u: before TOSS on the butler's palm (None: drawn with
+- 715: `tray_movers` Every guest and wolf of the chase as moves.kicked / moves.trodden want them.
+- 720: `tray_track` Where the fallen tray lies at u, or None while it is in the air (the check moves.trodden reads it).
+- 726: `_tray` The silver tray: an ellipse in perspective (thin when level with the eye), tumbling in the air, flat on the
+- 762: `_ell` 
+- 768: `_flute` A champagne flute (stem, foot, bowl) of height 0.2 m * s px-per-m, turned `ang` radians.
+- 786: `_glass_down` A glass that has landed: shards flung a little way and still, champagne spreading into a wet pool.
+- 821: `lunger` Wp, the last pounce on Blair; the film cuts on the lunge (item 13, locked), before it reaches him. It closes
+- 867: LUNGE_CUT (data)
+- 868: LUNGE_LEN (data)
+- 869: LUNGE_COIL (data)
+- 870: LUNGE_CREEP (data)
+- 871: LUNGE_D (data)
+- 872: LUNGE_STALK (data)
+- 873: LUNGE_PATH (data)
+- 874: LUNGE_T (data)
+- 877: READ_TIMES (data)
+- 880: LOCK_GAP (data)
+- 881: _LOCK (data)
+- 884: `_box` 
+- 892: `_ranks` Who is drawn in front of whom at chase frame n (25 a second), stuck once two overlap (Sam, 26 Nov: "Decide who
+- 923: `room_actors` room_actors with the chase's drawing order stuck (see _ranks): the depths handed to the painter keep each
+- 948: `_raw_actors` Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway).
+- 1009: `set_cam` The level camera as a 3D set camera (lying.py's bodies and floor-placed people need one).
+- 1015: `site_actors` Every background actor of shot 2 at shot time u: [(depth, draw)].
 
 ## brexit-is-done-people.txt (5 people; a note on a person changes their lines)
 - 3: may (Theresa May (the BBC interview, Nov : plum jacket, patterned blouse, pearls)): head: house may, hair bob, look detail; outfit: suit , shirt white, no tie, open collar; extras: pattern; tailoring: v_wide , v_deep , lapel_w , v_collar , v_close , lapel_x , stripe_w , plaid; body: , woman, shoulders
@@ -207,7 +212,7 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 65: carpet (the rug)
 - 66: the chandelier
 
-## brexit-is-done-moves.txt (45 lines; a note on a move changes its line: open that line)
+## brexit-is-done-moves.txt (44 lines; a note on a move changes its line: open that line)
 ### 1 (may)
 - 9: row: 4 "...we had a referendum, and in that referendum, the British Public chose wolves." |
 ### may
@@ -223,39 +228,38 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 20: body: head shake well
 - 21: body: lean in with roll remember had # chat Sam note : moved her head px comically large; read as none
 - 22: body: nod referendum referendum # chat Sam note : moved it ~ px comic; moved it px unseen. Aim px movesi
-- 23: body: nod that referendum that referendum
-- 24: body: nod that referendum that referendum
-- 25: body: nod wolves wolves
-- 26: keys look:
-- 27: idle: roll shifts
+- 23: body: nod that referendum that referendum # chat Sam note : one firm nod not two s snaps
+- 24: body: nod wolves wolves
+- 25: keys look:
+- 26: idle: roll shifts
 ### 2 (kemi)
-- 30: row: 10 "...more time doing his job: reducing the number of British people with their face
+- 29: row: 10 "...more time doing his job: reducing the number of British people with their face
 ### kemi
-- 32: face: stare | blink shut start start | disdain Andy | stare less | curt job | flat job | stare faces | 
-- 33: R: rest less | press less less | rest backwards | rest job | chop wide high job | chop wide low job | p
-- 34: L: rest backwards | point back swing backwards | point back mid backwards | point back backwards backwa
-- 35: keys shoulders: start | start | start
-- 36: body: chin up start # chat Sam note : comically large : moved it px; moved it
-- 37: body: tilt Andy less
-- 38: body: nod job job
-- 39: body: nod reducing reducing
-- 40: body: nod off off
-- 41: keys look:
-- 42: idle: roll shifts
+- 31: face: stare | blink shut start start | disdain Andy | stare less | curt job | flat job | stare faces | 
+- 32: R: rest less | press less less | rest backwards | rest job | chop wide high job | chop wide low job | p
+- 33: L: rest backwards | point back swing backwards | point back mid backwards | point back backwards backwa
+- 34: keys shoulders: start | start | start
+- 35: body: chin up start # chat Sam note : comically large : moved it px; moved it
+- 36: body: tilt Andy less
+- 37: body: nod job job
+- 38: body: nod reducing reducing
+- 39: body: nod off off
+- 40: keys look:
+- 41: idle: roll shifts
 ### 3 (blair)
-- 45: row: 12-13 "...I belong in The Hague." | genial, then the big grin held about 1.5 s until
+- 44: row: 12-13 "...I belong in The Hague." | genial, then the big grin held about 1.5 s until
 ### blair
-- 47: stance: armchair on armchair
-- 48: face: genial | sincere opinion | chuckle anything | grin Tony | breezy invaded | brows up Iraq | breez
-- 49: R: rest Well | palms lift Well opinion | rest opinion | rest belong | palms out belong Hague | rest Ha
-- 50: L: rest Well | palms out near Well | heart opinion listen | chop high fist listen | chop low fist list
-- 51: body: lean start start
-- 52: body: tilt start Well
-- 53: keys shoulders: Well | Well | Well | Iraq | Iraq | Iraq
-- 54: body: tilt Well Well
-- 55: body: head shake anything
-- 56: body: preen Tony Tony
-- 57: body: lean belong Hague
-- 58: body: nod Hague Hague
-- 59: keys look:
-- 60: idle: roll shifts
+- 46: stance: armchair on armchair
+- 47: face: genial | sincere opinion | chuckle anything | grin Tony | breezy invaded | brows up Iraq | breez
+- 48: R: rest Well | palms lift Well opinion | rest opinion | rest belong | palms out belong Hague | rest Ha
+- 49: L: rest Well | palms out near Well | heart opinion listen | chop high fist listen | chop low fist list
+- 50: body: lean start start
+- 51: body: tilt start Well
+- 52: keys shoulders: Well | Well | Well | Iraq | Iraq | Iraq
+- 53: body: tilt Well Well
+- 54: body: head shake anything
+- 55: body: preen Tony Tony
+- 56: body: lean belong Hague
+- 57: body: nod Hague Hague
+- 58: keys look:
+- 59: idle: roll shifts

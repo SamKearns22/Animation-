@@ -19,10 +19,9 @@ body: chin up 0.9 from -0.25 to "Prime" +0.1, rise 0.5, fall 0.35   # chat 37 (S
 body: tilt 1.0 from "Prime" -0.12 to "well" -0.2, rise 0.15, fall 0.3
 body: head shake 0.7 from "well" -0.05 over 0.6
 body: lean in 5 with roll 1 from "remember" -0.08 to "had" +0.3, rise 0.2, fall 0.35   # chat 37 (Sam note 23.1): 15 moved her head 166 px, "comically large"; 0.8 read as none
-body: nod 2.0 from "referendum" -0.05 to "referendum" +0.4, rise 0.12, fall 0.22   # chat 37 (Sam note 23.1): 4.5 moved it ~30 px, comic; 1 moved it 4-8 px, unseen. Aim 12-16 px (movesize window)
-body: nod 2.0 from "that referendum" -0.04 to "that referendum" +0.24, rise 0.1, fall 0.12
-body: nod 2.0 from "that referendum" +0.4 to "that referendum" +0.72, rise 0.1, fall 0.16
-body: nod 2.1 from "wolves" -0.05 to "wolves" +0.45, rise 0.12, fall 0.25
+body: nod 2.0 from "referendum" -0.05 to "referendum" +0.5, rise 0.25, fall 0.3   # chat 37 (Sam note 23.1): 4.5 moved it ~30 px, comic; 1 moved it 4-8 px, unseen. Aim 12-16 px (movesize window)
+body: nod 2.6 from "that referendum" -0.04 to "that referendum" +0.55, rise 0.22, fall 0.28   # chat 38 (Sam note 24.1): one firm nod, not two 0.1 s snaps
+body: nod 2.6 from "wolves" -0.05 to "wolves" +0.5, rise 0.2, fall 0.25
 keys look: -0.3 at 0
 idle: roll 1.2 shifts 71 0.9 1.6
 

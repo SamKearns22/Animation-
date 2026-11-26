@@ -975,13 +975,16 @@ def sleeve_colour(sp, yaw=None):
     return c
 
 
-DARK_SLEEVE, DARK_SLEEVE_LIFT = 200, 0.14       # sum of RGB below which a sleeve is "dark"; how far it is lifted
+DARK_SLEEVE, DARK_SLEEVE_LIFT = 200, 0.0  # 0 since chat 38 (Sam's note 24.3): limbs.DARK_RIM instead; was 0.14       # sum of RGB below which a sleeve is "dark"; how far it is lifted
 
 
 def sleeved_arm(p, j2, side, sp, shape=None):
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
+    import limbs as LB
+    yaw = j2.get('yaw')
+    LB.RIM_ON[0] = yaw is None or 20 < abs(((yaw + 180) % 360) - 180) < 160   # as sleeve_colour's old 'turned'
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
-        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sleeve_colour(sp, j2.get('yaw')),
+        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sleeve_colour(sp, yaw),
               **({'w': sp['arm_w'], 'bulge': sp.get('arm_bulge', 0.0)} if 'arm_w' in sp else {}))
     if sp.get('bangles') and not PROBE:
         bangles(p, el, wr, sp.get('arm_w', 30), side)
@@ -1230,6 +1233,26 @@ def torso_view(img, p, sp, view, seated=False):
                 if lw > 1.0:                                         # the notch where the collar meets the lapel
                     p.line([(o + sg * (a + 22 * lw) * k, 22), (o + sg * (a + 4) * k, 34)], INK, 2.0)
             p.line([(o + 2, dpt + 10), (o + 4, bottom)], jd, 2.2)
+        elif out == 'suit' and tie:
+            # Open Wounds chat 38 (Sam's note 24.4, Blair: "his shirt and tie section still seems like a small raised
+            # ridge ... a common fault at 3/4 views"): the shirt was a parallel strip with thin lapel slivers outlined
+            # on both sides and a tie with no knot, so it read as a band standing out. Now as a suit is: an open V
+            # narrowing to the button, the collar points over it, the knot and a widening blade, and broad lapels
+            # lying flat whose inner edge follows the V (the far side narrower, 0.6).
+            nk, fk, btn = 1.0, 0.6, 214
+            p.poly([(o - 30 * nk, -4), (o + 30 * fk, -4), (o + 2, btn)], sc, INK, 2.2)
+            p.poly([(o - 10, 6), (o + 9, 6), (o + 6, 30), (o - 7, 30)], tie, INK, 2.0)            # the knot
+            p.poly([(o - 7, 30), (o + 6, 30), (o + 13, 170), (o + 2, 196), (o - 10, 170)], tie, INK, 2.0)
+            p.poly([(o - 30 * nk, -4), (o - 6, 20), (o - 14, 44)], sc, INK, 2.0)                 # collar points
+            p.poly([(o + 30 * fk, -4), (o + 6, 20), (o + 12, 40)], sc, INK, 2.0)
+            for sg, k in ((-1, nk), (1, fk)):
+                top = (o + sg * 30 * k, -4)
+                along = lambda y: (top[0] + (o + 2 - top[0]) * (y + 4) / (btn + 4), y)          # on the V's edge
+                p.poly([top, (o + sg * 54 * k, 18), (o + sg * 46 * k, 30), (o + sg * 64 * k, 64),
+                        (o + sg * 30 * k, 170), (o + sg * 4, btn + 22), along(btn - 6), along(110), along(30)],
+                       jc, INK, 2.2)
+                p.line([(o + sg * 54 * k, 18), (o + sg * 40 * k, 26)], INK, 2.0)                  # the lapel's notch
+            p.line([(o + 4, btn + 22), (o + 4, bottom)], jd, 2.2)
         elif out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
             if tie:

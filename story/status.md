@@ -1,3 +1,3 @@
-Open Wounds chat 35 (26 Nov): May's hair, lean, gestures, smile, hand and blouse fixed; six head moves made clear; early move-size rule 92 written.
-Next: Sonnet chat renders the animatic with Override (Hook Text, sign-off) and sends it.
-Sam: Y or N on the finger picture (fault 3).
+Open Wounds chat 38 (26 Nov): Sam's notes 24.1-24.4 fixed in the shared drawing kit (heads can't snap, a real smirk, suit one cloth, the 3/4 suit front); May and Blair clips sent; seated 'no bum' test deleted; reserve job R8 check audit added.
+Next: chat 39 (Opus medium) settles two cast-sheet stops, then builds shot 2 a third closer (Sam's pick 2), board, Kemi clip; then Sonnet animatic.
+Sam: Y/N on the check-knows-intent proposal; a look at the two clips.

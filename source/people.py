@@ -768,6 +768,8 @@ def _fact(d, key, val, people):
                'dress': 'dress', 'jacket': 'jacket'}[w]] = colour(c)
             if w == 'jacket':
                 d['sleeve'] = d['jacket']
+        # NOT a suit's trousers in the jacket's colour (chat 38 tried it; Sam, 26 Nov: "The leg gap you previously
+        # fixed is back, why": the seated legs' drawing reads the crotch and lap by the trousers' different tone)
     elif key == 'extras':
         for p in parts:
             if p not in EXTRAS:
@@ -882,6 +884,8 @@ def _house(d):
         _sexed(sp, d)
     if d.get('sleeve') and d.get('jacket') and tuple(d['sleeve']) != tuple(d['jacket']):   # Brexit Is Done: sleeves
         sp['sleeve'] = tuple(d['sleeve'])                                                    # of their own colour
+    if 'trousers' in d:                           # the line's trousers (a suit with a tie: the jacket's cloth, chat 38)
+        sp['trousers'] = tuple(d['trousers'])
     return sp
 
 

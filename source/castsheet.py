@@ -788,8 +788,15 @@ def seated_look_faults(film, who=None, cast=None, force=False, raw=False):
                     # ... the darker right leg doesn't seem connected"), later than the R7 judges' "one dark mass"
                     # (25 Nov): on the body kit, legs side by side are ONE tone (solid_seat.leg_tone_faults); only
                     # a crossed under leg takes the shadow tone, so only crossed poses are asked for two
-                    side = sp0.get('seat_solid') == 'body' and 'cross' not in pose
-                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}", tones=yaw != 90 and not side)
+                    # Sam, 26 Nov (Open Wounds chat 33, his Y): "legs one cloth" (note 7) holds for crossed legs on
+                    # the body kit too (the tone test predates it), and "front views can't show a bottom": the body
+                    # kit is asked for neither; the ring knee and every turned view's bottom are still read
+                    body = sp0.get('seat_solid') == 'body'
+                    # Sam, 26 Nov (Open Wounds chat 38): "We have fixed the bum problem with our latest kit ... best
+                    # to delete that check altogether as it no longer serves a function": the bottom is drawn by the
+                    # body kit (solid_seat), never asked here
+                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}", tones=yaw != 90 and not body,
+                                       bottom=False)
     finally:
         V.knee_cap, V.seat_bottom, V.leg = real_cap, real_bottom, real_leg
     return out
@@ -853,11 +860,8 @@ def seated_faults(film, who=None, cast=None, raw=False):
                 if rings:
                     out.append(f"SEATED {name} at {yaw}: a knee drawn as a ball (an outlined ring {rings[0][0]:.0f} "
                                f"wide): Sam, 24 Nov, \"circular knees\"")
-                body = sp0.get('seat_solid') == 'body' and not raw   # the body kit draws its own bottom (the
-                if (not bottoms and not body) or raw:   # trunk under the hem: solid_seat.SEAT_TROUSERS), never through
-                    #                                     seat_bottom: the picture check (seated_look) judges it
-                    # raw: the bottom was never drawn (spy_bottom draws nothing)
-                    out.append(f"SEATED {name} at {yaw}: no bottom on the seat: Sam, 24 Nov, \"No bum\"")
+                # the 'no bum' test is deleted (Sam, 26 Nov, chat 38): the body kit draws the bottom
+
     finally:
         V.knee_cap, V.seat_bottom = real_cap, real_bottom
     if not raw:                                   # R7 people (every new film): the pictures read as a viewer too
@@ -1058,12 +1062,12 @@ def build_selftest():
     print('PASS' if not got else 'FAIL', 'every hair and hat outline now: no point twice', '|', (got or ['-'])[0][:110])
     ok &= not got
     got = seated_faults('brexit-is-done', ['may'], raw=True)
-    hit = any('ball' in g for g in got) and any('bottom' in g for g in got)
-    print('CAUGHT' if hit else 'MISSED', 'Open Wounds, 24 Nov: May seated, "No bum/circular knees" (as Sam saw it)', '|',
+    hit = any('ball' in g for g in got)            # the bottom test deleted (Sam, 26 Nov, chat 38)
+    print('CAUGHT' if hit else 'MISSED', 'Open Wounds, 24 Nov: May seated, "circular knees" (as Sam saw it)', '|',
           (got or ['-'])[0][:110])
     ok &= hit
     got = seated_faults('brexit-is-done')
-    print('PASS' if not got else 'FAIL', 'every cast member seated now: knees end the thigh, a bottom on the seat', '|',
+    print('PASS' if not got else 'FAIL', 'every cast member seated now: knees end the thigh', '|',
           (got or ['-'])[0][:110])
     ok &= not got
     got = teeth_faults('brexit-is-done', cast={'blair': cast['blair']})

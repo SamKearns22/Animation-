@@ -1235,6 +1235,15 @@
     "early_move_size"
    ],
    "example": "Open Wounds pre-flight, 26 Nov 18:57 (notes/ledger/brexit-is-done/checks.jsonl): Kemi's chin up 3 px, Kemi's nod 8 px, Blair's preen 12 px, Blair's nod 15 px, all written 'small'/'curt' and caught only at pre-flight; Sam's Y (26 Nov): check each move the moment it is written."
+  },
+  "93": {
+   "rule": "Checks advise, never lock: a pre-flight, picture check or body check never refuses, holds or delays an animatic, clip or final Sam asked for; it prints its concerns and the work goes ahead.",
+   "status": "next",
+   "tests": [],
+   "example": "Sam, 26 Nov (Open Wounds chat 36): his Y replacing the stops in rule 59 and the body check",
+   "notes": "entry added chat 38 (the handover stop: rule 93 had no entry)",
+   "plan": "a kittest runs pre-flight and the body check on a frame with a known fault through brexit_is_done.py final --span: the clip is written and override.advise prints the concern (the old stop refused it)",
+   "kind_before": "code (override.advise)"
   }
  },
  "_baseline": {

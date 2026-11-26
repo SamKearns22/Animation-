@@ -877,7 +877,75 @@ LUNGE_T = LUNGE_CUT - 0.4                                # the lunge's mark the 
 READ_TIMES = [('shot 3: the last pounce on Blair', LUNGE_CREEP - LUNGE_COIL - LUNGE_LEN, LUNGE_COIL, LUNGE_LEN)]
 
 
+LOCK_GAP = 0.6                           # m: how near the doorway's line a stuck pair is drawn together with the corridor
+_LOCK = {}                               # frame -> {who: paint rank}: the stuck order (chat 37, Sam's note 23.4)
+
+
+def _box(L, fn):
+    x, d, dx, dd = fn.at
+    px, py = L.p(x, d, 0.0)
+    m = L.ppm(d)
+    w, h = ((0.35 if dd < -0.8 else 0.75), 0.95) if fn.who.startswith('wolf') else (0.3, 1.75)
+    return px - w * m, py - h * m, px + w * m, py
+
+
+def _ranks(L, n):
+    """Who is drawn in front of whom at chase frame n (25 a second), stuck once two overlap (Sam, 26 Nov: "Decide who
+    is in front of who and stick to it"): far to near by depth, but a pair that overlapped on the frame before keeps
+    the order it had then until they are apart on screen. Worked out from frame 0, so any frame gives the same."""
+    if n in _LOCK:
+        return _LOCK[n]
+    prev = _ranks(L, n - 1) if n > 0 else {}
+    room, beyond = _raw_actors(n / 25.0, L)
+    fns = [fn for _, fn in sorted(beyond + [q for q in room if hasattr(q[1], 'who')], key=lambda q: -q[0])]
+    boxes = {fn.who: _box(L, fn) for fn in fns}
+    order = [fn.who for fn in fns]
+    def over(a, b):
+        A, B = boxes[a], boxes[b]
+        return not (A[2] <= B[0] or B[2] <= A[0] or A[3] <= B[1] or B[3] <= A[1])
+    for _ in range(len(order) * len(order)):
+        moved = False
+        for i in range(len(order)):
+            for j in range(i + 1, len(order)):
+                a, b = order[i], order[j]          # a drawn before b, but they overlapped the other way round
+                if a in prev and b in prev and prev[a] > prev[b] and over(a, b):   # held while they overlap
+                    order.insert(i, order.pop(j))
+                    moved = True
+                    break
+            if moved:
+                break
+        if not moved:
+            break
+    _LOCK[n] = {w: k for k, w in enumerate(order)}
+    return _LOCK[n]
+
+
 def room_actors(u, L):
+    """room_actors with the chase's drawing order stuck (see _ranks): the depths handed to the painter keep each
+    pair's order while they overlap."""
+    room, beyond = _raw_actors(u, L)
+    n = int(round(u * 25.0))
+    for k in range(max(0, min(_LOCK) if _LOCK else 0), n):     # fill from the start in order (no deep recursion)
+        _ranks(L, k)
+    rk = _ranks(L, n)
+    people = sorted([q for q in room + beyond if hasattr(q[1], 'who')], key=lambda q: rk.get(q[1].who, 0))
+    depths = sorted([q[0] for q in people], reverse=True)          # the same depths, given out in the stuck order
+    fix = {id(q[1]): d for q, d in zip(people, depths)}
+    room = [(fix.get(id(fn), d), fn) for d, fn in room]
+    beyond = [(fix.get(id(fn), d), fn) for d, fn in beyond]
+    # a pair stuck in one order across the doorway's line (one just through, one just behind): the one through is
+    # drawn with the corridor for those frames, so the doorway never flips them (it is within a step of the door)
+    inside = {q[1].who: q for q in beyond if hasattr(q[1], 'who')}
+    for q in list(room):
+        w = getattr(q[1], 'who', None)
+        if w and any(rk.get(o, -1) > rk.get(w, 0) and abs(inside[o][1].at[1] - q[1].at[1]) < LOCK_GAP
+                     for o in inside):
+            room.remove(q)
+            beyond.append(q)
+    return room, beyond
+
+
+def _raw_actors(u, L):
     """Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway)."""
     room, beyond = [], []
     for k, t0, pts, w, lag in PASSES:
