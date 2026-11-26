@@ -18314,6 +18314,228 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "52f3dc5e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.29,
+   "src": "estimate",
+   "sid": "session_01U3pKQxkZw5Lj6ByMN1w4UA",
+   "steps": 16,
+   "hist_k": 132,
+   "kinds": {
+    "tool search": 22.8,
+    "other": 77.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 13,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 1.0768,
+    "total": 1.0768,
+    "floor_k": 99,
+    "blocks": {
+     "start-up floor": 51.0,
+     "new writes": 24.3,
+     "Claude's words": 20.7,
+     "carried history": 4.0
+    },
+    "origins": {
+     "start-up floor": 51.0,
+     "Claude's words": 27.2,
+     "result: tool search": 19.7,
+     "messages and reminders": 2.0,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 51.0,
+     "reading notes": 18.0,
+     "thinking": 9.6,
+     "writing code": 7.5,
+     "messages to Sam": 4.1,
+     "commands": 3.5,
+     "writing notes": 2.5,
+     "messages and reminders": 2.0,
+     "start-up and handover tools": 1.1,
+     "running checks and tools": 0.7
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 99,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/proposals/chat-size-and-model.md",
+      0.7,
+      0.0057
+     ],
+     [
+      "notes/proposals/chat-size-and-model/sam.md",
+      0.7,
+      0.0057
+     ],
+     [
+      "notes/proposals/dearest-week.md",
+      0.7,
+      0.0057
+     ],
+     [
+      "story/status.md",
+      0.4,
+      0.0044
+     ]
+    ],
+    "base_pct": 25.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 5,
+     "other": 5,
+     "shared:ledger.py": 1,
+     "shared:costline.py": 1,
+     "shared:handover.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "notes/logs story/status.md",
+      "cost\\|usage\\|budget",
+      "",
+      1692
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/cost-diagnosis.md notes/real-cost-answer.md notes/cost-fixes.md notes/ledg",
+      "cd /home/user/Animation-; for f in notes/cost-diagnosis.md notes/real-cost-answe",
+      "",
+      8318
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "/home/user/Animation-/notes/ledger",
+      "cd /home/user/Animation-/notes/ledger; head -3 app-costs.tsv; echo; tail -40 app",
+      "",
+      5174
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/ledger notes/ledger/*.json",
+      "open|wound|gta|grand",
+      "",
+      735
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/logs notes/ledger/grand-theft-autism.json",
+      "wound|open",
+      "",
+      3504
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/ledger/grand-theft-autism.json source/*.py",
+      "open wounds\\|open-wounds",
+      "",
+      1503
+     ],
+     [
+      7,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/ source/ledger.py source/costline.py",
+      "allowance\\|per week\\|week's\\|\\$.*week",
+      "",
+      1617
+     ],
+     [
+      8,
+      "other",
+      "shared:costline.py",
+      "source/costline.py notes/real-cost.md notes/session-value.md",
+      "budget\\|15\\b\\|week\\|pct\\|percent\\|usd\\|dollar",
+      "",
+      2489
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/ledger/ guides/job-packs.md guides/film-quality-rules.md .claude/hooks not",
+      "cd /home/user/Animation-; python3 - <<'E' import json for f in ['grand-theft-aut",
+      "",
+      11305
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/ledger/ notes/grand-theft-autism.md notes/archive/grand-theft-autism*",
+      "^v\\|animatic v",
+      "",
+      326
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "notes/proposals notes/archive",
+      "create_session\\|open the next chat\\|opens the next\\|no count\\|fresh chat",
+      "",
+      1900
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/proposals/chat-size-and-model.md notes/proposals/chat-size-and-model/sam.m",
+      "cd /home/user/Animation-; cat notes/proposals/chat-size-and-model.md | head -80;",
+      "",
+      8389
+     ],
+     [
+      14,
+      "other",
+      "shared:handover.py",
+      "notes/ledger/ notes/proposals/*.md source/handover.py",
+      "fewer steps\\|rework",
+      "",
+      701
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
