@@ -15,6 +15,9 @@ VIEWS = ((0, 'upright', 'front'), (45, 'upright', 'three-quarter'), (90, 'uprigh
 
 def tile(who, yaw, pose, full=False):
     sp = dict(cast[who]); sp['seat_r7'] = True; sp['seat_solid'] = MODE
+    if MODE == 'body' and pose.startswith('cross') and 'turned_curves' not in sp:
+        sp['turned_curves'] = 0.0   # R7 chat 10: Sam's "way too curvaceous" view straightened to her boxy jacket; the
+        #                             uncrossed three-quarter is locked by Sam as it is (his Y needed to match it)
     img = Image.new('RGBA', (1080, 1920), (232, 232, 226, 255))
     s = 0.5 * sp['height'] / 1.75
     V.person(img, B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0, yaw, S.pose(sp, pose))

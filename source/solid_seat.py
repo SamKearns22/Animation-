@@ -647,7 +647,7 @@ def draw(p, j, yaw, sp, scale=2):
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
-    LAST.update(whole=arms, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
+    LAST.update(mode=mode, whole=arms, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
                 P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
     return L
 
@@ -724,4 +724,8 @@ def checks(j=None, sp=None):
         sizes = np.bincount(lab.ravel())[1:]
         big = int((sizes > max(40, sizes.max() * 0.01)).sum()) if k else 0
         out[nm + ' pieces (picture)'] = big if big > most else 0
+    # R7 chat 10: mode 'body' wears the person's posted jacket, which hangs straight: no bust bump or hip flare
+    # turned (Sam's "way too curvaceous" crossed three-quarter; views.turned_curves_fault)
+    if LAST.get('mode') == 'body' and V.LAST_TURNED:
+        out['turned curves'] = len(V.turned_curves_fault())
     return out

@@ -1363,20 +1363,61 @@ def _built_outline(sp, view, bottom, o, fig):
         # widths alone (the bust and seat never showed turned). Only the new women's builds (no finished film).
         sd, hs = _side_depths(sp, fig, bottom), _side_depths(sp, None, bottom)
         lead = 1 if view == 'three' else -1       # the body faces right: three's front edge is +x (three_back: -x)
+        # R7 chat 10 (Sam, 25 Nov, May crossed three-quarter: "Way too curvaceous from this angle. She's Theresa May
+        # not a swimsuit model"): 'turned_curves' is the share of the side's shape and the bust bump a turned edge
+        # keeps (1: the Open Wounds women, as posted); 0: her boxy jacket hangs straight from the shoulder, as in her
+        # posted frame (examples/sam-25nov-may-correct-outfit.jpg). Checked by turned_curves_fault (below).
+        tc = float(sp.get('turned_curves', 1.0))
         out = []
         for x, y in dense:
             kf = _fig_k(fig, y, sw, bottom, hem)
             i = 0 if x * lead > 0 else 1
             ks = float(np.interp(y, sd[2], sd[i])) / max(1.0, float(np.interp(y, hs[2], hs[i])))
             u = min(1.0, max(0.0, (y - 70.0) / 50.0))
-            x = x * (kf + TURNED_SIDE[fig] * (ks - 1.0) * u)
+            x = x * (kf + tc * TURNED_SIDE[fig] * (ks - 1.0) * u)
             if i == 0:                            # chat 7: the bust in front of the near arm (below)
-                x += lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD[fig]) ** 2)
+                x += tc * lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD[fig]) ** 2)
             out.append((x, y))
+        LAST_TURNED[:] = [(view, out, sp)]        # turned_curves_fault reads the last turned build's outline
         if hem:                                   # a short jacket (chat 7): turned, the seat runs into the thighs
             out = _seat_into_thighs(sp, out, view, bottom)   # (was a square corner: a box's; then a tuck by a fixed
         return out                                #   share, which overhung the back thigh and fell short of the front)
     return [(x * _fig_k(fig, y, sw, bottom, hem), y) for x, y in dense]
+
+
+LAST_TURNED = []                                   # [(view, outline, spec)] of the last turned build drawn
+CURVE_BUMP = 6.0     # a turned front edge may not swell out again below the shoulder by more than this (body units)
+CURVE_HIP = 1.45     # nor either edge's hip be more than this times its waist (R7 chat 10, May crossed three-quarter:
+#                      Sam's "way too curvaceous" frame measured bump 16, hip 1.71; her boxy jacket 0 and 1.29;
+#                      her locked front view's own widths 1.29)
+
+
+def turned_curves_fault(pts=None, view=None):
+    """R7 chat 10 (Sam, 25 Nov: "Way too curvaceous from this angle. She's Theresa May not a swimsuit model",
+    examples/sam-25nov-may-too-curvaceous.png): a turned torso whose front edge swells into a bust below the
+    shoulder (more than CURVE_BUMP) or whose hips flare past CURVE_HIP times its waist. Returns the faults as text
+    (empty: none). With no outline given, the last turned build's (LAST_TURNED)."""
+    if pts is None:
+        if not LAST_TURNED:
+            return []
+        view, pts, _ = LAST_TURNED[0]
+    lead = 1 if view == 'three' else -1
+    bottom = max(y for _, y in pts)
+    ys = np.arange(100.0, bottom - 20, 10.0)
+    sp = [_span(pts, y) for y in ys]
+    fr = np.array([(s[1] if lead > 0 else -s[0]) if s else 0.0 for s in sp])
+    bk = np.array([(-s[0] if lead > 0 else s[1]) if s else 0.0 for s in sp])
+    out = []
+    up = ys <= 220                                            # above the waist: below it the hip may widen
+    bump = float(np.max(fr[up] - np.minimum.accumulate(fr[up]))) if up.any() else 0.0   # the edge coming out again
+    if bump > CURVE_BUMP:
+        out.append('bust bump %d' % bump)
+    w = (ys > 180) & (ys < 330)
+    h = ys >= 300
+    for nm, e in (('front', fr), ('back', bk)):
+        if w.any() and h.any() and e[h].max() > CURVE_HIP * max(1.0, e[w].min()):
+            out.append('%s hip %.2f of waist' % (nm, e[h].max() / max(1.0, e[w].min())))
+    return out
 
 
 SEAT_ROUND = 0.12                                  # the seat's run into the thighs: a share of the body's length
@@ -1792,6 +1833,7 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None)
     `tilt` = (e, c), the camera's real tilt measured at the person (lying.stand works it out; else the fixed ELEV):
     a point one unit nearer sits e units lower, and heights squash by c towards the soles (more shoulders and the
     tops of the feet, shorter legs). Steeper than HIGH degrees, draw them with lying.stand (in 3D) instead."""
+    LAST_TURNED.clear()                           # R7 chat 10: turned_curves_fault reads this person's only
     if tilt is None:
         return _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, None)
     old = _E[0]

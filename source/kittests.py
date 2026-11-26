@@ -495,6 +495,28 @@ def named_lines_body_each_answered():
 
 
 @test
+def turned_curves():
+    """R7 chat 10 (Sam, 25 Nov, examples/sam-25nov-may-too-curvaceous.png: "Way too curvaceous from this angle.
+    She's Theresa May not a swimsuit model"): views.turned_curves_fault catches that frame's drawing (May, mode
+    'body', crossed three-quarter, turned_curves 1) and passes her boxy jacket (turned_curves 0)."""
+    import sys
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import views as V
+    import sheet_solid as SH
+    SH.MODE = 'body'
+    got = {}
+    keep = SH.cast['may']
+    try:
+        for tc in (1.0, 0.0):
+            SH.cast['may'] = dict(keep, turned_curves=tc)
+            SH.tile('may', -45, 'cross, knee over knee')
+            got[tc] = V.turned_curves_fault()
+    finally:
+        SH.cast['may'] = keep
+    return bool(got[1.0]) and not got[0.0], f"Sam's frame: {got[1.0] or 'MISSED'}; boxy jacket: {got[0.0] or 'passes'}"
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for Open Wounds (locked by
     Sam) and every posted film, whose seated people stay pixel for pixel (fingerprints taken before R7 was built)."""

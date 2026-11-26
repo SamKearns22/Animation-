@@ -100,3 +100,20 @@ Open rule requests: none. For Claude: whole-person solid (2b) not built yet: cha
 Branches not R7's, left for their chains: claude/kit-tests-when-build, claude/kit-tests-per-film, claude/gta-v5-sound-draft,
 claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31. End-check SENTENCE x4 are CLAUDE.md edits by other
 chats (34f49840, 0945cc85; named by earlier chats), not R7's.
+
+## Where things stand (chat 8, 25 Nov, session_01U3pKQz5xGww8EfKdFsFKXb; cost amber: handed over)
+Rules that bite next: 87 (a fix failing twice stops), 30 (fix the method), 85 (cost watch).
+Done: mode seat_solid='body' (solid_seat.py; off for every film): the whole solid body under May's flat posted outfit,
+solid shown only below the jacket's seated hem. Sam: "FINALLY correct ... correct anatomy and outfit", front "100%".
+Next: chat 9, Opus medium (a round of Sam's notes): 1. the crossed three-quarter's curves (Brief checklist: find
+which drawing makes the bust, waist and hip curves; straighten to her posted boxy jacket; nothing else moves; a sheet
+of 4 views to Sam). 2. then the proposal route (source/propose.py): mode 'body' as the default for every new film's
+people (seated first; standing/moving next), with Lost/Added, cost, and Kemi/Blair as the next test.
+Needs Sam: nothing until chat 9's sheet.
+Read: Brief checklist (top lines); source/solid_seat.py MAP + draw(); views._person (solid_whole / seat_solid).
+Open rule requests: none. Kit check: started unasked (rule 90), stopped; the film's final runs it.
+Locked by Sam: May mode 'body' front, side, three-quarter (examples/sam-25nov-may-front-correct.png); her posted
+outfit (sam-25nov-may-correct-outfit.jpg); Open Wounds' seated frames (switch off); the bum/seat.
+For Claude: sheet = notes/learn/seated/solid/may_sheet.py OUT body (sheet_solid tiles, MODE body; crops 240,620,840,1740); HEM_OVERLAP, BODY_TOP;
+mode 'whole' kept unused; model-body-all chain merged (live). Other chains' branches named in chat 6's archive entry.
+
