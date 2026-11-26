@@ -6400,6 +6400,118 @@ def _mh_one(_):
         return f'{type(e).__name__}: {e}'
 
 
+@test
+def checks_read_what_is_meant():
+    """Check-knows-intent change 1 (Sam's "1", 26 Nov): what a scene means to hide or overlap travels with the drawing
+    (figure.meant, and a side-on gait's own mark) and the hand check reads it: a meant flag is one 'meant: ...' line,
+    never a fault and never hidden; a real flag still shows; a hand in its sleeve, sinking, hovering or passing
+    through can never be marked meant. Examples: notes/learn/check-intent/sort-1.md (Open Wounds, 26 Nov)."""
+    import body as B
+    import figure as F
+    import handcheck as H
+    import kitchecks
+    import limbs
+    import moves as MV
+    import posegallery as G
+    import views as V
+    from PIL import Image
+    from satire_style import install_circle_hands
+    B.SS = 1
+    F.guard(B)
+    F._ALLOW.append('kittests')
+    install_circle_hands(B)
+    limbs.install(B)
+    kitchecks.install()
+    H.install()
+    cam = B.Cam(1.0, 540, 960)
+
+    def frame(draws, t=0.0):
+        im = Image.new('RGBA', (1400, 1100), G.BG)
+        H.begin()
+        for d in draws:
+            d(im)
+        return H.end(t)
+
+    def p(x, yaw, pose):
+        return lambda im: V.person(im, cam, x, 330, 0.62, G.MODEL, 0.0, yaw, pose)
+    pair = [p(500, 0, G.pose('pointing', G.MODEL)), p(650, -90, G.pose('pointing', G.MODEL))]
+    out = []
+    real = frame(pair)                                        # a crowding reach nobody marked: a fault
+    if not any(f['kind'].startswith('over') and not f.get('meant') for f in real):
+        out.append('an unmarked hand over another body was not flagged')
+    with F.meant('over *', 'a crush through a doorway'):
+        marked = frame(pair, 0.1)
+    ov = [f for f in marked if f['kind'].startswith('over')]
+    if not ov or not all(f.get('meant') for f in ov):
+        out.append('a hand over a body inside figure.meant was still a fault')
+    with F.meant('over *', 'a crush through a doorway'):    # the mark covers its kind only
+        if F.meant_for('no hand', F.MEANT):
+            out.append("an 'over' mark excused a hidden hand")
+    run = frame([p(600, 90, MV.gait(G.MODEL, 0.2, 'sprint'))], 0.2)
+    if not run or not all(f.get('meant') for f in run if f['kind'] == 'no hand'):
+        out.append("a side-on sprint's far hand behind the body was still a fault")
+    front = [m for m in MV.gait(G.MODEL, 0.2, 'sprint')['meant'] if len(m) < 3 or m[2] == 'front']
+    if front:
+        out.append("a gait's side-on mark also counted seen front on")
+    for k in ('in sleeve', 'sink', 'hover', 'through'):       # never meant
+        try:
+            with F.meant(k, 'x'):
+                pass
+            out.append(f'"{k}" was accepted as meant')
+        except F.FigureError:
+            pass
+    if F.meant_for('in sleeve', [(('*',), 'everything')]):
+        out.append('a hand in its sleeve was excused by a catch-all mark')
+    rows = H.summary(None, real + marked + run, 12)
+    lines = H.meant_lines(real + marked + run)
+    if any('crush' in r[1] or 'sprint' in r[1] for r in rows) or len(lines) < 2:
+        out.append(f'meant flags not kept apart: {len(rows)} fault rows, {len(lines)} meant lines')
+    return (not out), ('; '.join(out) or f'{len(rows)} fault row(s) (the unmarked reach), meant lines: ' +
+                       ' | '.join(lines))
+
+
+@test
+def faults_said_once():
+    """Check audit B1, say once (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, where 361
+    of 372 fault lines were the same fault back unchanged): a fault the last run of the same check already showed,
+    unchanged but for its times and numbers, is one count line, not printed again; a new fault prints in full; both
+    still count as faults. The real Open Wounds record: its last quick check's faults against the run before."""
+    import io
+    import contextlib
+    import ledger
+    import report as R
+    runs = [{'t': '1', 'of': {'quick check': 'quick check', 'pop-in': 'quick check'},
+             'faults': {'pop-in': ['pop-in: guest 2 appears at 17.55 s mid-frame']}},
+            {'t': '2', 'of': {'pre-flight': 'pre-flight'}, 'faults': {'pre-flight': ['CAPTION: x']}}]
+    now = ['pop-in: guest 2 appears at 17.80 s mid-frame', 'caption "wolves": shown 0.30 s']
+    before = R.shown_before('quick check', now, runs)
+    out = []
+    if before != {now[0]}:
+        out.append(f'repeat not recognised (or the new one taken as old): {before}')
+    keep = (R.shown_before, ledger.record)
+    try:
+        R.shown_before = lambda title, faults, runs_=None: R.__dict__['_kt_before']
+        R._kt_before = before
+        ledger.record = lambda *a, **k: None
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            R.summarise('quick check', now)
+        text = buf.getvalue()
+    finally:
+        R.shown_before, ledger.record = keep
+        R.__dict__.pop('_kt_before', None)
+    if '2 fault(s)' not in text or 'caption' not in text or '17.80' in text or '1 shown on the last run' not in text:
+        out.append('summary wrong: ' + text.replace(chr(10), ' / ')[:200])
+    real = [r for r in ledger.checkruns('brexit-is-done')['runs'] if 'quick check' in r['of'].values()]
+    if len(real) >= 2:
+        last = [x for k, v in real[-1]['faults'].items() for x in v]
+        same = R.shown_before('quick check', last, [real[-2]])
+        out_n = f'Open Wounds: {len(same)} of {len(last)} said once'
+    else:
+        out_n = 'Open Wounds: fewer than 2 quick checks'
+    return (not out), ('; '.join(out) or 'one count line for the repeat, the new fault in full; ' + out_n)
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
