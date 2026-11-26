@@ -60,7 +60,7 @@ The start check prints this for the film (handover.py start, LEARN-FIRST; kittes
 
 ## Where things stand (chat 37, 26 Nov, session_01U3pKR3AXhEjf4GS3ZJpZ4k)
 Rules that bite next: 30 (a note seen before: 23.1 and 23.4 were), 92 (move size: now a window, floor 10 px, ceiling 18 a nod), 11 (shot 2 held until Sam's framing number).
-Done (chat 37): Sam's notes 23.1-23.4 (Notes table): head moves back to house size + movesize ceiling, kittest head_moves_not_comic; Kemi's backwards point path (acting.PLACES point back / mid / swing); chase drawn far to near in the corridor (places_site._beyond) and cover sees each guest and wolf and skips doorway-vs-wall; shot 2 framings sheet sent. May clip sent.
+Done (chat 37): Sam's notes 23.1-23.4 (Notes table): head moves back to house size + movesize ceiling, kittest head_moves_not_comic; Kemi's backwards point path (acting.PLACES point back / mid / swing); chase drawn far to near in the corridor (places_site._beyond) and cover sees each guest and wolf and skips doorway-vs-wall; shot 2 framings sheet sent; May clip and chase clip sent (body check clean), Kemi before/after sheet sent. Chase order stuck while two overlap (_ranks; kittest chase_order_stuck).
 Next: on Sam's number for shot 2 (OPUS, medium): build it for real (the site's depths in brexit-is-done-places.txt and the action depths nearer, all four background actions and some grey sky kept in frame; not the preview's enlarging), board, then a Kemi clip (13.5-16 s, the point back); then Sonnet: pre-flight, animatic with Override only if Sam says so, finish.py, send.
 Needs Sam: shot 2 framing number; Y/N on check-knows-intent (V3).
 Read: guides/job-packs.md "Notes round".
@@ -168,4 +168,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 53.38% of 15%; forecast 60.4% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 59.23% of 15%; forecast 66.2% (2026-11-26)
