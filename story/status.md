@@ -1,3 +1,3 @@
-Open Wounds chat 28 (26 Nov): Sam's animatic notes fixed: the pounce lands on the worker, a fiercer bar fight, a real corridor behind Tony's doors, wolf lines at house weight; voices and growls saved; two clips sent.
-Next: chat 29 (Opus medium) sets the timing from Sam's voices and lays the growl bed; no animatic until the new body kit is across the film.
-Sam: which Kemi take (Q1).
+Open Wounds chat 29 (26 Nov): speech-to-text installed; Sam's takes set the clock (35.5 s), lips and captions on heard words, growl bed under Kemi and Tony; Kemi's two files are one line.
+Next: chat 30 (Opus medium, running) fixes notes 19-22 and May's seated sheet, then opens the Sonnet animatic chat.
+Sam: nothing needed.

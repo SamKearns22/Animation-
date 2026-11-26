@@ -58,24 +58,22 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (chat 28, 26 Nov, session_01U3pKR2gyjRcVjW35wkF7BD)
-Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (a note seen before).
-Done (chat 27, parallel): May, Kemi (standing) and Blair (armchair) on the body tool (people.SEAT_BODY, STAND_BODY); the
-body drawn over its own box, 3x faster (kittest solid_crop_same). Done (chat 28): Sam's animatic notes 13-18 saved with his voices and wolf growls (sounds/brexit-is-done/). Fixed 13 (the pounce lands on
-him, he falls on it, a beat first), 14 (the bar fight), 15 (the corridor and who comes from where), 16 (wolf lines). Clips sent:
-animations/drafts/ow-n13-14-site-attack.mp4, ow-n15-room-doors.mp4.
-Next: chat 29, Opus medium: Sam's takes set the clock (LINES start/end from the takes, as cryminister._voices; mouths and head
-life from the voice), the growl bed under shots 2-3 (note 17); a 10 s clip of each line's lips. Then the strike-lands check (13).
-NO animatic: Sam waits for the new body kit across the film (the crowds: workers, guests). Rule 91 changed by Sam: remind him
-of the learn-first suggestions in one line; checks only on his word.
-Needs Sam: Q1, which Kemi take (Kemi.m4a 8.9 s whole line, or Kemi_2.m4a 5.8 s); no speech-to-text here to tell them apart.
-Read: guides/job-packs.md "Notes round"; cryminister.py _voices/soundtrack (lines 136-215, 1593-1610).
-Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
-Handover check: REFUSED on 11 STOPs, all May's seated cast sheet (no bum, legs one tone, judge record old), from the body-tool work
-before this chat (nothing here touches sitting): first job of the body-kit chat. Finder: not used (the fixes were new builds).
-Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
-three in May's place and size; the cast; every camera and framing.
-For Claude: legs_soft vs FOLD_MIN: two fixes for one knee tick, merge to one. ACT.LEAD/HIT/REACH/POUNCE, _exchange, _from_passage/PASSAGE_D; places_site double doors corridor/passage; WF.house_ctx.
+## Where things stand (chat 29, 26 Nov, session_01J1JB7YdEy33J8jBD92qp7f)
+Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (a note seen before: 19 and 22 are kinds seen before).
+Done (chat 29): speech-to-text installed (faster-whisper, setup.sh) and built as shared source/words.py (kittest words_from_takes);
+Kemi's two files are her line's two halves (both used). Notes 17 (growl bed) and 18 (takes set the clock) fixed: film now 35.5 s.
+Captions and lips on heard word times (subtitles.pieces, shared). Clip: animations/drafts/ow-voices-tony-shot3.mp4 (0.9 MB).
+Running: chat 30 (session_01J1JB7WGFbaGz6YHKRXnSCz, Opus medium): notes 19-22 (Tony's hands, Tony's house look, Kemi's
+face lines, the last pounce) and May's seated cast-sheet STOPs. It was told the new clock (send_message).
+Next: when chat 30 finishes it opens the Sonnet animatic chat (Sam: "Once work is finished on both these chats render an
+animatic"): finish.py on the clean render (Hook Text, sign-off), sent in the chat. No other chat waits on this one.
+Needs Sam: nothing.
+Read: guides/job-packs.md "Checks and animatic"; this section.
+Open rule requests: none. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, left.
+Finder: not used (chat 29 built the voice clock new; no note's fix). Locked by Sam: the script (now as Sam recorded it), who is where, every background action, the three places' briefs, the cut on
+the lunge; film order; all three in May's place and size; the cast; every camera and framing.
+For Claude: LINES[i]['words'] (absolute), WD.track/at_word, SHOTS built from PRE/POST/GRIN_AFTER/LUNGE_AFTER_GRIN; ACT.LUNGE_T set
+from the 9.4 s reference; CHASE_DELAY (uc) in blair_shot; GROWLS/BED_DIP_DB; `brexit_is_done.py sound`. legs_soft vs FOLD_MIN still to merge.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Sam 26 Nov (chat 28, voice notes): "Point number two." / "Point number three." / "That doesn't look very good, and I think it affects the choreography of the rest of the scene.": the headings and words of notes 14 and 15.
@@ -147,12 +145,6 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 
 | # | shot | time | note | line | should have caught | status |
 |---|------|------|------|------|--------------------|--------|
-| 13 | 2 (site, the attack) | 7.5-9.5 | Sam (26 Nov, animatic): "you don't get a moment to take in the scene before the wolves pounce... the wolves jump over the construction worker and go past him, yet the construction worker does the falling down motion. The construction worker needs to be standing in that center spot to the left of Kemi, and we need to see the wolves doing their pounce, landing on him, and at the moment they land on him, that's when he falls and they start feeding on him. Please refer to Crime Minister" | new: contact (the strike lands where the body is; the fall starts on the landing) | none (no check compares a leaper's landing point with its target's body, nor a beat before the first action) | fixed (chat 28): he digs in the open ground left of Kemi (x -1.4) for 1.1 s first (LEAD); each wolf runs in, crouches, springs a short pounce whose forepaws strike him where he stands (WA his chest, WB his hips 0.2 s later), rides him down as he falls, then feeds over him, head down at his chest; he jerks upright as they spring. Clip: animations/drafts/ow-n13-14-site-attack.mp4. Check to build: a strike-lands check (a leaper's forepaws within reach of its target's body at the strike frame) |
-| 14 | 2 (site, bar fight, upper right) | all | Sam (26 Nov): "needs to be made more vigorous and desperate on both sides... hitting and stabbing and retreating, advancing... the wolves should also be similar in kind with their attacks and pushing forward and bites and snarls" | new: acting (fight energy) | none (the acting list named "jab", not how hard or how far) | fixed (chat 28): an exchange every 0.75 s, never still; the man gives ground as his wolf lunges, then steps in with a stab or a clubbing overhead hit by turns; the wolves press in snapping, lunge 0.3 m forward, are knocked back flinching; the third man brandishes over them. Wolves moved back so the bars, not bodies, meet. Same clip |
-| 15 | 3 (room, doorway) | 17.5-24 | Sam (26 Nov): "when the door opens into Tony's room, all of the characters appear from a sudden blank void at the end of the corridor, and they just materialize suddenly... a bit more planning needs to go into that, and you might want to draw the room so that you have an understanding of where everyone goes and when" | seen before kind: a pop (someone appears from nowhere): rule on pops | AUDIT pops (it ignores people who arrive inside a doorway's frame; the corridor beyond had no depth to come from) | fixed (chat 28): the corridor runs 9 m back (runner, side doors, wall lights, a lit window, a cross passage at 13.35-14.95 m, places_site double doors 'corridor'/'passage'); the four come round the passage's right arm, out of sight until they turn in, and run its length; doorway times spread 0.26 -> 0.55 s apart. Plan from above: notes/learn/room-plan/ow-shot3-plan.png (source/ow_room_plan.py). Clip: animations/drafts/ow-n15-room-doors.mp4. AUDIT pops should learn arrivals inside an opening (to build) |
-| 16 | 2 and 3 (wolves) | all | Sam (26 Nov): "the line work on the wolves is very thick in comparison to our house style, so that needs to be dragged back into compliance" | new: line weight (the wolf kit's ink is not the house's) | house look (it measures people's lines, not the wolf kit's) | fixed (chat 28): wolf.house_ctx: a kit wolf's outline is the people's own weight at its depth (lying._lw), creases in proportion; kittest wolf_house_line (red on the old weight, green now) |
-| 17 | 2 and 3 (sound) | all | Sam (26 Nov): "I have included wolf sound effects. They should be in the background during Kemi and Tony's scenes. They should not overwhelm the dialogue... one of them in particular is quite loud... reduced to a volume where it's kind of a background growl underneath people talking." Files: sounds/brexit-is-done/ (two growl files) | new: sound | none (a wish) | open: chat 29 lays both growls as a low bed under shots 2 and 3, the loud one (alice_soundz, peaks -0.4 dB) brought down further, voice well on top (filmkit.voice_balance) |
-| 18 | all (voices) | all | Sam (26 Nov): "The dialogue is also attached." sounds/brexit-is-done/May.m4a, Kemi.m4a, Kemi_2.m4a, Tony.m4a (they set the clock in place of the stand-in timing). "Do not proceed to create an animatic after this work is complete, as we are waiting on the new body kit to be implemented across this film." | new | none | open: chat 29 sets the clock from the takes (May, Tony, Kemi) as Cry Minister's _voices; Kemi_2 waits on Sam (Q1). NO animatic until the body kit is across the film |
 | 19 | 3 (Blair in the armchair) | 17.5-26.9 | Sam (26 Nov, after the body kit went on): "One thing I noticed on Tony: his hands hover rather than resting on the chair arms." | seen before kind: contact (hands on objects; Seeing like Sam 1) | to name (body chat): the check that looks at hands resting on a seat's arms | open: body chat (chat 30) |
 | 20 | 3 (Blair, house style) | all | Sam (26 Nov): "Please make sure Tony matches the house style: if you look at previous characters like Netanyahu, Trump or Brand, there's something off that I can't pin down. He's a bit doll like?" | new: likeness / house look (compare with the house's Netanyahu, Trump, Brand) | to name (body chat): house look | open: body chat (chat 30): line them up with Netanyahu, Trump, Brand, name what differs, fix the drawing |
 | 21 | 2 (Kemi's face) | 7.5-17.5 | Sam (26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the real life Kemi. Consult reference pictures of her face again." | new: likeness (face lines) | to name (body chat): likeness / name test | open: body chat (chat 30): her reference photos again, the mouth and eye lines redrawn to them |

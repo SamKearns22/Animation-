@@ -1,0 +1,16 @@
+{
+ "film": "mossad",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "quick_checks": [
+  {
+   "at": "2026-11-26T17:24+00:00",
+   "faults": 2
+  },
+  {
+   "at": "2026-11-26T17:26+00:00",
+   "faults": 2
+  }
+ ]
+}

@@ -3,6 +3,8 @@
 word for word from Mossad's audio file (mossad_audio.py, a finished film: freeze.py forbids new work loading it) so
 the shared tools (takes.py) use a kit file. mossad_audio keeps its own copy for the finished films; the two give
 identical sound (kittest takes_cleaned_and_registered compares Milburn's takes)."""
+import math
+
 import numpy as np
 from scipy.signal import butter, iirnotch, istft, resample_poly, sosfilt, sosfiltfilt, stft, tf2sos
 
@@ -118,3 +120,103 @@ def pauses(x, min_gap=0.12):
             merged.append([a, b])
     return [(a / 100, b / 100) for a, b in merged if b - a >= 4]
 
+
+
+# ------------------------------------------------------------------------------------------------- mastering
+# Copied word for word from mossad_audio.py (Cry Minister, 8 Oct; chat 29 of Open Wounds, 26 Nov) so a new film can
+# master its sound without loading a finished film's file (freeze.py); the same sound as the template's MA.master.
+MASTER_LUFS = -16.0
+MAX_LIMIT_DB = 3.0
+POLISH = True                  # as mossad_audio: the loud stretches evened out before the gentle levelling
+
+
+def gentle_level(x, ratio=3.0, above=4.0):
+    """Even out loud and soft words the way a studio does: the volume eases down only on stretches more than `above` dB
+    louder than the line's average (by half the excess), easing in over 30 ms and back over 300 ms, so it follows
+    syllables, never the voice's own waves. The film's sound used to be turned up 7 dB and then squashed by up to 8 dB
+    within milliseconds on every loud word: on a phone that is crackle (Sam's note 32, twice)."""
+    blk = int(0.001 * SR)
+    nb = -(-len(x) // blk)
+    p = (np.pad(x, (0, nb * blk - len(x))) ** 2).reshape(nb, blk).mean(1)
+    from scipy.ndimage import uniform_filter1d
+    lv = 10 * np.log10(uniform_filter1d(p, 30) + 1e-12)              # level over 30 ms, in dB
+    ref = 10 * np.log10(np.mean(p[lv > lv.max() - 40]) + 1e-12)       # the speech's average level
+    want = -np.maximum(0.0, lv - (ref + above)) * (1 - 1 / ratio)     # gain wanted, dB
+    g, att, rel = np.zeros(nb), 1 - math.exp(-1 / 30), 1 - math.exp(-1 / 300)
+    for i in range(1, nb):
+        k = att if want[i] < g[i - 1] else rel
+        g[i] = g[i - 1] + (want[i] - g[i - 1]) * k
+    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, 10 ** (g / 20))
+    return x * gs
+
+
+def even_out(x, above=2.0, ratio=3.0):
+    """Long loud stretches (an explosion, a run of shouting) eased toward the rest of the film: wherever the level over
+    400 ms sits more than `above` dB over the film's typical level (the median of its sounding moments, so the loud
+    stretch can't raise the bar itself), it comes down by two-thirds of the excess, easing in over 200 ms and back
+    over 1 s, slow enough that no single word is squashed (Job D, Ad-Vanced Notice: 11-17 s ran 4 dB over the rest)."""
+    from scipy.ndimage import uniform_filter1d
+    blk = int(0.01 * SR)
+    nb = -(-len(x) // blk)
+    p = (np.pad(x, (0, nb * blk - len(x))) ** 2).reshape(nb, blk).mean(1)
+    lv = 10 * np.log10(uniform_filter1d(p, 40) + 1e-12)                # 400 ms
+    on = lv > lv.max() - 30
+    if not on.any():
+        return x
+    ref = np.median(lv[on])
+    want = -np.maximum(0.0, lv - (ref + above)) * (1 - 1 / ratio)
+    g, att, rel = np.zeros(nb), 1 - math.exp(-1 / 20), 1 - math.exp(-1 / 100)
+    for i in range(1, nb):
+        g[i] = g[i - 1] + (want[i] - g[i - 1]) * (att if want[i] < g[i - 1] else rel)
+    return x * np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, 10 ** (g / 20))
+
+
+def smooth_limit(x, ceiling_db):
+    """A last guard on the few bursts left over (at most 3 dB of them): the volume eases down over 10 ms just ahead of
+    a peak and recovers over about 150 ms."""
+    from scipy.ndimage import minimum_filter1d, uniform_filter1d
+    c, blk = 10 ** (ceiling_db / 20), int(0.001 * SR)
+    nb = -(-len(x) // blk)
+    a = np.abs(np.pad(x, (0, nb * blk - len(x)))).reshape(nb, blk).max(1)
+    need = minimum_filter1d(np.minimum(1.0, c / np.maximum(a, 1e-9)), 21)    # 10 ms either side
+    g, rel = need.copy(), 1 - math.exp(-1 / 150)
+    for i in range(1, nb):
+        g[i] = min(need[i], g[i - 1] + (1 - g[i - 1]) * rel)
+    g = np.minimum(need, uniform_filter1d(g, 5))
+    g = np.minimum(g, uniform_filter1d(g, 5))
+    gs = np.interp(np.arange(len(x)), np.arange(nb) * blk + blk / 2, g)
+    return np.clip(x * gs, -c, c)
+
+
+def master(mix, end=None, lufs_target=MASTER_LUFS):
+    """The whole film's sound: levelled gently, set to -16 LUFS (or quieter if the loudest burst would need more than
+    3 dB of limiting), then the few bursts left eased under -1 dB. Returns (mastered, the gain applied before limiting)."""
+    end = len(mix) if end is None else end
+    x = gentle_level(even_out(mix) if POLISH else mix)
+    if np.abs(x).max() < 1e-9:
+        return x, 1.0
+    g = min(10 ** ((lufs_target - lufs(x[:end])) / 20), 10 ** ((MAX_LIMIT_DB - 1.0) / 20) / np.abs(x).max())
+    return smooth_limit(x * g, -1.0), g
+
+
+def bed(voice, clips, start, dip_db=9.0, sr=None):
+    """A background bed (growls, crowd, rain) under the voice, for any film (Open Wounds note 17, Sam 26 Nov: "a
+    background growl underneath people talking"). clips: [(samples, from_s, loudness_lufs)], laid from `start` seconds
+    to the end; loud peaks tamed by a slow limiter, each set to its loudness, a 0.25 s fade in, and the whole bed
+    dipped by dip_db under every stretch of speech (back up between lines). Check it with filmkit.voice_balance."""
+    sr = sr or SR
+    n, i0 = len(voice), int(start * sr)
+    out = np.zeros(n)
+    for x, off, target in clips:
+        x = np.asarray(x, float)[int(off * sr):][:max(0, n - i0)]
+        if not len(x):
+            continue
+        peak = np.convolve(np.abs(x), np.ones(sr // 100) / (sr // 100), 'same')
+        x = x * np.minimum(1.0, np.percentile(peak, 90) / (peak + 1e-9)) ** 0.7
+        x = x * 10 ** ((target - lufs(x)) / 20)
+        k = min(len(x), int(0.25 * sr))
+        x[:k] *= np.linspace(0, 1, k)
+        out[i0:i0 + len(x)] += x
+    w = int(0.15 * sr)
+    talk = np.convolve((np.abs(voice) > 1e-4).astype(float), np.ones(w) / w, 'same')
+    return out * 10 ** (-dip_db * np.minimum(1.0, talk * 3) / 20)

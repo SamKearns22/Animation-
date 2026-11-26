@@ -825,7 +825,7 @@ def lunger(img, L, u, cut=None):
     first frame: no wolf before it, no wind-up, so the eye had nothing to follow. Now it is acted in three beats
     that read at phone size, the cut still on the lunge: (1) from 1.6 s before the cut it creeps in low behind his
     shoulder at frame right (seen, crouched, snarling, eyes on his head) while he grins; (2) 0.4 s of coil, the body
-    sinking back on its haunches; (3) the leap, 0.6 s (seven frames), up and over onto his head, the jaws widening;
+    sinking back on its haunches; (3) the leap, 0.5 s (six frames), up and over onto his head, the jaws widening;
     the cut before it lands. `cut`: the shot's length (s), from the film's SHOTS (its voices set it)."""
     C = LUNGE_CUT if cut is None else cut
     t_in, t_coil, t_leap = C - LUNGE_CREEP, C - LUNGE_COIL - LUNGE_LEN, C - LUNGE_LEN
@@ -864,13 +864,14 @@ def lunger(img, L, u, cut=None):
 
 
 LUNGE_CUT = 9.4                                         # s: the shot's length when the voices don't say
-LUNGE_LEN = 0.6                                         # s: the leap (note 22: was 0.333, four frames)
+LUNGE_LEN = 0.5                                         # s: the leap, six frames (note 22: was 0.333, four)
 LUNGE_COIL = 0.4                                        # s: sinking back on its haunches before the leap
 LUNGE_CREEP = 1.6                                       # s before the cut it comes into view
 LUNGE_D = 4.2                                           # m: its depth behind him (the floor shows right of his chair)
 LUNGE_STALK = (2.6, 1.38)                               # world x (m) at LUNGE_D: off the right edge, to its mark
 LUNGE_PATH = ((960.0, 215.0), (750.0, 365.0))          # the jaws' front at the cut (second point), screen px
-LUNGE_T = LUNGE_CUT - LUNGE_LEN                          # the leap's start (critique tools read it)
+LUNGE_T = LUNGE_CUT - 0.4                                # the lunge's mark the film's clock keys the cut off (chat 29:
+#                                                         cut = mark + 0.4 s; the leap starts 0.1 s before it)
 # readtime.py (note 22): (name, seen before the wind-up, wind-up, action), seconds
 READ_TIMES = [('shot 3: the last pounce on Blair', LUNGE_CREEP - LUNGE_COIL - LUNGE_LEN, LUNGE_COIL, LUNGE_LEN)]
 

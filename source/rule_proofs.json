@@ -1215,6 +1215,17 @@
    "plan": "a handover check that every new public function or kit file added in the chat's commits is named by a kittest (docstring or call); its example: a build commit with no test",
    "notes": "Sam, 26 Nov",
    "kind_before": "new"
+  },
+  "N35": {
+   "rule": "Frame-by-frame line checks only when Sam asks; suggest one in a line when it is needed.",
+   "anchor": "Frame-by-frame line checks only when I ask (Sam, 26 Nov):",
+   "status": "partly",
+   "tests": [
+    "practice_mode"
+   ],
+   "example": "Sam, 26 Nov (CLAUDE.md): \"please no longer do this automatically. Please suggest when you think it's needed.\" kittest practice_mode replays a clip and an animatic run with nothing asked: no check runs on its own; only a final is held.",
+   "notes": "Entry written by Open Wounds chat 29 (the handover check found the rule with none). Known miss: no check yet that a reply suggests a line check when one is needed.",
+   "kind_before": "new"
   }
  },
  "_baseline": {

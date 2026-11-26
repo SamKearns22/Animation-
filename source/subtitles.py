@@ -163,7 +163,13 @@ def pieces(ln, fix=None, most=4):
         return ln['_pieces']
     ch = chunks(ln.get('sub') or ln['text'], most=most)
     out = [[ch[0][0], 0.0]]
-    if len(ch) > 1 and ln.get('_voice') is not None:
+    hw = ln.get('words')                    # heard word times (source/words.py, seconds on the film's clock): exact
+    if len(ch) > 1 and hw and len(hw) == sum(len(c.split()) for c, _ in ch):
+        k = 0
+        for (c, _), (prev, _) in zip(ch[1:], ch[:-1]):
+            k += len(prev.split())
+            out.append([c, max(out[-1][1] + 0.45, hw[k][0] - ln['start'] - 0.06)])
+    elif len(ch) > 1 and ln.get('_voice') is not None:
         import press_secretary as PS
         beats = PS._syllable_beats(ln['_voice'], ln['_stretches'])
         syl = [sum(mouths._syllables(w) for w in c.split()) for c, _ in ch]
