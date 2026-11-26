@@ -1054,6 +1054,51 @@ def pose_job_lines(film, notes=None):
     j = t.find('\n## ', i + 5)
     return [POSE_SAY] if POSE_JOB.search(t[i:j if j > 0 else None]) else []
 
+
+LEARN_FIRST = ("LEARN-FIRST (rule 91, Sam, 26 Nov: \"Next time we need a new pose, quote this rule and what you need to "
+               "learn before executing it\"): before building or using these poses, quote the rule to Sam in plain words "
+               "with what must be learned:")
+
+
+def pose_families():
+    """The families in guides/pose-kits.md, The Learn-First rule: (name, proven, words, to learn)."""
+    t = open(os.path.join(ROOT, 'guides', 'pose-kits.md'), encoding='utf-8').read()
+    i = t.find('## The Learn-First rule')
+    blk = t[t.find('```', i) + 3:t.find('```', t.find('```', i) + 3)] if i >= 0 else ''
+    out = []
+    for ln in blk.strip().splitlines():
+        p = [x.strip() for x in ln.split('|')]
+        if len(p) == 4:
+            out.append((p[0], p[1] == 'yes', [w.strip().lower() for w in p[2].split(',') if w.strip()], p[3]))
+    return out
+
+
+def learn_first_lines(film=None, text=None):
+    """Rule 91 (the Learn-First rule): every pose family the job names (the film's brief checklist, Where things
+    stand and moves file, or `text`) that the default pose tool is not proven on gets the rule and what must be
+    learned. Never refuses (Sam: no hard stop on handover). Kittest learn_first."""
+    if text is None:
+        t = ''
+        nf = film and os.path.join(ROOT, 'notes', f'{film}.md')
+        if nf and os.path.exists(nf):
+            n = open(nf, encoding='utf-8', errors='replace').read()
+            for h in ('## Brief checklist', '## Where things stand'):
+                i = n.find(h)
+                if i >= 0:
+                    j = n.find('\n## ', i + 5)
+                    t += n[i:j if j > 0 else None]
+        mf = film and os.path.join(ROOT, 'story', f'{film}-moves.txt')
+        if mf and os.path.exists(mf):
+            t += open(mf, encoding='utf-8', errors='replace').read()
+        text = t
+    low = text.lower()
+    need = []
+    for name, proven, words, learn in pose_families():
+        hit = [w for w in words if re.search(r'\b' + re.escape(w), low)]
+        if hit and not proven:
+            need.append(f"  {name} (named: {', '.join(hit[:3])}): learn {learn}")
+    return [LEARN_FIRST] + need if need else []
+
 def main(argv):
     if not argv or argv[0] in ('-h', '--help'):
         print(__doc__)
@@ -1127,6 +1172,8 @@ def main(argv):
             except Exception as e:
                 print(f'BROKEN (ledger rebook at start): {e}')
             for ln in pose_job_lines(opt('--film'), opt('--notes')):
+                print(ln)
+            for ln in learn_first_lines(opt('--film')):   # rule 91, the Learn-First rule
                 print(ln)
         nf = opt('--notes') or (opt('--film') and os.path.join(ROOT, 'notes', f"{opt('--film')}.md"))
         if nf and os.path.exists(nf):                            # startup-fixes 3: read this, not the whole file

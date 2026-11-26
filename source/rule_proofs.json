@@ -1151,6 +1151,15 @@
    "example": "Sam, 25 Nov (notes/ledger/sam/5whcspgq.md): \"Make the kit check happen at the beginning and the end of every film ... it is wasting usage and time to do this with every chat.\" The old start-up hook (fb29ae0a) ran them in every chat; the kittest catches it.",
    "notes": "check: kitfilm.setup_faults, handover kit gate (started_here), finish.py gate; proposal kit-tests-per-film (V2).",
    "kind_before": "none"
+  },
+  "91": {
+   "rule": "The Learn-First rule: before a pose the default tool is not proven on, quote the rule to Sam and what must be learned.",
+   "anchor": "| 91 | **The Learn-First rule**",
+   "status": "proven",
+   "tests": [
+    "learn_first"
+   ],
+   "example": "Sam, 26 Nov (notes/learn/pose-kit/examples/sam-26nov-learn-first.md): \"Next time we need a new pose, quote this rule and what you need to learn before executing it.\" Open Wounds' brief (a worker running from wolves, men fighting with steel bars, Blair in an armchair) gets the rule and five families to learn; a sitting-only job gets nothing."
   }
  },
  "_baseline": {

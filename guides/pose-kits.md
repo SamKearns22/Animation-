@@ -20,6 +20,24 @@ you start unless I say otherwise." So another tool is allowed; name it and why i
 3. **Lower garments, each its own layer**: trousers as a shell on the body, the seat, shoes, the lap opening. Each
    new look sits behind a flag on the pose (`lap_open`, `leg_gap`), so locked poses and posted films cannot move.
 
+## The Learn-First rule (rule 91, Sam, 26 Nov)
+**Before any pose the default tool has not been proven on, quote this rule to Sam and say what must be learned first;
+only then build it.** Proven means on a sheet Sam passed with its checks green. The start check prints the rule and the
+list for every pose family a job's notes name that is not proven (`handover.py start`, LEARN-FIRST; kittest `learn_first`).
+The families, as the check reads them (`family | proven? | words that name it | what must be learned`):
+
+```
+sitting upright | yes | upright on, seated, sitting, sits, legs crossed, legs apart | -
+sitting other seats | no | armchair, sofa, bench, stool, lean back, reclin | the seat's height and depth, the lean, a reference photo, a sheet
+leaning while seated | no | lean in, lean fwd, lean forward, leans | the hips' angle as she leans, a motion clip checked frame by frame
+standing | no | standing, stands, stand up | the legs straight under the outfit, feet on the floor, a reference photo, a sheet
+walking and running | no | walk, running, runs from, run from, run rampant, chasing, chase, flee, leap, jump | the legs through a stride, feet on the ground each step, a motion clip
+arms beyond the lap | no | arm across, reach, raise, lift, steel bar, swing, grab, fight | arms as part of the body (now flat, drawn on top), hands on objects
+lying, kneeling, crouching | no | lying, lies, kneel, crouch, fallen, on the ground, torn | the body on the floor, its weight, a reference photo, a sheet
+other clothes | no | skirt, dress, coat, shorts | each garment as its own layer on the body, a sheet
+seen from behind | no | from behind, back view | the back of the outfit, a sheet
+```
+
 ## Order of work
 1. **Brief as pictures**: the views Sam will judge (front, both three-quarters, side), each full size with the feet
    in frame. List what is locked (poses, films, outfit) and prove it pixel-identical before and after

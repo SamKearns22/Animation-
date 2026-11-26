@@ -5562,6 +5562,21 @@ def pose_job_line():
     return ok, f'r7: {"line" if r7 else "none"}; brexit-is-done: {"line" if other else "none"}'
 
 
+@test
+def learn_first():
+    """Rule 91, the Learn-First rule (Sam, 26 Nov; notes/learn/pose-kit/examples/sam-26nov-learn-first.md: "Next time we
+    need a new pose, quote this rule and what you need to learn before executing it"): the start check gives Open
+    Wounds (a worker running from wolves, men fighting with steel bars, Blair in an armchair) the rule and what must
+    be learned for each unproven pose; a job naming only the proven sitting pose gets nothing; it never refuses."""
+    import handover as H
+    ow = H.learn_first_lines('brexit-is-done')
+    seat = H.learn_first_lines(text='May sits upright on the office chair, legs crossed.')
+    sam = H.learn_first_lines(text='a worker runs from two wolves across the scaffolding and leaps off it')
+    ok = bool(ow) and 'rule 91' in ow[0] and any('walking and running' in l for l in ow) and \
+        any('arms beyond' in l for l in ow) and not seat and any('walking and running' in l for l in sam)
+    return ok, f"Open Wounds: {len(ow) - 1 if ow else 0} families; sitting only: {'none' if not seat else seat}"
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test

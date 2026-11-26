@@ -47,6 +47,17 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   both to you soon." "For now, please work on the characters."
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
+## The Learn-First rule (rule 91) on Open Wounds (R7 chat 15, 26 Nov; Sam: "implement this rule on the entirety of Open Wounds")
+The new pose tool is proven only on sitting upright. Open Wounds now draws everyone with the flat house kit (seated legs OFF,
+locked by Sam), so nothing changes until Sam picks. Before any shot moves to the new tool, what must be learned:
+- Shot 1, May on the office chair: sitting proven; her lean in and nods: the hips' angle as she leans, a motion clip checked frame by frame.
+- Shot 2, Kemi: as May (same seat, place and size).
+- Shot 3, Blair in the armchair: the armchair's height and depth, his lean back, a reference photo, a sheet.
+- Background, worker torn by wolves (item 6): the body on the ground, its weight, a reference photo, a sheet.
+- Background, worker running and leaping (7); staff fleeing (11): the legs through a stride, feet on the ground, a motion clip.
+- Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
+The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
+
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
 - **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 25 pushed there).
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
