@@ -78,6 +78,7 @@ def tag_rows(rulebook):
 
 
 SAM_REWORDED = {   # sentences Sam himself rewrote (his words now stand in their place): never "lost"
+    'The chain stops only at the budget stop (rule 24)': 'Sam\'s answer 2 on the check audit (26 Nov, notes/check-audit.md Q5): the budget stop is deleted, so the chain line drops it',
     'Every stage aims at three things (Sam, 13 Nov)': 'Statement One (Sam, 22 Nov), top of CLAUDE.md, and "Every stage '
                                                      'aims at Statement One" in "Rules are permanent"',
     'Every stage aims at three things: high quality': 'the same, reworded again by Sam\'s 22 Nov Statement One',

@@ -66,11 +66,14 @@ Named branches (not this job, not merged): claude/brexit-chat39 (Open Wounds cha
 claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
 
 ## Where things stand
-- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), "Fix the drawing, never the shot".
-- Done (chat 1): listing tool, kittest, catalogue row; evidence; report sent; Sam answered all five.
-- Next: R8 chat 2 (opened: session_01J1JB7W1VqXUHMQUcpFV4zp, Opus medium, the Animation- project attached): the plain-words checker first, then the work order above, one item at a time.
-- Needs Sam: nothing for R8 (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
+- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), N8 (plain words, now checked on every reply).
+- Done (chat 2): the plain-words checker (every reply, learns from Sam's "I don't understand"); Q5 budget alarms deleted; C1-C5 duplicates merged; B5 cast check only on change; B6 already so.
+- Next: R8 chat 3 (Opus, medium): B7, then check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), steps 2-3 with say-once, then B4, B3, B8, A2, A6, A4, A5 (Kemi front first), A3, A7, A8.
+- Needs Sam: one-question-at-a-time (1 or 2) and the critique column (Y/N), asked by the parent chat; record them here.
 - Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
-- Open rule requests: none (Q5 rewords rule 24 on Sam's 2).
-- COST: a tool job, no film estimate.
-- For Claude: kittest check_audit_lists_and_flags_repeats; chat 36 record session_01J1JB7YNoonB7shJ4bXB2Vq.
+- Open rule requests: none.
+- COST: a tool job, no film estimate (tracked quietly).
+- Named branches: claude/seeing-test-chat1 (live, not this job; not merged).
+- For Claude: source/plainwords.py (check/score; list notes/learn/plain-words/words.json; let-throughs notes/logs/plainwords.log); kittests plain_words_every_message, quiet_cost_line, castsheet_only_when_cast_changed; watcher.wiring_faults.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.3% of a week (2026-11-26)
