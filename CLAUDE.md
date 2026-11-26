@@ -84,7 +84,7 @@ at session start (`.claude/hooks/setup.sh`).
   something moves. It doesn't have to be perfect." Before a clip or animatic, one line names the checks I'd run, why
   now and how long; they run on my Y or when I ask. Finals keep their checks. **Practice clips** (`Kind: practice` in
   the job's notes, results in `notes/learn/`): no kit tests, body check or critique; sent as made. The body check runs
-  only when asked (`BODYCHECK=1`); kit tests at a major film's start and end only (kittest `practice_mode`).
+  only when asked (`BODYCHECK=1`); kit tests at a major film's start (when I give the screenplay and title) and end (when I ask for the film's lessons) only (kittest `practice_mode`, `kit_tests_per_film`).
   **Always test anything we build** (its own kit test, run once).
 - **No check sheet before an animatic unless I ask**: render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.

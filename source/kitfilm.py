@@ -8,7 +8,8 @@ notes/proposals/kit-tests-per-film.md, the judged pick V2).
                       film, kind (start | final), when, chat. A film with no 'start' row has not had its first chat.
   started_here() .... handover end: this chat wrote a start row (it is a film's first chat)
   first_chat() ...... True when this chat is the film's first (no start row yet, or the start row is this chat's)
-  at_start() ........ handover.py start --film NAME: in the film's first chat, writes the start row and starts the
+  begun(), begin(), lessons(): where a film starts and ends (Sam, 26 Nov): the screenplay and title; the lessons.
+  at_start() ........ handover.py start --film NAME: once the film has begun (its notes say so), in its first chat, writes the start row and starts the
                       stale kit tests in the background (watcher.py kittests-bg); in every chat, saves which tests are
                       stale now (local file), so the end can tell what THIS chat's changes made stale. Tool jobs (no
                       --film) start no run.
@@ -21,7 +22,9 @@ notes/proposals/kit-tests-per-film.md, the judged pick V2).
 The setup hook no longer starts any kit run (setup.sh); finish.py's gate before an animatic or final is unchanged
 (Change 2, keeping it before animatics: Sam's Y, 25 Nov; ANIMATIC_GATE).
 
-    python3 source/kitfilm.py status [FILM]      the films' start / final rows
+    python3 source/kitfilm.py begin FILM         Sam gave the screenplay and title: the film's start (run in that chat)
+    python3 source/kitfilm.py lessons FILM       Sam asked for the film's lessons: the film's end (the stale tests)
+    python3 source/kitfilm.py status [FILM]      the films' start / end rows
 """
 import os
 import subprocess
@@ -82,7 +85,7 @@ def _stale_names():
     return st
 
 
-def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_fn=None):
+def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_fn=None, notes_dir=None):
     """handover.py start. Returns the lines to print. In the film's first chat: the start row and the background run."""
     sid = sid or sid_now()
     out = []
@@ -96,8 +99,11 @@ def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_f
         os.makedirs(os.path.dirname(sp), exist_ok=True)
         with open(sp, 'w', encoding='utf-8') as f:
             f.write(f'{sid}\t{",".join(st)}\n')
-    if film and practice(film):
+    if film and practice(film, notes_dir):
         out.append(f'kit tests: {film} is a practice job: no kit tests (Sam, 26 Nov: only at the start and end of a major film)')
+    elif film and not begun(film, notes_dir):
+        out.append(f'kit tests: not yet for {film} (rule 90: they start when Sam gives the screenplay and title; '
+                   '`kitfilm.py begin FILM` in that chat)')
     elif film and first_chat(film, sid, path):
         if not any(_norm(r[0]) == _norm(film) and r[1] == 'start' and r[3] == sid for r in rows(path)):
             _add(_norm(film), 'start', sid, path)
@@ -107,6 +113,51 @@ def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_f
     elif film:
         out.append('kit tests: not this chat (rule 90: only a film\'s first chat and its final run them)')
     return out
+
+
+# Where a film starts and ends (Sam, 26 Nov, crowd pool chat 1: "The beginning of the film is when I give you the
+# screenplay and title. The end of the film is when I ask for any lessons on the film that need to be learned."):
+#   start: the film's notes carry the line 'Screenplay and title: given DATE' (the chat Sam gives them to writes it,
+#          `kitfilm.py begin FILM`); a job without it (a tool, a pool, a practice clip) never starts the run
+#   end:   `kitfilm.py lessons FILM`, run when Sam asks for the film's lessons: the stale tests, and the 'end' row
+#          (a final render no longer runs or waits for them)
+BEGUN = 'screenplay and title: given'
+
+
+def begun(film, notes_dir=None):
+    """True when the film's notes say Sam gave the screenplay and title (the film's start, Sam 26 Nov)."""
+    p = os.path.join(notes_dir or os.path.join(ROOT, 'notes'), f'{_norm(film)}.md')
+    try:
+        return any(ln.strip().lower().startswith(BEGUN) for ln in open(p, encoding='utf-8'))
+    except OSError:
+        return False
+
+
+def begin(film, notes_dir=None, sid=None, path=None, launch_fn=None):
+    """Sam gave the screenplay and title in this chat: the start line in the notes, the start row, the run."""
+    p = os.path.join(notes_dir or os.path.join(ROOT, 'notes'), f'{_norm(film)}.md')
+    if not begun(film, notes_dir):
+        with open(p, 'a', encoding='utf-8') as f:
+            f.write(f'\nScreenplay and title: given {datetime.now(timezone.utc):%d %b %Y} (the film\'s start: kit tests, rule 90)\n')
+    sid = sid or sid_now()
+    if not any(_norm(r[0]) == _norm(film) and r[1] == 'start' for r in rows(path)):
+        _add(_norm(film), 'start', sid, path)
+        (launch_fn or _launch)()
+        return f'kit tests: {film} starts (screenplay and title given): the kit check runs in the background; `handover.py end` waits for it'
+    return f'kit tests: {film} already started (its start row is on record)'
+
+
+def lessons(film, sid=None, path=None, run_fn=None):
+    """Sam asked for the film's lessons (the film's end): run the stale kit tests now and write the 'end' row."""
+    sys.path.insert(0, HERE)
+    st = _stale_names() if run_fn is None else []
+    ok = True
+    if run_fn is not None:
+        ok = run_fn()
+    elif st:
+        ok = subprocess.run([sys.executable, os.path.join(HERE, 'kittests.py'), '--stale'], cwd=ROOT).returncode == 0
+    _add(_norm(film), 'end', sid or sid_now(), path)
+    return ok
 
 
 def practice(film, notes_dir=None):
@@ -181,6 +232,13 @@ def main(argv):
             if not film or _norm(r[0]) == _norm(film):
                 print('\t'.join(r))
         return 0
+    if argv[:1] == ['begin'] and len(argv) > 1:
+        print(begin(argv[1]))
+        return 0
+    if argv[:1] == ['lessons'] and len(argv) > 1:
+        ok = lessons(argv[1])
+        print(f'kit tests: {argv[1]}\'s end-of-film check {"passed" if ok else "FAILED: fix or name each red before the lessons"}')
+        return 0 if ok else 1
     print(__doc__)
     return 2
 
