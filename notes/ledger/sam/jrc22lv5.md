@@ -12,3 +12,6 @@ Maybe a very small amount of bust bump in the 3/4 poses? She is still a woman an
 1. Shoes clipping on 3/4 view
 2. Confused shoe shapes on side view
 
+### 2026-11-26T09:29:02
+The front facing version -- keep this pose in our arsenal, but could you create another that is the same but her legs are not pressed in against each other? Relaxed, perpendicular, a natural gap between them.
+
