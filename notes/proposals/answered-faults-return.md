@@ -5,3 +5,5 @@ Why: faults answered once stay answered only while they look the same.
 You'd notice: a short "Reopened:" list with stills on animatics, fewer surprise faults.
 Other option: leave notes as they are and only list how many are older than the last drawing change.
 Lost: nothing. Added: a picture and fingerprint per note, a "Reopened:" line.
+
+Sam 26 Nov: proposal answered-faults-return.md declined ("doesn't seem like a good solution"). Offered instead: teach small side-on figures' hands in the drawing; awaiting his Y/N.
