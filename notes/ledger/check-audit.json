@@ -807,5 +807,15 @@
    "notes_auto": 0
   }
  ],
- "checks": {}
+ "checks": {},
+ "cost_log": [
+  {
+   "date": "2026-11-26",
+   "spent": 2.3
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 2.3
+  }
+ ]
 }

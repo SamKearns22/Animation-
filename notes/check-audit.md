@@ -54,19 +54,22 @@ Lost: four after-the-fact re-checks (a silent failure of the saver, guard or fin
 Added: nothing.
 Sam's words carried (handover start, chat 2): 22:19 "Let's move through these one at a time in simple language" is his reply to bad-1 (saved there) and leans to one question at a time (the parent chat asks it formally); 22:21 "We have discussed reopened as a concept before in another chat": carried as B1 above (no 'Reopened' list; he declined it 26 Nov 20:19).
 =======
-Plain words (Sam 26 Nov, Y): CLAUDE.md rule rewritten ("checked on every message"); FIRST job of chat 2: build the every-message checker (a Stop hook like propose.py hook: blocks once, never loops, logs a let-through), with a kittest that catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1; Sam's "I don't understand"/"explain" saves the message he replied to as an example (handover.py log sees his words) and adds its words to the list; rule_proofs N8 status owed until then. Sam's answers (26 Nov): one question at a time Y (CLAUDE.md line added; rule_proofs W_one_question owed to the checker: more than one question = send back); the critique column N (dropped).
+Plain words (Sam 26 Nov, Y): CLAUDE.md rule rewritten ("checked on every message"); FIRST job of chat 2: build the every-message checker (a Stop hook like propose.py hook: blocks once, never loops, logs a let-through), with a kittest that catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1; Sam's "I don't understand"/"explain" saves the message he replied to as an example (handover.py log sees his words) and adds its words to the list; rule_proofs N8 status owed until then. Sam's answers (26 Nov): one question at a time as the normal way: N (keep every open decision in one message; CLAUDE.md unchanged). I first misread his "1. Y" (it re-answered the checker question) as a Y to one-at-a-time and wrote a line in, then removed it. The critique column: still unanswered.
 >>>>>>> origin/claude/create-claude-md-oe8z4g
 Extra (Sam 26 Nov): E1 Y: find why body_check_back_view and finished_films_keep_their_bookmark keep going red; fix the test or the kit.
 Lesson (Sam 26 Nov): "This is the way you should be explaining things in all messages to me": what a thing is in everyday words, one question at a time, no item codes. My first Q1-Q5 and E1/E2 asks used report labels and jargon; CLAUDE.md names plain-check option 1 as the next step when this slips.
-Named branches (not this job, not merged): claude/brexit-chat39 (Open Wounds chat 39, live),
+Named branches (not this job, not merged): claude/seeing-test-chat1 (another chat's live seeing-tools test); claude/brexit-chat39 (Open Wounds chat 39, live),
 claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
 
 ## Where things stand
 - Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), "Fix the drawing, never the shot".
 - Done (chat 1): listing tool, kittest, catalogue row; evidence; report sent; Sam answered all five.
 - Next: R8 chat 2 (opened: session_01J1JB7W1VqXUHMQUcpFV4zp, Opus medium, the Animation- project attached): the plain-words checker first, then the work order above, one item at a time.
-- Needs Sam: nothing for R8 (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
+- Needs Sam: the critique column (Y/N), asked in plain words (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
 - Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
 - Open rule requests: none (Q5 rewords rule 24 on Sam's 2).
 - COST: a tool job, no film estimate.
+- SENTENCE in 7a775f28 ("The chain stops only at the budget stop..."): another chat's commit, not this job; named for its chat.
 - For Claude: kittest check_audit_lists_and_flags_repeats; chat 36 record session_01J1JB7YNoonB7shJ4bXB2Vq.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.3% of a week (2026-11-26)

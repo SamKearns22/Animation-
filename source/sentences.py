@@ -78,6 +78,9 @@ def tag_rows(rulebook):
 
 
 SAM_REWORDED = {   # sentences Sam himself rewrote (his words now stand in their place): never "lost"
+    'One question at a time (Sam, 26 Nov, "1.': 'withdrawn: written in by mistake (R8 chat 1 misread Sam\'s "1. Y"); Sam\'s '
+                                                  'answer was N (26 Nov): every open decision stays in one message',
+    'Y"; this replaces "every open decision in one message" above)': 'the same withdrawn line (Sam: N, 26 Nov)',
     'Every stage aims at three things (Sam, 13 Nov)': 'Statement One (Sam, 22 Nov), top of CLAUDE.md, and "Every stage '
                                                      'aims at Statement One" in "Rules are permanent"',
     'Every stage aims at three things: high quality': 'the same, reworded again by Sam\'s 22 Nov Statement One',
