@@ -195,6 +195,8 @@ def picture_faults(film, name, recs, fps, new_template=False):
     people = 'people' in set(getattr(film, 'HAS', KINDS))
     if people:
         problems += [row[1] for row in handcheck.summary(film, hands, fps)]
+        for line in handcheck.meant_lines(hands):  # check-knows-intent: shown, never a fault
+            print(line)
     for (who, view), t in sorted(heads_missing.items()):   # Job I faces: built only when a shot needs it
         problems.append(f'{t:6.2f} s: {who} is drawn turned ({view}) with the old generic head: their front design is '
                         'measured, so give them a turned head (turnhead.register, as the Ad-Vanced Notice cast does)')
@@ -436,10 +438,15 @@ def _text_only(film, problems, end, fps):
     import report
     problems[:] = report.group(problems, getattr(film, 'SHOTS', []))
     import ledger                               # check-catches change 1: the quick check is recorded too (it never was)
+    before = report.shown_before('quick check', problems)   # say once (check audit B1): read before recording
     ledger.record('quick check', problems)
     print('quick check (--text):', 'clean' if not problems else f'{len(problems)} fault(s)')
     for x in problems:
-        print(' -', x)
+        if x not in before:
+            print(' -', x)
+    if before:
+        print(f' + {len(before)} shown on the last quick check, unchanged, still faults (said once: '
+              f'{", ".join(sorted({report.kind(x) for x in before}))})')
     print('(no pass stamp: the render still needs the full pre-flight)')
 
 

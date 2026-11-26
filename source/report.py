@@ -33,6 +33,33 @@ def kind(line):
 _TIME = re.compile(r'(?<![\w.])(-?\d+(?:\.\d+)?)(?:-(\d+(?:\.\d+)?))? ?s\b')   # '4.83 s', '3.1-3.5 s'
 
 
+def same_key(x):
+    """A fault with its times, numbers and an extra's number taken out: the same fault on another run or frame."""
+    key = _TIME.sub('#s', str(x))
+    key = re.sub(r'\b([A-Za-z_]+?)( ?)\d+\b', r'\1\2*', key)   # an extra's number, and any other number
+    return re.sub(r'\d+(\.\d+)?', '#', key)
+
+
+def shown_before(title, faults, runs=None):
+    """Say once (check audit B1, Sam's Y 26 Nov: 97% of Open Wounds' fault lines were the same fault back unchanged):
+    which of these faults the last run of the same check already showed, unchanged. They still count (they still
+    stop what they stop); they are only not printed again in full. A changed drawing that is now fine is simply not
+    in `faults` any more: the check looked again (no 'reopened' list: Sam declined it). runs: ledger.checkruns' runs."""
+    name = re.sub(r'\s*\(.*\)$', '', title)
+    if runs is None:
+        try:
+            import ledger
+            film = ledger.check_film()
+            runs = ledger.checkruns(film)['runs'] if film else []
+        except Exception:
+            runs = []
+    last = next((r for r in reversed(runs) if name in r['of'].values()), None)
+    if not last:
+        return set()
+    keys = {same_key(x) for k, v in last['faults'].items() if last['of'].get(k) == name for x in v}
+    return {x for x in faults if same_key(str(x)[:200]) in keys}
+
+
 def group(faults, shots=()):
     """Rule 19 (Sam, 13 Nov: 137 faults and 356 repeat lines -> about 20): one line per fault, grouped by check, shot
     and who. Lines that differ only in their times, numbers or an extra's number (press0, press12; Journalist 4) are
@@ -42,9 +69,7 @@ def group(faults, shots=()):
         times = [float(v) for m in _TIME.findall(x) for v in m if v]
         t = times[0] if times else None
         shot = next((s[0] for s in shots if t is not None and s[1] <= t < s[2]), '')
-        key = _TIME.sub('#s', x)
-        key = re.sub(r'\b([A-Za-z_]+?)( ?)\d+\b', r'\1\2*', key)   # an extra's number, and any other number
-        key = re.sub(r'\d+(\.\d+)?', '#', key)
+        key = same_key(x)
         g = groups.setdefault((kind(x), shot, key), [x, [], 0])
         g[2] += 1
         g[1].extend(times)
@@ -63,6 +88,7 @@ def summarise(title, faults, path=None, first=FIRST, notes=()):
     """Print the short summary. A file is written only when there are more faults than the summary shows (Sam, 2 Nov:
     he never reads it; the one line is enough). Returns the printed text."""
     faults = list(faults)
+    before = shown_before(title, faults)           # say once: read before this run is recorded
     try:  # the film ledger keeps every round's full result, clean ones too (Job F, Sam 9 Nov)
         import ledger
         ledger.record(title, faults, notes)
@@ -89,9 +115,14 @@ def summarise(title, faults, path=None, first=FIRST, notes=()):
         out = [f'{title}: {len(faults)} fault(s)' + (f', {cnt} of them COULD NOT TEST (stops the animatic like a '
                'fault)' if cnt else '') + f' -- {top}{where}']
         faults = sorted(faults, key=lambda x: 'COULD NOT TEST' not in x.upper())   # shown first
-        out += [' - ' + (x if len(x) <= WIDTH else x[:WIDTH - 3] + '...') for x in faults[:first]]
-        if len(faults) > first:
-            out.append(f'   ... and {len(faults) - first} more in the file named in the line above')
+        fresh = [x for x in faults if x not in before]
+        out += [' - ' + (x if len(x) <= WIDTH else x[:WIDTH - 3] + '...') for x in fresh[:first]]
+        if len(fresh) > first:
+            out.append(f'   ... and {len(fresh) - first} more in the file named in the line above')
+        if before:
+            heads = sorted({kind(x) for x in before})
+            out.append(f'   + {len(before)} shown on the last run, unchanged, still faults (said once; '
+                       f'{", ".join(heads)}' + (f'; full list: {path}' if path else '') + ')')
     text = '\n'.join(out)
     print(text)
     return text
