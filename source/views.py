@@ -1368,7 +1368,8 @@ def _built_outline(sp, view, bottom, o, fig):
         # keeps (1: the Open Wounds women, as posted); 0: her boxy jacket hangs straight from the shoulder, as in her
         # posted frame (examples/sam-25nov-may-correct-outfit.jpg). Checked by turned_curves_fault (below).
         tc = float(sp.get('turned_curves', 1.0))
-        out = []
+        tb = float(sp.get('turned_bust', tc))     # the bust bump's own share (Sam, 26 Nov: "a very small amount of
+        out = []                                  # bust bump in the 3/4 poses ... The side view is a good representation")
         for x, y in dense:
             kf = _fig_k(fig, y, sw, bottom, hem)
             i = 0 if x * lead > 0 else 1
@@ -1376,7 +1377,7 @@ def _built_outline(sp, view, bottom, o, fig):
             u = min(1.0, max(0.0, (y - 70.0) / 50.0))
             x = x * (kf + tc * TURNED_SIDE[fig] * (ks - 1.0) * u)
             if i == 0:                            # chat 7: the bust in front of the near arm (below)
-                x += tc * lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD[fig]) ** 2)
+                x += tb * lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD[fig]) ** 2)
             out.append((x, y))
         LAST_TURNED[:] = [(view, out, sp)]        # turned_curves_fault reads the last turned build's outline
         if hem:                                   # a short jacket (chat 7): turned, the seat runs into the thighs

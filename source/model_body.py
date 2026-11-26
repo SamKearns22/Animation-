@@ -102,7 +102,8 @@ def rest(sp):
     vc[jk] += N[jk] * EASE_JACKET
     foot = SSE._foot_pts(R0)
     keep = (hide[T].max(1) < 0.5) & ~foot[T].all(1)
-    R = dict(v=v, vc=vc, T=T[keep], G=G, grp=grp, J=J, sk=sk, build=R0['build'], foot=foot, R0=R0)
+    R = dict(v=v, vc=vc, T=T[keep], G=G, grp=grp, J=J, sk=sk, build=R0['build'], foot=foot, R0=R0,
+             T_feet=T[hide[T].max(1) < 0.5])   # with the feet (solid_seat mode 'body' cuts its own lower shoe line)
     _R[key] = R
     return R
 

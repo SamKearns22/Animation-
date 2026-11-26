@@ -49,6 +49,10 @@ SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
 SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
 NECK_X = 1.0             # mode 'whole': the neck's width over the measured body's (the trunk eases to it above the shoulders)
 NECK_LIFT = 40.0         # mode 'whole': the shoulders' tops and the neck's base raised this far (person units, 6 cm)
+SHOE_HEM = True          # mode 'body': no bare foot under the shoe (chat 10, Sam's shoe notes; kittest shoe_shapes)
+HEM_FILL = 6             # mode 'body': the largest fleck (dots) between hem and shoe the hem covers (chat 10)
+SEAT_TROUSERS = True     # mode 'body': the trunk below the flat jacket's seated hem is trousers (chat 10; kittest
+#                          jacket_under_hem switches it off to prove its check catches Sam's purple bottom)
 HEM_OVERLAP = 20.0       # mode 'body': the solid starts this far (person units) above the flat jacket's hem (no gap)
 BODY_TOP = 2.2           # mode 'body': the solid body stops this far (rest dm) below the shoulder joints (the
 #                          waist: at 1.0 the bust showed past the flat jacket's front from the side, chat 8)
@@ -460,10 +464,16 @@ def _seat_y(j):
         return None
 
 
-def _foot_pts(R):
+SHOE_LINE = 0.25         # the shoe's top over the ankle joint (decimetres); mode 'body' uses SHOE_LINE_BODY:
+SHOE_LINE_BODY = -0.12   # a low court shoe, the trouser leg down over the ankle (Sam, 26 Nov, the hoof-high shoe:
+#                          "Confused shoe shapes on side view")
+
+
+def _foot_pts(R, line=None):
     """The rest body's points below the ankle line: the foot (the shoe takes its place)."""
     J = R['J']
-    return (R['v'][:, 1] < min(J['ankleL'][1], J['ankleR'][1]) + 0.25) & (R['arm'] < 0.05)
+    return (R['v'][:, 1] < min(J['ankleL'][1], J['ankleR'][1]) + (SHOE_LINE if line is None else line)) \
+        & (R['arm'] < 0.05)
 
 
 def _shoes(P, R, foot):
@@ -500,15 +510,20 @@ def draw(p, j, yaw, sp, scale=2):
     whole = mode in ('whole', 'body')           # 'body' (Sam, chat 8): the whole solid body under the person's own
     arms = mode == 'whole'                      # flat outfit (views draws the torso, sleeves and hands over it as in
     P, R = pose(j, sp, cloth=not skirt, whole=whole)   # every film): no solid arms or hands, so never two pairs
-    foot = _foot_pts(R)
+    foot = _foot_pts(R, SHOE_LINE_BODY if (mode == 'body' and SHOE_HEM) else None)
     if whole:                                   # the whole person: every point but the head and hands (the house
         import model_body as MB                 # head and circle hands are drawn instead: views, and hands() here)
         M = MB.rest(sp)
-        T = M['T']
+        T = M['T_feet'] if (not arms and SHOE_HEM) else M['T']   # mode 'body': the leg down to its own shoe line
         if not arms:                            # under the flat outfit: no arms, and nothing above the chest (the
             sh_y = (M['J']['shL'][1] + M['J']['shR'][1]) / 2   # outfit's own neck and collar; chat 8: the solid neck
             low = (R['arm'] < 0.05) & (R['v'][:, 1] < sh_y - BODY_TOP)   # showed between the chin and the collar)
             T = T[low[T].all(1)]
+        if SHOE_HEM:                            # the bare foot and the band of mixed triangles at the ankle never
+            T = T[~foot[T].all(1)]              # drawn: the shoe's hull is the shoe, the leg's last row (cut at the
+            #                                     shoe line by colour, below) meets it with no gap; the trouser leg ends in a
+        #                                         clean ring over it (Sam, 26 Nov: "Shoes clipping on 3/4 view",
+        #                                         "Confused shoe shapes on side view": the shin poked through the shoe)
         grp = M['grp']
     else:
         hip_y = (R['J']['hipL'][1] + R['J']['hipR'][1]) / 2
@@ -566,6 +581,26 @@ def draw(p, j, yaw, sp, scale=2):
         name = {v_: k_ for k_, v_ in MB.PIX.items()}
         pb[ob == 0] = [BD.PART_IX[WHOLE_IX.get(name[q], name[q])] for q in mp]
         pb[ob >= 2] = BD.PART_IX['hand']
+        if not arms and SHOE_HEM:               # the shoe's hull is all shoe, at _foot_pts' own ankle line (the suit's
+            ank = min(R['J']['ankleL'][1], R['J']['ankleR'][1]) + SHOE_LINE_BODY   # line is higher: a trouser wedge)
+            sh = (ob == 0) & (ab[..., 1] < ank + 0.02)
+            pb[sh & (pb == BD.PART_IX['trousers'])] = BD.PART_IX['shoes']
+            pb[(ob == 0) & ~sh & (pb == BD.PART_IX['shoes'])] = BD.PART_IX['trousers']   # the leg over the ankle
+        if not arms and SHOE_HEM:               # the hem covers the shoe's top: a fleck of background (up to HEM_FILL
+            TRx, SHx = BD.PART_IX['trousers'], BD.PART_IX['shoes']   # dots) between a trouser dot and the shoe under
+            for c in np.where((pb == SHx).any(0))[0]:                # it is trousers (chat 10: the hanging foot's
+                col = np.where(ob[:, c] == 0, pb[:, c], -1)           # heel, tipped HANG, left a sliver)
+                ys = np.where(col == SHx)[0]
+                tr = np.where(col[:ys[0]] == TRx)[0]
+                if len(tr) and 1 < ys[0] - tr[-1] <= HEM_FILL * scale and (col[tr[-1] + 1:ys[0]] == -1).all():
+                    r = slice(tr[-1] + 1, ys[0])
+                    ob[r, c], pb[r, c], m[r, c] = 0, TRx, True
+                    ab[r, c] = ab[tr[-1], c]
+        if not arms and SEAT_TROUSERS:          # under the flat outfit (mode 'body'): below the flat jacket's seated
+            low = (ob == 0) & (ab[..., 4] >= min(sp.get('bottom') or V.JACKET, 470))   # hem the trunk is her
+            pb[low & (pb != BD.PART_IX['shoes'])] = BD.PART_IX['trousers']   # trousers' seat, never the solid's own
+            #                                     jacket (Sam, 25 Nov, side view: "Is this bottom purple section
+            #                                     supposed to be there or is it supposed to be trousers"; chat 10)
     else:
         pb[ob == 0] = _parts(R, ab[ob == 0][:, :3])
     if skirt:                                   # the body above the hem is under the skirt: it IS the skirt there
@@ -648,7 +683,8 @@ def draw(p, j, yaw, sp, scale=2):
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
     LAST.update(mode=mode, whole=arms, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
-                P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
+                P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw,
+                shown=(lay[..., 3] > 0)[::scale, ::scale], ky=ab[..., 4][::scale, ::scale], foot=foot)
     return L
 
 
@@ -676,6 +712,42 @@ def lay_over(img, p=None):
     a[cut, 3] = 255
     L = Image.fromarray(a, 'RGBA')
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
+
+
+SHOE_TALL = 0.36   # a shoe's height over its length (rest body): above it, an ankle-high hoof (chat 10)
+
+
+def shoe_faults():
+    """R7 chat 10 (Sam, 26 Nov: "Shoes clipping on 3/4 view", "Confused shoe shapes on side view";
+    examples/sam-26nov-shoes-clipping-34.jpg, sam-26nov-shoe-shapes-side.jpg): in the last drawing, columns where
+    trousers show below a shoe (the shin poking through it) or a gap between the trouser hem and the shoe, and a shoe
+    taller than SHOE_TALL of its length. Returns the faults as text (empty: none)."""
+    pb, shown, R, foot = LAST['pb'], LAST['shown'], LAST['R'], LAST['foot']
+    TR, SH = BD.PART_IX['trousers'], BD.PART_IX['shoes']
+    poke = gap = 0
+    for c in range(pb.shape[1]):
+        col = np.where(shown[:, c], pb[:, c], -1)
+        ys = np.where(col == SH)[0]
+        if not len(ys):
+            continue
+        poke += int(((col == TR) & (np.arange(len(col)) > ys[0] + 1)).sum() > 2)
+        tr = np.where(col[:ys[0]] == TR)[0]
+        gap += int(len(tr) and 1 < (col[tr[-1] + 1:ys[0]] == -1).sum() <= 8)   # a fleck, not the toe ahead of a shin
+    out = []
+    if poke > 3:
+        out.append('trousers through the shoe in %d columns' % poke)
+    if gap > 3:
+        out.append('gap between hem and shoe in %d columns' % gap)
+    v = R['v'][foot]
+    if len(v):
+        for sg in (1, -1):
+            f = v[v[:, 0] * sg > 0]
+            if len(f) > 3:
+                k = (f[:, 1].max() - f[:, 1].min()) / max(1e-6, np.ptp(f[:, 2]))
+                if k > SHOE_TALL:
+                    out.append('shoe %.2f as tall as long' % k)
+                    break
+    return out
 
 
 def checks(j=None, sp=None):
@@ -728,4 +800,12 @@ def checks(j=None, sp=None):
     # turned (Sam's "way too curvaceous" crossed three-quarter; views.turned_curves_fault)
     if LAST.get('mode') == 'body' and V.LAST_TURNED:
         out['turned curves'] = len(V.turned_curves_fault())
+    # R7 chat 10 (Sam, 25 Nov, side view: "Is this bottom purple section supposed to be there or is it supposed to be
+    # trousers", examples/r7c10-purple-under-jacket-side.jpg): in mode 'body' no jacket or shirt colour of the solid
+    # shows below the flat jacket's seated hem (dots, at the check's scale)
+    if LAST.get('mode') == 'body':
+        hem = min(LAST['sp'].get('bottom') or V.JACKET, 470)
+        cloth = (pb == BD.PART_IX['body']) | (pb == BD.PART_IX['dash'])
+        out['jacket under the hem'] = int((cloth & LAST['shown'] & (LAST['ky'] >= hem + 4)).sum())
+        out['shoe faults'] = len(shoe_faults())
     return out
