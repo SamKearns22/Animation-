@@ -631,6 +631,9 @@ def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
     gap = max(9, int(0.07 * H))                             # join the jacket across hands, stripes, its own lines
     Jc = ndi.binary_closing(Jm, structure=np.ones((gap, 1), bool))
     Jc = ndi.binary_closing(Jc, structure=np.ones((1, 9), bool))
+    Jc &= ~ndi.binary_dilation(T, iterations=2)             # never joined across the trousers (chat 33: Blair's dark
+    #                                                         jacket bridged over the lap to his near-black shoes, so
+    #                                                         its 'hem' was at his feet: 0% where the seat showed his bum)
     jl, jn = ndi.label(Jc)
     if not jn:
         return None
