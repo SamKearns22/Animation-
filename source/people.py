@@ -768,10 +768,8 @@ def _fact(d, key, val, people):
                'dress': 'dress', 'jacket': 'jacket'}[w]] = colour(c)
             if w == 'jacket':
                 d['sleeve'] = d['jacket']
-        # a suit worn with a tie is one cloth: its trousers are the jacket's colour unless the line says otherwise
-        # (Sam, 26 Nov, Open Wounds note 24.3, Blair: the house trousers' grey under a near-black jacket)
-        if kind == 'suit' and d.get('tie') and 'jacket' in d and not any(p.startswith('trousers') for p in parts[1:]):
-            d['trousers'] = d['jacket']
+        # NOT a suit's trousers in the jacket's colour (chat 38 tried it; Sam, 26 Nov: "The leg gap you previously
+        # fixed is back, why": the seated legs' drawing reads the crotch and lap by the trousers' different tone)
     elif key == 'extras':
         for p in parts:
             if p not in EXTRAS:
