@@ -365,7 +365,11 @@ R7_END_ON = 0.55   # a thigh drawn shorter than this share of its length points 
 
 
 def r7_on(j, sp, view):
-    """The new seated lower body for this drawing? (seated on a lap, a new film, a drawn view, trousers)."""
+    """The new seated lower body for this drawing? (seated on a lap, a new film, a drawn view, trousers). Or the body
+    tool standing (stand_solid on the spec: pose test, 26 Nov; Sam, 26 Nov: "We've already shown ... your new way of
+    building the bodies works when standing and running": Open Wounds' Kemi)."""
+    if sp.get('stand_solid') and sp.get('seat_solid') and view in SEATED_R7_VIEWS:
+        return True
     return bool(sp.get('seat_r7') and j.get('lap') and view in SEATED_R7_VIEWS and sp.get('leg_cover') is None)
 
 

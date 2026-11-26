@@ -59,21 +59,20 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
 ## Where things stand (chat 27, 26 Nov, session_01U3pKR29EmmteJgw6u577Ng)
-Rules that bite next: 91 (Learn-First: quote it first), 87, 59 (render lock).
-Done: May (shot 1) on the seated body tool (people.SEAT_BODY, kittest seated_r7_switch updated, ten R7 kittests pass);
-a loose fold tick on her back calf found by stray_ink on the clip frames, fixed in the shared drawing (solid_seat FOLD_MIN,
-kittest fold_stub; the c15 sheets lose only tiny line hooks). Clip sent: animations/drafts/ow-shot1-may-body.mp4.
-Correction: Kemi STANDS in shot 2 (not seated as the last handover said): standing is unproven (rule 91), she stays on the house
-drawing; shot 2 needs no clip until standing is learned.
-Next: chat 28, Opus high (learning a new seat is building new): Blair's armchair under rule 91: reference photo (Plan pack
-search order), Blair in mode 'body' on the armchair (sitting.spec_armrests) beside the posted look, checks, a sheet; then his
-shot switches (add 'blair' to people.SEAT_BODY). Then the animatic (Sonnet).
-Needs Sam: his look at May's clip.
-Read: guides/pose-kits.md; this section and rule 91's above.
-Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
+Rules that bite next: 91 (changed by Sam: remind him of the learn-first suggestions in one line; he picks), checks only on his
+word (CLAUDE.md: frame-by-frame line checks only when he asks), 59 (render lock).
+Done: May, Kemi (standing) and Blair (armchair) on the body tool in the film (people.SEAT_BODY, STAND_BODY; Sam: "just put
+those two characters in the scene now"); May's shot 1 clip and stills of Kemi and Blair sent; a loose fold tick fixed for every
+film (kittest fold_stub); the body drawn over its own box, 3x faster, pixel for pixel the same (kittest solid_crop_same).
+A fresh-eye check on May's clip flagged: crossed legs read as one dark mass, seat thinner than her thighs, the lean barely shows.
+Next: the animatic (Sonnet; Sam sees them moving there). Say in one line which checks you'd suggest; run only on his Y.
+Needs Sam: notes on the four stills and May's clip, if any.
+Read: the Checks and animatic pack in guides/job-packs.md; this section.
+Open rule requests: none (both of Sam's 26 Nov changes written). GTA branches: GTA's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
 three in May's place and size; the cast; every camera and framing.
-For Claude: people.SEAT_BODY / seat_body / BODY_SPEC; solid_seat._ink fold_min (kittest fold_stub). The pose test chat fixed the same knee tick with opt-in legs_soft: merge to one (move to shared).
+For Claude: views.r7_on takes stand_solid; solid_seat.lay_over seated only; pose_test's own patches now duplicate these (move to
+shared done; pose_test may drop them). legs_soft vs FOLD_MIN: two fixes for one knee tick, merge to one.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.

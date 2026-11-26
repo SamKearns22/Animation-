@@ -1055,9 +1055,9 @@ def pose_job_lines(film, notes=None):
     return [POSE_SAY] if POSE_JOB.search(t[i:j if j > 0 else None]) else []
 
 
-LEARN_FIRST = ("LEARN-FIRST (rule 91, Sam, 26 Nov: \"Next time we need a new pose, quote this rule and what you need to "
-               "learn before executing it\"): before building or using these poses, quote the rule to Sam in plain words "
-               "with what must be learned:")
+LEARN_FIRST = ("LEARN-FIRST (rule 91, Sam's pick, 26 Nov: \"you will remind me of your Rule 91 suggestions and we will "
+               "manually choose them\"): remind Sam in one line of these, each with its time; build without waiting unless "
+               "he picks one:")
 
 
 def pose_families():
