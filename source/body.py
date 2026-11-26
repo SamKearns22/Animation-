@@ -558,6 +558,7 @@ def fig_half(fig, y, sw, bottom, hem=None):
 # reads as a hip and not a box hem. Its width at the hem over the shoulders: the thigh's outer edge there
 # (views.WOMAN_LEG), so the seat and the thigh are one line.
 SEAT_HEM = 0.85
+SEAT_BACK_CORNER = False   # True: chat 14's seat back line round the flat bottom's corner (Sam's note 6; kittest stray_ink)
 
 
 def seat_hem(sp):
@@ -600,7 +601,7 @@ def trouser_seat(p, sp, body, view_bottom, thighs=None, r7=False, rear=False):
             if any(on) and not all(on):                                               # the outline's one run of
                 k = on.index(False)                                                   # points on the back side,
                 drawn, on = drawn[k:] + drawn[:k], on[k:] + on[:k]                    # in its own order
-                back = [q for q, o in zip(drawn, on) if o and q[1] <= view_bottom - 8.0]   # never round the
+                back = [q for q, o in zip(drawn, on) if o and (SEAT_BACK_CORNER or q[1] <= view_bottom - 8.0)]   # never round the
                 #                                 flat outline's bottom corner: the solid draws the bottom (R7 chat 15,
                 #                                 Sam's note 6: it ran on into the trousers as a stray line, kittest stray_ink)
                 if len(back) > 1:

@@ -628,8 +628,16 @@ def stray_ink():
     sam6 = [e for e in SO.stray_ink(Image.open('notes/learn/pose-kit/examples/sam-26nov-c14-34-bottom-line.jpg'), sp)
             if 180 < e[0] < 240 and 125 < e[1] < 155]   # chat 15, note 6: the line's open end on Sam's three-quarter
     k34 = SO.stray_ink(SH.tile('kemi', 45, 'upright', full=True)[0].crop((420, 1400, 560, 1470)), sp)   # where it was
-    return bool(hit) and bool(sam6) and not now and not k34, \
-        f"Sam's frames: {hit or 'MISSED'} / 3-4 {sam6 or 'MISSED'}; Kemi's bottom now: side {now}, 3-4 {k34}"
+    import body as B                    # the sheet's own check (every tile) red on chat 14's line, put back
+    keep = B.SEAT_BACK_CORNER
+    try:
+        B.SEAT_BACK_CORNER = True
+        old = SH.tile('kemi', 45, 'upright', full=True)[1].get('stray ink')
+    finally:
+        B.SEAT_BACK_CORNER = keep
+    return bool(hit) and bool(sam6) and bool(old) and not now and not k34, \
+        f"Sam's frames: {hit or 'MISSED'} / 3-4 {sam6 or 'MISSED'}; sheet check on chat 14's line: {old or 'MISSED'}; " \
+        f"Kemi's bottom now: side {now}, 3-4 {k34}"
 
 
 @test
