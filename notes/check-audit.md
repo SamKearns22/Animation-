@@ -22,7 +22,7 @@ A3 acting sizes from camera distance (movesize to kittest); A4 hair/hats open cu
 castsheet.hair_spike_faults, mouth_spike_faults; A5 crotch limit in the body kit (look at kemi front first);
 A6 one line weight for every kit (house_ctx like wolf.house_ctx); A7 cuff limit in limbs (confirm what exists);
 A8 one ffmpeg join tool at 24 fps (rule S4).
-B smarter: B1 say-once (report.group + stills; replaces notes/proposals/answered-faults-return.md); B2 door-aware
+B smarter: B1 say-once (report.group + stills); NO 'Reopened' list: Sam declined that 26 Nov 20:19 (notes/ledger/sam/j4bxb2vq.md: "if something changes, it should just recheck the new film and recognise that it is fine again"); Q2 re-asked in his terms; B2 door-aware
 pops (notes/proposals/check-knows-intent.md); B3 sizes read set kinds; B4 one planning list (preflight.gates,
 gate_warnings, benchmark/plan/audits nags, rule 8/61/74 warnings); B5 castsheet_faults only for new/changed cast;
 B6 kittest_gate_faults only at film start/end (kitfilm); B7 kitinputs local copy; B8 look at linecheck May/Blair.
@@ -39,6 +39,7 @@ E keep: kittests; critique and judges (+ column "Sam noted it too?"); R7 seated 
 - Next: on Sam's answers, a tool chat (Opus medium) does the Y'd items one at a time, A first, each with its
   kittest and a "Lost:" line; nothing is deleted without his Y.
 - Sam's answers: Q1 Y (26 Nov: move group A into the kit, one at a time, each with its kittest).
+- Missed (26 Nov): Q2 first offered a 'Reopened' list Sam had already declined; I read only the top of answered-faults-return.md (the decline is its last line) and searched no saved messages. Before any proposal: grep notes/ledger/sam/ and the proposal's last lines.
 - Needs Sam: Q2-Q5 in the report (going one at a time, in simple words, Sam 26 Nov).
 - Read: guides/job-packs.md "A tool job"; this file; the report.
 - Open rule requests: none.
