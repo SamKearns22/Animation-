@@ -66,6 +66,7 @@ def write_pass(film, faults, pictures=False, untested=None, left=None):
     them while it drew. untested: the checks that could not run (could-not-test, 23 Nov), kept from the last full
     pre-flight when not given."""
     os.makedirs(PASSES, exist_ok=True)
+    film = film.replace('_', '-')                 # either spelling of a film's name is one stamp (chat 20)
     if untested is None:
         untested = (read_pass(film) or {}).get('untested', [])
     if left is None:                              # named-lines: the unanswered lines, kept from the last pre-flight
@@ -91,6 +92,7 @@ def untested_fault(film):
 
 
 def read_pass(film):
+    film = film.replace('_', '-')                 # the render names the film by its file (brexit_is_done), pre-flight by its name
     path = os.path.join(PASSES, f'{film}.json')
     if not os.path.exists(path):
         return None
