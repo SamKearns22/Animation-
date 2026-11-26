@@ -33,3 +33,6 @@ Whole film rebuild. Patriots 2 instead. New reserve job.
 ### 2026-11-26T23:04:53
 The reason why I choose to run that test is because we are way off our 15% target and we used to be a lot closer to it. We need to diagnose why and I can’t think of a better way to do it.
 
+### 2026-11-26T23:05:25
+do you agree or are you being agreeable?
+
