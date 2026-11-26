@@ -7184,7 +7184,106 @@
    "notes": 2,
    "repeats": [
     "stray line on the three-quarter bottom | stray_ink run on every sheet tile, reading soft lines"
-   ]
+   ],
+   "steps": 56,
+   "hist_k": 146,
+   "kinds": {
+    "tool search": 18.2,
+    "whole-file .py read": 1.8,
+    "renders": 2.9,
+    "pictures": 2.2,
+    "other": 75.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 23,
+    "whole-file .py read": 2,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 4,
+    "other": 25
+   },
+   "split": {
+    "usd": 2.3241,
+    "total": 2.3241,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 43.1,
+     "new writes": 21.4,
+     "Claude's words": 19.6,
+     "carried history": 15.9
+    },
+    "origins": {
+     "start-up floor": 43.1,
+     "Claude's words": 28.9,
+     "result: tool search": 19.7,
+     "messages and reminders": 4.4,
+     "result: pictures": 1.9,
+     "result: other": 0.8,
+     "result: whole-file .py read": 0.6,
+     "Claude's edits": 0.4,
+     "result: renders": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 43.1,
+     "reading kit code": 11.9,
+     "thinking": 8.0,
+     "commands": 8.0,
+     "writing code": 7.5,
+     "writing notes": 4.6,
+     "messages and reminders": 4.4,
+     "reading notes": 4.2,
+     "reading guides": 2.9,
+     "looking at pictures": 1.9,
+     "start-up and handover tools": 1.4,
+     "messages to Sam": 1.2,
+     "app tools (chats, files sent)": 0.3,
+     "other commands": 0.3,
+     "running checks and tools": 0.1,
+     "renders": 0.1,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 15,
+    "work_pct": 0.19,
+    "reads": [
+     [
+      "source/solid_seat.py",
+      3.9,
+      0.066
+     ],
+     [
+      "guides/pose-kits.md",
+      2.5,
+      0.0428
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-c14-34-bottom-line.jpg",
+      1.6,
+      0.0263
+     ],
+     [
+      "source/kittests.py",
+      1.2,
+      0.019
+     ],
+     [
+      "notes/learn/pose-kit/learn_sheet.py",
+      1.0,
+      0.0174
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/10608c6a-3ab6-5461-b1e1-cb9421a3e71e/tasks/bx8rb3l9b.output",
+      0.0,
+      0.0003
+     ]
+    ],
+    "base_pct": 36.1
+   }
   }
  ],
  "checks": {},
