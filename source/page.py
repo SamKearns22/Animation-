@@ -5,6 +5,11 @@ MAP
   build() .... story/FILM-page.md: each of the film's files (source/FILM*.py) with its size and its codemap (every
                def with its line and first docstring line); about a tenth of the code's words (Blessed: 6.7k tokens
                against ~60k). A round chat reads this page, then only the lines a note points to (rule 61).
+  files() .... R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the film's own files plus
+               every shared file they import, followed through (views, body, limbs, people, solid_seat, the checks;
+               ~110 files), other films' code left out. Their map is story/FILM-page-shared.md (never read whole);
+               find and show search both. A shared hit gives up show.shared points, so a tie goes to the film.
+               handover.py end (reach_faults) flags edits the finder cannot see or never pointed to.
   find() ..... a note's words against the page: the defs whose name or docstring hold most of them, best first, as
                FILE:LINE, so the chat opens 40 lines, not a file. Words of 3+ letters; plurals folded.
   tokens() ... rough size (characters / 4), printed so the saving is seen.
@@ -47,9 +52,52 @@ def names(film):
     return film.replace('-', '_'), film.replace('_', '-')
 
 
-def files(film):
+def own_files(film):
+    """The film's own files (source/FILM*.py): what the page opens with and what a tie goes to."""
     film = names(film)[0]
     return sorted(f for f in glob.glob(os.path.join(HERE, f'{film}*.py')) if re.match(rf'{film}(_\w+)?\.py$', os.path.basename(f)))
+
+
+def _film_mods():
+    """Every film's own modules (source/NAME*.py for each notes/NAME.md, as finderwarn.film_re): another film's code is
+    never part of this film's reach, even when a shared file imports it for a test or an old fix."""
+    names_ = []
+    for d in (os.path.join(ROOT, 'notes'), os.path.join(ROOT, 'notes', 'archive')):
+        for f in os.listdir(d) if os.path.isdir(d) else []:
+            c = f[:-3].replace('-', '_')
+            if f.endswith('.md') and os.path.exists(os.path.join(HERE, c + '.py')):
+                names_.append(c)
+    mods = [os.path.basename(f)[:-3] for f in glob.glob(os.path.join(HERE, '*.py'))]
+    return {m for m in mods for c in names_ if re.match(rf'{c}(_\w+)?$', m)}
+
+
+def _imports(path):
+    """The source/ modules one file imports, at the top or inside a def (the kit imports lazily: `import people`)."""
+    import ast
+    key = ('imp', path, os.path.getmtime(path))
+    if key not in _CACHE:
+        got = set()
+        for n in ast.walk(ast.parse(open(path, encoding='utf-8').read())):
+            if isinstance(n, ast.Import):
+                got |= {a.name.split('.')[0] for a in n.names}
+            elif isinstance(n, ast.ImportFrom) and n.module and not n.level:
+                got.add(n.module.split('.')[0])
+        _CACHE[key] = {m for m in got if os.path.exists(os.path.join(HERE, m + '.py'))}
+    return _CACHE[key]
+
+
+def files(film):
+    """R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the film's own files, then every
+    shared file they reach by import, followed through (the drawing kit: views, body, limbs, people, solid_seat...;
+    the checks), other films' own code left out. Own files first; the shared ones by name."""
+    mine = own_files(film)
+    others = _film_mods() - {os.path.basename(f)[:-3] for f in mine}
+    seen, todo = {os.path.basename(f)[:-3] for f in mine}, list(mine)
+    while todo:
+        for m in _imports(todo.pop()):
+            if m not in seen and m not in others:
+                seen.add(m); todo.append(os.path.join(HERE, m + '.py'))
+    return mine + sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine})
 
 
 def tokens(text):
@@ -60,11 +108,14 @@ def build(film):
     film = names(film)[1]
     parts, code = [f'# {film}: the page a notes round reads (python3 source/page.py {film}; regenerate after any edit)\n',
                    'Read this, then only the lines a note points to (`page.py FILM find "note words"`).\n'], ''
+    shared = [f'# {film}: the shared code this film uses (R12: the kit and checks it imports). Never read whole: '
+              f'show/find search it with the page and point to the lines.\n']
+    mine = set(own_files(film))
     for f in files(film):
         src = open(f, encoding='utf-8').read()
-        code += src
-        m = subprocess.run([sys.executable, os.path.join(HERE, 'codemap.py'), f], capture_output=True, text=True).stdout
-        parts.append(f'\n## {os.path.basename(f)} ({src.count(chr(10))} lines)\n' + '\n'.join(m.splitlines()[2:]))
+        code += src if f in mine else ''          # the saving printed is against the film's own code, as before
+        sec = f'\n## {os.path.basename(f)} ({src.count(chr(10))} lines)\n' + '\n'.join(_codemap(src))
+        (parts if f in mine else shared).append(sec)
     import people                                 # item 4: each person's description lines (story/FILM-people.txt)
     ppl = people.lines(film)
     if ppl:
@@ -80,10 +131,27 @@ def build(film):
     if mvs:
         parts.append(f'\n## {film}-moves.txt ({len(mvs)} lines; a note on a move changes its line: open that line)\n' +
                      '\n'.join(_group([(n, acting.gist(t)) for n, t in mvs], lambda t: tuple(re.split(r' ?: ', t, maxsplit=1)) if re.search(r' ?: ', t) else (t, ''))))
+    parts.append(f'\n(The shared code this film uses, {len(shared) - 1} files, is mapped in story/{film}-page-shared.md: '
+                 'show and find search it too; do not read it whole.)')
     page = '\n'.join(parts) + '\n'
     out = os.path.join(ROOT, 'story', f'{film}-page.md')
     open(out, 'w', encoding='utf-8').write(page)
+    open(shared_path(film), 'w', encoding='utf-8').write('\n'.join(shared) + '\n')
     return out, tokens(page), tokens(code)
+
+
+def _codemap(src):
+    """codemap.py's lines, made here (one process for ~110 files): every top-level def and class with its line and
+    first docstring line, and each UPPER-CASE table."""
+    import ast
+    out = []
+    for n in ast.parse(src).body:
+        if isinstance(n, (ast.FunctionDef, ast.ClassDef)):
+            doc = (ast.get_docstring(n) or '').strip().split('\n')[0][:110]
+            out.append(f'- {n.lineno}: `{"class " if isinstance(n, ast.ClassDef) else ""}{n.name}` {doc}')
+        elif isinstance(n, ast.Assign) and isinstance(n.targets[0], ast.Name) and n.targets[0].id.isupper():
+            out.append(f'- {n.lineno}: {n.targets[0].id} (data)')
+    return out
 
 
 def _group(rows, split):
@@ -117,10 +185,15 @@ def page_path(film):
     return os.path.join(ROOT, 'story', f'{names(film)[1]}-page.md')
 
 
+def shared_path(film):
+    """R12: the shared code's map, kept apart so a round that reads the page pays only for the film's own code."""
+    return os.path.join(ROOT, 'story', f'{names(film)[1]}-page-shared.md')
+
+
 def stale(film):
     """True when the page is missing or older than any film file or story list it is made from."""
     p = page_path(film)
-    if not os.path.exists(p):
+    if not os.path.exists(p) or not os.path.exists(shared_path(film)):
         return True
     src = files(film) + glob.glob(os.path.join(ROOT, 'story', f'{names(film)[1]}-*.txt'))
     return any(os.path.getmtime(f) > os.path.getmtime(p) for f in src)
@@ -131,7 +204,7 @@ def find(film, note, n=5):
     if stale(film):
         build(film)
     want, cur, grp, hits = _words(note), '', '', []
-    for ln in open(p, encoding='utf-8'):
+    for ln in [x for q in (p, shared_path(film)) for x in open(q, encoding='utf-8')]:
         if ln.startswith('## '):
             cur, grp = ln[3:].split()[0], ''
         if ln.startswith('### '):
@@ -141,7 +214,8 @@ def find(film, note, n=5):
             score = len(want & _words((grp + ' ' + m.group(2)).replace('_', ' ')))
             if score:
                 hits.append((score, f'{cur}:{m.group(1)}', (grp + ': ' + m.group(2))[:100]))
-    return sorted(hits, key=lambda h: -h[0])[:n]
+    mine = {os.path.basename(f) for f in own_files(film)}
+    return sorted(hits, key=lambda h: (-h[0], h[1].split(':')[0] not in mine))[:n]
 
 
 _CACHE = {}
@@ -210,7 +284,7 @@ def shots(film):
     import json
     code, story = names(film)
     cache = os.path.join(ROOT, 'story', f'{story}-shots.json')
-    fs = files(film)
+    fs = own_files(film)
     if os.path.exists(cache) and all(os.path.getmtime(f) <= os.path.getmtime(cache) for f in fs):
         return [tuple(x) for x in json.load(open(cache))]
     got = []
@@ -265,7 +339,8 @@ def _log(film, note, shot, at, res):
     with open(os.path.join(d, f'{names(film)[1]}-show.log'), 'a', encoding='utf-8') as f:
         f.write(f'{datetime.now().isoformat(timespec="seconds")}\t{shot or "-"}\t{at if at is not None else "-"}\t'
                 f'{top}\t{" ".join(note.split())[:100]}\t'
-                f'{os.environ.get("CLAUDE_CODE_REMOTE_SESSION_ID", "local").split("_")[-1][-8:]}\n')   # finder-use: the chat
+                f'{os.environ.get("CLAUDE_CODE_REMOTE_SESSION_ID", "local").split("_")[-1][-8:]}\t'   # finder-use: the chat
+                f'{",".join(dict.fromkeys(h.split()[1 if h.startswith("also ") else 0].split(":")[0] for h, _ in res)) or "-"}\n')
 
 
 def show(film, note, budget=40, shot=None, at=None, who=None):
@@ -280,7 +355,7 @@ def show(film, note, budget=40, shot=None, at=None, who=None):
     quoted = re.compile('|'.join(rf"""['"]{re.escape(n)}['"]""" for n in sh)) if sh else None
     if sh:                                        # the shot's own defs and the defs that branch on it join the hits
         seen = {w for _, w, _ in hits}
-        for f in files(film):
+        for f in own_files(film):
             lines = open(f, encoding='utf-8').read().splitlines()
             for ln, (end, name) in _defs(f).items():
                 own = any(name == n or name.startswith(n + '_') or name.endswith('_' + n) for n in sh)
@@ -289,7 +364,7 @@ def show(film, note, budget=40, shot=None, at=None, who=None):
     if show.deep:                                 # change 2: tables, and defs whose one line names the note's thing
         hits += _deep(film, want, {w for _, w, _ in hits})
     # words inside a def's body (comments, names) break ties and lift a def whose docstring missed the note
-    rescored = []
+    rescored, mine = [], set(own_files(film))
     for score, where, what in hits:
         f, ln = where.rsplit(':', 1)
         path, ln = os.path.join(HERE, f) if f.endswith('.py') else os.path.join(ROOT, 'story', f), int(ln)
@@ -311,9 +386,9 @@ def show(film, note, budget=40, shot=None, at=None, who=None):
                 if ln in _parsed(path)[2] and (want & SIZE or not show.gate):       # a settings table a more-or-less note may want
                     keys = ' '.join(re.findall(r'(\w+)\s*=', ' '.join(src))).replace('_', ' ')
                     body += 3 * len((want - SIZE) & _words(keys))
-        if score or body:
-            rescored.append((score * 2 + body, where, what, path, ln))
-    rescored.sort(key=lambda h: -h[0])
+        if score or body:                         # R12: shared code counts a little less than the film's own
+            rescored.append((score * 2 + body - (0 if path in mine else show.shared), where, what, path, ln))
+    rescored.sort(key=lambda h: (-h[0], h[3] not in mine))      # R12: a tie goes to the film's own code
     out, left = [], budget
     for i, (score, where, what, path, ln) in enumerate(rescored):
         if left <= 2:                             # each def's header is a line too; at most 3 more as FILE:LINE
@@ -348,6 +423,8 @@ def show(film, note, budget=40, shot=None, at=None, who=None):
 
 
 show.first, show.rest, show.head = 16, 5, 3     # lines for the best def, each runner-up, a def's head
+show.shared = int(os.environ.get('FINDER_SHARED', '5'))   # R12: points a shared file's hit gives up to the film's own
+                                                          # (5: the Blessed replay keeps 25/26, 14/14 and round_page its two; 0-4 lose one)
 show.gate = False                                # True: tables lifted only for a more-or-less note (SIZE words);
                                                  # off since 16 Nov: same replay score without the hand list
 show.deep = os.environ.get('FINDER_DEEP', '1') == '1'  # code-finder change 2 (Sam's yes, 16 Nov); FINDER_DEEP=0 turns it off

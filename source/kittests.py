@@ -3970,6 +3970,45 @@ def code_finder_replay():
     return lo >= 25 and st >= 14 and mx < 45, f'loose {lo}/26, strict {st}/14, longest {mx} lines (bar 25, 14, <45)'
 
 
+@test
+def finder_reaches_shared_nod():
+    """R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the code finder searches the shared
+    kit a film imports, not only the film's own files: chat 39's note 26, "It's not a nod, it's a head-bob", must show
+    views.py's nod drawing (Pitched / NOD_DEG) with its lines; other films' code stays out of the reach."""
+    import page
+    reach = {os.path.basename(f) for f in page.files('brexit-is-done')}
+    out = page.show('brexit-is-done', "It's not a nod, it's a head-bob.", 40)
+    nod = [h for h, rows in out if rows and h.startswith('views.py') and re.search(r'Pitched|Rolled|NOD_', h + ' '.join(t for _, t in rows))]
+    bad = (['views.py not in the reach'] if 'views.py' not in reach else []) + \
+          (['another film (blessed.py) in the reach'] if 'blessed.py' in reach else []) + \
+          ([] if nod else ['note 26 shows no views.py nod drawing: ' + ', '.join(h.split()[0] for h, _ in out)])
+    return not bad, '; '.join(bad) or f'{len(reach)} files searched; note 26 -> {nod[0].split("  ")[0]}'
+
+
+@test
+def finder_reach_end_check():
+    """R12 part 2: handover end flags a chat that used the finder and then edited code it cannot see or never pointed
+    to. Saved example: chat 39 (show log, 26 Nov 22:11, zkJd6kM8) asked show about note 26, was pointed only at
+    brexit_is_done.py, then edited views.py, solid_seat.py and facehouse.py by hand; with the old own-files-only finder
+    each is a blind spot, with today's each is a miss; a chat pointed at the file, or with no show call, is clean."""
+    import handover, page
+    shows = {'brexit-is-done': {'brexit_is_done.py'}}
+    chat39 = ['views.py', 'solid_seat.py', 'facehouse.py']
+    old = lambda film: [os.path.basename(f) for f in page.own_files(film)]
+    new = lambda film: [os.path.basename(f) for f in page.files(film)]
+    blank = lambda film: ''
+    a = handover.reach_faults(chat39, shows, old, blank)
+    b = handover.reach_faults(chat39, shows, new, blank)
+    c = handover.reach_faults(['views.py'], {'brexit-is-done': {'views.py'}}, new, blank)
+    d = handover.reach_faults(chat39, {}, new, blank)
+    e = handover.reach_faults(['views.py'], shows, new, lambda film: 'finder reach: views.py (a new tool)')
+    bad = ([f'old finder: {len(a)} of 3 blind spots'] if sum(x.startswith('FINDER REACH') for x in a) != 3 else []) + \
+          ([f'new finder: {len(b)} of 3 misses'] if sum(x.startswith('FINDER MISSED') for x in b) != 3 else []) + \
+          (['a pointed-to edit flagged'] if c else []) + (['a chat with no show call flagged'] if d else []) + \
+          (['a notes line did not settle it'] if e else [])
+    return not bad, '; '.join(bad) or 'chat 39: 3 blind spots under the old finder, 3 misses under the new; clean cases clean'
+
+
 
 def _repo_pair():
     """A pretend GitHub (a bare repo) with the main line holding one ledger row, and a chat's copy of it on its own
