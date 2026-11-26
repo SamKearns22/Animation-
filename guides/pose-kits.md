@@ -25,18 +25,24 @@ you start unless I say otherwise." So another tool is allowed; name it and why i
 which to do, if any. Nothing waits on them unless he picks.** (Was: learn first, then build.) Sam: standing, running
 and sitting work on the body tool (the pose test's practice clips; May). Proven means on a sheet Sam passed with its checks green. The start check prints the rule and the
 list for every pose family a job's notes name that is not proven (`handover.py start`, LEARN-FIRST; kittest `learn_first`).
-The families, as the check reads them (`family | proven? | words that name it | what must be learned`):
+**Movements and camera views too (Sam's pick 1, 26 Nov):** the list also names movements against objects and hard
+camera views (GTA's lean-out, never on the list, cost about 59% of a week learned inside the film; notes/steps-breakdown.md).
+Each line offers a **grey practice clip** (a plain grey figure, no film checks, sent as made) with its time; Sam still picks.
+The families, as the check reads them (`family | proven? | words that name it | what must be learned | practice clip time`):
 
 ```
-sitting upright | yes | upright on, seated, sitting, sits, legs crossed, legs apart | -
-sitting other seats | no | armchair, sofa, bench, stool, lean back, reclin | the seat's height and depth, the lean, a reference photo, a sheet
-leaning while seated | no | lean in, lean fwd, lean forward, leans | the hips' angle as she leans, a motion clip checked frame by frame
-standing | no | standing, stands, stand up | the legs straight under the outfit, feet on the floor, a reference photo, a sheet
-walking and running | no | walk, running, runs from, run from, run rampant, chasing, chase, flee, leap, jump | the legs through a stride, feet on the ground each step, a motion clip
-arms beyond the lap | no | arm across, reach, raise, lift, steel bar, swing, grab, fight | arms as part of the body (now flat, drawn on top), hands on objects
-lying, kneeling, crouching | no | lying, lies, kneel, crouch, fallen, on the ground, torn | the body on the floor, its weight, a reference photo, a sheet
-other clothes | no | skirt, dress, coat, shorts | each garment as its own layer on the body, a sheet
-seen from behind | no | from behind, back view | the back of the outfit, a sheet
+sitting upright | yes | upright on, seated, sitting, sits, legs crossed, legs apart | - | -
+sitting other seats | no | armchair, sofa, bench, stool, lean back, reclin | the seat's height and depth, the lean, a reference photo, a sheet | one chat, about 2% of a week
+leaning while seated | no | lean in, lean fwd, lean forward, leans | the hips' angle as she leans, a motion clip checked frame by frame | one chat, about 2% of a week
+standing | no | standing, stands, stand up | the legs straight under the outfit, feet on the floor, a reference photo, a sheet | one chat, about 2% of a week
+walking and running | no | walk, running, runs from, run from, run rampant, chasing, chase, flee, leap, jump | the legs through a stride, feet on the ground each step, a motion clip | one chat, about 2% of a week
+arms beyond the lap | no | arm across, reach, raise, lift, steel bar, swing, grab, fight | arms as part of the body (now flat, drawn on top), hands on objects | two chats, about 4% of a week
+lying, kneeling, crouching | no | lying, lies, kneel, crouch, fallen, on the ground, torn | the body on the floor, its weight, a reference photo, a sheet | one or two chats, 2-4% of a week
+other clothes | no | skirt, dress, coat, shorts | each garment as its own layer on the body, a sheet | one chat a garment, about 2% of a week
+seen from behind | no | from behind, back view, back to us, his back to, her back to | the back of the outfit, a sheet | one chat, about 2% of a week
+leaning or climbing out of a vehicle | no | lean out, leans out, leaning out, climbs out, climb out, out of the window, through the window, window ledge, hangs out, gets out of the car | the body through the window frame, hands on the sill, the car moving under him, a grey practice clip checked at full size | two or three chats, 4-6% of a week
+riding in a vehicle | no | steering wheel, passenger seat, driver's seat, back seat, drives, driving, in the car | seated in the car seen through glass, hands on the wheel, everyone leaning with the swerve | one chat, about 2% of a week
+very close, or a limb at the lens | no | close-up, close up, extreme close, points at the camera, points at us, at the lens, towards the lens | the face or hand that fills the frame, its depth, a reference photo | one chat, about 2% of a week
 ```
 
 ## Order of work

@@ -1056,8 +1056,8 @@ def pose_job_lines(film, notes=None):
 
 
 LEARN_FIRST = ("LEARN-FIRST (rule 91, Sam's pick, 26 Nov: \"you will remind me of your Rule 91 suggestions and we will "
-               "manually choose them\"): remind Sam in one line of these, each with its time; build without waiting unless "
-               "he picks one:")
+               "manually choose them\"; movements and camera views added, Sam's pick 1): remind Sam in one line of these, "
+               "each offered as a grey practice clip with its time; build without waiting unless he picks one:")
 
 
 def pose_families():
@@ -1068,8 +1068,9 @@ def pose_families():
     out = []
     for ln in blk.strip().splitlines():
         p = [x.strip() for x in ln.split('|')]
-        if len(p) == 4:
-            out.append((p[0], p[1] == 'yes', [w.strip().lower() for w in p[2].split(',') if w.strip()], p[3]))
+        if len(p) >= 4:
+            out.append((p[0], p[1] == 'yes', [w.strip().lower() for w in p[2].split(',') if w.strip()], p[3],
+                        p[4] if len(p) > 4 else ''))
     return out
 
 
@@ -1093,10 +1094,11 @@ def learn_first_lines(film=None, text=None):
         text = t
     low = text.lower()
     need = []
-    for name, proven, words, learn in pose_families():
+    for name, proven, words, learn, clip in pose_families():
         hit = [w for w in words if re.search(r'\b' + re.escape(w), low)]
         if hit and not proven:
-            need.append(f"  {name} (named: {', '.join(hit[:3])}): learn {learn}")
+            need.append(f"  {name} (named: {', '.join(hit[:3])}): learn {learn}"
+                        + (f"; grey practice clip: {clip}" if clip else ''))
     return [LEARN_FIRST] + need if need else []
 
 def main(argv):

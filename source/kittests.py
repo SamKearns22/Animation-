@@ -6061,9 +6061,14 @@ def learn_first():
     ow = H.learn_first_lines('brexit-is-done')
     seat = H.learn_first_lines(text='May sits upright on the office chair, legs crossed.')
     sam = H.learn_first_lines(text='a worker runs from two wolves across the scaffolding and leaps off it')
+    # GTA's 20 Nov plan line for shot 4 (notes/learn/pose-kit/examples/gta-lean-out-untried.md): the list must name it
+    gta = H.learn_first_lines(text='tracks left with Jason as he leans out of the passenger window, until we hang '
+                                   'outside with him looking back down the street')
     ok = bool(ow) and 'rule 91' in ow[0] and any('walking and running' in l for l in ow) and \
-        any('arms beyond' in l for l in ow) and not seat and any('walking and running' in l for l in sam)
-    return ok, f"Open Wounds: {len(ow) - 1 if ow else 0} families; sitting only: {'none' if not seat else seat}"
+        any('arms beyond' in l for l in ow) and not seat and any('walking and running' in l for l in sam) and \
+        any('out of a vehicle' in l and 'grey practice clip' in l for l in gta)
+    return ok, (f"Open Wounds: {len(ow) - 1 if ow else 0} families; sitting only: {'none' if not seat else seat}; "
+                f"GTA lean-out: {'named' if len(gta) > 1 else 'MISSED'}")
 
 
 def main():
