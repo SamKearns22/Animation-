@@ -1,6 +1,6 @@
 # Proposal: Better ways for Claude to look at our images and animations
 
-Status: open
+Status: replaced:seeing-five-candidates (2026-11-26)
 
 ## Problem
 Claude can read only still frames, one at a time or on a sheet, and cannot watch motion. Judging hands, limbs, contact and movement from stills is the weak point: checks flag the wrong things or miss faults, and Sam (26 Nov, chat 36) asked whether any tools or programs would improve how Claude looks at the project's images and at its own drawings and animations, beyond what it does now. Checks must never block requested work (rule 93).
