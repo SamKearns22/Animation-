@@ -2200,64 +2200,67 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.0,
+   "cost": 1.34,
    "src": "estimate",
    "sid": "session_01U3pKQz5SGLAdf578rj5R9v",
-   "steps": 72,
-   "hist_k": 181,
+   "steps": 93,
+   "hist_k": 209,
    "kinds": {
-    "tool search": 25.8,
-    "whole-file .py read": 0.4,
-    "page.py": 1.5,
-    "renders": 1.2,
-    "pictures": 9.7,
-    "other": 61.4
+    "film-file search": 0.1,
+    "tool search": 24.0,
+    "whole-file .py read": 0.3,
+    "page.py": 1.1,
+    "renders": 3.2,
+    "pictures": 8.6,
+    "other": 62.6
    },
    "calls": {
-    "film-file search": 0,
-    "tool search": 49,
+    "film-file search": 1,
+    "tool search": 61,
     "whole-file .py read": 1,
     "page.py": 1,
     "routine": 0,
-    "renders": 2,
+    "renders": 4,
     "pictures": 14,
-    "other": 14
+    "other": 18
    },
    "split": {
-    "usd": 3.6425,
-    "total": 3.6425,
+    "usd": 4.8869,
+    "total": 4.8869,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 34.1,
-     "Claude's words": 28.7,
-     "new writes": 21.3,
-     "carried history": 15.9
+     "start-up floor": 31.9,
+     "Claude's words": 27.3,
+     "new writes": 20.5,
+     "carried history": 20.3
     },
     "origins": {
-     "Claude's words": 44.0,
-     "start-up floor": 34.1,
-     "result: tool search": 10.9,
-     "result: pictures": 7.6,
-     "messages and reminders": 1.6,
-     "result: other": 1.1,
+     "Claude's words": 44.1,
+     "start-up floor": 31.9,
+     "result: tool search": 12.6,
+     "result: pictures": 7.1,
+     "messages and reminders": 2.3,
+     "result: other": 1.2,
      "result: whole-file .py read": 0.5,
-     "result: renders": 0.1
+     "result: renders": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 34.1,
-     "thinking": 19.5,
-     "writing code": 10.5,
-     "commands": 8.4,
-     "looking at pictures": 7.6,
-     "reading kit code": 5.0,
-     "writing notes": 4.9,
-     "reading notes": 4.0,
-     "messages and reminders": 1.6,
-     "other commands": 1.5,
-     "start-up and handover tools": 1.1,
-     "messages to Sam": 0.7,
-     "renders": 0.6,
-     "running checks and tools": 0.5
+     "start-up reading (rules, tools, first files)": 31.9,
+     "thinking": 17.4,
+     "writing code": 8.6,
+     "commands": 8.2,
+     "writing notes": 7.8,
+     "looking at pictures": 7.1,
+     "reading notes": 5.2,
+     "reading kit code": 4.7,
+     "messages and reminders": 2.3,
+     "start-up and handover tools": 2.1,
+     "other commands": 1.4,
+     "messages to Sam": 1.3,
+     "helper and chat prompts": 0.7,
+     "renders": 0.5,
+     "running checks and tools": 0.5,
+     "app tools (chats, files sent)": 0.1
     },
     "leftover": 0.0
    },
@@ -2269,79 +2272,80 @@
      [
       "notes/learn/seated/examples/sam-26nov-apart-spread-crotch.png",
       1.6,
-      0.0321
+      0.0381
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/refs4.jpg",
       1.6,
-      0.0312
+      0.0373
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/mfa.jpg",
       1.6,
-      0.0286
+      0.0347
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/before.jpg",
       1.6,
-      0.0266
+      0.0327
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/try1.jpg",
       1.6,
-      0.0243
+      0.0304
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/try2.jpg",
       1.6,
-      0.024
+      0.0301
      ],
      [
       "source/sitting.py",
       1.1,
-      0.019
+      0.0231
      ],
      [
       "notes/r7.md",
       0.6,
-      0.0127
+      0.0151
      ],
      [
       "notes/learn/seated/solid/sheet_solid.py",
       0.6,
-      0.0102
+      0.0124
      ],
      [
       "notes/learn/seated/solid/may_sheet.py",
       0.4,
-      0.0075
+      0.0092
      ],
      [
       "source/page.py",
       0.0,
-      0.0004
+      0.0005
      ]
     ],
-    "base_pct": 29.6
+    "base_pct": 28.6
    },
    "search": {
     "show": 1,
     "film": {
      "before show": 0,
      "miss": 0,
-     "after show": 0
+     "after show": 1
     },
     "other": {
-     "other": 17,
+     "other": 20,
      "shared:handover.py": 1,
      "shared:sitting.py": 9,
      "guides": 1,
      "shared:may_sheet.py": 1,
-     "shared:solid_seat.py": 6,
+     "shared:solid_seat.py": 7,
      "shared:views.py": 4,
      "shared:body.py": 4,
      "shared:kittests.py": 4,
-     "film notes": 2
+     "film notes": 6,
+     "shared:propose.py": 4
     },
     "ticked": 0,
     "edited film code": false,
@@ -2786,6 +2790,123 @@
       "sed -i \"s#so the check runs only where spec lap_open.#so the check runs only whe",
       "",
       449
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      "",
+      19
+     ],
+     [
+      82,
+      "film",
+      "after show",
+      "story/r7-page.md",
+      "head -5 story/r7-page.md && wc -c story/r7-page.md && git add story/r7-page.md &",
+      "",
+      271
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit FET",
+      "",
+      61
+     ],
+     [
+      84,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals notes/r7.md",
+      "why missed\\|lesson",
+      "",
+      4246
+     ],
+     [
+      85,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/ledger/r7.json notes/r7.md",
+      "def cmd_new\\|def new\\|'new'",
+      "",
+      2437
+     ],
+     [
+      86,
+      "other",
+      "shared:propose.py",
+      "notes/ledger/r7.json notes/r7.md source/propose.py",
+      "python3 -c \" import json;d=json.load(open('notes/ledger/r7.json'));print(d['esti",
+      "",
+      4068
+     ],
+     [
+      89,
+      "other",
+      "shared:propose.py",
+      "notes/r7.md source/propose.py",
+      "Sam 26 Nov: \\",
+      "",
+      197
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit FET",
+      "",
+      61
+     ],
+     [
+      93,
+      "other",
+      "film notes",
+      "notes/archive/r7-handovers.md notes/proposals/seated-legs-3d.md notes/proposals/",
+      "^## Where things stand",
+      "",
+      497
+     ],
+     [
+      94,
+      "other",
+      "film notes",
+      "notes/archive/r7-handovers.md",
+      "sed -n 1,121p notes/archive/r7-handovers.md | cut -c1-260",
+      "",
+      12232
+     ],
+     [
+      95,
+      "other",
+      "shared:solid_seat.py",
+      "notes/proposals/seated-legs-3d.md notes/learn/seated/judge/ source/solid_seat.py",
+      "^## \\|^### ",
+      "",
+      1771
+     ],
+     [
+      96,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d.md notes/r7.md",
+      "chat 7\\|chat 9",
+      "",
+      2225
+     ],
+     [
+      97,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "sed -n 84,110p notes/r7.md | cut -c1-300",
+      "",
+      2530
      ]
     ]
    },
@@ -2799,54 +2920,55 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.59,
+   "cost": 0.91,
    "src": "estimate",
    "sid": "session_01U3pKQzd7WtTW95LHF7F6LQ",
-   "steps": 13,
-   "hist_k": 95,
+   "steps": 22,
+   "hist_k": 102,
    "kinds": {
-    "tool search": 16.5,
-    "other": 83.5
+    "tool search": 16.1,
+    "other": 83.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 10,
+    "tool search": 15,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 3
+    "other": 6
    },
    "split": {
-    "usd": 0.5131,
-    "total": 0.5131,
+    "usd": 0.7815,
+    "total": 0.7815,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 66.8,
-     "new writes": 16.9,
-     "Claude's words": 14.0,
-     "carried history": 2.3
+     "start-up floor": 61.4,
+     "new writes": 19.0,
+     "Claude's words": 15.2,
+     "carried history": 4.4
     },
     "origins": {
-     "start-up floor": 66.8,
-     "Claude's words": 18.7,
-     "result: tool search": 8.5,
-     "result: other": 3.3,
-     "messages and reminders": 2.6
+     "start-up floor": 61.4,
+     "Claude's words": 21.1,
+     "result: tool search": 7.2,
+     "messages and reminders": 5.3,
+     "result: other": 5.0
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 66.8,
-     "commands": 9.4,
-     "reading notes": 4.5,
-     "start-up and handover tools": 3.1,
-     "thinking": 2.9,
-     "git and saving": 2.8,
-     "helper and chat prompts": 2.7,
-     "messages and reminders": 2.6,
-     "writing notes": 2.6,
-     "helper results": 1.5,
-     "messages to Sam": 1.2
+     "start-up reading (rules, tools, first files)": 61.4,
+     "commands": 11.1,
+     "messages and reminders": 5.3,
+     "reading notes": 3.7,
+     "helper and chat prompts": 3.5,
+     "start-up and handover tools": 2.9,
+     "thinking": 2.8,
+     "git and saving": 2.1,
+     "helper results": 1.9,
+     "messages to Sam": 1.8,
+     "writing notes": 1.8,
+     "app tools (chats, files sent)": 1.6
     },
     "leftover": 0.0
    },
@@ -2858,20 +2980,20 @@
      [
       "notes/r7.md",
       0.7,
-      0.0066
+      0.0078
      ],
      [
       "notes/proposals/pose-kit-format.md",
       0.8,
-      0.0062
+      0.0074
      ],
      [
       "notes/proposals/pose-kit-format/chat.md",
       0.3,
-      0.0029
+      0.0034
      ]
     ],
-    "base_pct": 35.5
+    "base_pct": 40.8
    },
    "search": {
     "show": 0,
@@ -2880,8 +3002,9 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "film notes": 7,
-     "shared:propose.py": 2
+     "film notes": 9,
+     "shared:propose.py": 3,
+     "other": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -2975,6 +3098,51 @@
       "wc -w notes/proposals/pose-kit-format.md notes/proposals/pose-kit-format/chat.md",
       "",
       1400
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "git add notes/r7.md && git commit -qm \"R7 chat 12: carry Sam's codify ask into t",
+      "",
+      7
+     ],
+     [
+      15,
+      "other",
+      "film notes",
+      "notes/proposals/pose-kit-format/ notes/proposals/pose-kit-format.md",
+      "crux\\|full body\\|layer",
+      "",
+      383
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      "",
+      45
+     ],
+     [
+      17,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/pose-kit-format/state.json notes/proposals/pose-kit-format.md so",
+      "full body\\|layer",
+      "",
+      1239
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "notes/proposals/pose-kit-format",
+      "git add -A notes/proposals/pose-kit-format && git commit -qm \"R7 chat 12: main l",
+      "",
+      31
      ]
     ]
    },
