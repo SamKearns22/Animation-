@@ -2790,6 +2790,195 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "c8398a62",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.59,
+   "src": "estimate",
+   "sid": "session_01U3pKQzd7WtTW95LHF7F6LQ",
+   "steps": 13,
+   "hist_k": 95,
+   "kinds": {
+    "tool search": 16.5,
+    "other": 83.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 3
+   },
+   "split": {
+    "usd": 0.5131,
+    "total": 0.5131,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 66.8,
+     "new writes": 16.9,
+     "Claude's words": 14.0,
+     "carried history": 2.3
+    },
+    "origins": {
+     "start-up floor": 66.8,
+     "Claude's words": 18.7,
+     "result: tool search": 8.5,
+     "result: other": 3.3,
+     "messages and reminders": 2.6
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 66.8,
+     "commands": 9.4,
+     "reading notes": 4.5,
+     "start-up and handover tools": 3.1,
+     "thinking": 2.9,
+     "git and saving": 2.8,
+     "helper and chat prompts": 2.7,
+     "messages and reminders": 2.6,
+     "writing notes": 2.6,
+     "helper results": 1.5,
+     "messages to Sam": 1.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/r7.md",
+      0.7,
+      0.0066
+     ],
+     [
+      "notes/proposals/pose-kit-format.md",
+      0.8,
+      0.0062
+     ],
+     [
+      "notes/proposals/pose-kit-format/chat.md",
+      0.3,
+      0.0029
+     ]
+    ],
+    "base_pct": 35.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "film notes": 7,
+     "shared:propose.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status | head -3 && git push --dry-run origin HEAD 2>&1 | tail -2; python3 s",
+      "",
+      2183
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "Where things stand",
+      "",
+      3312
+     ],
+     [
+      2,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "git checkout -b claude/r7-chat12-pose-kit-format 2>&1|tail -1 && git push --dry-",
+      "",
+      880
+     ],
+     [
+      5,
+      "other",
+      "shared:propose.py",
+      "notes/r7.md source/propose.py",
+      "gta-v5-sound-draft\\|gta-chat31",
+      "",
+      3360
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "sed -n 42,50p notes/r7.md",
+      "",
+      990
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "sed -n 51,57p notes/r7.md",
+      "",
+      788
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "python3 - <<'EOF' p='notes/r7.md'; s=open(p).read() i=s.index('## Where things s",
+      "",
+      973
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "below the button (bo",
+      "",
+      167
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "sed -i 's/below the button (bo$/below the button, trousers between the thighs (s",
+      "",
+      244
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposals/pose-kit-format.md notes/proposals/pose-kit-format/chat.md",
+      "wc -w notes/proposals/pose-kit-format.md notes/proposals/pose-kit-format/chat.md",
+      "",
+      1400
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
