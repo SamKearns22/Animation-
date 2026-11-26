@@ -296,7 +296,7 @@ def main():
         keep = os.path.join(os.path.dirname(HERE), 'animations', 'drafts')
         os.makedirs(keep, exist_ok=True)
         slug = str(name[0]).replace('_', '-')
-        mine = {os.path.realpath(x) for x in (src, dst, src + cover.SIDE)}   # never delete what this run is using
+        mine = {os.path.realpath(x) for x in (src, dst, src + cover.SIDE, humancheck._side(src), humancheck._side(dst))}   # never delete what this run is using (chat 26: dst's own body-check record was deleted when dst sat in drafts)
         for f in os.listdir(keep):
             if f.startswith(slug + '-') and os.path.realpath(os.path.join(keep, f)) not in mine:
                 os.remove(os.path.join(keep, f))   # only the latest is kept
