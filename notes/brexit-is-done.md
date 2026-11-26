@@ -58,15 +58,22 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 25 pushed there).
-- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
-- **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
-- **Done (chat 25, Opus):** the 6 body-check lines traced to one drawing fault: a runner's FAR arm (hidden behind the body) was opened at the back of each swing (chat 18's open_back), so its forearm stuck out of the middle of the back, its shoulder hidden (the waitress at 19.08 s, full size). Fixed in the shared kit: `moves.open_back(..., yaw=)` keeps the far arm's own bend; only the near arm opens (every film). HANDS_OK widened to the whole of shot 2 (workers 2) and shot 3 (guests), with their notes rows. Body check on every frame 7.5-26.75 s at full size (232 drawings): no lines. The crossed-forearms line (guest 4, 19.67 s) came from the same arm. Stills 19.08, 21.5, 23.0 s looked at full size: runners read.
-- **Next:** chat 26, Sonnet: pre-flight (`python3 source/preflight.py brexit-is-done OUTDIR`, ~2 min), redraw `python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp4 --small` (~12 min), critic helper, `humancheck.py critiqued`, finish.py, send the animatic with the Hook Text and sign-off; then stop for Sam's notes.
-- **Needs Sam:** nothing; the animatic is next.
-- **Read:** guides/job-packs.md Checks and animatic.
-- **Open rule requests:** none. **For Claude:** finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts; GTA branches left to GTA chats (named: claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31); Sam told (chat 25) why the redraw took two hand-overs. Chat 25 end check answered: the two drafts' missing body-check records come only from chat 26's redraw; the 'Locked by Sam' and 'Just go' sentences are still in CLAUDE.md (re-wrapped over two lines, lines 20 and 91), so not lost; no pre-flight ran in chat 25 (only stills and a body-check sweep), so no record was due.
+## Where things stand (R7 chat 15, 26 Nov, session_01U3pKR2jCSbFoPHuV4dYE3T; Sam: "These fixes were built specifically for Open Wounds ... Implement.")
+Rules that bite next: 91 (Learn-First: quote it and what must be learned before each unproven pose), 87, 59 (render lock).
+Done: R7's seated body tool (mode 'body': the 3D body under the posted outfit) proven on May, Kemi, Blair sitting upright on the
+office chair (notes/r7.md; sheets notes/learn/pose-kit/*-r7c15-before-after.jpg). Rule 91's list for this film is the section above.
+Next: chat 27, Opus medium (building from a clear plan): (1) switch Open Wounds' seated people to mode 'body' (people.BEFORE_SEATED /
+seat_r7, sheet_solid's spec: seat_solid='body', turned_curves 0, turned_bust 0.6); update kittest seated_r7_switch (Open Wounds now
+on, by Sam's word, 26 Nov) and re-run it plus the ten R7 kittests (seated_r7_switch, short_top_hem, shoe_shapes, legs_apart_spread,
+jacket_triangle, turned_curves, jacket_under_hem, leg_tone, back_clip, stray_ink); (2) May and Kemi: short clip of each shot
+(final OUT --small --span) with the sheet checks (stray_ink, leg_tone) on sampled frames: the lean and nods are rule 91's
+"leaning while seated"; (3) Blair's armchair: rule 91, "sitting other seats": reference photo, a sheet of Blair in mode 'body' on
+the armchair beside the posted look, checks, before his shot switches; (4) background people (runners, the torn worker, men with
+bars) stay on the house drawing (standing/running/arms not proven). Send clips and sheet; then the animatic (Sonnet).
+Needs Sam: nothing until the clips and sheet. Read: guides/pose-kits.md; this section, rule 91's above; notes/r7.md Where things stand.
+Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
+Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
+three in May's place and size; the cast; every camera and framing (seated legs OFF lifted by Sam, 26 Nov). For Claude: sheet_solid.tile shows the spec; solid_seat.LAST per drawing; body.SEAT_BACK_CORNER test flag.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
@@ -151,4 +158,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 47.49% of 15%; forecast 54.5% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 42.27% of 15%; forecast 52% (2026-11-26)

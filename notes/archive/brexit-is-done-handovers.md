@@ -399,3 +399,14 @@ into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, set
 - **Needs Sam:** nothing yet; the animatic is later than hoped.
 - **Read:** guides/job-packs.md Checks and animatic.
 - **Open rule requests:** none. **For Claude:** finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts; preflight takes the hyphen film name; 4 GTA branches left to GTA chats.
+
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 25 pushed there).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
+- **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
+- **Done (chat 25, Opus):** the 6 body-check lines traced to one drawing fault: a runner's FAR arm (hidden behind the body) was opened at the back of each swing (chat 18's open_back), so its forearm stuck out of the middle of the back, its shoulder hidden (the waitress at 19.08 s, full size). Fixed in the shared kit: `moves.open_back(..., yaw=)` keeps the far arm's own bend; only the near arm opens (every film). HANDS_OK widened to the whole of shot 2 (workers 2) and shot 3 (guests), with their notes rows. Body check on every frame 7.5-26.75 s at full size (232 drawings): no lines. The crossed-forearms line (guest 4, 19.67 s) came from the same arm. Stills 19.08, 21.5, 23.0 s looked at full size: runners read.
+- **Next:** chat 26, Sonnet: pre-flight (`python3 source/preflight.py brexit-is-done OUTDIR`, ~2 min), redraw `python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp4 --small` (~12 min), critic helper, `humancheck.py critiqued`, finish.py, send the animatic with the Hook Text and sign-off; then stop for Sam's notes.
+- **Needs Sam:** nothing; the animatic is next.
+- **Read:** guides/job-packs.md Checks and animatic.
+- **Open rule requests:** none. **For Claude:** finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts; GTA branches left to GTA chats (named: claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31); Sam told (chat 25) why the redraw took two hand-overs. Chat 25 end check answered: the two drafts' missing body-check records come only from chat 26's redraw; the 'Locked by Sam' and 'Just go' sentences are still in CLAUDE.md (re-wrapped over two lines, lines 20 and 91), so not lost; no pre-flight ran in chat 25 (only stills and a body-check sweep), so no record was due.
+

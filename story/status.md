@@ -1,3 +1,3 @@
-R7 (seated full body): chat 15 fixed Sam's notes 6-7 (stray line on the three-quarter, crossed legs one colour); sheets sent.
-Next: Sam's notes on the c15 sheets (fresh chat, Opus medium).
-Sam: Q1 and C2 still open.
+R7 chat 15: Sam's notes 6-7 fixed; rule 91 (Learn-First) built; Sam: put the seated body tool into Open Wounds.
+Next: Open Wounds chat 27 (Opus medium): May and Kemi on the new tool with clips; Blair's armchair learned first; then the animatic.
+Sam: nothing until the clips and sheet.
