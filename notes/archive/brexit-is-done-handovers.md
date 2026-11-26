@@ -484,3 +484,20 @@ the lunge; film order; all three in May's place and size; the cast; every camera
 For Claude: LINES[i]['words'] (absolute), WD.track/at_word, SHOTS built from PRE/POST/GRIN_AFTER/LUNGE_AFTER_GRIN; ACT.LUNGE_T set
 from the 9.4 s reference; CHASE_DELAY (uc) in blair_shot; GROWLS/BED_DIP_DB; `brexit_is_done.py sound`. legs_soft vs FOLD_MIN still to merge.
 
+
+## Where things stand (chat 30, 26 Nov, session_01J1JB7WGFbaGz6YHKRXnSCz)
+Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (19 and 22 were kinds seen before).
+Done (chat 29): Sam's takes set the clock (film 35.5 s), growl bed. Done (chat 30): notes 19-22 fixed with a check each (in the
+notes table); clips animations/drafts/ow-n19-22-tony.mp4, ow-n21-kemi.mp4. Cast sheet: 40 STOPs to 22 (the tone check now
+follows Sam's 26 Nov note 1, one tone for legs side by side; the old bottom spy skips the body kit, the picture judges it).
+Next: Sonnet chat (opened by chat 30): the animatic (Sam: "Once work is finished on both these chats render an animatic"):
+finish.py on the clean render (Hook Text, sign-off), sent in the chat. Then a body-kit chat (Opus medium): the 22 STOPs left.
+Needs Sam: nothing.
+Read: guides/job-packs.md "Checks and animatic"; this section.
+Open rule requests: none. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, left.
+STOPs left (cast sheet, poses the film never uses): crossed legs one tone (the body kit doesn't shade a crossed under leg),
+no bottom front-on and on Blair's long jacket on the office chair. Film poses (May upright -45, Blair armchair -45) pass.
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge;
+film order; all three in May's place and size; the cast; every camera and framing.
+For Claude: ACT.lunger(cut=), LUNGE_CREEP/COIL/LEN, LUNGE_T = the 0.4 s mark chat 29's clock reads; FH.CAST blair neck_up; legs_soft vs FOLD_MIN to merge.
+
