@@ -20,3 +20,6 @@ Notes for most recent animatic.
 3. Tony’s suit sleeves are a different colour to the jacket. Investigate why this was drawn like this.
 4. His shirt and tie section still seems like a small raised ridge, it doesn’t quite look natural. A common fault at 3/4 views.
 
+### 2026-11-26T21:18:52
+2. 2
+
