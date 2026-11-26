@@ -1043,6 +1043,17 @@ def main(argv):
                 print(ln)
         except Exception as e:
             print(f'BROKEN (watcher): the watcher could not run at start ({e})')
+        if opt('--film'):                                        # brexit-is-done chats 22-23 (Sam, 26 Nov): the send
+            try:                                                 # gate was first asked at send time, two chats late
+                import glob
+                import humancheck
+                for v in sorted(glob.glob(os.path.join(ROOT, 'animations', 'drafts', f"{opt('--film')}-*.mp4"))):
+                    for f in humancheck.send_faults(v):
+                        print('SEND GATE (now, not at send time): ' + os.path.relpath(f, ROOT) +
+                              (' A missing record can only come from drawing the film again (a whole-film render: '
+                               'Sonnet), so plan that redraw first.' if 'no body check record' in f else ''))
+            except Exception as e:
+                print(f'BROKEN (send gate at start): could not check the drafts ({e})')
         nf = opt('--notes') or (opt('--film') and os.path.join(ROOT, 'notes', f"{opt('--film')}.md"))
         if nf and os.path.exists(nf):                            # startup-fixes 3: read this, not the whole file
             print(f'handover: the notes to read ({os.path.relpath(nf, ROOT)}; nothing else of it unless a note names it):')
