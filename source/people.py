@@ -850,6 +850,19 @@ EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'f
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 
+def head_faults(sp):
+    """Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"): a
+    crowd-pack person drawn while the pack is not installed falls back to the old default head (bald, no hard hat).
+    One line when so; [] when the pack's own head will draw. Kittest crowd_head_installed."""
+    import people_parts as PP
+    if not (sp.get('kit_crowd') or sp.get('kit_face')):
+        return []
+    import people_hats as PH                     # install() hangs the turned heads, the hats and the vests: without it
+    if kit_torso_view in PP.V.TORSO_EXTRAS and PH.draw in PP.V.HEAD_WEAR:   # the old side head, no hat, no hi-vis
+        return []
+    return [f"{sp.get('name') or sp.get('who')}: old default head (bald, no hat): people.install(people.load(FILM)) not run"]
+
+
 def install(cast):
     """Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person)."""
     import people_parts as PP

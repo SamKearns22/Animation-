@@ -77,7 +77,31 @@ def install():
     ON[0] = True
 
 
+def asked():
+    """Checks on request (Sam, 26 Nov: "advise whether you want to run a certain suite of checks ... sometimes I just
+    need an animatic or a clip to see how something moves"): the body check runs only when asked (BODYCHECK=1, or a
+    final film). Off, a render draws each person once: the check's redraws cost 3-4x (pose-test chat 1)."""
+    return os.environ.get('BODYCHECK') == '1'
+
+
+def is_final(video):
+    """A finished film for posting: in animations/ (not drafts), not an animatic or clip. Only these are held at the
+    send without a body check and critique; every clip, animatic and practice video goes to Sam as it is (Sam, 26 Nov).
+    SENDGATE_ALL=1 treats every video as final (kit tests of the gate itself)."""
+    if os.environ.get('SENDGATE_ALL') == '1':
+        return True
+    p = os.path.realpath(video)
+    an = os.path.realpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'animations'))
+    b = os.path.basename(p).lower()
+    return p.startswith(an + os.sep) and os.sep + 'drafts' + os.sep not in p and not any(
+        w in b for w in ('animatic', 'clip', 'draft', 'practice', 'test'))
+
+
 def frame_begin():
+    if not asked():
+        del _ENTRIES[:]
+        del _AIMS[:]
+        return
     if not ON[0]:
         install()
     del _ENTRIES[:]
@@ -90,6 +114,8 @@ def aim(who, muzzle, barrel, target, firing=True):
 
 
 def frame_end(t):
+    if not asked():
+        return []
     out = []
     open_ = []                                     # people drawn, waiting for their head (_headless)
     for e in list(_ENTRIES):
@@ -412,7 +438,7 @@ class Writer:
         import waivers
         lines = self.lines()
         done, left = waivers.split(lines, notes or '') if lines else ([], [])
-        rec = dict(video=os.path.basename(out), faults=lines, named=bool(lines and not left), critique=None,
+        rec = dict(video=os.path.basename(out), faults=lines, named=bool(lines and not left), critique=None, checked=asked(),
                    answered=len(done), made=os.path.getmtime(out) if os.path.exists(out) else None)
         _save(out, rec)
         print('\n'.join(lines) or f'body check ({self.label}): clean, every person, every drawing', flush=True)
@@ -452,7 +478,7 @@ def copy_record(src, dst):
 
 def send_faults(video):
     """Why this video may not go to Sam yet ([] = it may)."""
-    if not os.path.exists(video) or os.path.getmtime(video) < START:
+    if not os.path.exists(video) or os.path.getmtime(video) < START or not is_final(video):
         return []
     rec = load(video)
     if rec is None:

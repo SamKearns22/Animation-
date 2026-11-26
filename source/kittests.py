@@ -13,6 +13,10 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# Checks on request (Sam, 26 Nov): the body check, the final-only send gate and the proposal guard are off unless
+# asked; the kit tests test those tools themselves, so here they are asked for (kittest practice_mode tests them off).
+for _k in ('BODYCHECK', 'PROPOSE_GUARD', 'SENDGATE_ALL'):
+    os.environ.setdefault(_k, '1')
 sys.path.insert(0, HERE)
 
 TESTS = []
@@ -4857,6 +4861,56 @@ def handover_status_checks():
           and no_push and not push and st)
     return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
                 f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
+
+
+@test
+def crowd_head_installed():
+    """Sam, 26 Nov (pose-test chat 1, saved example notes/learn/pose-test/sheet-keyframes.jpg): a test scene that never
+    installed the crowd pack drew every worker and guest with the old default head, bald with no hard hat. The check
+    must flag that scene's worker, and pass the same worker once the film's pack is installed."""
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); import people as PK; w = PK.crowd_person(PK.crowds('brexit-is-done')"
+            "['worker'], 0); a = PK.head_faults(w); PK.install(PK.load('brexit-is-done')); b = PK.head_faults(w); "
+            "print(len(a), len(b))") % HERE
+    r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE)
+    got = (r.stdout.strip().split('\n') or [''])[-1]
+    return got == '1 0', f'without the pack: flagged, with it: clean -> {got!r} {r.stderr[-200:] if got != "1 0" else ""}'
+
+
+@test
+def practice_mode():
+    """Sam, 26 Nov ("override all checks and produce it"; "advise whether you want to run a certain suite of checks";
+    the proposal route on request): with nothing asked, a render runs no body check, a practice clip or animatic goes
+    to Sam with no record, only a final is held; a practice job (Kind: practice) starts no kit tests; the proposal
+    guard never stops a reply. Saved example: pose-test chat 1 (a 3 s clip took 12 min under the body check; 112 kit
+    tests ran for a test clip)."""
+    import tempfile
+    import humancheck as HC
+    import kitfilm as KF
+    import propose as P
+    saved = {k: os.environ.pop(k, None) for k in ('BODYCHECK', 'PROPOSE_GUARD', 'SENDGATE_ALL')}
+    try:
+        d = tempfile.mkdtemp()
+        HC._ENTRIES.append({'kind': 'flat'})
+        HC.frame_begin()
+        off = HC.frame_end(0.0) == [] and not HC._ENTRIES and not HC.asked()
+        clip = os.path.join(d, 'pose-test-runner.mp4')
+        open(clip, 'wb').write(b'0')
+        sent = HC.send_faults(clip) == []
+        root = os.path.dirname(HERE)
+        final = HC.is_final(os.path.join(root, 'animations', 'open-wounds.mp4'))
+        draft = HC.is_final(os.path.join(root, 'animations', 'drafts', 'open-wounds-animatic.mp4'))
+        open(os.path.join(d, 'zz-practice.md'), 'w').write('# x\nKind: practice\n')
+        open(os.path.join(d, 'zz-film.md'), 'w').write('# x\n')
+        prac = KF.practice('zz-practice', d) and not KF.practice('zz-film', d)
+        quiet = P.hook('{"transcript_path": "/nonexistent"}') == 0
+    finally:
+        for k, v in saved.items():
+            if v is not None:
+                os.environ[k] = v
+    ok = off and sent and final and not draft and prac and quiet and not KF.ANIMATIC_GATE
+    return ok, (f'body check off {off}; practice clip sent {sent}; final held {final}, animatic not {not draft}; '
+                f'practice job {prac}; proposal guard quiet {quiet}; no kit gate before animatics {not KF.ANIMATIC_GATE}')
 
 
 @test

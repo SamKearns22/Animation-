@@ -1,5 +1,7 @@
 # Pose test (blank test scene; Sam, 26 Nov)
 
+Kind: practice
+
 Sam: "Open a fresh chat and open a blank test environment. Run the background people and their movements on the new
 model engine and show me a five second render of each of what they look like."
 
@@ -9,7 +11,8 @@ model engine and show me a five second render of each of what they look like."
 - [x] Item 7, worker sprints and leaps off the scaffold: `pose-test-runner.mp4`
 - [x] Item 8, men with steel bars: `pose-test-bars.mp4` (arms still flat, drawn on top)
 - [x] Item 11, staff fleeing: `pose-test-flee.mp4` (a man in a suit; a dress is not on the body tool yet)
-- [x] Plain background, moving as in the film, 5 s each, small MP4s (0.1-0.2 MB), sent in the chat
+- [x] Plain background, moving as in the film, 5 s each, small MP4s, sent in the chat
+- [x] Sam, 26 Nov: no old bald practice heads: redrawn with the crowd pack (people.install), full size
 - [x] Checks stray_ink and leg_tone on every 12th frame (Checks line below)
 
 Locked by Sam: Open Wounds' shots, cameras, beats and all its background movements (this test only reads them).
@@ -38,13 +41,16 @@ end (a weakness to fix before it guards standing people). One real: a crease tic
 None.
 
 ## Where things stand (pose-test chat 1, 26 Nov, session_01U3pKR3DtLpm97GCSPH6Kke)
-Rules that bite next: 91 (Learn-First), 87 (two rounds no gain: stop), 2 (every note becomes a check).
-Done: four 5 s clips on the body tool, sent; what each still needs listed above.
-Next: Sam's pick of which to learn first (Opus, high: building new); that chat starts with a reference photo and a sheet for it (guides/pose-kits.md, Order of work).
-Needs Sam: which movement to learn first (question in the chat).
-Read: guides/job-packs.md Plan pack; guides/pose-kits.md; this file.
+Rules that bite next: checks advised, not automatic (CLAUDE.md, Sam 26 Nov); people in tests are the crowd pack or grey; 91 (Learn-First).
+Done: four 5 s clips on the body tool, redrawn at full size with the crowd pack (hats, hair, faces, hi-vis); Sam: "fine
+for now ... acceptable quality for background people": no more learning on this job. Practice mode, checks on request,
+proposal route on request: built and tested (kittests practice_mode, crowd_head_installed; 19 touched tests green).
+Next: none for this job (finished). Locked by Sam: Open Wounds' shots and background movements (read, never changed).
+Needs Sam: nothing.
+Read: nothing (finished).
 Open rule requests: none.
-For Claude: source/pose_test.py (MAP); solid_seat.draw legs_soft; stray_ink's hem false alarm.
+For Claude: source/pose_test.py (MAP; draws on a sheet round each person: whole-frame canvas cost 15x at 1080 x 1920);
+humancheck.asked/is_final; kitfilm.practice; propose.hook PROPOSE_GUARD; people.head_faults.
 
 ## Override (Sam, 26 Nov: "override all checks and produce it")
 Skipped by Override: the body check and fresh critique on runner, bars and flee (torn's body check ran: clean); the
