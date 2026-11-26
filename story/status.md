@@ -1,3 +1,3 @@
-Open Wounds chat 38 (26 Nov): Sam's notes 24.1-24.4 fixed in the shared drawing kit (heads can't snap, a real smirk, suit one cloth, the 3/4 suit front); May and Blair clips sent; seated 'no bum' test deleted; reserve job R8 check audit added.
-Next: chat 39 (Opus medium) settles two cast-sheet stops, then builds shot 2 a third closer (Sam's pick 2), board, Kemi clip; then Sonnet animatic.
-Sam: Y/N on the check-knows-intent proposal; a look at the two clips.
+R8 check audit (26 Nov): every check listed (498) with what it caught; 22 of 24 Open Wounds notes no check could catch, 97% of fault lines were unchanged repeats. Report sent: notes/check-audit.html.
+Next: on Sam's answers, a tool chat (Opus medium) moves the Y'd checks into the kit, one at a time, each with its kit test. Open Wounds chat 39 is unchanged.
+Sam: Q1-Q5 in the report.

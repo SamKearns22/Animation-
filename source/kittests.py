@@ -6167,6 +6167,31 @@ def learn_first():
 
 
 @test
+def check_audit_lists_and_flags_repeats():
+    """R8 check audit (Sam, 26 Nov: "audit every check we do in this project"; saved example: Open Wounds'
+    notes/ledger/brexit-is-done/checks.jsonl, where 97% of fault lines were the same fault back unchanged, run after
+    run): checkaudit.inventory finds every kind of check from the code (a hook, a handover check, a kit test, a rulebook
+    row), and evidence() marks a fault seen on 3 runs as a repeat (numbers aside) but not one seen on 2."""
+    import json
+    import tempfile
+    import checkaudit as CA
+    rows = CA.inventory()
+    names = {r['name'] for r in rows}
+    found = all(n in names for n in ('modelguard.py', 'handover.size_faults', 'learn_first', 'rule 17'))
+    tmp = tempfile.mkdtemp()
+    os.makedirs(os.path.join(tmp, 'notes', 'ledger', 'kt'))
+    with open(os.path.join(tmp, 'notes', 'ledger', 'kt', 'checks.jsonl'), 'w') as fh:
+        for run, faults in (('r1', ['pop-in: shot 1 at 2.5 s', 'caption "a": 0.4 s']),
+                            ('r2', ['pop-in: shot 1 at 2.7 s', 'caption "a": 0.4 s']), ('r3', ['pop-in: shot 1 at 3.1 s'])):
+            for f in faults:
+                fh.write(json.dumps(dict(run=run, check=f.split(':')[0].split(' ')[0], faults=[f])) + '\n')
+    ev = CA.evidence(tmp)
+    rep = len(ev['pop-in']['repeats']) == 1 and not ev['caption']['repeats']
+    return found and rep, f"{len(rows)} checks listed; known four {'found' if found else 'MISSING'}; repeats " + \
+        ('right' if rep else f"WRONG ({ {k: len(e['repeats']) for k, e in ev.items()} })")
+
+
+@test
 def head_moves_never_snap():
     """A nod written as a snap (rise 0.1 s, Sam's note 24.1, Open Wounds chat 38: "very sharp and doesn't correspond
     to anything a person would actually do") is drawn at a real head's speed (acting.HEAD_MIN): no drawing at 12 a
