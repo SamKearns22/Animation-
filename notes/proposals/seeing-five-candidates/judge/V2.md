@@ -1,0 +1,1 @@
+Chat's own idea (chat 36): build 1 (colour who-is-where copy, own engine) first, then 2 (motion tracing); test 3 on old notes only if network allows; drop 4 (photo-trained, flat drawings); 5 not available here. Test each on Sam's past movement notes before trusting.
