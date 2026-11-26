@@ -42,7 +42,9 @@ E keep: kittests; critique and judges (+ column "Sam noted it too?"); R7 seated 
 - Missed (26 Nov): Q2 first offered a 'Reopened' list Sam had already declined; I read only the top of answered-faults-return.md (the decline is its last line) and searched no saved messages. Before any proposal: grep notes/ledger/sam/ and the proposal's last lines.
 - Q2 and Q3 merged (26 Nov): Sam asked whether Q2 already had a proposal and whether Q3 was agreed. Chat 36 record (session_01J1JB7YNoonB7shJ4bXB2Vq, read 20:29-22:18): check-knows-intent asked 20:30, re-asked 4 times, never picked (21:00 Sam asked only whether option 1 applies to all films); his 22:14 '1. Y' answered the seeing-tools re-run. Say-once (B1) is part of check-knows-intent option 1 (recheck and recognise meant as fine), so one question.
 - Sam's answers: Q2/Q3 option 1 (check-knows-intent, includes say-once B1 and doors B2); resting-hand faults discarded ("I don't see anything wrong their resting hands, discard.").
-- Needs Sam: Q4, Q5; seeing-five-candidates 1 or 2 (chat 36) in the report (going one at a time, in simple words, Sam 26 Nov).
+- Sam's answers: Q4 Y (26 Nov: rest of B and merge C).
+- Named: claude/brexit-chat39 (Open Wounds chat 39, live, not this job's) not merged here.
+- Needs Sam: Q5; seeing-five-candidates 1 or 2 (chat 36) in the report (going one at a time, in simple words, Sam 26 Nov).
 - Read: guides/job-packs.md "A tool job"; this file; the report.
 - Open rule requests: none.
 - COST: a tool job, no film estimate.
