@@ -73,3 +73,15 @@ number). Retire no_bottom in mode 'body'. Three new edge checks are missing, eac
 (1) thighs wider than the torso in front views (Kemi's knee lobes), (2) trouser block above the lap at the jacket's
 hem (Blair side), (3) crossed top leg wider than the torso / one dark mass (both crossed). These are only findings,
 not Sam's notes, so per rule 5 each needs his frame or his Y before it becomes a rule.
+
+## 3. What pose building has cost so far (cost records; no target, Sam 26 Nov)
+Sam: "It's impossible to aim for a budget until we know that it works and we understand how much it costs when we get
+it to work." So no target here; C2 records each pose's own cost from its first pose on, and the target is set later
+from those figures, with Sam. The records so far, as far as their stage labels let them be split:
+- R7 (May seated: upright, crossed, apart; four views): 27.7% of a week over 13 chats (notes/ledger/r7.json), of
+  which 15.6% bought nothing kept. The passed look itself came in chats 6, 8-11: about 10%.
+- Blessed: one chat labelled "seated rebuild, van sheet" 7.58%; arm fixes 2.25% and 0.58% (blessed.json).
+- GTA: "bench stage 1 (key poses, proof)" 2.03%; the rest of its body bench is filed under other stage names and
+  cannot be split honestly from the record.
+Sam's own figure ("up to 40 or 50% of a week") includes chats filed under other jobs before C1's booking fix, so the
+records above are lower bounds.
