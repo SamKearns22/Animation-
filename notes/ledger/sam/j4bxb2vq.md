@@ -14,3 +14,14 @@ Y
 
 When asked
 
+### 2026-11-26T20:12:44
+Why were the hand faults not found in the previous 3 animatics?
+
+### 2026-11-26T20:14:18
+The failure to fix: an answered fault should come back when the drawing changes (rule 59 says it should), and should be re-looked at each time. Only your word moves it forward.
+
+I don't know what this means
+
+### 2026-11-26T20:15:11
+Y
+

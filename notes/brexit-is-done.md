@@ -58,16 +58,15 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (chat 35, 26 Nov, session_01J1JB7W6fe75b1JDhgHTCLp)
-Rules that bite next: 59 (render lock: Sam's Override skips it for this animatic only, each skip named), 92 (move size early), 30 (a note seen before).
-Done (chat 35): May's faults 1 hair (short rounded bob: the turned hair's front no longer juts as a quiff; fringe low), 2 lean in on 'remember' (15, roll 3: reads as a lean towards the interviewer), 4 gestures at chest height ('palm up chest', chop stops 'chop firm low'), 5 tight satisfied smile from the end of 'wolves' to the cut (during the word the lips still say it: mouths locked), 6 near hand held on the thigh ('lap fwd', 'open near lap'), 7 blouse a wide plaid between broad lighter notched lapels ('tailoring:' line, shared). Six head moves enlarged, timing kept (Sam's four + Kemi's nods on 'reducing' and 'off', same fault). The shot 1 'pan' was May's own body (no camera moves in shot 1): the camera check now measures on the background above everyone (kitinputs FREE_BAND; kittest camera_measured_on_background). Rule 92 (early move size) written with kittest early_move_size.
-Next: SONNET (routine: animatic). Sam typed "Once you get to animatic stage, override everything and deliver the animatic": render with Override (log each skip, "Checks: skipped by Override: ..."), finish.py (Hook Text, sign-off), save both to animations/drafts/, push, send with size and render time. Fault 3 stays as is in the animatic unless Sam has said Y to the finger picture.
-Needs Sam: fault 3 finger picture (notes/brexit-is-done-finger-fix.jpg, sent): Y to draw it in, N to leave.
-Read: guides/job-packs.md "Checks and animatic".
-Open rule requests: none (rule 92 written).
+## Where things stand (chat 36, 26 Nov, session_01J1JB7YNoonB7shJ4bXB2Vq)
+Rules that bite next: 93 (checks advise, never lock; written this chat), 30 (a note seen before), 92 (move size early).
+Done (chat 36): animatic rendered under Sam's Override (16 min 23 s) and sent, 2.4 MB, with Hook Text and sign-off (finish.py), in animations/drafts/. Skipped by Override: the render lock (pre-flight not passed), the handover end check and kit-test gate. The picture checks left 6 hands faults (workers 3/4/5 in the site 11-12 s, Kemi's right hand 17.4 s, guests 1-3 in the oak room 26.4 and 29.3 s) + 3 rests, listed in source/data/brexit_is_done-picture-checks.txt; the video was held by the old lock, copied as the clean render. Rule 93 written (checks never lock) and the lock code changed. Fault 3 (May's finger) left as is: no Y found.
+Next: Sam's notes on the animatic (OPUS, medium). Still to build for rule 93: circled stills + why-line (on Sam's word), kittest checks_advise_never_lock.
+Needs Sam: Y/N on the finger picture (notes/brexit-is-done-finger-fix.jpg).
+Read: guides/job-packs.md "Notes round".
+Open rule requests: none.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
-Handover check: REFUSED on 23 STOPs, all cast-sheet poses the film never uses (seated 'no bum', crossed legs one tone, Kemi's front crotch line, judge record old); the same 23 on the commit before this chat (checked in a worktree): Sam's Y in chat 33 skips the seated ones; Override covers the rest for the animatic.
-For Claude: preflight name 'brexit-is-done'; fault 3's proposed finger is a scratch patch of B.gesture_hand (longer finger, 72 units, over the circle from its edge), not in the kit yet; movesize.py FILM --new measures only new/changed moves.
+For Claude: preflight name 'brexit-is-done'; branch claude/open-wounds-chat36.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Sam 26 Nov 19:09: "Question: if these were not right, why were they animated in that way originally?" and 19:10: "Do you see the problem if something is being designed in a way that will later fail a check?": answered in chat 34; the fix is rule 92 (move size checked the moment a move is written, chat 35).
