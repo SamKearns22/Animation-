@@ -581,6 +581,9 @@ def draw(p, j, yaw, sp, scale=2):
         BD._fill(np.ascontiguousarray(xy), np.ascontiguousarray(z), np.ascontiguousarray(To, np.int64),
                  np.zeros(len(To), np.int64), zb, pb, ob, oi, 0.01, ab, np.ascontiguousarray(attrs), True)
     m = ob >= 0
+    if mode == 'body' and SMOOTH_R:             # R7 chat 14 (Sam, 26 Nov, notes 3-4: "knee to calf area could have
+        _smooth(zb, pb, ob, ab, SMOOTH_R * scale)   # smoother, less rugged lines"; the crotch's ragged ends): each leg's
+        m = ob >= 0                             # and the trunk's outline smoothed (notches filled, steps rounded)
     if whole:                                   # the suit per dot (model_body.suit_parts), in this drawing's part ids
         # her jacket buttoned with a V (the flat kit's women's jackets), his open over the shirt, unless the spec says
         mp = MB.suit_parts(ab[ob == 0][:, :3], ab[ob == 0][:, 7:12], M,
@@ -621,7 +624,7 @@ def draw(p, j, yaw, sp, scale=2):
     ls = np.where(ab[..., 6] > 0.5, 1, np.where(ab[..., 6] < -0.5, 2, 0))
     ls[ob != 0] = 0
     if mode == 'body':                          # R7 chat 14 (Sam, 26 Nov, note 2: "Stray horizontal line on butt"):
-        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, (ob == 0) & (ls == 0))   # the trunk is one soft mass:
+        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, np.where(ob == 0, ls + 1, 0))   # each piece is one soft mass:
     else:                                       # no line where it folds over itself (the seat-pressed bottom bulging
         edge = BD.ink(zb, pb, ob, max(2, p.w(2.6)) * scale)   # sideways); its outline and the legs' lines stay
     between = np.zeros_like(edge)            # the house line wherever the two legs meet (they are two parts)
@@ -641,6 +644,11 @@ def draw(p, j, yaw, sp, scale=2):
             e = (a_ > 0) & (b_ > 0) & (a_ != b_) & la & lb
             between[:lab.shape[0] - dy, :lab.shape[1] - dx] |= e
     from scipy import ndimage
+    if mode == 'body':                          # R7 chat 14 (Sam's note 3, the tick in the crotch): where the legs only
+        lb, nb = ndimage.label(between, structure=np.ones((3, 3)))   # touch deep in a gap (a few dots), no line
+        if nb:
+            sz = ndimage.sum(between, lb, range(1, nb + 1))
+            between &= np.isin(lb, 1 + np.where(sz >= BETWEEN_MIN * scale)[0])
     edge |= ndimage.binary_dilation(between, iterations=max(1, int(max(2, p.w(2.6)) * scale // 2)))
     cols = {BD.PART_IX['trousers']: tuple(sp.get('trousers', (40, 40, 46))),
             BD.PART_IX['shoes']: tuple(sp.get('shoe', (30, 26, 24))),
@@ -705,8 +713,43 @@ def draw(p, j, yaw, sp, scale=2):
     return L
 
 
+BETWEEN_MIN = 14        # mode 'body': a line between the legs shorter than this (dots at 1x) is not drawn (chat 14)
+SMOOTH_R = 5.0          # mode 'body': outline smoothing radius (picture dots at 1x; chat 14)
+
+
+def _smooth(zb, pb, ob, ab, r):
+    """Each piece of the solid (either leg, the trunk) smoothed in the picture: notches narrower than about 2r filled
+    and stair steps rounded (a disc closing, then a blur over r/2 held at half); filled dots take their nearest dot's
+    depth and attributes, dots shaved off become empty. Pieces never grow into each other (the gap between apart
+    legs stays)."""
+    from scipy import ndimage
+    o0 = ob == 0
+    lab = np.where(ab[..., 6] > 0.5, 1, np.where(ab[..., 6] < -0.5, 2, 3))
+    lab[~o0] = 0
+    yy, xx = np.mgrid[-int(r):int(r) + 1, -int(r):int(r) + 1]
+    disc = (yy ** 2 + xx ** 2) <= r * r
+    any_obj = ob >= 0
+    for k in (1, 2, 3):
+        L = lab == k
+        if L.sum() < 50:
+            continue
+        others = ndimage.binary_dilation(any_obj & ~L, iterations=2)
+        Ls = ndimage.binary_closing(L, structure=disc)
+        Ls = ndimage.gaussian_filter(Ls.astype(float), r / 2) > 0.5
+        add = Ls & ~any_obj & ~others
+        cut = L & ~Ls & ~others
+        if add.any():
+            _, (iy, ix) = ndimage.distance_transform_edt(~L, return_indices=True)
+            ty, tx = iy[add], ix[add]
+            zb[add], pb[add], ob[add], ab[add] = zb[ty, tx], pb[ty, tx], ob[ty, tx], ab[ty, tx]
+            any_obj = ob >= 0
+        if cut.any():
+            zb[cut], pb[cut], ob[cut], ab[cut] = np.inf, -1, -1, 0
+
+
 def _ink(zb, pb, ob, width, soft):
-    """bench_draw.ink, but a depth jump between two `soft` dots is no line (one soft mass folding over itself)."""
+    """bench_draw.ink, but a depth jump between two dots of the same `soft` piece (a label above 0) is no line (one
+    soft mass folding over itself: the trunk, each leg)."""
     h, w = zb.shape
     edge = np.zeros((h, w), bool)
     zf = np.where(np.isfinite(zb), zb, 1e3)
@@ -715,7 +758,7 @@ def _ink(zb, pb, ob, width, soft):
         a = (slice(0, h - dy), slice(max(0, -dx), w - max(0, dx)))
         b = (slice(dy, h), slice(max(0, dx), w + min(0, dx)))
         jump = np.abs(zf[a] - zf[b]) > 0.03 + 0.02 * np.minimum(zf[a], zf[b]) / 4
-        diff = (ob[a] != ob[b]) | (pb[a] != pb[b]) | (jump & ~(soft[a] & soft[b]))
+        diff = (ob[a] != ob[b]) | (pb[a] != pb[b]) | (jump & ~((soft[a] > 0) & (soft[a] == soft[b])))
         near_a = zf[a] <= zf[b]
         edge[a] |= diff & near_a & (ob[a] >= 0)
         edge[b] |= diff & ~near_a & (ob[b] >= 0)
@@ -958,3 +1001,128 @@ def short_top_faults(img, sp):
     if mid and side and max(mid) - np.median(side) > SHORT_TOP_DIP:
         out.append('short top dips between the thighs: %.2f hands deeper in the middle' % (max(mid) - np.median(side)))
     return out
+
+
+# ---- R7 chat 14: Sam's five notes on Kemi's sheets (26 Nov), each read from the picture alone (any scale, a JPEG too)
+FAR_TONE = 0.15         # leg_tone_faults: the shadow tone's share of the trousers at most this (Sam's frame: 0.6)
+OVER_HEM = 0.02         # leg_tone_faults: trousers lying on the outfit higher than its hem by this share of its width
+LAST_RUGGED = [0.0]
+RUGGED = 0.004          # rugged_faults: notch area (closing radius 1.5% of the width) per width squared at most this
+
+
+def _masks(img, sp):
+    a = np.asarray(img.convert('RGB')).astype(int)
+    tr = np.array(sp.get('trousers', (40, 40, 46)), float)
+    ink = a.max(-1) < 31
+    base = (np.abs(a - tr).sum(-1) <= 20) & ~ink
+    far = (np.abs(a - tr * 0.72).sum(-1) <= 8) & ~ink
+    J = (np.abs(a - np.array(sp.get('jacket', (40, 40, 46)))).sum(-1) <= 20) & ~ink & ~base & ~far
+    return a, ink, base, far, J
+
+
+def leg_tone_faults(img, sp):
+    """Sam, 26 Nov, note 1 (examples/sam-26nov-kemi-34-far-leg.jpg): "In 3/4 pose the legs are different colour and
+    the darker right leg doesn't seem connected smoothly to the body as it is in the other poses". Legs side by side
+    (not crossed): 'two tones': a shadow tone (R7_FAR) over FAR_TONE of the trousers; 'over the hem': trousers
+    lying on the outfit above its hem line (a leg's top over the jacket, a notched lump). Kittest leg_tone."""
+    a, ink, base, far, J = _masks(img, sp)
+    out = []
+    if base.sum() and far.sum() > FAR_TONE * base.sum():
+        out.append('two tones: shadow leg %.2f of the trousers' % (far.sum() / base.sum()))
+    T = base | far
+    cols = np.where(J.any(0))[0]
+    if len(cols) < 10:
+        return out
+    W = np.percentile(cols, 99) - np.percentile(cols, 1)
+    hems = np.array([np.where(J[:, c])[0].max() for c in cols])
+    hem = np.median(hems)
+    bad = 0
+    for c, h in zip(cols, hems):
+        t = np.where(T[:, c])[0]
+        t = t[(t < hem) & (t > hem - 0.2 * W)]
+        if len(t) and t.min() < hem - OVER_HEM * W and J[t.min() + 1:, c].any() and h > t.min():
+            bad += 1
+    if bad > OVER_HEM * W:
+        out.append('over the hem: trousers on the outfit in %d columns' % bad)
+    return out
+
+
+def stray_ink(img, sp, where=None):
+    """Sam, 26 Nov, notes 2 and 3 ("Stray horizontal line on butt", examples/sam-26nov-kemi-side-bum-line-chair.jpg;
+    "Stray vertical line in crotch", examples/sam-26nov-kemi-apart-crotch-line-knees.jpg): an ink line that ends in
+    the open inside a fill (a loose end: one arc of ink round it, the rest no ink). Every house line closes or meets
+    another. `where`: only ends inside this mask (the solid layer). Returns the ends (x, y). Kittest stray_ink."""
+    import math as _m
+    a = np.asarray(img.convert('RGB')).astype(int)
+    ink = a.max(-1) < 31
+    runs = []
+    for y in range(0, a.shape[0], 7):
+        d = np.diff(np.r_[0, ink[y].astype(int), 0])
+        runs += list(np.where(d == -1)[0] - np.where(d == 1)[0])
+    w = max(2.0, float(np.median(runs))) if runs else 3.0
+    R = 2.5 * w + 2
+    n = max(24, int(2 * _m.pi * R))
+    ang = np.linspace(0, 2 * _m.pi, n, endpoint=False)
+    dy, dx = np.round(R * np.sin(ang)).astype(int), np.round(R * np.cos(ang)).astype(int)
+    H, Wd = ink.shape
+    tr = np.array(sp.get('trousers', (40, 40, 46)), float)
+    trs = ((np.abs(a - tr).sum(-1) <= 20) | (np.abs(a - tr * 0.72).sum(-1) <= 8)) & ~ink    # inside the trousers
+    seat = ((np.abs(a - np.array((58, 60, 68))).sum(-1) <= 16) | (np.abs(a - np.array((84, 86, 96))).sum(-1) <= 16))
+    ends = []
+    ys, xs = np.where(ink if where is None else ink & where)
+    for y, x in zip(ys[::2], xs[::2]):
+        yy, xx = y + dy, x + dx
+        if yy.min() < 0 or xx.min() < 0 or yy.max() >= H or xx.max() >= Wd:
+            continue
+        ri = ink[yy, xx]
+        rt = trs[yy, xx]
+        if not ri.any() or ri.mean() >= 0.35 or (ri | rt | seat[yy, xx]).mean() < 0.97 or rt.mean() < 0.4:
+            continue
+        if int((np.diff(np.r_[ri, ri[:1]].astype(int)) == 1).sum()) == 1:
+            if all(_m.hypot(x - u, y - v) > 3 * R for u, v in ends):
+                ends.append((int(x), int(y)))
+    return ends
+
+
+def rugged_faults(img, sp):
+    """Sam, 26 Nov, note 4 (examples/sam-26nov-kemi-apart-crotch-line-knees.jpg): "Front-facing pose knee to calf
+    area could have smoother, less rugged lines": the trousers' outline notched (the pressed thigh's lobe stepping
+    in to the shin, stair steps). Notch area: background a disc closing of the trousers fills, per width squared.
+    Kittest rugged."""
+    from scipy import ndimage
+    a, ink, base, far, J = _masks(img, sp)
+    T = ndimage.binary_dilation(base | far, iterations=2) | ink & ndimage.binary_dilation(base | far, iterations=4)
+    cols = np.where(J.any(0))[0] if J.any() else np.where(T.any(0))[0]
+    W = float(np.percentile(cols, 99) - np.percentile(cols, 1))
+    r = max(3, int(0.015 * W))
+    yy, xx = np.mgrid[-r:r + 1, -r:r + 1]
+    disc = yy ** 2 + xx ** 2 <= r * r
+    bg = a.min(-1) > 200                                # the sheet's light ground
+    notch = ndimage.binary_closing(T, structure=disc) & ~T & bg
+    k = notch.sum() / (W * W)
+    LAST_RUGGED[0] = k
+    return ['rugged outline: notches %.4f' % k] if k > RUGGED else []
+
+
+def back_clip_faults(img, sp):
+    """Sam, 26 Nov, note 5 (examples/sam-26nov-kemi-side-bum-line-chair.jpg): "Back of bum clips slightly into chair
+    in side-on pose and needs stronger lining": from the side, the chair back's front edge (a dark upright line, the
+    chair colour on its far side) is gone where the person passes over it, and the person's back there has no ink.
+    Rows from the outfit's hem to the seat where, at the chair back's front edge, neither the chair's line nor an
+    outline shows: a clip. Kittest back_clip."""
+    a = np.asarray(img.convert('RGB')).astype(int)
+    ink = a.max(-1) < 31
+    chair = (np.abs(a - np.array((58, 60, 68))).sum(-1) <= 14) | (np.abs(a - np.array((84, 86, 96))).sum(-1) <= 14)
+    # the chair back: the column band holding chair colour in most rows of its upper half
+    rows = np.where(chair.any(1))[0]
+    if not len(rows):
+        return []
+    colfrac = chair[rows[0]:rows[0] + max(10, (rows[-1] - rows[0]) // 3)].mean(0)
+    cb = np.where(colfrac > 0.6)[0]
+    if not len(cb):
+        return []
+    face = cb.max()                                     # the back's front edge (the person sits to its right)
+    a_, ink_ = a[:, face + 1:face + 8], ink[:, face - 2:face + 6]
+    T = np.abs(a - np.array(sp.get('trousers', (40, 40, 46)))).sum(-1) <= 20
+    bad = [y for y in range(a.shape[0]) if T[y, face - 6:face + 1].sum() >= 4 and not ink_[y].any()]
+    return ['back clip: %d rows of the person over the chair back with no line' % len(bad)] if len(bad) > 3 else []
