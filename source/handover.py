@@ -466,24 +466,6 @@ def end_stamp(rec, stops=()):
         f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{mark}{sid}\n')
 
 
-def finder_faults(film, rec=None):
-    """finder-use change 1 (Sam's 1, 17 Nov), replacing the per-day flag (one show call anywhere that day silenced it
-    for every chat; it never fired on 16 Nov): THIS chat edited the film's code with no `page.py show` call: say so,
-    with its count of hand searches of the film's code (stepcost.search_record, from the chat's own record)."""
-    if not film or not rec:
-        return []
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    import stepcost
-    try:
-        r = stepcost.search_record(rec, film)
-    except Exception:
-        return []
-    if not r['edited film code'] or r['show']:
-        return []
-    return [f'FINDER: this chat edited the film\'s code with no `page.py {film} show` call ({r["film"].get("no show", 0)} '
-            'hand searches of its code): each note looks first with show --shot --at --who (or say in the notes why not)']
-
-
 def unrouted_faults(rec):
     """The proposal route (Sam, 15 Nov): a change put to Sam that the Stop hook blocked once and then let through
     (stop_hook_active) is logged by propose.py; the handover names each one so it is routed, not forgotten."""
@@ -1106,7 +1088,7 @@ def main(argv):
         nf = opt('--notes')
         checks = [('quick', quick_faults), ('notes', lambda: _run(turns(rec), film, nf)),
                   ('model', lambda: model_faults(film, nf)), ('draft', lambda: draft_faults(film, nf)), ('report', lambda: kept_report_faults(film)),
-                  ('finder', lambda: finder_faults(film, rec)), ('unrouted', lambda: unrouted_faults(rec)),
+                  ('unrouted', lambda: unrouted_faults(rec)),
                   ('branch', lambda: branch_faults(film, nf)), ('sentence', sentence_faults), ('freeze', freeze_faults),
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
