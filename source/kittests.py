@@ -565,6 +565,65 @@ def short_top_hem():
 
 
 @test
+def leg_tone():
+    """R7 chat 14 (Sam, 26 Nov, note 1: "In 3/4 pose the legs are different colour";
+    examples/sam-26nov-kemi-34-far-leg.jpg): solid_seat.leg_tone_faults catches Sam's frame and passes May, Kemi and
+    Blair at three-quarter as now (before chat 14 all three were caught: shadow tone 0.51, 0.44, 0.61)."""
+    import sys
+    from PIL import Image
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import solid_seat as SO
+    import sheet_solid as SH
+    SH.MODE = 'body'
+    sam = SO.leg_tone_faults(Image.open('notes/learn/pose-kit/examples/sam-26nov-kemi-34-far-leg.jpg'), SH.cast['kemi'])
+    now = {w: SO.leg_tone_faults(SH.tile(w, 45, 'upright', full=True)[0], SH.cast[w]) for w in ('may', 'kemi', 'blair')}
+    return bool(sam) and not any(now.values()), f"Sam's frame: {sam or 'MISSED'}; as now: {now}"
+
+
+@test
+def back_clip():
+    """R7 chat 14 (Sam, 26 Nov, note 5: "Back of bum clips slightly into chair in side-on pose and needs stronger
+    lining"; examples/sam-26nov-kemi-side-bum-line-chair.jpg): solid_seat.back_clip_faults catches Sam's frame and
+    Kemi side on with the chair back at its old place (views.r7_back_face off), and passes all three as now."""
+    import sys
+    from PIL import Image
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import solid_seat as SO
+    import sheet_solid as SH
+    import views as V
+    SH.MODE = 'body'
+    sam = SO.back_clip_faults(Image.open('notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair.jpg'),
+                              SH.cast['kemi'])
+    keep = V.r7_back_face
+    try:
+        V.r7_back_face = lambda *a, **k: None
+        old = SO.back_clip_faults(SH.tile('kemi', 90, 'upright', full=True)[0], SH.cast['kemi'])
+    finally:
+        V.r7_back_face = keep
+    now = {w: SO.back_clip_faults(SH.tile(w, 90, 'upright', full=True)[0], SH.cast[w]) for w in ('may', 'kemi', 'blair')}
+    return bool(sam) and bool(old) and not any(now.values()), f"Sam's frame: {sam or 'MISSED'}; old chair: {old}; now: {now}"
+
+
+@test
+def stray_ink():
+    """R7 chat 14 (Sam, 26 Nov, note 2: "Stray horizontal line on butt"; examples/sam-26nov-kemi-side-bum-line-chair.jpg):
+    solid_seat.stray_ink finds the loose end of the line on Sam's frame, and none of Kemi's side view where that line
+    was (the bottom, under the hem). (It misses note 3's crotch tick on Sam's frame: not yet proven there.)"""
+    import sys
+    from PIL import Image
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import solid_seat as SO
+    import sheet_solid as SH
+    SH.MODE = 'body'
+    sp = SH.cast['kemi']
+    sam = SO.stray_ink(Image.open('notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair.jpg'), sp)
+    hit = [e for e in sam if 150 < e[1] < 200 and 200 < e[0] < 360]          # the line itself (not the hand's edge)
+    im = SH.tile('kemi', 90, 'upright', full=True)[0].crop((440, 1400, 720, 1470))   # under the hem, the bottom
+    now = SO.stray_ink(im, sp)
+    return bool(hit) and not now, f"Sam's frame: {hit or 'MISSED'}; Kemi's bottom now: {now}"
+
+
+@test
 def shoe_shapes():
     """R7 chat 10 (Sam, 26 Nov: "Shoes clipping on 3/4 view", "Confused shoe shapes on side view";
     examples/sam-26nov-shoes-clipping-34.jpg, sam-26nov-shoe-shapes-side.jpg): solid_seat.shoe_faults catches May's

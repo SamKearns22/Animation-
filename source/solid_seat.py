@@ -624,7 +624,7 @@ def draw(p, j, yaw, sp, scale=2):
     ls = np.where(ab[..., 6] > 0.5, 1, np.where(ab[..., 6] < -0.5, 2, 0))
     ls[ob != 0] = 0
     if mode == 'body':                          # R7 chat 14 (Sam, 26 Nov, note 2: "Stray horizontal line on butt"):
-        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, np.where(ob == 0, ls + 1, 0))   # each piece is one soft mass:
+        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, np.where((ob == 0) & (ls == 0), 1, 0))   # the trunk is one soft mass:
     else:                                       # no line where it folds over itself (the seat-pressed bottom bulging
         edge = BD.ink(zb, pb, ob, max(2, p.w(2.6)) * scale)   # sideways); its outline and the legs' lines stay
     between = np.zeros_like(edge)            # the house line wherever the two legs meet (they are two parts)
@@ -650,6 +650,11 @@ def draw(p, j, yaw, sp, scale=2):
             sz = ndimage.sum(between, lb, range(1, nb + 1))
             between &= np.isin(lb, 1 + np.where(sz >= BETWEEN_MIN * scale)[0])
     edge |= ndimage.binary_dilation(between, iterations=max(1, int(max(2, p.w(2.6)) * scale // 2)))
+    if mode == 'body':                          # R7 chat 14 (Sam's note 3): a speck of ink on its own (a tiny ring
+        le, ne = ndimage.label(edge, structure=np.ones((3, 3)))   # where folds meet in the crotch) is no line
+        if ne:
+            sz = ndimage.sum(edge, le, range(1, ne + 1))
+            edge &= np.isin(le, 1 + np.where(sz >= SPECK * scale * scale)[0])
     cols = {BD.PART_IX['trousers']: tuple(sp.get('trousers', (40, 40, 46))),
             BD.PART_IX['shoes']: tuple(sp.get('shoe', (30, 26, 24))),
             BD.PART_IX['skin']: tuple(sp.get('tights') or sp['skin']), BD.PART_IX['vest']: tuple(skirt or (0, 0, 0)),
@@ -714,6 +719,7 @@ def draw(p, j, yaw, sp, scale=2):
 
 
 BETWEEN_MIN = 14        # mode 'body': a line between the legs shorter than this (dots at 1x) is not drawn (chat 14)
+SPECK = 60              # mode 'body': an ink piece smaller than this (dots at 1x) is a speck, not drawn (chat 14)
 SMOOTH_R = 5.0          # mode 'body': outline smoothing radius (picture dots at 1x; chat 14)
 
 
@@ -1023,27 +1029,13 @@ def _masks(img, sp):
 def leg_tone_faults(img, sp):
     """Sam, 26 Nov, note 1 (examples/sam-26nov-kemi-34-far-leg.jpg): "In 3/4 pose the legs are different colour and
     the darker right leg doesn't seem connected smoothly to the body as it is in the other poses". Legs side by side
-    (not crossed): 'two tones': a shadow tone (R7_FAR) over FAR_TONE of the trousers; 'over the hem': trousers
-    lying on the outfit above its hem line (a leg's top over the jacket, a notched lump). Kittest leg_tone."""
+    (not crossed): 'two tones': a shadow tone (R7_FAR) over FAR_TONE of the trousers. Kittest leg_tone. (The join, the
+    far thigh's top showing over the hem as a notched lump, has no proven picture check yet: chat 14 tried trousers
+    above the hem line and it missed Sam's frame.)"""
     a, ink, base, far, J = _masks(img, sp)
     out = []
     if base.sum() and far.sum() > FAR_TONE * base.sum():
         out.append('two tones: shadow leg %.2f of the trousers' % (far.sum() / base.sum()))
-    T = base | far
-    cols = np.where(J.any(0))[0]
-    if len(cols) < 10:
-        return out
-    W = np.percentile(cols, 99) - np.percentile(cols, 1)
-    hems = np.array([np.where(J[:, c])[0].max() for c in cols])
-    hem = np.median(hems)
-    bad = 0
-    for c, h in zip(cols, hems):
-        t = np.where(T[:, c])[0]
-        t = t[(t < hem) & (t > hem - 0.2 * W)]
-        if len(t) and t.min() < hem - OVER_HEM * W and J[t.min() + 1:, c].any() and h > t.min():
-            bad += 1
-    if bad > OVER_HEM * W:
-        out.append('over the hem: trousers on the outfit in %d columns' % bad)
     return out
 
 
