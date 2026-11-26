@@ -66,6 +66,7 @@ Needs Sam: fault 3 finger picture (notes/brexit-is-done-finger-fix.jpg, sent): Y
 Read: guides/job-packs.md "Checks and animatic".
 Open rule requests: none (rule 92 written).
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
+Handover check: REFUSED on 23 STOPs, all cast-sheet poses the film never uses (seated 'no bum', crossed legs one tone, Kemi's front crotch line, judge record old); the same 23 on the commit before this chat (checked in a worktree): Sam's Y in chat 33 skips the seated ones; Override covers the rest for the animatic.
 For Claude: preflight name 'brexit-is-done'; fault 3's proposed finger is a scratch patch of B.gesture_hand (longer finger, 72 units, over the circle from its edge), not in the kit yet; movesize.py FILM --new measures only new/changed moves.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
