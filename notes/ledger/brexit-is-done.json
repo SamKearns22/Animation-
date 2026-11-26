@@ -20794,7 +20794,113 @@
     "24.2 smirk | smile moved the lip corners half a pixel: the kit could not draw a smirk",
     "24.4 shirt ridge | chat 12 moved the V, never reshaped it",
     "25 leg gap | the one-cloth trousers broke the tone the seated legs rely on"
-   ]
+   ],
+   "steps": 142,
+   "hist_k": 262,
+   "kinds": {
+    "film-file search": 4.6,
+    "tool search": 20.8,
+    "page.py": 1.5,
+    "renders": 0.2,
+    "pictures": 4.3,
+    "other": 68.6
+   },
+   "calls": {
+    "film-file search": 16,
+    "tool search": 90,
+    "whole-file .py read": 0,
+    "page.py": 4,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 13,
+    "other": 18
+   },
+   "split": {
+    "usd": 7.8431,
+    "total": 7.8431,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 32.8,
+     "start-up floor": 30.0,
+     "Claude's words": 19.1,
+     "new writes": 18.1
+    },
+    "origins": {
+     "Claude's words": 34.1,
+     "start-up floor": 30.0,
+     "result: tool search": 15.5,
+     "result: other": 6.0,
+     "result: pictures": 6.0,
+     "messages and reminders": 3.9,
+     "result: film-file search": 2.4,
+     "result: page.py": 2.0
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 30.0,
+     "writing code": 10.6,
+     "thinking": 10.2,
+     "commands": 9.5,
+     "reading kit code": 8.5,
+     "looking at pictures": 6.0,
+     "start-up and handover tools": 5.3,
+     "reading chat records": 5.1,
+     "messages and reminders": 3.9,
+     "writing notes": 2.8,
+     "reading notes": 2.6,
+     "other commands": 1.4,
+     "messages to Sam": 1.0,
+     "reading film code": 0.8,
+     "running checks and tools": 0.8,
+     "app tools (chats, files sent)": 0.7,
+     "git and saving": 0.3,
+     "reading guides": 0.2,
+     "renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 23,
+    "work_pct": 0.3,
+    "reads": [
+     [
+      "source/castsheet.py",
+      3.4,
+      0.1052
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/35855f13-3fc4-50bc-ac32-7c68b7ac8658/scratchpad/seat.jpg",
+      3.2,
+      0.0959
+     ],
+     [
+      "story/brexit-is-done-moves.txt",
+      1.2,
+      0.0391
+     ],
+     [
+      "source/movesize.py",
+      0.9,
+      0.0284
+     ],
+     [
+      "source/page.py",
+      0.9,
+      0.028
+     ],
+     [
+      "source/handover.py",
+      0.8,
+      0.0252
+     ],
+     [
+      "notes/archive/brexit-is-done-handovers.md",
+      0.8,
+      0.0222
+     ]
+    ],
+    "base_pct": 27.5
+   }
   }
  ],
  "checks": {
