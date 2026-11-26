@@ -15,3 +15,6 @@ Add to reserve jobs.
 
 How would you increase your ability to understand a screenplay when drawing/animating?
 
+### 2026-11-26T22:53:16
+Reserve job but just the beat sheet.
+

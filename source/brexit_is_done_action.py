@@ -52,8 +52,9 @@ FEET = 928.0
 # ================================================================================================= setup
 WOLF_SHOULDER = 0.85                 # m: half a man's height (Cry Minister's dire wolves; the kit's s=1 is 200 units)
 UNITS = 200.0 / WOLF_SHOULDER        # wolf units a metre
-ATTACK = dict(x=-1.4, d=7.0)         # W1 digging in the open ground left of Kemi (note 13; places file: people attack 7)
-LIFT_D = 24.95                       # between the scaffold's inner (25.6) and outer (24.3) frames: the boards
+ATTACK = dict(x=-0.93, d=4.67)       # W1 digging in the open ground left of Kemi (note 13; places file: people attack 4.67;
+                                     # Sam's framing 2, note 23.2: every site depth and place across x 2/3 of chat 39's)
+LIFT_D = 16.28                       # between the scaffold's inner (16.93) and outer (15.63) frames: the boards
 TOP, MID = 9.6, 6.4                  # the runner's lift, the bar fight's lift (board tops, m)
 CROWD = PK.crowds('brexit-is-done')
 WORKERS = [PK.crowd_person(CROWD['worker'], i) for i in range(5)]
@@ -169,8 +170,8 @@ def tube(img, a, b, w, col=(150, 156, 164)):
 # him digging first); each wolf runs in, crouches, springs a short pounce whose forepaws strike him where he is
 # (WA his chest at HIT, WB his hips as he buckles, 0.2 s later), rides him down as he falls, then feeds.
 LEAD = 1.1                                          # s of the shot before the attack's own clock starts
-WA = dict(d=6.75, land=ATTACK['x'] + 0.1, pal=1, seed=21, hit=0.0, strike=1.25)    # nearer him: jaws at his chest
-WB = dict(d=7.3, land=ATTACK['x'] - 0.2, pal=3, seed=22, hit=0.2, strike=0.85)     # behind him: at his belly
+WA = dict(d=ATTACK['d'] - 0.25, land=ATTACK['x'] + 0.1, pal=1, seed=21, hit=0.0, strike=1.25)    # nearer him: jaws at his chest
+WB = dict(d=ATTACK['d'] + 0.3, land=ATTACK['x'] - 0.2, pal=3, seed=22, hit=0.2, strike=0.85)     # behind him: at his belly
 RUN_V = 5.5                                         # m/s, the wolves' run in (seen crossing the open ground)
 HIT = 0.6                                           # WA's forepaws strike him (attack clock): he starts to fall
 REACH = 0.95                                        # m from a leaping wolf's middle to its forepaws (leap pose, v 1)
@@ -374,8 +375,9 @@ def w1(img, L, cam3, u):
 
 
 # ================================================================================================= shot 2: runner
-RUN_FROM, RUN_T0, LEAP_T = 13.4, 1.5, 4.6
-RUN_SPEED = (RUN_FROM - (-11.6)) / (LEAP_T - RUN_T0)    # m/s: he reaches the lift's end as he leaps
+RUN_FROM, RUN_T0, LEAP_T = 9.6, 1.5, 4.6                 # framing 2: the scaffold x -9 to 9.3 (its end at the frame's edge)
+LIFT_END = -7.6                                          # where he leaps, 1.4 m in from the lift's end
+RUN_SPEED = (RUN_FROM - LIFT_END) / (LEAP_T - RUN_T0)    # m/s: he reaches the lift's end as he leaps
 
 
 def _runner_x(u):
@@ -407,7 +409,7 @@ def runner(img_unused, L, u):
 
     def wolf(img, k):
         lag = (2.3, 3.1)[k]
-        x_stop = (-11.0, -10.1)[k]
+        x_stop = (LIFT_END + 0.6, LIFT_END + 1.5)[k]
         d = LIFT_D + (0.18, -0.15)[k]
         if u < RUN_T0:
             return
@@ -446,7 +448,9 @@ def runner(img_unused, L, u):
 
 
 # ================================================================================================= shot 2: bars
-BAR_MEN = [dict(i=2, x=9.95, d=LIFT_D - 0.2), dict(i=3, x=10.75, d=LIFT_D + 0.25), dict(i=4, x=11.6, d=LIFT_D)]
+BAR_X = -4.0                         # framing 2: the fight 4 m left of chat 39's, its place on screen kept (x 2/3 of chat 39's)
+BAR_MEN = [dict(i=2, x=9.95 + BAR_X, d=LIFT_D - 0.2), dict(i=3, x=10.75 + BAR_X, d=LIFT_D + 0.25),
+           dict(i=4, x=11.6 + BAR_X, d=LIFT_D)]
 # Note 14 (Sam, 26 Nov: "more vigorous and desperate on both sides... hitting and stabbing and retreating, advancing,
 # really trying to stop wolves from killing them. And the wolves... attacks and pushing forward and bites and
 # snarls"): an exchange every 0.75 s, the two wolves in turn (each every 1.5 s), never a still moment. A wolf presses
@@ -454,7 +458,7 @@ BAR_MEN = [dict(i=2, x=9.95, d=LIFT_D - 0.2), dict(i=3, x=10.75, d=LIFT_D + 0.25
 # stab, or a clubbing overhead hit, by turns), and the struck wolf is knocked back, flinching, and comes again.
 LUNGES = [(0.3 + 0.75 * k, k % 2) for k in range(16)]        # (time, which wolf): We and Wf in turn
 STRIKE = 0.26                                                 # the blow lands this long after the lunge starts
-CLANG = 4.3                                                   # W5's swing stops dead on the outer standard at x 11
+CLANG = 4.3                                                   # W5's swing stops dead on the outer standard at x 7
 
 
 def _exchange(u, k):
@@ -531,7 +535,7 @@ def bars(L, u):
                 tip_len = 1.5 * pxm
                 ang = math.atan2(dy, dx)
                 tip = (b[0] + math.cos(ang) * tip_len, b[1] + math.sin(ang) * tip_len)
-                stx = L.p(11.0, LIFT_D, 0)[0]                       # the standard it must not pass through
+                stx = L.p(11.0 + BAR_X, LIFT_D, 0)[0]                       # the standard it must not pass through
                 if tip[0] < stx and b[0] > stx:
                     k = (b[0] - stx) / max(1e-3, b[0] - tip[0])
                     tip = (stx, b[1] + (tip[1] - b[1]) * k)
@@ -545,7 +549,7 @@ def bars(L, u):
     for k in range(2):                                              # We and Wf: lunge in turn, struck, flinch
         def wolf(img, k=k):
             d = (LIFT_D - 0.05, LIFT_D + 0.3)[k]
-            x = (8.0, 8.7)[k]                                        # back from the men: the bars, not bodies, meet
+            x = (8.0 + BAR_X, 8.7 + BAR_X)[k]                                        # back from the men: the bars, not bodies, meet
             # between lunges it presses in, snapping and snarling, edging forward and back (note 14)
             snap = 0.5 + 0.45 * max(0.0, math.sin((u + 0.7 * k) * 10.0))
             P = WF.pose('lunge', 0.25 + 0.15 * math.sin((u + k) * 5.0), jaw=snap, snarl=1.0)
@@ -568,14 +572,14 @@ def bars(L, u):
         v = (u % per) / per
         d = LIFT_D + 0.45
         if v < 0.45:
-            x, face, dist = 7.7 + 1.0 * (v / 0.45), 1, v * per * 0.55
+            x, face, dist = 7.7 + BAR_X + 1.0 * (v / 0.45), 1, v * per * 0.55
         elif v < 0.5:
-            wolf_front_at(img, L, 8.7, d, MID, pal=4, seed=52, jaw=0.4)
+            wolf_front_at(img, L, 8.7 + BAR_X, d, MID, pal=4, seed=52, jaw=0.4)
             return
         elif v < 0.95:
-            x, face, dist = 8.7 - 1.0 * ((v - 0.5) / 0.45), -1, (v - 0.5) * per * 0.55
+            x, face, dist = 8.7 + BAR_X - 1.0 * ((v - 0.5) / 0.45), -1, (v - 0.5) * per * 0.55
         else:
-            wolf_front_at(img, L, 7.7, d, MID, pal=4, seed=52, jaw=0.4)
+            wolf_front_at(img, L, 7.7 + BAR_X, d, MID, pal=4, seed=52, jaw=0.4)
             return
         wolf_at(img, L, x, d, MID, face, WF.pose('walk', dist * UNITS, jaw=0.4, snarl=0.8), pal=4, seed=52)
     out.append((LIFT_D + 0.45, wg))
@@ -592,12 +596,12 @@ def milling(L, u):
 
     def wh(img):                                                    # sits, tail sweeping, looks round now and then
         back = (u % 3.4) > 2.2
-        wolf_at(img, L, -3.1, 13.0, 0.0, 1, WF.pose('sit', u, back=back), pal=0,
+        wolf_at(img, L, -2.07, 8.67, 0.0, 1, WF.pose('sit', u, back=back), pal=0,
                 wear=dict(hat=1, vest=0, torn=0.6), blood=BLOODY, seed=60)
-    out.append((13.0, wh))
+    out.append((8.67, wh))
 
     def wi(img):                                                    # paws the dirt; each rake leaves a groove that stays
-        d, x = 11.0, -1.5
+        d, x = 7.33, -1.0
         s = wolf_s(L, d)
         px, py = L.p(x, d, 0)
         X = _ctx(img, s)
@@ -608,14 +612,14 @@ def milling(L, u):
         k = int(rakes)
         if k >= 1:
             WF.dust(X, px + (WF.HOME['ff'] - 30) * s, py, s, (rakes - k) * 0.9, seed=62 + k, size=0.7)
-    out.append((11.0, wi))
+    out.append((7.33, wi))
 
     def walker(img, x0, vx, d, face, pal, hat, vest, seed):
         x = x0 + vx * u
         wolf_at(img, L, x, d, 0.0, face, WF.pose('walk', abs(vx) * u * UNITS), pal=pal,
                 wear=dict(hat=hat, vest=vest, torn=0.5), blood=BLOODY, seed=seed)
-    out.append((14.0, lambda img: walker(img, -7.6, 0.85, 14.0, 1, 3, 0, 1, 63)))
-    out.append((11.6, lambda img: walker(img, 1.6, -1.0, 11.6, -1, 2, 2, 0, 64)))
+    out.append((9.33, lambda img: walker(img, -5.07, 0.57, 9.33, 1, 3, 0, 1, 63)))    # framing 2: x, speed, depth 2/3
+    out.append((7.73, lambda img: walker(img, 1.07, -0.67, 7.73, -1, 2, 2, 0, 64)))
     return out
 
 
