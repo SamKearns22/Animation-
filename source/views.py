@@ -1136,6 +1136,9 @@ def face_box(img, frame, sp, t, view, hx, hy):
     return _FACE_BOX[key]
 
 
+NOD_SOLID = [None]   # (centre x, brim y, half width, dome height) in head units while a solid hat is drawn
+
+
 class Pitched:
     """A head's frame nodded `deg` degrees (chin down: +) about the top of the neck, in 3D (NOD_* above): a nod as
     the head turning, never sliding. `c` the head's centre (head units), hw/hh its half width and height, `view` the
@@ -1152,7 +1155,14 @@ class Pitched:
 
     def depth(self, x, y):
         """How far toward us the head's surface is at (x, y): an ellipsoid, the jaw fuller below the middle (the
-        chin stands forward, so it tucks rather than staying on the outline)."""
+        chin stands forward, so it tucks rather than staying on the outline). A solid worn on the head (NOD_SOLID:
+        a hard hat) is its own dome on a flat brim, so it tips whole (chat 39: on the face's ellipsoid the brim,
+        wider than the face, bent into a V)."""
+        if NOD_SOLID[0] is not None:
+            cx, yb, w, h = NOD_SOLID[0]
+            a = (x - cx) / w
+            b = min(0.0, y - yb) / h
+            return self.rz * w / self.rx * math.sqrt(max(0.0, 1.0 - a * a - b * b))
         u, v = (x - self.cx) / self.rx, (y - self.cy) / self.ry
         q = u * u + (0.5 * v * v if v > 0 else v * v)
         return self.rz * math.sqrt(max(0.0, 1.0 - q))
@@ -1170,6 +1180,16 @@ class Pitched:
 WHITE = (250, 250, 248)                       # the whites of the eyes, in every head the kit draws
 
 
+def _split_long(pts, most=10.0):
+    """A closed outline with every edge longer than `most` head units cut into equal pieces (never shorter than
+    most/2, so the line's joins stay as they were drawn)."""
+    out = []
+    for a, b in zip(pts, list(pts[1:]) + [pts[0]]):
+        n = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) // most))
+        out += [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(n)]
+    return out
+
+
 class Eyes(B.Pen):
     """A head's pen that notes each eye as it is drawn (the white, then the pupil inside it), in screen pixels, so the
     look check measures where the pupils really point on screen (rule 43), never what the film meant them to. A real
@@ -1183,6 +1203,8 @@ class Eyes(B.Pen):
 
     def poly(self, pts, fill, line=INK, lw=4):
         self._note(fill, line, pts)
+        if isinstance(self.pen.cam, Pitched):     # nodding: long straight edges cut short so they bend with the
+            pts = _split_long(pts)                # turn (chat 39: a hard hat's brim of 7 points tipped into a V)
         return self.pen.poly(pts, fill, line, lw)
 
     def ell(self, cx, cy, rx, ry, fill, line=INK, lw=4, rot=0, n=40):

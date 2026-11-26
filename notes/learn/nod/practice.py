@@ -82,6 +82,8 @@ if still:                                         # the bottom of a nod beside r
     sh = Image.new('RGB', (2160, 1080), 'white')
     sh.paste(a, (0, 0)); sh.paste(b, (1080, 0))
     sh.save(still, quality=88)
+    if '--only-still' in sys.argv:
+        sys.exit(0)
 with tempfile.TemporaryDirectory() as tmp:
     for i in range(int(2.1 * FPS)):
         frame(i / FPS).save(os.path.join(tmp, f'{i:04d}.png'))
