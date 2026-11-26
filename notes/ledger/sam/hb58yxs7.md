@@ -18,3 +18,7 @@ This would produce a report at the end with individual suggestions across those 
 Purpose: better checks. Removing dead checks. Improving ‘first time’ success instead of relying on a ‘after it has happened’ system of catching avoidable mistakes.
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-26T21:50:00
+How are you judging too small on a phone? Show me a nod that’s too small on a phone
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
