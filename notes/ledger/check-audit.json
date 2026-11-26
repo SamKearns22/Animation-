@@ -8,66 +8,66 @@
    "model": "opus",
    "stage": "plan",
    "round": null,
-   "cost": 2.3,
+   "cost": 2.55,
    "notes": 3,
    "repeats": [
     "Reopened list offered again after Sam declined it | search Sam's saved messages before any proposal"
    ],
    "src": "estimate",
    "sid": "session_01J1JB7XK3JVXc9v4nLQXGZU",
-   "steps": 117,
-   "hist_k": 261,
+   "steps": 130,
+   "hist_k": 278,
    "kinds": {
-    "tool search": 21.4,
-    "renders": 2.1,
-    "other": 76.5
+    "tool search": 21.6,
+    "renders": 1.9,
+    "other": 76.6
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 71,
+    "tool search": 81,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
     "pictures": 0,
-    "other": 27
+    "other": 30
    },
    "split": {
-    "usd": 7.4626,
-    "total": 7.4626,
+    "usd": 8.399,
+    "total": 8.399,
     "floor_k": 82,
     "blocks": {
-     "carried history": 29.4,
-     "Claude's words": 26.0,
-     "start-up floor": 25.7,
-     "new writes": 18.8
+     "carried history": 31.4,
+     "Claude's words": 25.2,
+     "start-up floor": 25.1,
+     "new writes": 18.3
     },
     "origins": {
-     "Claude's words": 43.1,
-     "start-up floor": 25.7,
-     "result: tool search": 16.2,
-     "result: other": 10.9,
-     "Claude's edits": 2.2,
-     "messages and reminders": 1.8,
+     "Claude's words": 43.0,
+     "start-up floor": 25.1,
+     "result: tool search": 16.3,
+     "result: other": 10.8,
+     "messages and reminders": 2.6,
+     "Claude's edits": 2.1,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 25.7,
-     "thinking": 17.4,
-     "reading notes": 9.7,
-     "writing notes": 8.9,
-     "writing code": 7.6,
-     "commands": 6.0,
+     "start-up reading (rules, tools, first files)": 25.1,
+     "thinking": 16.9,
+     "reading notes": 9.4,
+     "writing notes": 9.2,
+     "writing code": 7.3,
+     "commands": 6.1,
      "messages to Sam": 4.8,
      "app tools (chats, files sent)": 4.2,
-     "reading chat records": 4.0,
-     "start-up and handover tools": 3.5,
+     "reading chat records": 4.1,
+     "start-up and handover tools": 3.6,
      "reading guides": 2.6,
-     "reading kit code": 2.1,
-     "messages and reminders": 1.8,
-     "helper and chat prompts": 0.7,
+     "messages and reminders": 2.6,
+     "reading kit code": 2.2,
+     "helper and chat prompts": 0.9,
      "running checks and tools": 0.6,
-     "other commands": 0.1,
+     "other commands": 0.2,
      "git and saving": 0.1,
      "renders": 0.1,
      "edit results": 0.1
@@ -82,65 +82,65 @@
      [
       "notes/next-jobs.md",
       2.7,
-      0.0778
+      0.0842
      ],
      [
       "guides/job-packs.md",
       1.2,
-      0.0342
+      0.037
      ],
      [
       "notes/brexit-is-done.md",
       1.2,
-      0.0314
+      0.0342
      ],
      [
       "source/preflight.py",
       1.1,
-      0.0307
+      0.0333
      ],
      [
       "guides/film-quality-rules.md",
       1.0,
-      0.0271
+      0.0293
      ],
      [
       "story/status.md",
       0.9,
-      0.0252
+      0.0272
      ],
      [
       "notes/logs/handover-end.log",
       0.8,
-      0.0215
+      0.0234
      ],
      [
       "notes/proposals/check-catches.md",
       0.6,
-      0.0156
+      0.0169
      ],
      [
       "notes/preflight-audit.md",
       0.6,
-      0.0156
+      0.0169
      ],
      [
       ".claude/settings.json",
       0.4,
-      0.0124
+      0.0135
      ],
      [
       "notes/logs/kittest-reds.log",
       0.2,
-      0.0054
+      0.0058
      ],
      [
       "notes/logs/brexit-is-done-show.log",
       0.2,
-      0.0054
+      0.0058
      ]
     ],
-    "base_pct": 23.1
+    "base_pct": 22.8
    },
    "search": {
     "show": 0,
@@ -148,9 +148,9 @@
      "no show": 0
     },
     "other": {
-     "film notes": 21,
-     "shared:handover.py": 8,
-     "guides": 4,
+     "film notes": 22,
+     "shared:handover.py": 11,
+     "guides": 6,
      "shared:kittests.py": 6,
      "other": 21,
      "shared:preflight.py": 1,
@@ -158,7 +158,8 @@
      "shared:ink.py": 1,
      "shared:sizes.py": 2,
      "shared:ledger.py": 1,
-     "shared:propose.py": 4
+     "shared:propose.py": 4,
+     "shared:sentences.py": 4
     },
     "ticked": 0,
     "edited film code": false,
@@ -801,6 +802,96 @@
       "cd /home/user/Animation-; sed -i 's|^- Next: R8 chat 2 (Opus medium):|- Next: R8",
       "",
       69
+     ],
+     [
+      101,
+      "other",
+      "shared:sentences.py",
+      "source/sentences.py",
+      "Every open decision",
+      "",
+      1558
+     ],
+     [
+      102,
+      "other",
+      "shared:handover.py",
+      "source/rule_proofs.json notes/learn/plain-words/bad-1-first-report-reply.md note",
+      "} if 'N16' not in d['rules'] else d['rules']['N16']\njson.dump(d,open(p,'w'),inde",
+      "",
+      652
+     ],
+     [
+      104,
+      "other",
+      "shared:handover.py",
+      "source/rule_proofs.json notes/learn/plain-words/bad-1-first-report-reply.md sour",
+      "}\nk='W_one_question'; d['rules'][k]=new\njson.dump(d,open(p,'w'),indent=1,ensure_",
+      "",
+      473
+     ],
+     [
+      105,
+      "other",
+      "film notes",
+      "notes/check-audit.md",
+      "cd /home/user/Animation-; sed -i 's/rule_proofs N16 owed/rule_proofs W_one_quest",
+      "",
+      69
+     ],
+     [
+      107,
+      "other",
+      "shared:handover.py",
+      "source/rule_proofs.json notes/check-audit.md source/handover.py",
+      "^ ",
+      "",
+      873
+     ],
+     [
+      108,
+      "other",
+      "shared:sentences.py",
+      "source/sentences.py",
+      "MERGED_23NOV",
+      "",
+      1132
+     ],
+     [
+      109,
+      "other",
+      "shared:sentences.py",
+      "source/sentences.py",
+      "^SAM_REWORDED",
+      "",
+      554
+     ],
+     [
+      110,
+      "other",
+      "shared:sentences.py",
+      "source/sentences.py notes/check-audit.md source/handover.py",
+      "^ ",
+      "",
+      332
+     ],
+     [
+      111,
+      "other",
+      "guides",
+      "",
+      "The chain stops only at the budget stop",
+      "",
+      428
+     ],
+     [
+      112,
+      "other",
+      "guides",
+      "",
+      "One question at a time",
+      "",
+      105
      ]
     ]
    },
