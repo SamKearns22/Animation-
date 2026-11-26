@@ -19118,17 +19118,17 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 2.17,
+   "cost": 2.61,
    "src": "estimate",
    "sid": "session_01J1JB7YNoonB7shJ4bXB2Vq",
-   "steps": 117,
-   "hist_k": 179,
+   "steps": 119,
+   "hist_k": 180,
    "kinds": {
     "film-file search": 0.4,
-    "tool search": 11.7,
-    "renders": 4.4,
+    "tool search": 11.5,
+    "renders": 4.3,
     "pictures": 1.2,
-    "other": 82.4
+    "other": 82.6
    },
    "calls": {
     "film-file search": 2,
@@ -19138,37 +19138,37 @@
     "routine": 0,
     "renders": 10,
     "pictures": 3,
-    "other": 19
+    "other": 20
    },
    "split": {
-    "usd": 2.94,
-    "total": 2.94,
+    "usd": 2.9816,
+    "total": 2.9816,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 35.1,
-     "new writes": 28.4,
-     "carried history": 18.3,
-     "Claude's words": 18.2
+     "start-up floor": 34.6,
+     "new writes": 28.1,
+     "carried history": 19.3,
+     "Claude's words": 18.0
     },
     "origins": {
-     "start-up floor": 35.3,
-     "Claude's words": 28.6,
-     "messages and reminders": 22.2,
-     "result: tool search": 8.6,
+     "start-up floor": 34.8,
+     "Claude's words": 28.3,
+     "messages and reminders": 23.2,
+     "result: tool search": 8.5,
      "result: renders": 2.1,
      "result: pictures": 1.8,
      "result: other": 1.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 35.3,
-     "messages and reminders": 22.2,
-     "commands": 9.3,
-     "messages to Sam": 8.0,
-     "thinking": 5.1,
-     "writing code": 3.4,
-     "reading notes": 2.5,
+     "start-up reading (rules, tools, first files)": 34.8,
+     "messages and reminders": 23.2,
+     "commands": 9.2,
+     "messages to Sam": 7.9,
+     "thinking": 5.0,
+     "writing code": 3.3,
+     "reading notes": 2.4,
      "start-up and handover tools": 2.4,
-     "reading kit code": 2.3,
+     "reading kit code": 2.2,
      "renders": 2.2,
      "looking at pictures": 1.8,
      "writing notes": 1.7,
@@ -19187,7 +19187,7 @@
     "work_step": 5,
     "work_pct": 0.04,
     "reads": [],
-    "base_pct": 33.4
+    "base_pct": 33.5
    },
    "search": {
     "show": 0,
