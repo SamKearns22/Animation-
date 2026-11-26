@@ -537,6 +537,31 @@ def jacket_under_hem():
 
 
 @test
+def shoe_shapes():
+    """R7 chat 10 (Sam, 26 Nov: "Shoes clipping on 3/4 view", "Confused shoe shapes on side view";
+    examples/sam-26nov-shoes-clipping-34.jpg, sam-26nov-shoe-shapes-side.jpg): solid_seat.shoe_faults catches May's
+    shoes as Sam saw them (SHOE_HEM off: the shin through the shoe, ankle-high hooves) in his two views and passes
+    all four views as now."""
+    import sys
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import solid_seat as SO
+    import sheet_solid as SH
+    SH.MODE = 'body'
+    views = ((45, 'upright'), (90, 'upright'), (-45, 'cross, knee over knee'), (0, 'upright'))
+    old, new = {}, {}
+    try:
+        for on, got in ((False, old), (True, new)):
+            SO.SHOE_HEM = on
+            for yaw, pose in (views[:2] if not on else views):
+                SH.tile('may', yaw, pose)
+                got[yaw] = SO.shoe_faults()
+    finally:
+        SO.SHOE_HEM = True
+    ok = all(old.values()) and not any(new.values())
+    return ok, f"Sam's shoes: {old}; now: {new}"
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for Open Wounds (locked by
     Sam) and every posted film, whose seated people stay pixel for pixel (fingerprints taken before R7 was built)."""
