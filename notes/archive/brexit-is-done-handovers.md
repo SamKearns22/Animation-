@@ -533,3 +533,18 @@ Read: guides/job-packs.md "Checks and animatic"; this section; source/data/criti
 Open rule requests: none. Branches claude/gta-*: GTA's, left.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. Do not change timing, lines, mouths, soundtrack.
 For Claude: DRAWN in brexit_is_done (movesize); RESTS May 'thigh' rows; views _drawn['head_at']; sitting office pad.
+
+## Where things stand (chat 33, 26 Nov, session_01J1JB7X6dBPzPZX3g5Ccr38)
+Rules that bite next: 89 (the critique gate: skipped by Sam's Y), 30 (a note seen before), 59 (render lock).
+Done (chat 33): the cast sheet's bottom check never joins the jacket across the trousers (Blair's dark jacket bridged
+to his shoes: his 3/4 seat STOPs were false; saved examples still caught). Sam (26 Nov): "May doesn't look front on" and
+"The previous parting line was fine": review r27 hunt 2's P8 (torso) and P1 (legs one mass) are NOT faults; the lifted
+leg line tried here was undone. Sam's Y: skip the rest of hunt 2 (gestures, smile, hands, chair) and the remaining seated
+cast-sheet STOPs (the tone test predates Sam's note 7, legs one cloth; front views can't show a bottom): go to the animatic.
+Pipe at 13.50 s: Sam "Leave it" (answered, nothing changed).
+Next: Sonnet, the animatic: render, finish.py (Hook Text, sign-off), save to animations/drafts/, push, send with size and render time.
+Needs Sam: nothing.
+Read: guides/job-packs.md "Checks and animatic".
+Open rule requests: none. Branches claude/gta-*: GTA's, left.
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
+For Claude: castsheet.seated_look tones still ask crossed body-kit legs for two tones (conflicts with Sam's note 7): handover STOPs on it are waived by Sam's Y (chat 33); fix the test to the body kit later.
