@@ -15007,12 +15007,6 @@
   }
  },
  "notes_tags": {
-  "13": "none (no check compares a leaper's landing point with its target's body, nor a beat before the first action)",
-  "14": "none (the acting list named \"jab\", not how hard or how far)",
-  "15": "AUDIT pops (it ignores people who arrive inside a doorway's frame; the corridor beyond had no depth to come from)",
-  "16": "house look (it measures people's lines, not the wolf kit's)",
-  "17": "none (a wish)",
-  "18": "none",
   "19": "to name (body chat): the check that looks at hands resting on a seat's arms",
   "20": "to name (body chat): house look",
   "21": "to name (body chat): likeness / name test",
@@ -15123,6 +15117,14 @@
   },
   {
    "at": "2026-11-26T16:05+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T17:24+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T17:26+00:00",
    "faults": 0
   }
  ],
@@ -15259,6 +15261,16 @@
    "date": "2026-11-26",
    "spent": 45.39,
    "forecast": 52.4
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 47.66,
+   "forecast": 54.7
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 47.66,
+   "forecast": 54.7
   },
   {
    "date": "2026-11-26",
