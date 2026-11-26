@@ -154,5 +154,5 @@ A new chat's start and re-learning cost 15% of the film (8.26% of a week over 28
 - stray line on the three-quarter bottom | stray_ink run on every sheet tile, reading soft lines
 
 ## Checks (runs, faults, by kind)
-- pre-flight: 1 runs, 3 faults (critique 1, drawing 1, other 1)
+- pre-flight: 2 runs, 9 faults (MOVE SIZE 4, critique 2, drawing 1, other 1, CAMERA FEEL 1)
 - quick check: 8 runs, 292 faults (drawing 199, caption 34, other 31, may 8, blair 7, benchmark 4, house style 4, plan 4, kit inputs 1)

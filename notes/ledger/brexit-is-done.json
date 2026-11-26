@@ -17963,12 +17963,14 @@
    }
   },
   "pre-flight": {
-   "runs": 1,
-   "faults": 3,
+   "runs": 2,
+   "faults": 9,
    "kinds": {
-    "critique": 1,
+    "critique": 2,
     "drawing": 1,
-    "other": 1
+    "other": 1,
+    "CAMERA FEEL": 1,
+    "MOVE SIZE": 4
    }
   }
  },
