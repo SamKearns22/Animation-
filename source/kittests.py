@@ -5107,6 +5107,49 @@ def head_moves_not_comic():
 
 
 @test
+def chase_order_stuck():
+    """Open Wounds chat 37 (saved example: Sam's note 23.4, 26 Nov: "The wolves and guests are clipping over each other
+    when they run in ... Decide who is in front of who and stick to it"). Over the chase, no two runners whose boxes
+    overlap on two frames in a row may swap who is drawn in front; with the lock taken off (plain far to near, as the
+    animatic was drawn) the swaps Sam saw come back (26.26 s guest 2 / wolf 1, 26.90 s guest 3 / wolf 2)."""
+    import brexit_is_done as F
+    import brexit_is_done_action as A
+    L = F._cam('blair')
+
+    def swaps():
+        A._LOCK.clear()
+        prev, out = {}, []
+        for i in range(int(9.4 * 25)):
+            room, beyond = A.room_actors(i / 25.0, L)
+            fns = [fn for _, fn in sorted(beyond, key=lambda q: -q[0])] + \
+                  [fn for _, fn in sorted(room, key=lambda q: -q[0]) if hasattr(fn, 'who')]
+            pos = {fn.who: (k, A._box(L, fn)) for k, fn in enumerate(fns)}
+            for a in pos:
+                for b in pos:
+                    if a >= b:
+                        continue
+                    (ka, A0), (kb, B0) = pos[a], pos[b]
+                    ov = not (A0[2] <= B0[0] or B0[2] <= A0[0] or A0[3] <= B0[1] or B0[3] <= A0[1])
+                    if ov and (a, b) in prev and prev[(a, b)] != (ka > kb):
+                        out.append((i, a, b))
+                    if ov:
+                        prev[(a, b)] = ka > kb
+                    else:
+                        prev.pop((a, b), None)
+            for k in [k for k in prev if k[0] not in pos or k[1] not in pos]:
+                prev.pop(k)
+        return out
+    real = A._ranks
+    try:
+        A._ranks = lambda L_, n: {}
+        old = swaps()
+    finally:
+        A._ranks = real
+    now = swaps()
+    return len(old) >= 2 and not now, f'without the lock: {len(old)} swaps; with it: {now}'
+
+
+@test
 def early_move_size():
     """Open Wounds chat 35 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, pre-flight 26 Nov
     18:57: "MOVE SIZE: shot 2 kemi: the chin up at 9.89 s moves the head 3 px ... the nod at 17.55 s ... 8 px ... shot
