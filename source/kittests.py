@@ -5033,6 +5033,73 @@ def crowd_head_installed():
 
 
 @test
+def nod_reads_on_screen():
+    """Open Wounds chat 32 (saved example: the fresh-eye review, notes/ledger/brexit-is-done/round-27.txt: "never
+    leaning in as she talks", "no nod reads"): May's moves named a lean in and nods, but 'lean in 0.8' was 0.8 degrees
+    and a nod of 0.8 dropped her head 5 px. movesize must flag those amounts and pass the film's own."""
+    import acting as A
+    import movesize as MS
+    real = A.load
+
+    def two(film, old):
+        d = real(film)
+        b = d['shots']['1']
+        keep = [m for m in b['body'] if m['move'] == 'lean in'][:1] + [m for m in b['body'] if m['move'] == 'nod'][:1]
+        if old:
+            keep = [dict(m, amount=0.8) for m in keep]
+        b['body'] = keep
+        return d
+    import brexit_is_done as F
+    try:
+        A.load = lambda f: two(f, True)
+        F._MOVES.clear()                              # the film keeps the moves it read first
+        before = MS.faults('brexit-is-done', ['1'])
+        A.load = lambda f: two(f, False)
+        F._MOVES.clear()
+        now = MS.faults('brexit-is-done', ['1'])
+    finally:
+        A.load = real
+        F._MOVES.clear()
+    return len(before) == 2 and not now, f'old amounts: {len(before)} flagged; the film now: {now}'
+
+
+@test
+def hand_rests_on_thigh():
+    """Open Wounds chat 32 (saved example: round-27.txt, "both ball hands sit loose at the lap edge ... neither clearly
+    rests on a thigh"): with the old 'lap fwd' place (y 378) May's hands hover over her thighs at 1.0 s; the resting
+    check ('thigh' in RESTS) must flag it, and pass the place as it is now."""
+    import acting as A
+    import kitchecks as K
+    import brexit_is_done as F
+    rec = lambda: [('1.00 s', 'May', {'_rest': K._rest_record(F.acted('1', 'may', 1.0)[1], 1.0)})]
+    keep = A.PLACES['lap fwd']
+    try:
+        A.PLACES['lap fwd'] = keep[:2] + (378.0,) + keep[3:]
+        before = [x for x in K.rests(F, rec()) if 'thigh' in x and 'hovers' in x]
+    finally:
+        A.PLACES['lap fwd'] = keep
+    now = [x for x in K.rests(F, rec()) if 'thigh' in x and 'COULD NOT' not in x]
+    return len(before) == 2 and not now, f'old place: {len(before)} hands hover; now: {now}'
+
+
+@test
+def pop_carried_off_edge():
+    """Open Wounds chat 32 (saved example: pre-flight, notes/ledger/brexit-is-done/round-0.txt: "shot 3: guest
+    vanishes mid-shot between 33.88 and 34.12 s, away from the frame's edge"; drawn frame by frame he runs off the
+    left edge at 33.96 s): a runner carried on at his own speed past the edge between samples is no pop; someone
+    who stops still and vanishes mid-frame still is."""
+    import kitinputs as KI
+    run = [dict(shot='3', t=t, people=[dict(who='guest', box=b)] if b else []) for t, b in
+           ((33.64, (380, 700, 520, 1200)), (33.88, (76, 700, 216, 1200)), (34.12, None))]
+    still = [dict(shot='3', t=t, people=[dict(who='guest', box=b)] if b else []) for t, b in
+             ((33.64, (500, 700, 640, 1200)), (33.88, (500, 700, 640, 1200)), (34.12, None))]
+    class F:
+        ALLOWED_POPS = []
+    a, b = KI.pop_faults(F, run), KI.pop_faults(F, still)
+    return not a and len(b) == 1, f'runner off the edge: {a}; standing then gone: {len(b)} flagged'
+
+
+@test
 def words_from_takes():
     """Chat 29 of Open Wounds (26 Nov; saved example: Sam's Kemi.m4a and Kemi_2.m4a, which chat 28 could not tell apart
     and called two takes of one line): speech-to-text must hear that they are the line's two halves, give each word

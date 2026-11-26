@@ -58,19 +58,22 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (chat 31, 26 Nov, session_01J1JB7WQi6LkF56PZE9rCCe)
-Rules that bite next: 89 (the critique gate), 59 (render lock), 30 (kinds seen before).
-Done (chat 31): pre-flight run; it REFUSES the animatic on 3 faults: (1) critique round 27 pass 1: 7 faults open (3 "can't tell"); (2) 13.50 s shot 2:
-the frame drawn over the big orange pipe riser (4 of 142 frames); (3) pop-in shot 3: a guest vanishes mid-shot at 33.88-34.12 s away from the edge.
-Sam (26 Nov): "1. If the current fresh eye review picked up on them, fix them. If they didn't, leave them. Two. I don't know. You will have to show me a
-still of what you're talking about. 3. Guest vanishes. That sounds like something you should fix."
-Next: Opus medium chat: (1) fix the review faults the fresh eye named (leave the ones it could not tell); (2) show Sam ONE still of 13.50 s shot 2 (pipe/frame),
-plain words, ask Y/N, do not fix before his word; (3) fix the guest's vanishing at ~34 s (draw it leaving through a door or the edge, the beat unchanged);
-then pre-flight, and hand to Sonnet for the animatic, finish.py (Hook Text, sign-off), drafts, send. Then the body-kit chat (Opus medium): the 22 cast-sheet STOPs.
-Needs Sam: the still of 13.50 s (his Y/N). Read: guides/job-packs.md "Checks and animatic"; python3 source/waivers.py todo brexit-is-done; this section.
+## Where things stand (chat 32, 26 Nov, session_01J1JB7Wb6BUtbWVgVLvbPyy)
+Rules that bite next: 89 (the critique gate), 78 (resting hands, now 'thigh'), 30 (kinds seen before).
+Done (chat 32): review r27 hunt 1 fixed: lean in was 0.8 DEGREES (now 9, head tipped forward), nods 4.5-5 (were ~1: 4-8 px); hands
+rest on the thighs (acting 'lap fwd' y 418); office seat a padded 52-unit cushion; May's 'reasonable'/'firm' faces stronger. New checks,
+each catching its saved example: movesize.py (pre-flight MOVE SIZE), kitchecks.rests 'thigh', pop_faults carries a runner on between
+samples (the ~34 s guest runs off the left edge at 33.96 s: no fix to the drawing needed). Kit tests nod_reads_on_screen,
+hand_rests_on_thigh, pop_carried_off_edge pass. Hunt 2 (r27-p2) recorded: 8 faults; P4 hair/face and P13 costume marked locked (the cast).
+Next: Opus medium, the body-kit chat: the 22 cast-sheet STOPs AND hunt 2's open list on May shot 1: P8 torso reads front-on at yaw -45;
+P6 raised finger a stub; P2 gestures/chop weak at 4.2 and 6.4 s; P2 no satisfied smile at 8.36 s (mouth locked, face not); P1/P7 near hand
+beside the hip, legs one dark mass, thin chair back beside the torso. Then `critique.py fixed`, pre-flight, Sonnet animatic chat.
+Needs Sam: Y/N on the 13.50 s still (scaffolding planks and tape cross in front of the orange pipe; the check says the pipe is 15 cm
+nearer; my pick: leave it, scaffolding stands in front of a building). Nothing touched there until his word.
+Read: guides/job-packs.md "Checks and animatic"; this section; source/data/critique/brexit-is-done/r27-p2/result.md (git-ignored: list above).
 Open rule requests: none. Branches claude/gta-*: GTA's, left.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. Do not change timing, lines, mouths, soundtrack.
-For Claude: ACT.site_actors / room_actors guests; ALLOWED_POPS needs a why row in Exceptions.
+For Claude: DRAWN in brexit_is_done (movesize); RESTS May 'thigh' rows; views _drawn['head_at']; sitting office pad.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Sam 26 Nov (chat 28, voice notes): "Point number two." / "Point number three." / "That doesn't look very good, and I think it affects the choreography of the rest of the scene.": the headings and words of notes 14 and 15.

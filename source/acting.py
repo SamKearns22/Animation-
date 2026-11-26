@@ -92,7 +92,7 @@ PLACES = {
     'chop low': (0.0, 50.0, 270.0, 200.0, 'down', 'palm'),        # ... chopped down, level with the lap / waist
     'open out': (1.0, -40.0, 230.0, 235.0, 'down', 'palm'),         # both hands open outward a little (the public): the far hand, forward not out wide (critique r1: wide, the arm swung out behind her)
     'open near': (1.0, 30.0, 300.0, 170.0, 'down', 'palm'),       # ... the near hand opens on her lap (higher, the elbow jutted: hands on hips)
-    'lap fwd': (0.0, 70.0, 378.0, 125.0, 'down', 'palm'),         # both hands slide forward on the lap as she shifts forward (the hook)
+    'lap fwd': (0.0, 70.0, 418.0, 125.0, 'down', 'palm'),         # both hands slide forward on the lap as she shifts forward (the hook; chat 32: y 378 hovered over the thigh, kitchecks.rests 'thigh')
     'press': (0.0, 60.0, 255.0, 235.0, 'down', 'palm'),           # standing: palm down, pressing, forward at the waist (the far hand, out past her body: the near hand in front of her read as holding her stomach)
     'point back': (1.0, 95.0, -70.0, -50.0, 'front', 'point'),    # a finger back over the shoulder, clear of the braids (our round hands have no thumb)
     'point back mid': (1.0, 70.0, 110.0, 70.0, 'down', 'palm'),   # its way up and back down, in front of the shoulder (out at the side it read as a hand on the hip;  straight from rest the elbow folded across her body: the figure check)

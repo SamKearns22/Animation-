@@ -61,7 +61,10 @@ MAX_TURN = 95                 # degrees: a head turned further from its body loo
 SINK = 0.01                   # metres: a resting forearm or elbow this far below its surface has sunk into it (rule 78)
 SINK_U = 4.0                  # the same in person units (flat films; about 1 cm)
 FLOAT_U = 12.0                # person units: a resting elbow further above its surface than this is not resting on it
-SURFACES = ('desk', 'armrest', 'seat')   # flat films' surfaces, found in the pose (a number: a height above the floor)
+SURFACES = ('desk', 'armrest', 'seat', 'thigh')   # flat films' surfaces, found in the pose (a number: a height above
+#                                                  the floor); 'thigh': a hand resting in the lap (chat 32)
+HAND_ON = 21.0                # person units from the wrist (after the lean) to the bottom of a resting ball hand:
+#                               May's settled rest at 9.3 s sits on her thigh by eye at full size and measures 21
 
 
 def _flat_surface(x):
@@ -549,6 +552,11 @@ def _rest_record(j, t):
         seat = j.get('seat')
         if seat is not None:
             rec['tops']['seat'] = SK.FLOOR - seat.h - bob
+            # a hand on the thigh (Open Wounds chat 32, critique r27: "both ball hands sit loose at the lap edge ...
+            # neither clearly rests on a thigh"): the thigh's top under each wrist, as the sitting kit lays it
+            # (_thigh_rest: HIP_Y - 46 at the hip, sloping 30 down to the knee 215 forward), body frame, no lean
+            rec['thigh'] = {sd: V.HIP_Y - 46 + 30 * min(1.0, max(0.0, rec['arms'][sd][1][2] / 215.0))
+                            for sd in 'LR'}
             if getattr(seat, 'arms', None):
                 rec['tops']['armrest'] = SK.FLOOR - seat.h - bob - seat.arms
             desk = getattr(seat, 'desk', None)
@@ -587,6 +595,25 @@ def rests(film, records):
                 unlisted.setdefault((name, s), where)
             for arm, surf, t0, t1, why, *_ in covered:
                 seen.add((arm, surf, t0, t1))
+                if surf == 'thigh':                      # a hand resting on the thigh: the ball's bottom on its top
+                    if 'thigh' not in r:
+                        found.setdefault(('none', name, s, surf), []).append(
+                            (t, f'{where}: {name} is not seated, so the hand-on-thigh check checked NOTHING '
+                                f'(RESTS: {why})'))
+                        continue
+                    wr = r['arms'][s][1]
+                    gap = r['thigh'][s] - (wr[1] + HAND_ON)
+                    if gap > FLOAT_U:
+                        found.setdefault(('hover', name, s, surf), []).append(
+                            (t, f'{where}: {name}\'s {s} hand hovers {cm(gap):.0f} cm above the thigh it should rest '
+                                f'on (rule 78: the weight on it; RESTS: {why})'))
+                    elif gap < -2 * FLOAT_U:
+                        found.setdefault(('sink', name, s, surf), []).append(
+                            (t, f'{where}: {name}\'s {s} hand sinks {cm(-gap):.0f} cm into the thigh (RESTS: {why})'))
+                    if wr[2] > 215 + HAND_ON:
+                        found.setdefault(('knee', name, s, surf), []).append(
+                            (t, f'{where}: {name}\'s {s} hand is past the knee, off the lap\'s edge (RESTS: {why})'))
+                    continue
                 top = (r['floor'] - surf - r['bob']) if isinstance(surf, (int, float)) else r['tops'].get(surf)
                 if top is None:
                     found.setdefault(('none', name, s, surf), []).append(

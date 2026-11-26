@@ -118,7 +118,11 @@ THREE_QUARTER_OK = [('1', 'may', 'locked by Sam: the interview look, turned to t
                     ('2', 'kemi', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)'),
                     ('3', 'blair', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)')]
 # rule 78: Blair's forearms rest on the wing chair's arms between gestures (the acting list: 'hands on its arms')
-RESTS = [('*Blair*.forearmL', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's left forearm on the wing chair's arm between gestures"),
+RESTS = [('*May*.forearmL', 'thigh', 0.0, 6.5, "May's far hand in her lap from the start to \"British\" (chat 32, critique r27: it hovered at the lap's edge)"),
+         ('*May*.forearmR', 'thigh', 0.0, 1.55, "May's near hand in her lap until the raised finger on \"well\""),
+         ('*May*.forearmL', 'thigh', 9.0, SHOTS[0][2], "May's far hand settled in her lap after \"wolves\""),
+         ('*May*.forearmR', 'thigh', 9.0, SHOTS[0][2], "May's near hand settled in her lap after \"wolves\""),
+         ('*Blair*.forearmL', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's left forearm on the wing chair's arm between gestures"),
          ('*Blair*.forearmR', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's right forearm on the wing chair's arm between gestures")]
 # rule 41 exceptions (reasons in the notes' Exceptions): a side-on runner's far hand passes behind his body for one
 # drawing at the back of each swing (chat 19: seen full size, the arm reads swinging; the figure is 40 px tall)
@@ -230,8 +234,11 @@ def seated(img, who, L, X, d, t, yaw, pose='upright', look=None, chair=False, jo
     neck_y -= j.get('bob', 0.0) * s                   # the sitting kit drops the body by bob: the neck stays put
     B.SS = 1
     cam = B.Cam(1.0, 540, 960)
-    V.person(img, cam, X, neck_y, s, sp, t, yaw, j)
+    DRAWN[who] = V.person(img, cam, X, neck_y, s, sp, t, yaw, j)   # what was drawn (movesize.py reads the eyes)
     return s
+
+
+DRAWN = {}                       # who -> the last drawing's record (views.person's joints with '_drawn')
 
 
 # ================================================================================================= faces and moves
@@ -259,8 +266,8 @@ MOODS = {
     'patient': dict(smile=0.16, lid4=0.2, brow_up=0.03),             # May: the thin patient smile, talking down
     'stern': dict(smile=0.0, lid4=0.12, brow_up=0.035),              # ... the schoolmistress's raised finger
     'brows up': dict(smile=0.06, lid4=0.06, brow_up=0.05),           # ... "remember"; "chose" (a tiny pause)
-    'reasonable': dict(smile=0.1, lid4=0.12, brow_up=0.02),
-    'firm': dict(smile=-0.12, lid4=0.16, frown=0.025),               # ... the chops (it was decided)
+    'reasonable': dict(smile=0.22, lid4=0.16, brow_up=0.035),         # chat 32 (critique r27: 0.1 read as a blank stare)
+    'firm': dict(smile=-0.22, lid4=0.2, frown=0.045),                # ... the chops (it was decided; chat 32: was -0.12, blank)
     'satisfied': dict(smile=0.45, lid4=0.2, brow_up=0.012),  # (critique hunt 2: 0.32 read as a plain closed mouth)          # ... the tight satisfied smile on "wolves"
     'satisfied brows': dict(smile=0.45, lid4=0.16, brow_up=0.04),    # ... and the small brow raise to the cut
     'disdain': dict(smile=-0.38, lid4=0.24, frown=0.02, brow_up=0.012),   # Kemi: "Andy", lips tight
@@ -374,7 +381,7 @@ def standing(img, who, L, X, d, t, yaw, look=None, joints=None):
     s = scale_at(pxm, sp)
     sole_y = L.p(0.0, d, 0.0)[1]
     B.SS = 1
-    V.person(img, B.Cam(1.0, 540, 960), X, sole_y - FEET * s, s, sp, t, yaw, joints)
+    DRAWN[who] = V.person(img, B.Cam(1.0, 540, 960), X, sole_y - FEET * s, s, sp, t, yaw, joints)
     return s
 
 

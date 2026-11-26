@@ -117,14 +117,27 @@ def pop_faults(film, sv):
     by_shot = {}
     for r in sv:
         by_shot.setdefault(r['shot'], []).append(r)
+    boxes = lambda r: {p['who']: p['box'] for p in r['people'] if p.get('box')}
     for shot, rs in by_shot.items():
-        for a, b in zip(rs, rs[1:]):
-            pa = {p['who']: p['box'] for p in a['people'] if p.get('box')}
-            pb = {p['who']: p['box'] for p in b['people'] if p.get('box')}
+        for i, (a, b) in enumerate(zip(rs, rs[1:])):
+            pa, pb = boxes(a), boxes(b)
             for who, box, t, verb in [(w, x, a['t'], 'vanishes') for w, x in pa.items() if w not in pb] + \
                                      [(w, x, b['t'], 'appears') for w, x in pb.items() if w not in pa]:
                 if _at_edge(box) or (shot, who, verb) in seen:
                     continue
+                # Open Wounds chat 32 (pre-flight said a guest "vanishes mid-shot" at 33.88-34.12 s: drawn frame by
+                # frame he runs off the left edge at 33.96 s; the samples, 0.24 s apart, caught him 146 px in, then
+                # gone): a runner between samples is carried on at the speed the samples show; reaching the edge by
+                # the next sample is leaving (or entering) through it, not a pop
+                other = boxes(rs[i - 1]).get(who) if verb == 'vanishes' and i > 0 else \
+                    boxes(rs[i + 2]).get(who) if verb == 'appears' and i + 2 < len(rs) else None
+                if other is not None:
+                    t_other = rs[i - 1]['t'] if verb == 'vanishes' else rs[i + 2]['t']
+                    t_gap = (b['t'] if verb == 'vanishes' else a['t']) - t
+                    k = t_gap / (t - t_other) if t != t_other else 0.0
+                    carried = [box[n] + (box[n] - other[n]) * k for n in range(4)]
+                    if _at_edge(carried) or carried[2] < 0 or carried[0] > 1080:
+                        continue
                 if any(fnmatch.fnmatchcase(who, n) and t0 <= t <= t1 for n, t0, t1, *_ in allowed):
                     continue
                 seen.add((shot, who, verb))

@@ -28,3 +28,34 @@ look.md did not name the interview setting (nothing in the picture reads as a TV
 - Her gaze has no target; eyes look straight ahead rather than at an interviewer; suggested line: "Gaze goes to the person or thing the beat names, shown by a gaze-target mark."
 - Raised arm in panels 2 and 3 gestures with a limp hand and no matching body shift; suggested line: "Gestures move the shoulder and torso with the arm."
 
+== critique, round 27 pass 2 (2026-11-26): 8 fault(s), 2 can't tell
+-- look.md --
+1: Grey-haired man in purple jacket seated, hands on lap, calm neutral face; no words.
+2: Same man seated, right hand raised pointing finger sideways, head tilted, calm; no words.
+3: Same man seated, left hand held out low, blank face, mouth closed; no words.
+4: Same man seated, hand out low, mouth open as if talking, looking forward; no words.
+5: Same man seated, hands on lap, mouth open, head turned left; no words.
+-- result.md --
+## Faults
+FAULT P4 A2 [1-5]: hair - ours is a tall swept-up quiff; the reference is a short, rounded grey bob. Face is smooth and young; the reference is lined and heavier. Reads as a different person.
+FAULT P8 [1-5]: torso is near front-on (symmetrical collar and lapels), not three-quarter to screen-left as briefed. In 4 the face also looks straight at the lens, not at the interviewer; in 2, 3 and 5 head and body point different ways.
+FAULT P2 [2]: 'remember' should be a lean in towards the interviewer. She sits upright and the head tilts back; it reads as a lean away.
+FAULT P6 [2]: the raised finger is a short tick stuck on the ball hand and angled up. It does not run out along the forearm (rule 41); it reads as a stray mark.
+FAULT P2 [3, 4]: the brief wants a gesturing hand (3) and a firm mid-chop (4). Both show a ball hand hanging low at the end of a bent arm: no gesture, no force. 4 looks like a shrug.
+FAULT P2 [5]: 'wolves' should have a tight satisfied smile. The mouth is open and round, like an "oh" or a song, and the face is not satisfied.
+FAULT P1 P7 [1-5]: the near hand sits at the jacket hem beside the hip, not on a thigh, with a gap above the leg. The far hand sits on the knee. The legs merge into one dark mass, so the lap and the thighs are unclear. Check castsheet.seated_faults.
+FAULT P13 [1-5]: the blouse is a narrow rainbow-striped strip down the chest, like a tie. The reference has a wide plaid blouse showing between broad lapels. The jacket is a plain open cardigan shape, not a tailored jacket.
+CAN'T TELL P14 [1-5]: the eyes are tiny at this size; a full-size face crop is needed to see whether the pupil stays inside the eye.
+CAN'T TELL P12 [2, 3]: mouths are closed or a thin line while the line is spoken ('remember', 'referendum'); a frame labelled with the audio would show it.
+
+## Checked
+1-5
+
+## Cold look
+look.md read the pose and mood correctly, but it missed everything about identity and acting. It named the hair as plain grey hair, not the wrong quiff. It called 2 "calm" and did not notice that there is no lean. It read 5 as "hands on lap, mouth open", with no sign of a smile. It called 3 and 4 hands "held out" and did not notice that nothing reads as a gesture or a chop. It read the figure's facing direction by the head only and missed the front-on body.
+
+## Not on the list
+- The face has almost no expression (flat eyes, no brow shift) on every panel, so the acting reads as bored. suggested line: "P2b the brows and eyes change between beats, so a phone-size viewer sees a different face on each one".
+- The chair is a thin slab behind the thighs and the back sits to the side of the torso, so the pose looks half off the seat. suggested line: "P7b the chair back and seat sit under and behind the body, not beside it".
+- The panel has far more empty backdrop than the reference. This is locked framing, so it is noted only. suggested line: "A5 a locked framing that differs from the reference is named, not counted as a fault".
+

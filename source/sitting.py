@@ -167,7 +167,7 @@ class Seat:
                     end = V.project(end3, yaw)[0]
                     p.line([hub, end], (34, 34, 38), 11)
                     p.ell(end[0], end[1] + 8, 15, 11, (26, 26, 30), INK, 1.6)
-                col_top = V.project((0.0, top + 30, -5 + sh), yaw)[0]
+                col_top = V.project((0.0, top + 52, -5 + sh), yaw)[0]
                 p.line([col_top, hub], (40, 40, 46), 14)
             parts.append((-999, 'pre', base))
         else:
@@ -186,7 +186,9 @@ class Seat:
             if self.kind == 'armchair':
                 parts.append((-500, 'pre', lambda p: _box(p, yaw, -w - 50, w + 50, top + 6, floor - 30, self.rear,
                                                           self.front, c, None, 0, sh)))
-        parts.append((-300, 'pre', lambda p: _box(p, yaw, -w, w, top, top + 30, self.rear, self.front, c, ct, 0, sh)))
+        pad = 52 if self.kind == 'office' else 30        # Open Wounds chat 32 (critique r27: "the seat is a thin
+        #                                                  slab"): an office seat is a padded cushion about 8 cm deep
+        parts.append((-300, 'pre', lambda p: _box(p, yaw, -w, w, top, top + pad, self.rear, self.front, c, ct, 0, sh)))
         if self.back_top:
             bz = -78 if self.kind in ('office', 'plastic') else -86
             bz = min(bz, j.get('_back_face', bz))      # R7 chat 14: against the full body's back (views.r7_back_face)

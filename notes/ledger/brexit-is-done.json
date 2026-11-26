@@ -17005,6 +17005,27 @@
      "1-3 P4: no reference is shown (\"no reference\" on the check sheet), so hair and face match cannot be confirmed.",
      "2-3 P5: the raised arm joins the jacket at the side; a full-size shoulder crop would show if there is a step."
     ]
+   },
+   {
+    "round": 27,
+    "pass": 2,
+    "stage": "moves",
+    "date": "2026-11-26",
+    "hunt": 2,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "1-5 P4 A2: hair - ours is a tall swept-up quiff; the reference is a short, rounded grey bob. Face is smooth and young; the reference is lined and heavier. Reads",
+     "1-5 P8: torso is near front-on (symmetrical collar and lapels), not three-quarter to screen-left as briefed. In 4 the face also looks straight at the lens, not ",
+     "2 P2: 'remember' should be a lean in towards the interviewer. She sits upright and the head tilts back; it reads as a lean away.",
+     "2 P6: the raised finger is a short tick stuck on the ball hand and angled up. It does not run out along the forearm (rule 41); it reads as a stray mark.",
+     "3-4 P2: the brief wants a gesturing hand (3) and a firm mid-chop (4). Both show a ball hand hanging low at the end of a bent arm: no gesture, no force. 4 looks ",
+     "5 P2: 'wolves' should have a tight satisfied smile. The mouth is open and round, like an \"oh\" or a song, and the face is not satisfied.",
+     "1-5 P1 P7: the near hand sits at the jacket hem beside the hip, not on a thigh, with a gap above the leg. The far hand sits on the knee. The legs merge into one",
+     "1-5 P13: the blouse is a narrow rainbow-striped strip down the chest, like a tie. The reference has a wide plaid blouse showing between broad lapels. The jacket",
+     "1-5 P14: the eyes are tiny at this size; a full-size face crop is needed to see whether the pupil stays inside the eye.",
+     "2-3 P12: mouths are closed or a thin line while the line is spoken ('remember', 'referendum'); a frame labelled with the audio would show it."
+    ]
    }
   ],
   "lines": {
@@ -17013,15 +17034,15 @@
     "false": 1
    },
    "P2": {
-    "faults": 15,
+    "faults": 18,
     "false": 1
    },
    "P4": {
-    "faults": 14,
-    "false": 0
+    "faults": 15,
+    "false": 1
    },
    "A2": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "P11": {
@@ -17029,15 +17050,15 @@
     "false": 2
    },
    "P1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P13": {
-    "faults": 1,
-    "false": 0
+    "faults": 2,
+    "false": 1
    },
    "P8": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "A4": {
@@ -17053,7 +17074,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "P10": {
@@ -17077,6 +17098,10 @@
     "false": 0
    },
    "P12": {
+    "faults": 1,
+    "false": 0
+   },
+   "P6": {
     "faults": 1,
     "false": 0
    }
@@ -17205,6 +17230,10 @@
   },
   {
    "at": "2026-11-26T17:34+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T18:26+00:00",
    "faults": 0
   }
  ],
@@ -17366,6 +17395,11 @@
    "date": "2026-11-26",
    "spent": 49.05,
    "forecast": 56.1
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 51.4,
+   "forecast": 58.4
   },
   {
    "date": "2026-11-26",

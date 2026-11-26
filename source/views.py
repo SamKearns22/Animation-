@@ -2106,6 +2106,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         d = np.abs(np.asarray(img.crop(hair_box), np.int16) - np.asarray(hair_was, np.int16)).max(-1) > 0
         head_paint = d if d.any() else None
     j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
+    j2['_drawn']['head_at'] = tuple(up_head.P(hdx, -150.0 + sp_draw.get('head_dy', 0.0)))   # mid-face on screen,
+    #                                              after lean, roll and nod (movesize.py: does a named nod read?)
     j2['_drawn']['mouth'] = head_pen.mouth_seen(sp_draw, hv)   # rule 13
     j2['_drawn']['head_mirror'] = head_mirror
     j2['_drawn']['behind'] = set(behind)          # arms drawn before the torso (the seam check skips them: rule 81)

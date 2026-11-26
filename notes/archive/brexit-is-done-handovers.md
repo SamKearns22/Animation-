@@ -501,3 +501,18 @@ Locked by Sam: the script (as recorded), who is where, every background action, 
 film order; all three in May's place and size; the cast; every camera and framing.
 For Claude: ACT.lunger(cut=), LUNGE_CREEP/COIL/LEN, LUNGE_T = the 0.4 s mark chat 29's clock reads; FH.CAST blair neck_up; legs_soft vs FOLD_MIN to merge.
 
+
+## Where things stand (chat 31, 26 Nov, session_01J1JB7WQi6LkF56PZE9rCCe)
+Rules that bite next: 89 (the critique gate), 59 (render lock), 30 (kinds seen before).
+Done (chat 31): pre-flight run; it REFUSES the animatic on 3 faults: (1) critique round 27 pass 1: 7 faults open (3 "can't tell"); (2) 13.50 s shot 2:
+the frame drawn over the big orange pipe riser (4 of 142 frames); (3) pop-in shot 3: a guest vanishes mid-shot at 33.88-34.12 s away from the edge.
+Sam (26 Nov): "1. If the current fresh eye review picked up on them, fix them. If they didn't, leave them. Two. I don't know. You will have to show me a
+still of what you're talking about. 3. Guest vanishes. That sounds like something you should fix."
+Next: Opus medium chat: (1) fix the review faults the fresh eye named (leave the ones it could not tell); (2) show Sam ONE still of 13.50 s shot 2 (pipe/frame),
+plain words, ask Y/N, do not fix before his word; (3) fix the guest's vanishing at ~34 s (draw it leaving through a door or the edge, the beat unchanged);
+then pre-flight, and hand to Sonnet for the animatic, finish.py (Hook Text, sign-off), drafts, send. Then the body-kit chat (Opus medium): the 22 cast-sheet STOPs.
+Needs Sam: the still of 13.50 s (his Y/N). Read: guides/job-packs.md "Checks and animatic"; python3 source/waivers.py todo brexit-is-done; this section.
+Open rule requests: none. Branches claude/gta-*: GTA's, left.
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. Do not change timing, lines, mouths, soundtrack.
+For Claude: ACT.site_actors / room_actors guests; ALLOWED_POPS needs a why row in Exceptions.
+

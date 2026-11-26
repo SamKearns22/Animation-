@@ -1,0 +1,111 @@
+{
+ "round": 27,
+ "stage": "moves",
+ "panels": [
+  {
+   "t": 1.0,
+   "is": "Theresa May in her BBC interview (shot 1 of 3): seated on a plain office chair, turned three-quarter to screen-left, looking at an interviewer off-frame left (never seen); dark wood-panelled backdrop; plum jacket, patterned blouse, grey hair. Framed about waist up and a little wider (Sam's framing, locked): her legs run off the bottom edge and the chair's base is out of frame by design. Flat cartoon house style, circle hands by design. Her line: 'The Prime Minister would do well to remember that we had a referendum, and in that referendum, the British public chose wolves.' Acting: composed, firm, reasonable; hands rest in her lap between gestures (a raised finger on 'well', an open palm on 'referendum', chops, open hands); she leans in on 'remember' and nods on 'referendum' and 'wolves'; a tight satisfied smile on 'wolves'. Mouths follow Sam's recorded voice (locked). This panel: Just after the line starts: both hands rest on her thighs.",
+   "parts": "AP",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg",
+    "references/brexit-is-done/may-interview-3.jpg"
+   ],
+   "people": [
+    {
+     "name": "May, head and hands",
+     "box": [
+      330,
+      420,
+      1010,
+      1500
+     ]
+    }
+   ],
+   "set": "may"
+  },
+  {
+   "t": 2.75,
+   "is": "Theresa May in her BBC interview (shot 1 of 3): seated on a plain office chair, turned three-quarter to screen-left, looking at an interviewer off-frame left (never seen); dark wood-panelled backdrop; plum jacket, patterned blouse, grey hair. Framed about waist up and a little wider (Sam's framing, locked): her legs run off the bottom edge and the chair's base is out of frame by design. Flat cartoon house style, circle hands by design. Her line: 'The Prime Minister would do well to remember that we had a referendum, and in that referendum, the British public chose wolves.' Acting: composed, firm, reasonable; hands rest in her lap between gestures (a raised finger on 'well', an open palm on 'referendum', chops, open hands); she leans in on 'remember' and nods on 'referendum' and 'wolves'; a tight satisfied smile on 'wolves'. Mouths follow Sam's recorded voice (locked). This panel: 'remember': she leans in towards the interviewer, finger raised.",
+   "parts": "AP",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg",
+    "references/brexit-is-done/may-interview-3.jpg"
+   ],
+   "people": [
+    {
+     "name": "May, head and hands",
+     "box": [
+      330,
+      420,
+      1010,
+      1500
+     ]
+    }
+   ],
+   "set": "may"
+  },
+  {
+   "t": 4.22,
+   "is": "Theresa May in her BBC interview (shot 1 of 3): seated on a plain office chair, turned three-quarter to screen-left, looking at an interviewer off-frame left (never seen); dark wood-panelled backdrop; plum jacket, patterned blouse, grey hair. Framed about waist up and a little wider (Sam's framing, locked): her legs run off the bottom edge and the chair's base is out of frame by design. Flat cartoon house style, circle hands by design. Her line: 'The Prime Minister would do well to remember that we had a referendum, and in that referendum, the British public chose wolves.' Acting: composed, firm, reasonable; hands rest in her lap between gestures (a raised finger on 'well', an open palm on 'referendum', chops, open hands); she leans in on 'remember' and nods on 'referendum' and 'wolves'; a tight satisfied smile on 'wolves'. Mouths follow Sam's recorded voice (locked). This panel: 'referendum': a nod, the near hand gesturing.",
+   "parts": "AP",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg",
+    "references/brexit-is-done/may-interview-3.jpg"
+   ],
+   "people": [
+    {
+     "name": "May, head and hands",
+     "box": [
+      330,
+      420,
+      1010,
+      1500
+     ]
+    }
+   ],
+   "set": "may"
+  },
+  {
+   "t": 6.4,
+   "is": "Theresa May in her BBC interview (shot 1 of 3): seated on a plain office chair, turned three-quarter to screen-left, looking at an interviewer off-frame left (never seen); dark wood-panelled backdrop; plum jacket, patterned blouse, grey hair. Framed about waist up and a little wider (Sam's framing, locked): her legs run off the bottom edge and the chair's base is out of frame by design. Flat cartoon house style, circle hands by design. Her line: 'The Prime Minister would do well to remember that we had a referendum, and in that referendum, the British public chose wolves.' Acting: composed, firm, reasonable; hands rest in her lap between gestures (a raised finger on 'well', an open palm on 'referendum', chops, open hands); she leans in on 'remember' and nods on 'referendum' and 'wolves'; a tight satisfied smile on 'wolves'. Mouths follow Sam's recorded voice (locked). This panel: 'that referendum': firm, mid-chop.",
+   "parts": "AP",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg",
+    "references/brexit-is-done/may-interview-3.jpg"
+   ],
+   "people": [
+    {
+     "name": "May, head and hands",
+     "box": [
+      330,
+      420,
+      1010,
+      1500
+     ]
+    }
+   ],
+   "set": "may"
+  },
+  {
+   "t": 8.36,
+   "is": "Theresa May in her BBC interview (shot 1 of 3): seated on a plain office chair, turned three-quarter to screen-left, looking at an interviewer off-frame left (never seen); dark wood-panelled backdrop; plum jacket, patterned blouse, grey hair. Framed about waist up and a little wider (Sam's framing, locked): her legs run off the bottom edge and the chair's base is out of frame by design. Flat cartoon house style, circle hands by design. Her line: 'The Prime Minister would do well to remember that we had a referendum, and in that referendum, the British public chose wolves.' Acting: composed, firm, reasonable; hands rest in her lap between gestures (a raised finger on 'well', an open palm on 'referendum', chops, open hands); she leans in on 'remember' and nods on 'referendum' and 'wolves'; a tight satisfied smile on 'wolves'. Mouths follow Sam's recorded voice (locked). This panel: 'wolves': a nod, the tight satisfied smile.",
+   "parts": "AP",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg",
+    "references/brexit-is-done/may-interview-3.jpg"
+   ],
+   "people": [
+    {
+     "name": "May, head and hands",
+     "box": [
+      330,
+      420,
+      1010,
+      1500
+     ]
+    }
+   ],
+   "set": "may"
+  }
+ ]
+}

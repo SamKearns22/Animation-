@@ -578,6 +578,9 @@ def main():
         shared += voices.check(film)
     import readtime                         # note 22 (Open Wounds): story actions long enough to be seen
     shared += readtime.faults(film)
+    if hasattr(film, 'DRAWN') and os.path.exists(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'story', name.replace('_', '-') + '-moves.txt')):
+        import movesize                     # Open Wounds chat 32 (critique r27): every named nod and lean moves the
+        shared += ['MOVE SIZE: ' + x for x in movesize.faults(name.replace('_', '-'))]   # head far enough to see
     import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
     shared += viewchecks.faults(kf)       # effects hidden behind figures (rule 20 runs on the drawing pass)
     import film_engine
