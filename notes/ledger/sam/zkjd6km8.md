@@ -45,3 +45,6 @@ You built a chat handover tool to save usage. You confirmed today that it is wor
 
 Stop telling me chats are long unless you are admitting that your own tool is broken.
 
+### 2026-11-26T23:08:38
+Now, tell me about heavy reading. Are we doing heavy reading and can it be fixed?
+
