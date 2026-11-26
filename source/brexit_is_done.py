@@ -71,10 +71,11 @@ RESTS = [('*Blair*.forearmL', 'armrest', 17.5, 26.9, "Blair's left forearm on th
          ('*Blair*.forearmR', 'armrest', 17.5, 26.9, "Blair's right forearm on the wing chair's arm between gestures")]
 # rule 41 exceptions (reasons in the notes' Exceptions): a side-on runner's far hand passes behind his body for one
 # drawing at the back of each swing (chat 19: seen full size, the arm reads swinging; the figure is 40 px tall)
-HANDS_OK = [("*workers 2", 'R', 'no hand', 10.7, 12.1, "the side-on runner's far hand passes behind his body for one "
-             "drawing each swing, as a real runner's does (40 px tall)"),
-            ("*fleeing staff and guests*", '*', 'no hand', 20.9, 24.8, "the guests run side on across the room: each far "
-             "hand passes behind the body for one drawing per swing, as a real runner's does")]
+HANDS_OK = [("*workers 2", 'R', 'no hand', 7.5, 17.5, "the side-on runner's far hand passes behind his body at the "
+             "back of each swing, as a real runner's does (40 px tall; chat 25: the far arm no longer opens out of his back)"),
+            ("*fleeing staff and guests*", '*', 'no hand', 17.5, 26.9, "the guests run side on and three-quarter across "
+             "the room: each far hand passes behind the body at the back of each swing, as a real runner's does (chat 25: "
+             "the far arm no longer opens out of the back, so its hand is hidden on more drawings)")]
 ALLOWED_POPS = [('guest', 17.55, 17.95, 'the butler bursts in through the double doors as they open (seen full size)'),
                 ('guest', 19.85, 20.25, 'the woman in red runs off the frame\'s right edge at 4.4 m/s, half out the '
                  'frame the drawing before (seen full size, chat 19)'),

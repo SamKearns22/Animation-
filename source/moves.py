@@ -116,12 +116,23 @@ RUN_SWEEP = 0.75        # runs: a planted foot travels at most this many leg len
 #                         toe-off); a real runner's hips bob about a tenth of a leg, not a quarter
 
 
-def open_back(j, kind, k=1.4):
+def open_back(j, kind, k=1.4, yaw=None):
     """After gait(): each arm swung back opens its elbow (a sprinter's back arm trails; the bend comes back as it swings
     forward), so seen side on the far hand clears the body's back instead of hiding behind the hip (Open Wounds chat
-    18, rule 41: 'an arm with no hand' on a side-on runner, the hand at the hip at the back of each swing)."""
+    18, rule 41: 'an arm with no hand' on a side-on runner, the hand at the hip at the back of each swing).
+    `yaw` (the facing the runner is drawn at): the FAR arm, hidden behind the body, keeps the gait's own bend. Opened,
+    its forearm stuck straight out of the middle of the back, the shoulder it belongs to hidden: an arm out of the
+    body (Open Wounds chat 25: the body check held the redraw on the waitress at 19.08 s and four more runners). A real
+    runner's far hand passes behind the body at the back of each swing; only the near arm opens."""
     bend = GAITS[kind]['bend']
+    far = None
+    if yaw is not None:
+        vd = V.snap(yaw)[0]
+        if V.VIEWS[vd] in ('three', 'side', 'three_back'):
+            far = min('LR', key=lambda sd: V.project(j['sh' + sd], vd)[1])
     for side in 'LR':
+        if side == far:
+            continue
         sh, el = j['sh' + side], j['el' + side]
         swing = math.atan2(el[2] - sh[2], el[1] - sh[1])
         if swing < 0:
