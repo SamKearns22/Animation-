@@ -19446,6 +19446,328 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "81b35345",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.7,
+   "src": "estimate",
+   "sid": "session_01U3pKQyoiy1KRBdskafaBnP",
+   "steps": 43,
+   "hist_k": 170,
+   "kinds": {
+    "tool search": 17.7,
+    "page.py": 17.1,
+    "other": 65.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 21,
+    "whole-file .py read": 0,
+    "page.py": 15,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 6
+   },
+   "split": {
+    "usd": 2.5547,
+    "total": 2.5547,
+    "floor_k": 100,
+    "blocks": {
+     "start-up floor": 40.8,
+     "Claude's words": 24.8,
+     "new writes": 22.0,
+     "carried history": 12.3
+    },
+    "origins": {
+     "start-up floor": 40.8,
+     "Claude's words": 36.3,
+     "result: tool search": 10.8,
+     "result: page.py": 7.0,
+     "messages and reminders": 3.8,
+     "result: other": 1.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 40.8,
+     "writing code": 17.0,
+     "start-up and handover tools": 13.3,
+     "thinking": 11.7,
+     "commands": 6.0,
+     "messages and reminders": 3.8,
+     "reading notes": 3.6,
+     "writing notes": 0.9,
+     "running checks and tools": 0.7,
+     "reading kit code": 0.7,
+     "messages to Sam": 0.7,
+     "other commands": 0.3,
+     "git and saving": 0.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 100,
+    "work_step": 13,
+    "work_pct": 0.27,
+    "reads": [
+     [
+      "source/page.py",
+      5.4,
+      0.0805
+     ],
+     [
+      "source/handover.py",
+      3.0,
+      0.0415
+     ],
+     [
+      ".claude/hooks/finderwarn.py",
+      1.6,
+      0.022
+     ],
+     [
+      "notes/next-jobs.md",
+      1.2,
+      0.018
+     ],
+     [
+      "source/kittests.py",
+      1.0,
+      0.0146
+     ],
+     [
+      "story/status.md",
+      0.4,
+      0.0055
+     ],
+     [
+      "notes/logs/open-wounds-show.log",
+      0.4,
+      0.0055
+     ],
+     [
+      "source/codemap.py",
+      0.4,
+      0.0055
+     ]
+    ],
+    "base_pct": 29.7
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 0,
+     "after show": 0
+    },
+    "other": {
+     "guides": 1,
+     "film notes": 3,
+     "shared:handover.py": 6,
+     "shared:finderwarn.py": 1,
+     "other": 4,
+     "shared:kittests.py": 6
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "guides",
+      "guides/job-packs.md notes/*.md",
+      "reserve",
+      "",
+      8249
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/next-jobs.md source/*.py",
+      "R12",
+      "",
+      4747
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/open_wounds*.py source/handover.py notes/*.md notes/logs/",
+      "show",
+      "",
+      4463
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "source/brexit*.py source/handover.py source/kittests.py",
+      "def finder\\|finder-use\\|show.log\\|def _finder",
+      "",
+      1060
+     ],
+     [
+      6,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py",
+      "finder",
+      "",
+      4081
+     ],
+     [
+      7,
+      "other",
+      "shared:handover.py",
+      "source/handover.py .claude/hooks/ notes/check-audit.md",
+      "C1",
+      "",
+      6788
+     ],
+     [
+      8,
+      "other",
+      "shared:finderwarn.py",
+      ".claude/hooks/finderwarn.py source/handover.py",
+      "def end\\b\\|def end(\\|faults +=\\|faults.extend\\|_faults(",
+      "",
+      6308
+     ],
+     [
+      9,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 543,602p source/handover.py; sed -n 1085,1112p source/handover.py",
+      "",
+      5086
+     ],
+     [
+      10,
+      "other",
+      "other",
+      ".claude/hooks",
+      "show.log\\|show\\.log\\|-show.log",
+      "",
+      2342
+     ],
+     [
+      17,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "time python3 source/kittests.py --names code_finder_replay 2>&1 | tail -5",
+      "",
+      282
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "notes/proposals/learn/replay-show.py",
+      "def run",
+      "",
+      3671
+     ],
+     [
+      22,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^def _keep_notes",
+      "",
+      1697
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "git log -8 --no-merges --format='%h %s | %(trailers:key=Claude-Session,valueonly",
+      "",
+      611
+     ],
+     [
+      26,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/brexit-is-done-show.log source/kittests.py",
+      "2026-11-26",
+      "",
+      2802
+     ],
+     [
+      27,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^import\\|^from",
+      "",
+      1050
+     ],
+     [
+      28,
+      "other",
+      "shared:kittests.py",
+      ".claude/hooks notes/proposals/learn source/kittests.py",
+      "import page\\|page\\.files\\|page\\.show\\|page\\.find",
+      "",
+      356
+     ],
+     [
+      29,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 2660,2700p source/kittests.py | head -45; python3 source/kittests.py --na",
+      "",
+      2613
+     ],
+     [
+      31,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      "",
+      929
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/next-jobs.md story/FILM-page-shared.md notes/brexit-is-done.md",
+      "## Where things stand",
+      "",
+      76
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/brexit-is-done.md",
+      "sed -i 's/ ~~R12\\. The code finder/ R12. The code finder/' notes/next-jobs.md &&",
+      "",
+      2595
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "",
+      "kittests|castsheet",
+      "",
+      31
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
