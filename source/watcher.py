@@ -53,6 +53,7 @@ PROMISES = {
     'ledger.py auto': ('every chat has a cost row with its steps, kinds and search record', 'kittest cost_rows_reach_the_main_line'),
     'propose.py hook': ('no change is put to Sam without the proposal route; every block is logged in full (notes/proposals/guard-blocks.jsonl) and asks for one "Correction:" line, never the reply again (Sam\'s "One message, never twice", 22 Nov; guard-film-questions Change 1); a wrong or full resend is a let-through listed by handover end', 'kittest guard_one_correction'),
     'modelguard.py': ('no routine work (finish.py, a whole-film render, a splice) runs on Opus or Fable', 'live guard'),
+    'triggerguard.py': ('no scheduled task starts a fresh chat on each firing (it gets no project and the default model); a chat with the project is woken instead', 'kittest scheduled_task_guard'),
     'humancheck.py sendgate': ('no clip reaches Sam without a body check record, clean or each line answered in the notes (named-lines)', 'kittest body_send_gate'),
     'finderwarn.py': ('a chat that hand-searches a film\'s code before using the finder is told so at once', 'live finder'),
     'watcher.py stop': ('every promise here is checked at the end of every reply; a daily line shows it is alive', 'live hooks'),

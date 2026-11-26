@@ -4229,6 +4229,18 @@ def model_guard_stops_routine_on_opus():
 
 
 @test
+def scheduled_task_guard():
+    """Scheduled-task guard (Sam, 26 Nov): Open Wounds chat 17 made a scheduled task that started a fresh chat on
+    firing; chat 18 got no project and the default model. The guard refuses that kind and allows wake-ups."""
+    import io, contextlib
+    G = _hook('triggerguard')
+    out = io.StringIO()
+    with contextlib.redirect_stdout(out):
+        ok = G.test() == 0
+    return ok, out.getvalue().strip()
+
+
+@test
 def message_saver_keeps_typed_messages():
     """Message saver (handover.py log): nothing Sam typed was saved after 16 Nov 19:02, because the app began stamping
     typed messages with an origin and any origin read as "not typed". Typed kinds are saved; robots are not."""
