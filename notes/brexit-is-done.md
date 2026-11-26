@@ -73,7 +73,7 @@ Read: guides/pose-kits.md; this section and rule 91's above.
 Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
 three in May's place and size; the cast; every camera and framing.
-For Claude: people.SEAT_BODY / seat_body / BODY_SPEC; solid_seat._ink fold_min, FOLD_LOG; kittests fold_stub, seated_r7_switch.
+For Claude: people.SEAT_BODY / seat_body / BODY_SPEC; solid_seat._ink fold_min (kittest fold_stub). The pose test chat fixed the same knee tick with opt-in legs_soft: merge to one (move to shared).
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
