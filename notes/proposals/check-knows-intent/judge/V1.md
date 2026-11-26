@@ -1,0 +1,1 @@
+Chat's own first idea (Sonnet, chat 36): give each scene a written purpose line in the film's notes ('crowd fleeing: overlap expected'), and let the check read it and skip faults that fit. Weakness: a hand-written list again, and the check still cannot judge.
