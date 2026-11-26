@@ -1,6 +1,6 @@
 # Proposal: Test five ways for Claude to see our drawings and movement
 
-Status: open
+Status: adopted (2026-11-26)
 
 ## Problem
 Claude can read only still frames and cannot watch motion, so faults between frames (a hand's path, contact, who is in front, overlap the scene means versus a real mistake) reach Sam or get flagged wrongly. Sam (26 Nov, chat 36) asked what tools or programs would improve how Claude looks at the project's images and its own drawings and animations, was given five candidates in chat, and asked for a proposal. The first route (notes/proposals/better-seeing-tools.md) dropped most of them; Sam: "Your proposal doesn't mention any of the 5 answers you gave me". The proposal must deal with each of the five by name, say plainly which can and cannot be done here and what must be learned or obtained first (CLAUDE.md Statement Two), and checks must never block requested work (rule 93).
@@ -98,3 +98,6 @@ You'd notice: the new pictures sooner, but no proof they catch your notes, and t
 Other option: test all five on your old notes first.
 Lost: a fair test of the cut-out tool and pose finder.
 Added: two new ways of looking, about 4% of a week once, untested.
+
+## Sam's pick (26 Nov, chat 36)
+"1. Y but lose option 5": option 1 adopted, testing four tools (colour who-is-where copy, frame-to-frame movement measure, picture cut-out tool, body-pose finder); the video-watching model is dropped.

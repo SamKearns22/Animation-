@@ -1029,6 +1029,16 @@ def hard_hat(p, f, L, kh, crown, hw):
     top = crown - 0.16
     W = hw + 0.07
     dome = [(W * math.cos(a), vb + (top - vb) * math.sin(a)) for a in np.linspace(0, math.pi, 30)]
+    import views as V                              # a nod tips the helmet whole (views.Pitched, Open Wounds chat 39)
+    (x0, yb), (x1, _), (_, yt) = f.pts([(-W - 0.05, vb), (W + 0.05, vb), (0.0, top)])
+    V.NOD_SOLID[0] = ((x0 + x1) / 2, yb, abs(x1 - x0) / 2, max(1.0, abs(yb - yt)))
+    try:
+        _hard_hat_parts(p, f, col, vb, top, W, dome)
+    finally:
+        V.NOD_SOLID[0] = None
+
+
+def _hard_hat_parts(p, f, col, vb, top, W, dome):
     p.poly(curve(f.pts(dome), 2), col, INK, 2.6)
     p.line(open_curve(f.pts([(0.0, vb - 0.005), (0.0, top + 0.01)]), 3), dk(col, 0.78), 3.0)   # the ridge
     for sgn in (-1, 1):

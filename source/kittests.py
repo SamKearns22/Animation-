@@ -6214,6 +6214,73 @@ def head_moves_never_snap():
 
 
 @test
+def nod_is_a_turn():
+    """A nod turns the head, never slides it (saved example: Sam's note 26, Open Wounds chat 39, on Kemi's nod at
+    17.6 s: "It's not a nod, it's a head-bob"; the kit's nod moved every mark of the head down by the same amount).
+    Every cast head drawn nodding goes through views.Pitched about its own face (views.face_box); at 3 units, front-on
+    the crown moves under half as far as the middle of the face, side-on the chin goes in toward the neck and the
+    forehead forward. The old bob (every mark down alike) fails the same measure."""
+    import castsheet as CS
+    import numpy as np
+    from PIL import Image
+    cast, PP = CS._setup('brexit-is-done', None)
+    B, V = PP.B, PP.V
+    made, real = [], V.Pitched
+
+    class Spy(real):
+        def __init__(self, *a):
+            made.append(a)
+            real.__init__(self, *a)
+
+    class Life:
+        def at_time(self, t):
+            return 0.0, 3.0
+
+    class Flat:
+        cam, s = None, 1.0
+
+        def P(self, x, y):
+            return (x, y)
+
+        def S(self, v):
+            return v
+
+    def measure(pv):
+        (_, deg, c, fw, fh, view) = pv
+        q = real(Flat(), deg, c, fw, fh, view)
+        mv = lambda x, y: np.subtract(q.P(x, y), (x, y))   # noqa: E731
+        if view == 'front':
+            return abs(mv(c[0], c[1] - 1.1 * fh)[1]) / max(1e-6, abs(mv(c[0], c[1])[1]))
+        return mv(c[0] + 0.7 * fw, c[1] + 1.05 * fh)[0], mv(c[0] + 0.8 * fw, c[1] - 0.8 * fh)[0]
+    out, bad = [], []
+    try:
+        V.Pitched = Spy
+        for who, sp in cast.items():
+            for yaw in (0, 90):
+                made.clear()
+                d = dict(sp, head_life=Life())
+                tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+                s = 0.5 * d['height'] / 1.75
+                V.person(tile, B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, d, 0.0, yaw, None)
+                if not made:
+                    bad.append(f'{who} {yaw}: no turn drawn')
+                    continue
+                m = measure(made[-1])
+                if yaw == 0:
+                    out.append(f'{who} front crown/face {m:.2f}')
+                    if m > 0.5:
+                        bad.append(out[-1])
+                else:
+                    out.append(f'{who} side chin {m[0]:+.0f} forehead {m[1]:+.0f}')
+                    if not (m[0] < -3 and m[1] > 3):
+                        bad.append(out[-1])
+    finally:
+        V.Pitched = real
+    old_ratio = 1.0                                     # the bob: crown and face moved alike (dy for every mark)
+    return not bad and old_ratio > 0.5, '; '.join(out) + (f'; FAULTS: {bad}' if bad else '') + '; old bob crown/face 1.00 (fails)'
+
+
+@test
 def suit_one_cloth():
     """A suit with a tie is one cloth (Sam's note 24.3, Open Wounds chat 38: "Tony's suit sleeves are a different
     colour to the jacket"): Blair's sleeves and trousers are his jacket's colour, and the dark sleeve is never
