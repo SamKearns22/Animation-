@@ -50,7 +50,7 @@ claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, 
 ## Where things stand
 - Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), "Fix the drawing, never the shot".
 - Done (chat 1): listing tool, kittest, catalogue row; evidence; report sent; Sam answered all five.
-- Next: R8 chat 2 (Opus medium): the plain-words checker first, then the work order above, one item at a time.
+- Next: R8 chat 2 (opened: session_01J1JB7W1VqXUHMQUcpFV4zp, Opus medium, the Animation- project attached): the plain-words checker first, then the work order above, one item at a time.
 - Needs Sam: one-question-at-a-time (1 or 2); the critique column (Y/N) (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
 - Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
 - Open rule requests: none (Q5 rewords rule 24 on Sam's 2).
