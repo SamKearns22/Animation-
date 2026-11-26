@@ -466,3 +466,21 @@ Locked by Sam: the script, who is where, every background action, the three plac
 three in May's place and size; the cast; every camera and framing.
 For Claude: legs_soft vs FOLD_MIN: two fixes for one knee tick, merge to one. ACT.LEAD/HIT/REACH/POUNCE, _exchange, _from_passage/PASSAGE_D; places_site double doors corridor/passage; WF.house_ctx.
 
+
+## Where things stand (chat 29, 26 Nov, session_01J1JB7YdEy33J8jBD92qp7f)
+Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (a note seen before: 19 and 22 are kinds seen before).
+Done (chat 29): speech-to-text installed (faster-whisper, setup.sh) and built as shared source/words.py (kittest words_from_takes);
+Kemi's two files are her line's two halves (both used). Notes 17 (growl bed) and 18 (takes set the clock) fixed: film now 35.5 s.
+Captions and lips on heard word times (subtitles.pieces, shared). Clip: animations/drafts/ow-voices-tony-shot3.mp4 (0.9 MB).
+Running: chat 30 (session_01J1JB7WGFbaGz6YHKRXnSCz, Opus medium): notes 19-22 (Tony's hands, Tony's house look, Kemi's
+face lines, the last pounce) and May's seated cast-sheet STOPs. It was told the new clock (send_message).
+Next: when chat 30 finishes it opens the Sonnet animatic chat (Sam: "Once work is finished on both these chats render an
+animatic"): finish.py on the clean render (Hook Text, sign-off), sent in the chat. No other chat waits on this one.
+Needs Sam: nothing.
+Read: guides/job-packs.md "Checks and animatic"; this section.
+Open rule requests: none. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, left.
+Finder: not used (chat 29 built the voice clock new; no note's fix). Locked by Sam: the script (now as Sam recorded it), who is where, every background action, the three places' briefs, the cut on
+the lunge; film order; all three in May's place and size; the cast; every camera and framing.
+For Claude: LINES[i]['words'] (absolute), WD.track/at_word, SHOTS built from PRE/POST/GRIN_AFTER/LUNGE_AFTER_GRIN; ACT.LUNGE_T set
+from the 9.4 s reference; CHASE_DELAY (uc) in blair_shot; GROWLS/BED_DIP_DB; `brexit_is_done.py sound`. legs_soft vs FOLD_MIN still to merge.
+

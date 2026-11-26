@@ -58,22 +58,21 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (chat 29, 26 Nov, session_01J1JB7YdEy33J8jBD92qp7f)
-Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (a note seen before: 19 and 22 are kinds seen before).
-Done (chat 29): speech-to-text installed (faster-whisper, setup.sh) and built as shared source/words.py (kittest words_from_takes);
-Kemi's two files are her line's two halves (both used). Notes 17 (growl bed) and 18 (takes set the clock) fixed: film now 35.5 s.
-Captions and lips on heard word times (subtitles.pieces, shared). Clip: animations/drafts/ow-voices-tony-shot3.mp4 (0.9 MB).
-Running: chat 30 (session_01J1JB7WGFbaGz6YHKRXnSCz, Opus medium): notes 19-22 (Tony's hands, Tony's house look, Kemi's
-face lines, the last pounce) and May's seated cast-sheet STOPs. It was told the new clock (send_message).
-Next: when chat 30 finishes it opens the Sonnet animatic chat (Sam: "Once work is finished on both these chats render an
-animatic"): finish.py on the clean render (Hook Text, sign-off), sent in the chat. No other chat waits on this one.
+## Where things stand (chat 30, 26 Nov, session_01J1JB7WGFbaGz6YHKRXnSCz)
+Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (19 and 22 were kinds seen before).
+Done (chat 29): Sam's takes set the clock (film 35.5 s), growl bed. Done (chat 30): notes 19-22 fixed with a check each (in the
+notes table); clips animations/drafts/ow-n19-22-tony.mp4, ow-n21-kemi.mp4. Cast sheet: 40 STOPs to 22 (the tone check now
+follows Sam's 26 Nov note 1, one tone for legs side by side; the old bottom spy skips the body kit, the picture judges it).
+Next: Sonnet chat (opened by chat 30): the animatic (Sam: "Once work is finished on both these chats render an animatic"):
+finish.py on the clean render (Hook Text, sign-off), sent in the chat. Then a body-kit chat (Opus medium): the 22 STOPs left.
 Needs Sam: nothing.
 Read: guides/job-packs.md "Checks and animatic"; this section.
 Open rule requests: none. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, left.
-Finder: not used (chat 29 built the voice clock new; no note's fix). Locked by Sam: the script (now as Sam recorded it), who is where, every background action, the three places' briefs, the cut on
-the lunge; film order; all three in May's place and size; the cast; every camera and framing.
-For Claude: LINES[i]['words'] (absolute), WD.track/at_word, SHOTS built from PRE/POST/GRIN_AFTER/LUNGE_AFTER_GRIN; ACT.LUNGE_T set
-from the 9.4 s reference; CHASE_DELAY (uc) in blair_shot; GROWLS/BED_DIP_DB; `brexit_is_done.py sound`. legs_soft vs FOLD_MIN still to merge.
+STOPs left (cast sheet, poses the film never uses): crossed legs one tone (the body kit doesn't shade a crossed under leg),
+no bottom front-on and on Blair's long jacket on the office chair. Film poses (May upright -45, Blair armchair -45) pass.
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge;
+film order; all three in May's place and size; the cast; every camera and framing.
+For Claude: ACT.lunger(cut=), LUNGE_CREEP/COIL/LEN, LUNGE_T = the 0.4 s mark chat 29's clock reads; FH.CAST blair neck_up; legs_soft vs FOLD_MIN to merge.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Sam 26 Nov (chat 28, voice notes): "Point number two." / "Point number three." / "That doesn't look very good, and I think it affects the choreography of the rest of the scene.": the headings and words of notes 14 and 15.
@@ -145,10 +144,10 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 
 | # | shot | time | note | line | should have caught | status |
 |---|------|------|------|------|--------------------|--------|
-| 19 | 3 (Blair in the armchair) | 17.5-26.9 | Sam (26 Nov, after the body kit went on): "One thing I noticed on Tony: his hands hover rather than resting on the chair arms." | seen before kind: contact (hands on objects; Seeing like Sam 1) | to name (body chat): the check that looks at hands resting on a seat's arms | open: body chat (chat 30) |
-| 20 | 3 (Blair, house style) | all | Sam (26 Nov): "Please make sure Tony matches the house style: if you look at previous characters like Netanyahu, Trump or Brand, there's something off that I can't pin down. He's a bit doll like?" | new: likeness / house look (compare with the house's Netanyahu, Trump, Brand) | to name (body chat): house look | open: body chat (chat 30): line them up with Netanyahu, Trump, Brand, name what differs, fix the drawing |
-| 21 | 2 (Kemi's face) | 7.5-17.5 | Sam (26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the real life Kemi. Consult reference pictures of her face again." | new: likeness (face lines) | to name (body chat): likeness / name test | open: body chat (chat 30): her reference photos again, the mouth and eye lines redrawn to them |
-| 22 | 3 (the last wolf pounce on Blair) | end of shot 3 | Sam (26 Nov): "The final wolf pounce on Tony, so quick it's barely registered by the viewer." | seen before kind: an action too fast to read (note 13, the worker's pounce) | to name (body chat): the check on how long an action holds on screen | open: body chat (chat 30); shot length stays as Sam's voice sets it |
+| 19 | 3 (Blair in the armchair) | 17.5-26.9 | Sam (26 Nov, after the body kit went on): "One thing I noticed on Tony: his hands hover rather than resting on the chair arms." | seen before kind: contact (hands on objects; Seeing like Sam 1) | to name (body chat): the check that looks at hands resting on a seat's arms | fixed (chat 30): the armchair's resting hand curls over the arm's front end (sitting.spec_armrests, ARMREST_DROP; shared). Check: sitting.armrest_faults (the hand's centre above the arm's top), kittest hands_rest_on_armrests: catches chat 27's pose, passes the fix and a desk rest. Clip ow-n19-22-tony.mp4 |
+| 20 | 3 (Blair, house style) | all | Sam (26 Nov): "Please make sure Tony matches the house style: if you look at previous characters like Netanyahu, Trump or Brand, there's something off that I can't pin down. He's a bit doll like?" | new: likeness / house look (compare with the house's Netanyahu, Trump, Brand) | to name (body chat): house look | fixed (chat 30): lined up with the house's Netanyahu (netan-yahoo-vertical), Trump (midterminal), Brand (blessed). What differed: brown brows under grey hair (painted on), almost no neck (the bigger house face grows down over it: 5-8% of his head vs Netanyahu's ~10%), a 73-year-old with almost no lines. Fixed: neck_up 0.09 (facehouse, front and turned: shared), grey brows, age_boost 1.5, lid 0.2. Check: facehouse.doll_faults, kittest house_head_not_a_doll |
+| 21 | 2 (Kemi's face) | 7.5-17.5 | Sam (26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the real life Kemi. Consult reference pictures of her face again." | new: likeness (face lines) | to name (body chat): likeness / name test | fixed (chat 30): her photos are smooth-skinned; the age measure read the shade under her round cheeks and eyes on darker skin as the deepest lines of all 13 faces (deeper than May's or Blair's). Her age lines off (age_boost 0). Check: facehouse.line_faults (dark skin + a top-two line drawn), kittest face_lines_photos_show; facehouse_whole_head re-held. Clip ow-n21-kemi.mp4 |
+| 22 | 3 (the last wolf pounce on Blair) | end of shot 3 | Sam (26 Nov): "The final wolf pounce on Tony, so quick it's barely registered by the viewer." | seen before kind: an action too fast to read (note 13, the worker's pounce) | to name (body chat): the check on how long an action holds on screen | fixed (chat 30): was 0.33 s (four frames) from off-screen in mid-air. Now acted: the wolf creeps in low behind his shoulder 1.6 s before the cut, coils 0.4 s, leaps 0.5 s (six frames) up and over; the cut still on the lunge, chat 29's clock unchanged. Check: shared source/readtime.py (pre-flight, READ_TIMES), kittest pounce_long_enough_to_read. Clip ow-n19-22-tony.mp4 |
 | 9 | framing (all three interviews) | - | Sam (24 Nov 00:42): "I don't mind if you zoom out on May a little to give the Kemi/Tony scenes more room to show their scenes" | new: framing | none (a wish, not a fault) | passed to the sets chat (staging): May may be framed a little wider, Kemi and Blair match her |
 | 5 | cast sheet v2 | - | Sam: "Can I just say...I'm not sure we have female bodies? Kemi's body seems much more like a man's." | seen before (GTA 20 Nov, "Lucia on a man's box body"): rule 30 | none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed) | open: through the proposal route (notes/proposals/womans-build.md); waiting for Sam's pick |
 
@@ -164,4 +163,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 47.66% of 15%; forecast 54.7% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 49.05% of 15%; forecast 56.1% (2026-11-26)

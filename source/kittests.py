@@ -818,10 +818,10 @@ def seated_r7_switch():
     import castsheet as CS
     import sitting as S
     from PIL import Image
-    saved = {('blair', 0): 'ea35a4094040', ('blair', 45): 'e865aaf477d4', ('blair', 90): '83ccd9a9c644',   # 45/90: Open
+    saved = {('blair', 0): '13d5c648a6ed', ('blair', 45): '24f16e2873e6', ('blair', 90): '3732d689f2ab',   # re-held 26 Nov, chat 30: notes 20-21 changed the heads (neck, brows, lines), nothing below them   # 45/90: Open
              #   Wounds' own chain moved them (3d10d4c7, its shared sleeve lift in turned views), proven with R7's
              #   chat 2 changes taken out (still moved); was 5e30e187e32c / 397e4b53c71f
-             ('kemi', 0): 'de19d3438300', ('kemi', 45): 'a9568e8c38ec', ('kemi', 90): '24eac6dedfae',
+             ('kemi', 0): 'c736ac4bb567', ('kemi', 45): 'aa63685bd955', ('kemi', 90): 'cc0826ec4d61',
              ('may', 0): '97cbfbe3e550', ('may', 45): '5e504d91a956', ('may', 90): 'dbeb1214140e'}
     off = [f for f in people.BEFORE_SEATED if people.seat_r7(f) and f != 'brexit-is-done']
     new_on = people.seat_r7('a-new-film')
