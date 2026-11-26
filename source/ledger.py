@@ -243,13 +243,16 @@ def _task(transcript):
 
 
 def film_of(transcript):
-    """The film or job this chat worked on, in this order: (1) a task (its first message) under notes/proposals/ is
+    """The film or job this chat worked on, in this order: (0) the film its task names with --film NAME; (1) a task (its first message) under notes/proposals/ is
     process work (named more than any film), billed to the proposal-route ledger (Sam, 16 Nov: chat 7406486e built a startup fix
     but was billed to a film on hiatus, because it tested on that film's notes 14 times); (2) any chat that names
     notes/morning-report.md is overnight work, recorded there (Sam, 14 Nov); (3) the film its task names most; (4) the
     notes/NAME.md (or source/NAME*.py with a notes file) its own tool calls named most."""
     names = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT, 'notes')) if f.endswith('.md')} - SKIP
     names.add(PROCESS)
+    told = re.search(r'--film[ =]([A-Za-z0-9_-]+)', _task(transcript))   # (0) the film the chat is told it works on
+    if told and told.group(1) in names:           # wins (pose-kit-format C1, Sam 26 Nov: R7 chats 1-5 were billed to
+        return told.group(1)                      # brexit-is-done and proposal-route, 13.3% hidden from R7)
     task = _jobs(_task(transcript), names)
     films = [v for k, v in task.items() if k != PROCESS]
     if task.get(PROCESS, 0) > max(films, default=0):   # a film's task that also cites a proposal stays the film's
@@ -974,6 +977,71 @@ def kept_lines():
             for p, mb in big]
     return out or ['rule 37: every sound and reference file is on GitHub']
 
+SESS = re.compile(r'session_[A-Za-z0-9]{24}')
+
+
+def film_sessions(film):
+    """The chats a film's own handovers name as its chats: every "where things stand (chat N, ..., session_X)" line in
+    notes/FILM.md and notes/archive/FILM-handovers.md."""
+    out = []
+    for f in (os.path.join(ROOT, 'notes', film + '.md'), os.path.join(ROOT, 'notes', 'archive', film + '-handovers.md')):
+        if not os.path.exists(f):
+            continue
+        for line in open(f, encoding='utf-8', errors='replace'):
+            if 'where things stand' in line.lower():
+                out += [m for m in SESS.findall(line) if m not in out]
+    return out
+
+
+def misfiled(film, ledgers=None):
+    """[(other ledger, row)] for the film's own chats (film_sessions) whose estimate row sits under another ledger
+    (pose-kit-format C1). ledgers: {name: dict} to test on a saved copy; default the files in notes/ledger/."""
+    import glob
+    mine = set(film_sessions(film))
+    if ledgers is None:
+        ledgers = {}
+        for f in sorted(glob.glob(os.path.join(DIR, '*.json'))):
+            try:
+                ledgers[os.path.splitext(os.path.basename(f))[0]] = json.load(open(f))
+            except (ValueError, OSError):
+                pass
+    out = []
+    for name, d in ledgers.items():
+        if name == film or not isinstance(d, dict):
+            continue
+        out += [(name, c) for c in d.get('chats', []) if c.get('sid') in mine and c.get('src') != 'app']
+    return out
+
+
+def rebook(film):
+    """Move every misfiled row to the film's own ledger (taken out of the other, on the main line too); a row already
+    in the film's ledger for the same chat is kept (the double-booked one is only taken out elsewhere)."""
+    import subprocess
+    import mainline
+    moved = misfiled(film)
+    for other, row in moved:
+        drop = lambda x, row=row: _cut(x, row)
+        d = load(other)
+        drop(d)
+        store(d)
+        up, _ = _ledger_updates(other, drop)
+        mainline.to_main(up, root=ROOT, msg=f'Ledger: {other}, chat {row["chat"]} rebooked to {film}')
+        j, md, _ = _paths(other)
+        subprocess.run(['git', '-C', ROOT, 'add', j, md], capture_output=True)
+        subprocess.run(['git', '-C', ROOT, 'commit', '-q', '-m', f'Ledger: {other}, chat {row["chat"]} rebooked to {film}',
+                        '--', j, md], capture_output=True)
+        here = load(film)
+        if not any(same_row(c, row) for c in here['chats']):
+            push_row(film, row)
+    return moved
+
+
+def _cut(x, row):
+    n = len(x.get('chats', []))
+    x['chats'] = [c for c in x.get('chats', []) if not same_row(c, row)]
+    return len(x['chats']) != n
+
+
 def main():
     a = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     s = a.add_subparsers(dest='cmd', required=True)
@@ -993,10 +1061,19 @@ def main():
     s.add_parser('auto')
     p = s.add_parser('coldstart', help='the film-end line: what starting new chats cost the film')
     p.add_argument('film')
+    p = s.add_parser('rebook', help='move the film\'s own chats (named in its handovers) from other ledgers to it')
+    p.add_argument('film'); p.add_argument('--dry', action='store_true')
     s.add_parser('app', help='rebuild film rows from notes/ledger/app-costs.tsv (the app\'s real per-chat costs)')
     o = a.parse_args()
     if o.cmd == 'coldstart':
         print(coldstart(load(o.film)) or f'ledger coldstart: {o.film} has no start figures yet (recorded from 19 Nov)')
+        return
+    if o.cmd == 'rebook':
+        rows = misfiled(o.film) if o.dry else rebook(o.film)
+        for other, r in rows:
+            print(f'ledger rebook: {o.film} chat {r["chat"]} ({r.get("cost")}%) {"is under" if o.dry else "moved from"} {other}')
+        tot = sum(c.get('cost') or 0 for c in load(o.film)['chats'])
+        print(f'ledger rebook: {len(rows)} rows; {o.film} now {round(tot, 2)}% of a week on its own record')
         return
     if o.cmd == 'app':
         for film, (n, pct) in app_import().items():

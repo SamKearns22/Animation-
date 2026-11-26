@@ -72,6 +72,11 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Read: the job's own section in `notes/next-jobs.md`; the tool's MAP; `source/kittests.py` for its tests.
 - Bite: 86, 13, 85. Every tool gets a kittest; its rule's check column names it (on Sam's yes).
 
+## A pose kit job (Opus, high to build a new pose; medium for notes on it)
+- Read: `guides/pose-kits.md` (the default tool, the layers, the order of work); the film's Brief checklist.
+- First reply says the default tool (the start check prints the line); another tool only with its reason (Sam, 26 Nov).
+- Bite: 87, 30, the proposal route.
+
 ## Film types (moved from CLAUDE.md, 10 Nov; the rules unchanged)
 - **Satire-style film** (the TikTok series, beyond two people talking): `guides/satire.md`, always starting from
   `source/satire_template.py`, and the rulebook. `guides/best-practice.md` Part 2 only for a scene satire.md doesn't cover.

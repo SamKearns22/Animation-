@@ -123,6 +123,7 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 | A shell bursting on a bunker's slit: flash, black smoke outside, dust puffs rolling in (drawn in depth order), grit from the ceiling, concrete chips that land apart and stay, the bite left in the lintel, camera shake | `source/patriots3_fx.py` |
 
 ## Movement and checks (the kit tools)
+**New poses (default, Sam 26 Nov):** the full body under the posted outfit, `source/solid_seat.py` (mode `seat_solid='body'`), posed by joints (`sitting._leg_by_knee`); the method and its layer-edge checks: `guides/pose-kits.md`.
 `views.py`, `moves.py`, `stage.py`, `filmkit.py`, `perform.py`, `audit.py`, `clipcheck.py`, `voices.py`: see
 `guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`. The film-quality checks (25 Oct):
 `plan.py` (rule 1), `benchmark.py` (3), `sets.py` (2, 12), `kitchecks.py` (13), `viewchecks.py` (15-18, 20),

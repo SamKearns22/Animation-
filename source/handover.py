@@ -1033,6 +1033,27 @@ def _late(inp, wait=20):
                    capture_output=True)
 
 
+
+POSE_JOB = re.compile(r'pose[- ]kit|new pose|pose job', re.I)
+POSE_SAY = ("POSE JOB: say to Sam in your first reply: \"Using the default pose tool (the full body posed by its joints, "
+            "your posted outfit laid on top unchanged) unless you say otherwise.\" Method: guides/pose-kits.md. Another "
+            "tool is fine when the pose needs it (Sam, 26 Nov): name it and why in that same line. Nothing stops a handover.")
+
+
+def pose_job_lines(film, notes=None):
+    """pose-kit-format C3 as Sam changed it (26 Nov: "No hard stop on handover. Just tell me you're using the default
+    tool when you start unless I say otherwise"): a film whose Where things stand names a pose kit, a new pose or a pose
+    job gets the line to say; no refusal anywhere."""
+    nf = notes or (film and os.path.join(ROOT, 'notes', f'{film}.md'))
+    if not nf or not os.path.exists(nf):
+        return []
+    t = open(nf, encoding='utf-8', errors='replace').read()
+    i = t.find('## Where things stand')
+    if i < 0:
+        return []
+    j = t.find('\n## ', i + 5)
+    return [POSE_SAY] if POSE_JOB.search(t[i:j if j > 0 else None]) else []
+
 def main(argv):
     if not argv or argv[0] in ('-h', '--help'):
         print(__doc__)
@@ -1097,6 +1118,16 @@ def main(argv):
                                'Sonnet), so plan that redraw first.' if 'no body check record' in f else ''))
             except Exception as e:
                 print(f'BROKEN (send gate at start): could not check the drafts ({e})')
+        if opt('--film'):                                        # pose-kit-format C1 (Sam's Y, 26 Nov): the film's
+            try:                                                 # own chats billed elsewhere are moved to it, quietly
+                import ledger
+                moved = ledger.rebook(opt('--film'))
+                if moved:
+                    print(f"ledger: {len(moved)} of {opt('--film')}'s chats were billed to other jobs; moved to it")
+            except Exception as e:
+                print(f'BROKEN (ledger rebook at start): {e}')
+            for ln in pose_job_lines(opt('--film'), opt('--notes')):
+                print(ln)
         nf = opt('--notes') or (opt('--film') and os.path.join(ROOT, 'notes', f"{opt('--film')}.md"))
         if nf and os.path.exists(nf):                            # startup-fixes 3: read this, not the whole file
             print(f'handover: the notes to read ({os.path.relpath(nf, ROOT)}; nothing else of it unless a note names it):')

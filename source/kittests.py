@@ -5405,6 +5405,59 @@ def kit_tests_per_film():
                 f'hook code read: {"source/kitstamps.py" in (r_git or set())}')
 
 
+
+@test
+def ledger_told_film():
+    """pose-kit-format C1 (Sam's Y, 26 Nov; saved example notes/learn/pose-kit/examples/ledger-misfiled-26nov.json):
+    R7 chats 3-5 were billed to proposal-route because their task named notes/proposals/ more than notes/r7.md. A task
+    that says --film r7 is now billed to r7 however often it names a proposal; a task with no --film keeps the old
+    order (proposals win)."""
+    import json
+    import tempfile
+    import ledger as L
+    def bill(text):
+        with tempfile.NamedTemporaryFile('w', suffix='.jsonl', delete=False) as f:
+            f.write(json.dumps({'type': 'user', 'message': {'content': [{'type': 'text', 'text': text}]}}) + '\n')
+        try:
+            return L.film_of(f.name)
+        finally:
+            os.unlink(f.name)
+    seed = ('R7, chat 5 (Opus high). Run python3 source/handover.py start S --film r7, read notes/r7.md. Then the '
+            'proposal notes/proposals/seated-legs-3d.md (its judge; notes/proposals/seated-legs-3d.md Final version).')
+    told, untold = bill(seed), bill(seed.replace(' --film r7', ''))
+    return told == 'r7' and untold == L.PROCESS, f'with --film r7: {told}; without: {untold}'
+
+
+@test
+def ledger_rebook():
+    """pose-kit-format C1: misfiled() finds every R7 chat its handovers name that sits in another ledger: all five on
+    the saved 26 Nov copy (1f655db8, 39bef7c8 under brexit-is-done; dcc49037, 8fb22562, b2f8e1d1 under
+    proposal-route), and none on the ledgers as they are now (rebooked)."""
+    import json
+    import ledger as L
+    saved = json.load(open(os.path.join(HERE, '..', 'notes', 'learn', 'pose-kit', 'examples',
+                                        'ledger-misfiled-26nov.json')))['ledgers']
+    then = sorted(r['chat'] for _, r in L.misfiled('r7', saved))
+    now = L.misfiled('r7')
+    want = sorted(['1f655db8', '39bef7c8', 'dcc49037', '8fb22562', 'b2f8e1d1'])
+    return then == want and not now, f'saved copy: {then}; now: {[r["chat"] for _, r in now] or "none"}'
+
+
+
+
+@test
+def pose_job_line():
+    """pose-kit-format C3 as Sam changed it (notes/learn/pose-kit/examples/sam-26nov-default-tool.md: "Just tell me
+    you're using the default tool when you start unless I say otherwise"; "No hard stop on handover"): the start check
+    gives a pose job (R7's notes) the line naming the default tool and leaving room for another; a film that is not a
+    pose job (brexit-is-done) gets nothing; the line never refuses."""
+    import handover as H
+    r7, other = H.pose_job_lines('r7'), H.pose_job_lines('brexit-is-done')
+    ok = bool(r7) and 'default pose tool' in r7[0] and 'Another tool is fine' in r7[0] and not other
+    ok = ok and 'Nothing stops a handover' in r7[0]
+    return ok, f'r7: {"line" if r7 else "none"}; brexit-is-done: {"line" if other else "none"}'
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
@@ -5457,4 +5510,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
