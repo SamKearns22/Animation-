@@ -6461,63 +6461,63 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.74,
+   "cost": 2.05,
    "src": "estimate",
    "sid": "session_01U3pKR1movU8e9xJf8nbpnk",
-   "steps": 75,
-   "hist_k": 229,
+   "steps": 92,
+   "hist_k": 247,
    "kinds": {
-    "tool search": 17.2,
-    "whole-file .py read": 5.9,
-    "renders": 3.4,
+    "tool search": 16.4,
+    "whole-file .py read": 5.2,
+    "renders": 2.9,
     "pictures": 7.7,
-    "other": 65.7
+    "other": 67.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 38,
-    "whole-file .py read": 10,
+    "tool search": 46,
+    "whole-file .py read": 11,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
-    "pictures": 24,
-    "other": 19
+    "pictures": 28,
+    "other": 25
    },
    "split": {
-    "usd": 6.3865,
-    "total": 6.3865,
+    "usd": 7.5195,
+    "total": 7.5195,
     "floor_k": 84,
     "blocks": {
-     "new writes": 35.6,
-     "Claude's words": 28.3,
-     "carried history": 20.4,
-     "start-up floor": 15.6
+     "new writes": 32.2,
+     "Claude's words": 27.5,
+     "carried history": 27.1,
+     "start-up floor": 13.3
     },
     "origins": {
-     "Claude's words": 41.2,
-     "messages and reminders": 29.1,
-     "start-up floor": 15.8,
-     "result: tool search": 9.9,
-     "result: pictures": 3.1,
+     "Claude's words": 40.8,
+     "messages and reminders": 32.9,
+     "start-up floor": 13.4,
+     "result: tool search": 8.7,
+     "result: pictures": 3.3,
      "result: whole-file .py read": 0.5,
-     "result: other": 0.2,
+     "result: other": 0.3,
      "result: renders": 0.2
     },
     "named": {
-     "messages and reminders": 29.1,
-     "thinking": 23.9,
-     "start-up reading (rules, tools, first files)": 15.8,
+     "messages and reminders": 32.9,
+     "thinking": 21.8,
+     "start-up reading (rules, tools, first files)": 13.4,
      "writing code": 12.8,
-     "reading kit code": 6.3,
-     "commands": 4.1,
-     "looking at pictures": 3.1,
-     "reading notes": 2.6,
-     "git and saving": 0.7,
+     "reading kit code": 5.6,
+     "commands": 4.2,
+     "looking at pictures": 3.3,
+     "reading notes": 2.2,
+     "writing notes": 1.4,
      "running checks and tools": 0.7,
-     "messages to Sam": 0.4,
-     "other commands": 0.2,
+     "git and saving": 0.6,
+     "messages to Sam": 0.6,
      "renders": 0.2,
-     "writing notes": 0.1,
+     "other commands": 0.2,
      "app tools (chats, files sent)": 0.1
     },
     "leftover": 0.0
@@ -6623,7 +6623,7 @@
       0.0087
      ]
     ],
-    "base_pct": 17.6
+    "base_pct": 18.4
    },
    "search": {
     "show": 0,
@@ -6634,13 +6634,14 @@
      "shared:handover.py": 1,
      "film notes": 2,
      "guides": 1,
-     "shared:solid_seat.py": 5,
-     "other": 7,
+     "shared:solid_seat.py": 6,
+     "other": 10,
      "shared:views.py": 12,
      "shared:sitting.py": 7,
      "shared:bench_draw.py": 1,
      "shared:body.py": 1,
-     "shared:castsheet.py": 1
+     "shared:castsheet.py": 1,
+     "shared:kittests.py": 4
     },
     "ticked": 0,
     "edited film code": false,
@@ -6986,6 +6987,78 @@
       "sleep 60; ls /tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a",
       "",
       489
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "git add -A source && git commit -qm \"R7 chat 14: smoothing, soft-piece ink, pict",
+      "",
+      7
+     ],
+     [
+      95,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scrat",
+      "",
+      792
+     ],
+     [
+      101,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py notes/learn/seated/solid",
+      "the trunk is one soft mass",
+      "",
+      253
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "notes/learn/pose-kit/learn_sheet.py source/kittest*.py",
+      "def seated_r7_switch\\|'seated_r7_switch'\\|def short_top_hem",
+      "",
+      64
+     ],
+     [
+      106,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "usage\\|argv\\|python3",
+      "",
+      2678
+     ],
+     [
+      107,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "short_top_hem",
+      "",
+      821
+     ],
+     [
+      108,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/learn/seated/solid notes/learn/pose-kit/examples/sam-26",
+      "; examples/sam-26nov-kemi-side-bum-line-chair.jpg): solid_seat.back_clip_faults ",
+      "",
+      242
+     ],
+     [
+      109,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL|ERROR)",
+      "",
+      7
      ]
     ]
    },
