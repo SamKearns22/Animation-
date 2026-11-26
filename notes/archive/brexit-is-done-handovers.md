@@ -388,3 +388,14 @@ into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, set
 - **End check (chat 22), answered as in chat 21:** branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats; the CLAUDE.md SENTENCE lines (34f49840, 0945cc85) are Sam's own edits, named since chat 1.
 - **Open rule requests:** none. **For Claude:** 4 GTA branches left to GTA chats; kit-tests-when.md verdict stale.
 
+
+
+## Chat 24 handover (archived chat 25)
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 24 pushed there).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
+- **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
+- **Done (chat 24, Sonnet):** pre-flight run (film name with hyphens); clean render redrawn, 12m10s. The body check STOPPED it with 6 lines, held as source/data/brexit-is-done-clean.held.mp4 (+ .faults.json): R arm hidden behind the body comes out on the far side (workers 2 at 9.17s; shot 3 guests 1,2,3,4 at 18.42-20.08s); guest 4 at 19.67s forearms crossed (folded=True?). No animatic made, nothing forged, no exceptions written.
+- **Next:** chat 25, Opus medium: look at those frames (held clip, .faults.json), fix the drawing of the hidden-arm pose in shot 2/3 crowd figures (no camera or shot change), redraw (Sonnet) with `python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp4 --small` (pre-flight first: `python3 source/preflight.py brexit-is-done OUTDIR`, ~2 min), then critic helper, humancheck critiqued, finish.py, send.
+- **Needs Sam:** nothing yet; the animatic is later than hoped.
+- **Read:** guides/job-packs.md Checks and animatic.
+- **Open rule requests:** none. **For Claude:** finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts; preflight takes the hyphen film name; 4 GTA branches left to GTA chats.

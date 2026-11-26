@@ -363,7 +363,8 @@ def runner(img_unused, L, u):
             return
         x = _runner_x(min(u, LEAP_T))
         z = TOP
-        j = MV.open_back(MV.gait(sp, u - RUN_T0, 'sprint', stride=1.5 / V.M_PER_UNIT, steps_per_s=RUN_SPEED / 1.5), 'sprint')
+        j = MV.open_back(MV.gait(sp, u - RUN_T0, 'sprint', stride=1.5 / V.M_PER_UNIT, steps_per_s=RUN_SPEED / 1.5), 'sprint',
+                         yaw=-90.0)
         if u > LEAP_T:                                             # the leap: up over the end rail, out of frame left
             v = u - LEAP_T
             x -= RUN_SPEED * v
@@ -599,7 +600,7 @@ def _guest_pose(sp, k, tt, dx, dd, u):
         yaw, j = 0.0, MV.gait(sp, tt, 'front_run')
     else:
         yaw = (-90.0 if dx < 0 else 90.0) if abs(dd) < 0.35 else (-45.0 if dx < 0 else 45.0)
-        j = MV.open_back(MV.gait(sp, tt + 0.13 * k, 'run', steps_per_s=GUEST_V / RUN_STEP), 'run')
+        j = MV.open_back(MV.gait(sp, tt + 0.13 * k, 'run', steps_per_s=GUEST_V / RUN_STEP), 'run', yaw=yaw)
     if k == 0 and u < TOSS:                                 # the butler's tray up on his right palm, shoulder high
         V.arm_to(j, 'R', (215.0, -10.0, 150.0), 'out', 'palm')
     return yaw, j
