@@ -6362,7 +6362,84 @@
    "round": null,
    "cost": 2.54,
    "notes": 1,
-   "repeats": []
+   "repeats": [],
+   "steps": 37,
+   "hist_k": 116,
+   "kinds": {
+    "tool search": 17.0,
+    "other": 83.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 22,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 11
+   },
+   "split": {
+    "usd": 1.3205,
+    "total": 1.3205,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 53.6,
+     "new writes": 19.8,
+     "Claude's words": 19.0,
+     "carried history": 7.7
+    },
+    "origins": {
+     "start-up floor": 53.6,
+     "Claude's words": 26.2,
+     "result: tool search": 8.4,
+     "messages and reminders": 7.5,
+     "result: other": 4.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 53.6,
+     "commands": 10.2,
+     "messages and reminders": 7.5,
+     "writing notes": 5.0,
+     "reading notes": 4.9,
+     "thinking": 4.2,
+     "messages to Sam": 3.8,
+     "start-up and handover tools": 3.3,
+     "helper and chat prompts": 3.0,
+     "helper results": 1.8,
+     "git and saving": 1.6,
+     "app tools (chats, files sent)": 1.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/r7.md",
+      0.7,
+      0.0099
+     ],
+     [
+      "notes/proposals/pose-kit-format.md",
+      0.8,
+      0.0095
+     ],
+     [
+      "source/propose.py",
+      0.8,
+      0.0075
+     ],
+     [
+      "notes/proposals/pose-kit-format/chat.md",
+      0.3,
+      0.0044
+     ]
+    ],
+    "base_pct": 41.4
+   }
   }
  ],
  "checks": {},
