@@ -14,3 +14,6 @@ Y
 
 When asked
 
+### 2026-11-26T20:12:44
+Why were the hand faults not found in the previous 3 animatics?
+
