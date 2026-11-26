@@ -553,7 +553,21 @@ def draw(p, j, yaw, sp, scale=2):
     xy = np.array([p.cam.P(x, y) for x, y in zip(sx, sy)], float)
     xy = xy * scale
     z = 3.0 - depth * V.M_PER_UNIT
-    zb = np.full((Hd * scale, Wd * scale), np.inf)
+    FH, FW = Hd * scale, Wd * scale             # the whole picture at the drawing's scale
+    used = [T.ravel()] + [h.ravel() for h in hand_objs] + ([R['skirt'].ravel()] if skirt else [])
+    bx = xy[np.unique(np.concatenate(used))] if sum(len(u) for u in used) else xy   # the drawn points only
+    if CROP:                                    # speed (Sam's Y, 26 Nov: "A 10 second clip taking 15 mins is
+        mg = CROP_MARGIN * scale                # unsustainable"): every buffer only over the body's own box (it fills a
+        x0 = max(0, (int(np.floor(bx[:, 0].min())) - mg) // scale * scale)   # sixth of the frame), the same
+        y0 = max(0, (int(np.floor(bx[:, 1].min())) - mg) // scale * scale)   # drawing laid back in place at the end
+        x1 = min(FW, -(-(int(np.ceil(bx[:, 0].max())) + mg) // scale) * scale)   # (kittest solid_crop_same)
+        y1 = min(FH, -(-(int(np.ceil(bx[:, 1].max())) + mg) // scale) * scale)
+        if x1 <= x0 or y1 <= y0:
+            x0, y0, x1, y1 = 0, 0, FW, FH
+    else:
+        x0, y0, x1, y1 = 0, 0, FW, FH
+    xy = xy - np.array([x0, y0], float)
+    zb = np.full((y1 - y0, x1 - x0), np.inf)
     pb = np.full(zb.shape, -1, np.int64)
     ob = np.full(zb.shape, -1, np.int64)
     nv = len(R['v'])
@@ -711,18 +725,27 @@ def draw(p, j, yaw, sp, scale=2):
         lay[(ab[..., 4] < hem) & (np.abs(ab[..., 6]) < 0.5), 3] = 0   # waist or bust past the jacket (chat 8: a tab
         #                                         and a notch); never the legs (their tops lie above the hem's line)
         lay[~m, 3] = np.where(edge[~m], lay[~m, 3], 0)
-    L = Image.fromarray(lay, 'RGBA')
+    lay_full = np.zeros((FH, FW, 4), np.uint8)  # (shrunk whole, as before: shrinking the box alone moved 6,000 dots'
+    lay_full[y0:y1, x0:x1] = lay                #  shades by a little; this step is cheap)
+    L = Image.fromarray(lay_full, 'RGBA')
     if scale > 1:
         L = L.resize((Wd, Hd), Image.LANCZOS)
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
-    zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
+
+    def full(a, fill=0):                        # a box-sized buffer as the whole picture's, at 1x (for the checks)
+        a = a[::scale, ::scale]
+        out = np.full((Hd, Wd) + a.shape[2:], fill, a.dtype)
+        out[y0 // scale:y0 // scale + a.shape[0], x0 // scale:x0 // scale + a.shape[1]] = a
+        return out
     LAST.clear()
-    LAST.update(mode=mode, whole=arms, far_ls=far_ls, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
-                P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw,
-                shown=(lay[..., 3] > 0)[::scale, ::scale], ky=ab[..., 4][::scale, ::scale], foot=foot)
+    LAST.update(mode=mode, whole=arms, far_ls=far_ls, layer=L, front=full(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5)), m=full(m), zk=full(ab[..., 5]),
+                P=P[:nv], T=T, R=R, pb=full(pb, -1), edge=full(edge), between=full(between), ls=full(ls), j=j, sp=sp, yaw=yaw,
+                shown=full(lay[..., 3] > 0), ky=full(ab[..., 4]), foot=foot, box=(x0 // scale, y0 // scale, x1 // scale, y1 // scale))
     return L
 
 
+CROP = True             # draw over the body's own box only (speed; kittest solid_crop_same proves it changes nothing)
+CROP_MARGIN = 48        # dots at 1x round the body's points: wider than every smoothing, ink and blur reach
 BETWEEN_MIN = 14        # mode 'body': a line between the legs shorter than this (dots at 1x) is not drawn (chat 14)
 SPECK = 60              # mode 'body': an ink piece smaller than this (dots at 1x) is a speck, not drawn (chat 14)
 SMOOTH_R = 5.0          # mode 'body': outline smoothing radius (picture dots at 1x; chat 14)
