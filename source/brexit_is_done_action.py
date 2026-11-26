@@ -134,6 +134,24 @@ def _screen(jj, x, y, s, yaw):
     return jj
 
 
+def grip_hands(img, jj, s, sp, sides=('L', 'R')):
+    """The circle hands drawn again over a held tube (chat 18, rule 41: the tube laid over two small hands hid them,
+    'an arm with no hand'): a grip reads as the hand closed round the tube, so the hand is on top. Same circle as
+    satire_style.gesture_hand (r 26, 12 out along the forearm)."""
+    from satire_style import OUT as LINE
+    d = ImageDraw.Draw(img)
+    skin = tuple(sp.get('skin', (200, 150, 110)))[:3]
+    for sd in sides:
+        el, wr = jj.get('el' + sd + '_px'), jj.get('wr' + sd + '_px')
+        if not el or not wr:
+            continue
+        dx, dy = wr[0] - el[0], wr[1] - el[1]
+        n = math.hypot(dx, dy) or 1.0
+        k = abs(s)
+        cx, cy, r = wr[0] + dx / n * 12 * k, wr[1] + dy / n * 12 * k, 26 * k
+        d.ellipse([cx - r, cy - r, cx + r, cy + r], fill=skin, outline=LINE, width=max(1, int(round(2.4 * k))))
+
+
 def tube(img, a, b, w, col=(150, 156, 164)):
     """A steel scaffold tube from a to b (screen), w px thick, one outline."""
     d = ImageDraw.Draw(img)
@@ -345,7 +363,7 @@ def runner(img_unused, L, u):
             return
         x = _runner_x(min(u, LEAP_T))
         z = TOP
-        j = MV.gait(sp, u - RUN_T0, 'sprint', stride=1.5 / V.M_PER_UNIT, steps_per_s=RUN_SPEED / 1.5)
+        j = MV.open_back(MV.gait(sp, u - RUN_T0, 'sprint', stride=1.5 / V.M_PER_UNIT, steps_per_s=RUN_SPEED / 1.5), 'sprint')
         if u > LEAP_T:                                             # the leap: up over the end rail, out of frame left
             v = u - LEAP_T
             x -= RUN_SPEED * v
@@ -425,8 +443,9 @@ def _bar_man(sp, u, who):
     j['footR'] = (50, j['footR'][1], -90.0)
     reach = 150 + 160 * jab
     pull = 3.5 * min(0.0, lean)                     # leaning back to brace, he draws the tube in to his chest with him
-    V.arm_to(j, 'L', (-40.0, 230.0, reach + 110 + pull), 'down', 'fist')
-    V.arm_to(j, 'R', (40.0, 250.0, max(130.0, reach - 30) + pull), 'down', 'fist')
+    up = 45.0 if who == 0 else 0.0                  # chat 18: the nearest man's grip was level with the lift's front
+    V.arm_to(j, 'L', (-40.0, 230.0 - up, reach + 110 + pull), 'down', 'fist')     # guard rail: hands hidden behind it
+    V.arm_to(j, 'R', (40.0, 250.0 - up, max(130.0, reach - 30) + pull), 'down', 'fist')
     return j, jab
 
 
@@ -463,6 +482,7 @@ def bars(L, u):
             else:
                 tube(img, (a[0] - dx / nn * 0.4 * pxm, a[1] - dy / nn * 0.4 * pxm),
                      (b[0] + dx / nn * 1.3 * pxm, b[1] + dy / nn * 1.3 * pxm), 0.05 * pxm + 1)
+            grip_hands(img, jj, scale_at(L, m['d'], sp), sp)    # both the jab and the swing: hands over the tube
         out.append((m['d'], man))
 
     for k in range(2):                                              # We and Wf: lunge in turn, struck, flinch
@@ -579,7 +599,7 @@ def _guest_pose(sp, k, tt, dx, dd, u):
         yaw, j = 0.0, MV.gait(sp, tt, 'front_run')
     else:
         yaw = (-90.0 if dx < 0 else 90.0) if abs(dd) < 0.35 else (-45.0 if dx < 0 else 45.0)
-        j = MV.gait(sp, tt + 0.13 * k, 'run', steps_per_s=GUEST_V / RUN_STEP)
+        j = MV.open_back(MV.gait(sp, tt + 0.13 * k, 'run', steps_per_s=GUEST_V / RUN_STEP), 'run')
     if k == 0 and u < TOSS:                                 # the butler's tray up on his right palm, shoulder high
         V.arm_to(j, 'R', (215.0, -10.0, 150.0), 'out', 'palm')
     return yaw, j

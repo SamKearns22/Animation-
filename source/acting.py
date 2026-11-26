@@ -87,23 +87,27 @@ PLACES = {
     'palm up': (0.0, 60.0, 290.0, 225.0, 'down', 'palm'),         # one hand forward and low, open palm turning up (May's photo 1)
     'finger up': (0.0, 40.0, 40.0, 245.0, 'back', 'point'),       # the schoolmistress's raised forefinger, tipped at the listener (upright reads rude)
     'finger tap': (0.0, 40.0, 95.0, 270.0, 'back', 'point'),      # ... tapping the air once, forward
-    'palm open': (0.0, 60.0, 200.0, 215.0, 'down', 'palm'),       # the finger opens into a palm, forward at the chest
-    'chop high': (0.0, 50.0, 115.0, 195.0, 'down', 'palm'),       # a flat hand up, about to chop
-    'chop low': (0.0, 50.0, 270.0, 200.0, 'down', 'palm'),        # ... chopped down, level with the lap / waist
+    'palm open': (0.0, 60.0, 200.0, 215.0, 'back', 'palm'),       # the finger opens into a palm, forward at the chest
+    'chop high': (0.0, 120.0, 130.0, 175.0, 'down', 'palm'),       # a flat hand up, about to chop
+    'chop low': (0.0, 120.0, 270.0, 180.0, 'down', 'palm'),        # ... chopped down, level with the lap / waist
     'open out': (1.0, -40.0, 230.0, 235.0, 'down', 'palm'),         # both hands open outward a little (the public): the far hand, forward not out wide (critique r1: wide, the arm swung out behind her)
     'open near': (1.0, 30.0, 300.0, 170.0, 'down', 'palm'),       # ... the near hand opens on her lap (higher, the elbow jutted: hands on hips)
     'lap fwd': (0.0, 70.0, 378.0, 125.0, 'down', 'palm'),         # both hands slide forward on the lap as she shifts forward (the hook)
     'press': (0.0, 60.0, 255.0, 235.0, 'down', 'palm'),           # standing: palm down, pressing, forward at the waist (the far hand, out past her body: the near hand in front of her read as holding her stomach)
     'point back': (1.0, 95.0, -70.0, -50.0, 'front', 'point'),    # a finger back over the shoulder, clear of the braids (our round hands have no thumb)
-    'point back mid': (1.0, 10.0, 70.0, 125.0, 'down', 'palm'),   # its way up and back down, in front of the shoulder (out at the side it read as a hand on the hip;  straight from rest the elbow folded across her body: the figure check)
+    'point back mid': (1.0, 70.0, 110.0, 70.0, 'down', 'palm'),   # its way up and back down, in front of the shoulder (out at the side it read as a hand on the hip;  straight from rest the elbow folded across her body: the figure check)
     'hand low front': (1.0, -10.0, 330.0, 110.0, 'down', 'palm'), # from her side to the front of her thigh, elbow down (the swing out from rest read as a hand on the hip)
-    'pat high': (0.0, 60.0, 205.0, 240.0, 'down', 'palm'),        # patting the air down, level (targets)
-    'pat low': (0.0, 60.0, 270.0, 240.0, 'down', 'palm'),         # 
+    'pat high': (0.0, 110.0, 215.0, 205.0, 'down', 'palm'),        # patting the air down, level (targets)
+    'pat low': (0.0, 110.0, 270.0, 205.0, 'down', 'palm'),         # 
     'palms lift': (1.0, 40.0, 225.0, 210.0, 'out', 'palm'),       # seated: both hands up off the chair arms, palms open
     'palm flip': (1.0, 150.0, 120.0, 100.0, 'out', 'palm'),        # a breezy flip of the palm outward, out to its own side at the chest (critique r1: low, it read as resting on the chair arm; hunt 2: in front, as a hand on the chest)
     'palms out': (1.0, -20.0, 170.0, 200.0, 'out', 'palm'),
     'palms out near': (1.0, 160.0, 95.0, 100.0, 'out', 'palm'),   # ... the near hand, kept to its own side (critique r1: in front of the chest the two read as one; hunt 2: up off the chair arm)       # both palms open towards the interviewer (hunt 2: the elbow kept bent, straight it read as a long arm)
 }
+# Points bent at the elbow by their nature: a raised forefinger (a teacher's finger, a tap on the air) aims at nothing;
+# a thumb-style point back over the shoulder can only be made with the elbow bent. The hand check's 'bent point'
+# (rule 41) is for a straight-armed point AT something (Open Wounds chat 18: May at 1.75 s, Kemi at 11.0 s).
+RAISED = {'finger up', 'finger tap', 'point back'}
 # Body moves: channels per unit of the move (the first channel is the one an AMOUNT sets; the rest scale with it).
 # lean: degrees forward; nod: + down; roll: head tilt; dip: down at the knees, feet kept; bob, head_dy: drops.
 BODY = {
@@ -503,8 +507,8 @@ def arm_keys(j, sp, side, t, keys):
     def spec(s):
         if s is None:
             return rest
-        tgt, pole, shape = s
-        return tgt, V.POLES[pole] if isinstance(pole, str) else pole, shape
+        tgt, pole, shape = s[:3]
+        return (tgt, V.POLES[pole] if isinstance(pole, str) else pole, shape) + tuple(s[3:])
     if t <= keys[0][0]:
         a = b = spec(keys[0][1])
         u = 0.0
@@ -520,7 +524,10 @@ def arm_keys(j, sp, side, t, keys):
     tgt = moves.lerp(a[0], b[0], u)
     pole = moves.lerp(a[1], b[1], u)
     off = F.HAND.get(a[2], 14) + (F.HAND.get(b[2], 14) - F.HAND.get(a[2], 14)) * u
-    return _arm(j, side, tgt, pole, off, b[2] if u >= 0.5 else a[2])
+    now = b if u >= 0.5 else a
+    if now[2] == 'point' and len(now) > 3 and now[3]:
+        j['point_bent'] = True          # a raised finger (RAISED): bent at the elbow on purpose, aimed at no target
+    return _arm(j, side, tgt, pole, off, now[2])
 
 
 def place(name, side, sw, places, lean=0.0):
@@ -539,7 +546,7 @@ def place(name, side, sw, places, lean=0.0):
     tgt = (sg * (a * size[unit] + c), y, z)
     if world and lean:
         tgt = unlean(tgt, lean)
-    return tgt, pole, shape or shp
+    return tgt, pole, shape or shp, name in RAISED
 
 
 def unlean(p, lean):

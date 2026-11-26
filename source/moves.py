@@ -116,6 +116,19 @@ RUN_SWEEP = 0.75        # runs: a planted foot travels at most this many leg len
 #                         toe-off); a real runner's hips bob about a tenth of a leg, not a quarter
 
 
+def open_back(j, kind, k=1.4):
+    """After gait(): each arm swung back opens its elbow (a sprinter's back arm trails; the bend comes back as it swings
+    forward), so seen side on the far hand clears the body's back instead of hiding behind the hip (Open Wounds chat
+    18, rule 41: 'an arm with no hand' on a side-on runner, the hand at the hip at the back of each swing)."""
+    bend = GAITS[kind]['bend']
+    for side in 'LR':
+        sh, el = j['sh' + side], j['el' + side]
+        swing = math.atan2(el[2] - sh[2], el[1] - sh[1])
+        if swing < 0:
+            V.set_arm(j, side, swing, max(0.25, bend + k * swing))
+    return j
+
+
 def gait(sp, t, kind='walk', stride=None, steps_per_s=None):
     """A pose `t` seconds into a gait. Feet planted on the floor slide back exactly as fast as the body moves on.
     `stride`: step length in person units (default from GAITS)."""

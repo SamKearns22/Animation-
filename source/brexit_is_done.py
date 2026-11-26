@@ -60,6 +60,14 @@ DUR = SHOTS[-1][2]
 T = {'chose_wolves': 6.0, 'grin': 25.0, 'lunge': 26.5}
 SHOT_CAST = {'1': ['may'], '2': ['kemi'], '3': ['blair']}
 SHOT_MARKS = SHOT_CAST                 # rule 38: who the front-on check looks at, per shot
+# rule 38: all three are turned to the unseen interviewer off-frame left (item 14), the interview look Sam locked on
+# 24 Nov (the camera and framing are his; a fix may never move them: CLAUDE.md "Fix the drawing, never the shot")
+THREE_QUARTER_OK = [('1', 'may', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)'),
+                    ('2', 'kemi', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)'),
+                    ('3', 'blair', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)')]
+# rule 78: Blair's forearms rest on the wing chair's arms between gestures (the acting list: 'hands on its arms')
+RESTS = [('*Blair*.forearmL', 'armrest', 17.5, 26.9, "Blair's left forearm on the wing chair's arm between gestures"),
+         ('*Blair*.forearmR', 'armrest', 17.5, 26.9, "Blair's right forearm on the wing chair's arm between gestures")]
 HOOK = ('Andy is opening old wounds... \U0001F1EC\U0001F1E7', {'y': 300, 'until': 3.0})   # item 15: above her hair (top at about 465)
 
 
