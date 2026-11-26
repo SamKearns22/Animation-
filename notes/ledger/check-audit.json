@@ -8,65 +8,65 @@
    "model": "opus",
    "stage": "plan",
    "round": null,
-   "cost": 2.02,
+   "cost": 2.3,
    "notes": 3,
    "repeats": [
     "Reopened list offered again after Sam declined it | search Sam's saved messages before any proposal"
    ],
    "src": "estimate",
    "sid": "session_01J1JB7XK3JVXc9v4nLQXGZU",
-   "steps": 103,
-   "hist_k": 244,
+   "steps": 117,
+   "hist_k": 261,
    "kinds": {
-    "tool search": 20.6,
-    "renders": 2.4,
-    "other": 77.0
+    "tool search": 21.4,
+    "renders": 2.1,
+    "other": 76.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 62,
+    "tool search": 71,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
     "pictures": 0,
-    "other": 23
+    "other": 27
    },
    "split": {
-    "usd": 6.4509,
-    "total": 6.4509,
+    "usd": 7.4626,
+    "total": 7.4626,
     "floor_k": 82,
     "blocks": {
-     "carried history": 27.4,
-     "start-up floor": 26.5,
-     "Claude's words": 26.4,
-     "new writes": 19.7
+     "carried history": 29.4,
+     "Claude's words": 26.0,
+     "start-up floor": 25.7,
+     "new writes": 18.8
     },
     "origins": {
-     "Claude's words": 42.4,
-     "start-up floor": 26.5,
-     "result: tool search": 16.1,
+     "Claude's words": 43.1,
+     "start-up floor": 25.7,
+     "result: tool search": 16.2,
      "result: other": 10.9,
      "Claude's edits": 2.2,
      "messages and reminders": 1.8,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 26.5,
-     "thinking": 17.1,
-     "reading notes": 10.0,
-     "writing notes": 9.2,
-     "writing code": 7.0,
-     "commands": 6.1,
-     "messages to Sam": 4.9,
+     "start-up reading (rules, tools, first files)": 25.7,
+     "thinking": 17.4,
+     "reading notes": 9.7,
+     "writing notes": 8.9,
+     "writing code": 7.6,
+     "commands": 6.0,
+     "messages to Sam": 4.8,
      "app tools (chats, files sent)": 4.2,
-     "reading chat records": 3.8,
-     "start-up and handover tools": 3.0,
-     "reading guides": 2.7,
-     "reading kit code": 2.2,
+     "reading chat records": 4.0,
+     "start-up and handover tools": 3.5,
+     "reading guides": 2.6,
+     "reading kit code": 2.1,
      "messages and reminders": 1.8,
-     "running checks and tools": 0.7,
-     "helper and chat prompts": 0.3,
+     "helper and chat prompts": 0.7,
+     "running checks and tools": 0.6,
      "other commands": 0.1,
      "git and saving": 0.1,
      "renders": 0.1,
@@ -82,65 +82,65 @@
      [
       "notes/next-jobs.md",
       2.7,
-      0.0709
+      0.0778
      ],
      [
       "guides/job-packs.md",
       1.2,
-      0.0312
+      0.0342
      ],
      [
       "notes/brexit-is-done.md",
       1.2,
-      0.0285
+      0.0314
      ],
      [
       "source/preflight.py",
       1.1,
-      0.0279
+      0.0307
      ],
      [
       "guides/film-quality-rules.md",
       1.0,
-      0.0246
+      0.0271
      ],
      [
       "story/status.md",
       0.9,
-      0.023
+      0.0252
      ],
      [
       "notes/logs/handover-end.log",
       0.8,
-      0.0194
+      0.0215
      ],
      [
       "notes/proposals/check-catches.md",
       0.6,
-      0.0142
+      0.0156
      ],
      [
       "notes/preflight-audit.md",
       0.6,
-      0.0142
+      0.0156
      ],
      [
       ".claude/settings.json",
       0.4,
-      0.0113
+      0.0124
      ],
      [
       "notes/logs/kittest-reds.log",
       0.2,
-      0.0049
+      0.0054
      ],
      [
       "notes/logs/brexit-is-done-show.log",
       0.2,
-      0.0049
+      0.0054
      ]
     ],
-    "base_pct": 23.5
+    "base_pct": 23.1
    },
    "search": {
     "show": 0,
@@ -148,17 +148,17 @@
      "no show": 0
     },
     "other": {
-     "film notes": 19,
-     "shared:handover.py": 5,
-     "guides": 3,
+     "film notes": 21,
+     "shared:handover.py": 8,
+     "guides": 4,
      "shared:kittests.py": 6,
-     "other": 20,
+     "other": 21,
      "shared:preflight.py": 1,
      "shared:checkaudit.py": 2,
      "shared:ink.py": 1,
      "shared:sizes.py": 2,
      "shared:ledger.py": 1,
-     "shared:propose.py": 2
+     "shared:propose.py": 4
     },
     "ticked": 0,
     "edited film code": false,
@@ -718,6 +718,87 @@
       "other",
       "",
       "cd /home/user/Animation-; git push -q origin claude/upbeat-ritchie-3d3b2y 2>&1|t",
+      "",
+      69
+     ],
+     [
+      88,
+      "other",
+      "shared:propose.py",
+      "source/rule_proofs.json source/propose.py guides/film-quality-rules.md",
+      "transcript_path\\|stop_hook_active\\|def hook",
+      "",
+      2504
+     ],
+     [
+      89,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/rule_proofs.json",
+      "^def last_turn",
+      "",
+      4971
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "source/rule_proofs.json /.claude/projects/-home-user-Animation-/",
+      "cd /home/user/Animation-; python3 -c \" import json;d=json.load(open('source/rule",
+      "",
+      683
+     ],
+     [
+      93,
+      "other",
+      "film notes",
+      "notes/learn/plain-words/ notes/check-audit.md. source/rule_proofs.json notes/lea",
+      "\n",
+      "",
+      79
+     ],
+     [
+      94,
+      "other",
+      "shared:handover.py",
+      "notes/check-audit.md notes/learn/plain-words/bad-1 source/handover.py",
+      "^ ",
+      "",
+      1702
+     ],
+     [
+      95,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/ruleproofs.py",
+      "owed\\|anchor",
+      "",
+      1568
+     ],
+     [
+      96,
+      "other",
+      "shared:handover.py",
+      "notes/check-audit.md. notes/proposals/plain-check.md source/rule_proofs.json not",
+      ")\nnew_body=new_body.replace(",
+      "",
+      272
+     ],
+     [
+      97,
+      "other",
+      "guides",
+      "",
+      "cd /home/user/Animation-; git add -A CLAUDE.md source notes story guides; git co",
+      "",
+      111
+     ],
+     [
+      99,
+      "other",
+      "film notes",
+      "notes/check-audit.md",
+      "cd /home/user/Animation-; sed -i 's|^- Next: R8 chat 2 (Opus medium):|- Next: R8",
       "",
       69
      ]
