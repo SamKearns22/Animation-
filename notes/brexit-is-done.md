@@ -68,8 +68,7 @@ hand_rests_on_thigh, pop_carried_off_edge pass. Hunt 2 (r27-p2) recorded: 8 faul
 Next: Opus medium, the body-kit chat: the 22 cast-sheet STOPs AND hunt 2's open list on May shot 1: P8 torso reads front-on at yaw -45;
 P6 raised finger a stub; P2 gestures/chop weak at 4.2 and 6.4 s; P2 no satisfied smile at 8.36 s (mouth locked, face not); P1/P7 near hand
 beside the hip, legs one dark mass, thin chair back beside the torso. Then `critique.py fixed`, pre-flight, Sonnet animatic chat.
-Needs Sam: Y/N on the 13.50 s still (scaffolding planks and tape cross in front of the orange pipe; the check says the pipe is 15 cm
-nearer; my pick: leave it, scaffolding stands in front of a building). Nothing touched there until his word.
+Sam (26 Nov) on the 13.50 s still: "Leave it" (answered in the notes' answers table; nothing changed). Needs Sam: nothing.
 Read: guides/job-packs.md "Checks and animatic"; this section; source/data/critique/brexit-is-done/r27-p2/result.md (git-ignored: list above).
 Open rule requests: none. Branches claude/gta-*: GTA's, left.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. Do not change timing, lines, mouths, soundtrack.
@@ -122,6 +121,7 @@ rule 14)
 | ALLOWED_POPS | guest | 19.9-20.2 s: the woman in red runs off the frame's right edge at 4.4 m/s; the drawing before she is half out of frame, so the check sees her vanish away from the edge | chat 19, shot 3 at 20.0-20.25 s full size | chosen | chat 19 |
 | ALLOWED_POPS | guest | 22.4-22.75 s: a guest runs in at the frame's right edge, half hidden by Blair's shoulder, so the check sees her appear away from the edge | chat 19, shot 3 at 22.42-22.67 s full size | chosen | chat 19 |
 | ALLOWED_POPS | guest | 25.2-25.55 s: the last guest runs off the left edge ahead of the wolves | chat 19, shot 3 at 25.25-25.5 s full size | chosen | chat 19 |
+| `*13.50 s (shot 2): the frame (26.00 m away) is drawn over a big orange pipe riser (25.85 m, nearer)*` | - | Sam (26 Nov, on the still): "Leave it": the scaffolding's planks and tape cross in front of the pipe, as scaffolding stands in front of a building | chat 32, shot 2 at 13.50 s full size, the marked still sent to Sam | chosen | chat 32; Sam's word |
 | `HANDS: 1 *: Theresa May (*)'s right arm: the hand pushed back into its own sleeve *` | - | the chop gesture, forearm raised and angled toward the interviewer: seen from the front the forearm is foreshortened (55% of its length) but the hand stays clear and visible beside the sleeve | chat 20, shot 1 at 1.75 s full size (1080 px): hand and raised forearm read as a bent arm gesturing | real | chat 20; named to Sam |
 | `HANDS: 2 *: Kemi Badenoch on site (*)'s right arm: the hand pushed back into its own sleeve *` | - | the wave: forearm raised and turned toward camera, foreshortened (51%); the hand circle sits clear of the sleeve | chat 20, shot 2 at 12.42 s full size: reads as a wave | real | chat 20; named to Sam |
 | `HANDS: 2 *: the site's workers *'s right arm: an arm with no hand (the hand covered) *` | - | the three scaffold workers (about 40 px tall) walk side on with the far hand behind the body, as the runner's; the hand shows on the other frames | chat 20, shot 2 at 8.67 s, 3x crop: they read as walking, hands behind | real | chat 20 |
