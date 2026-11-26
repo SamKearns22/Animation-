@@ -86,7 +86,9 @@ class HeadLife:
                 self.roll[j] = a + (tgt - a) * w
             a = tgt
         for i0 in accents(env):
-            for u, d in enumerate((0.6, 1.0, 0.55, 0.2)):
+            # eased down and back over half a second (Sam, 26 Nov, Open Wounds note 24.1: a head that snaps down
+            # in one drawing is "very sharp and doesn't correspond to anything a person would actually do")
+            for u, d in enumerate((0.3, 0.7, 1.0, 0.75, 0.4, 0.15)):
                 if i0 + u < n:
                     self.nod[i0 + u] = max(self.nod[i0 + u], d)
 

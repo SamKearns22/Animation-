@@ -5888,10 +5888,19 @@ def dark_sleeve_reads():
             return n, step
         finally:
             V.DARK_SLEEVE_LIFT = keep
-    n_old, step_old = arm_px(0.0)
+    # chat 38 (Sam, note 24.3: "sleeves are a different colour to the jacket"): the sleeve is the jacket's own colour
+    # and the arm reads by its lit edge (limbs.DARK_RIM); the old lifted sleeve and the bare one are both refused
+    import limbs as LB
     n_now, step_now = arm_px(V.DARK_SLEEVE_LIFT)
-    ok = step_old < 18 and step_now >= 18 and n_now >= 400
-    return ok, f'old sleeve {step_old} from the jacket (vanishes); now {step_now}, {n_now} arm pixels seen'
+    jac = tuple(sp.get('jacket', (40, 40, 46))[:3])
+    edge = LB._lit(jac)
+    img = Image.new('RGBA', (400, 600), (235, 235, 235, 255))
+    j = MV.gait(sp, 0.0, 'run', steps_per_s=3.5)
+    with FG.allow('kittest: a side-on runner'):
+        V.person(img, B.Cam(1.0, 540, 960), 200, 60, 0.5, sp, 0.0, 90.0, j)
+    n_edge = sum(1 for c in img.convert('RGB').getdata() if sum(abs(a - b) for a, b in zip(c, edge)) <= 6)
+    ok = step_now == 0 and n_edge >= 60
+    return ok, f'sleeve {step_now} from the jacket (0 = same cloth); lit edge {n_edge} px'
 
 
 @test
@@ -6157,6 +6166,71 @@ def learn_first():
                 f"GTA lean-out: {'named' if len(gta) > 1 else 'MISSED'}")
 
 
+@test
+def head_moves_never_snap():
+    """A nod written as a snap (rise 0.1 s, Sam's note 24.1, Open Wounds chat 38: "very sharp and doesn't correspond
+    to anything a person would actually do") is drawn at a real head's speed (acting.HEAD_MIN): no drawing at 12 a
+    second moves it more than half its depth; the voice's own accent nods (headlife) ease in the same way."""
+    import acting as AC
+    import headlife as HL
+    import numpy as np
+    m = dict(move='nod', curve='bump', a=0.0, b=0.4, rise=0.1, fall=0.12, amount=2.0, over=None, with_={})
+    m['with'] = m.pop('with_')
+    clock = lambda v: v
+    us = [AC.body_value(m, f / 12, clock, AC.BODY)['nod'] for f in range(-2, 9)]
+    peak = max(us) or 1.0
+    step = max(abs(b - a) for a, b in zip(us, us[1:])) / peak
+    env = np.full(60, 0.05)
+    env[22] = 0.3
+    nod = HL.HeadLife(env, 0.0).nod
+    hstep = float(np.max(np.abs(np.diff(nod)))) if nod.max() else 0.0
+    ok = step <= 0.7 and 0 < hstep <= 0.45     # the snap Sam saw: the whole depth (1.0) in one drawing
+    return ok, f'written snap: biggest step {step:.2f} of the nod (at most 0.7; the snap was 1.0); voice nod step {hstep:.2f}'
+
+
+@test
+def suit_one_cloth():
+    """A suit with a tie is one cloth (Sam's note 24.3, Open Wounds chat 38: "Tony's suit sleeves are a different
+    colour to the jacket"): Blair's sleeves and trousers are his jacket's colour, and the dark sleeve is never
+    lifted to a grey (limbs.DARK_RIM draws its edge instead)."""
+    import people as PK
+    import views as V
+    sp = PK.load('brexit-is-done')['blair']
+    jac = tuple(sp['jacket'][:3])
+    got = (tuple(V.sleeve_colour(sp, 45)[:3]), tuple(sp['trousers'][:3]))
+    return got == (jac, jac), f'jacket {jac}, sleeve {got[0]}, trousers {got[1]}'
+
+
+@test
+def smirk_one_corner():
+    """A smirk reads (Sam's note 24.2, Open Wounds chat 38: "doesn't read as a satisfied smirk but a neutral
+    expression"; FACS: one corner pulled up, unilateral AU12): May's 'satisfied' mouth after "wolves" has one corner
+    well above the other; 'smile' alone (the old mood) lifted both by half a pixel."""
+    import brexit_is_done as M
+    import numpy as np
+    out = {}
+    import faces as FA
+    for name, up in (('old', 0.0), ('now', FA.SMIRK_UP)):
+        keep = FA.SMIRK_UP
+        FA.SMIRK_UP = up                                # no lift: the corners as the old mood drew them
+        try:
+            a = np.asarray(M.picture(9.0).convert('RGB')).astype(int)
+        finally:
+            FA.SMIRK_UP = keep
+        hx, hy = M.DRAWN['may']['_drawn']['head_at']
+        box = a[int(hy):int(hy + 160), int(hx - 140):int(hx + 140)]
+        lip = (box[..., 0] > 150) & (box[..., 1] < 90) & (box[..., 2] > 60) & (box[..., 2] < 140)
+        ys, xs = np.nonzero(lip)
+        if not len(xs):
+            return False, f'{name}: no lips found'
+        x0, x1 = xs.min(), xs.max()
+        top = lambda c: ys[np.abs(xs - c) <= 3].min()
+        out[name] = int(top(x0)) - int(top(x1))     # + : the near (screen-right) corner higher; the head's tilt adds
+    lift = out['now'] - out['old']                  # the same to both, so the smirk is the change
+    ok = lift >= 6
+    return ok, f"the near corner raised {lift} px over the old mood's (a smirk: 6 or more; the old mood: none)"
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
@@ -6209,5 +6283,6 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
 

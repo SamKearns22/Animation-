@@ -147,6 +147,13 @@ def ramp(t, a, b):
     return min(1.0, max(0.0, (t - a) / max(1e-6, b - a)))
 
 
+# A real head never snaps (Sam, 26 Nov, Open Wounds chat 38 note 24.1: a nod rising in 0.12 s, "very sharp and doesn't
+# correspond to anything a person would actually do"). Head moves take at least this long to go and come back (s),
+# whatever a moves file writes: a film cannot draw the snap. Measured on the nods Sam passed (0.2-0.3 s down).
+HEAD_MIN = {'nod': (0.2, 0.22), 'nod by': (0.2, 0.22), 'chin up': (0.25, 0.25), 'preen': (0.2, 0.22),
+            'bow': (0.3, 0.3), 'tilt': (0.18, 0.2), 'peer': (0.25, 0.25)}
+
+
 def bump(t, a, b, rise=0.2, fall=0.25):
     return ease(ramp(t, a, a + rise)) * (1 - ease(ramp(t, b - fall, b)))
 
@@ -609,7 +616,8 @@ def body_value(m, t, clock, table, with_u=False):
         a = clock(m['a'])
         u = ease(ramp(t, a, a + m['over']))
     else:
-        u = bump(t, clock(m['a']), clock(m['b']), m['rise'], m['fall'])
+        r0, f0 = HEAD_MIN.get(m['move'], (0.0, 0.0))
+        u = bump(t, clock(m['a']), clock(m['b']), max(m['rise'], r0), max(m['fall'], f0))
         if m['curve'] == 'except':
             u = 1 - u
     base = dict(table[m['move']])

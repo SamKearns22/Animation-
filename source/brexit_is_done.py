@@ -271,8 +271,8 @@ MOODS = {
     'brows up': dict(smile=0.06, lid4=0.06, brow_up=0.05),           # ... "remember"; "chose" (a tiny pause)
     'reasonable': dict(smile=0.22, lid4=0.16, brow_up=0.035),         # chat 32 (critique r27: 0.1 read as a blank stare)
     'firm': dict(smile=-0.22, lid4=0.2, frown=0.045),                # ... the chops (it was decided; chat 32: was -0.12, blank)
-    'satisfied': dict(smile=0.45, lid4=0.2, brow_up=0.012),  # (critique hunt 2: 0.32 read as a plain closed mouth)          # ... the tight satisfied smile on "wolves"
-    'satisfied brows': dict(smile=0.45, lid4=0.16, brow_up=0.04),    # ... and the small brow raise to the cut
+    'satisfied': dict(smile=0.2, smirk=-0.9, lid4=0.26, brow_up=0.012),   # chat 38 (note 24.2): the smirk, cheek up  # (critique hunt 2: 0.32 read as a plain closed mouth)          # ... the tight satisfied smile on "wolves"
+    'satisfied brows': dict(smile=0.2, smirk=-0.9, lid4=0.22, brow_up=0.04),    # ... and the small brow raise to the cut
     'disdain': dict(smile=-0.38, lid4=0.24, frown=0.02, brow_up=0.012),   # Kemi: "Andy", lips tight
     'flat': dict(smile=-0.3, lid4=0.14, frown=0.02),                 # ... the manager giving targets
     'sincere': dict(smile=0.3, lid4=0.14, brow_up=0.03, frown=0.01), # Blair: hand on his chest

@@ -243,19 +243,36 @@ def lips(p, f, L, sp, lip_c, fx_my):
     smile = sp.get('smile', 0.0)
     sr = smile + lop(sp).get('mouth', 0.0)              # our right corner (lifted on a lopsided face)
 
+    # A smirk (Sam, 26 Nov, Open Wounds note 24.2: "it doesn't read as a satisfied smirk but a neutral expression";
+    # FACS: a smirk is ONE lip corner pulled up and back, unilateral AU12, lips closed; satisfied adds the cheek
+    # raised on that side, AU6). sp['smirk'] 0..1 lifts our right corner SMIRK_UP face heights and pulls it out, the
+    # lips pressed a little thinner, a short crease at that corner. smile alone lifts both corners 0.004 a unit:
+    # half a pixel at 0.45, too little to read.
+    k = max(-1.0, min(1.0, sp.get('smirk', 0.0)))         # below 0: our LEFT corner (the near cheek of a head
+    side = -1 if k < 0 else 1                                # turned the other way)
+    k = abs(k)
+
     def rest():
         hw = mw / 2
-        top = curve(f.pts([(-hw, l13 - 0.004 * smile), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.012), (hw * 0.4, l0 + 0.006),
-                           (hw, l13 - 0.004 * sr), (0.0, l13 + 0.004)]), 3)
-        bot = curve(f.pts([(-hw, l13 - 0.004 * smile), (0.0, l13 + 0.004), (hw, l13 - 0.004 * sr), (hw * 0.5, l17 - 0.01),
-                           (0.0, l17), (-hw * 0.5, l17 - 0.01)]), 3)
+        ry = l13 - 0.004 * sr - SMIRK_UP * k                    # the smirking corner
+        rx = hw * (1 + 0.1 * k)
+        bl = l17 - 0.012 * k                                    # pressed: the lower lip a little thinner
+        pts = (lambda q: f.pts([(side * x, y) for x, y in q])) if k else f.pts
+        top = curve(pts([(-hw, l13 - 0.004 * smile), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.012 - 0.004 * k),
+                           (hw * 0.4, l0 + 0.006 - 0.01 * k), (rx, ry), (0.0, l13 + 0.004)]), 3)
+        bot = curve(pts([(-hw, l13 - 0.004 * smile), (0.0, l13 + 0.004), (rx, ry), (hw * 0.5, bl - 0.01 - 0.008 * k),
+                           (0.0, bl), (-hw * 0.5, bl - 0.01)]), 3)
         p.poly(top, dk(lip_c, 0.86), INK, 1.5)
         p.poly(bot, lip_c, INK, 1.5)
-        p.line(curve(f.pts([(-hw, l13 - 0.006 * smile), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.004),
-                            (hw, l13 - 0.006 * sr)]), 3), INK, 2.2)
+        p.line(curve(pts([(-hw, l13 - 0.006 * smile), (-hw * 0.3, l13 + 0.004), (hw * 0.3, l13 + 0.002 - 0.006 * k),
+                            (rx, ry - 0.002 * k)]), 3), INK, 2.2)
+        if k > 0.2:                                             # the crease the pulled corner presses into the cheek
+            p.line(curve(pts([(rx + 0.012, ry - 0.018 * k), (rx + 0.02, ry + 0.004), (rx + 0.012, ry + 0.022 * k)]), 3),
+                   dk(sp.get('skin', V_SKIN), 0.72), 1.6)
     talk_or(p, dict(sp, lips=True, lip_c=lip_c), 0.0, fx, my, rest)
 
 
+SMIRK_UP = 0.04                  # a full smirk's corner lift (face heights): about 8 px on a house head
 V_SKIN = (232, 178, 152)          # the house mouth's default skin and lip (fair, pink)
 V_LIP = (204, 134, 120)
 

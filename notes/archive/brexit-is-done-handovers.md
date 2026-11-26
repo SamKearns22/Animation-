@@ -576,3 +576,14 @@ Open rule requests: none.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
 For Claude: preflight name 'brexit-is-done'; branch claude/open-wounds-chat36.
 
+
+
+## Where things stand (chat 37, 26 Nov, session_01U3pKR3AXhEjf4GS3ZJpZ4k)
+Rules that bite next: 30 (a note seen before: 23.1 and 23.4 were), 92 (move size: now a window, floor 10 px, ceiling 18 a nod), 11 (shot 2 held until Sam's framing number).
+Done (chat 37): Sam's notes 23.1-23.4 (Notes table): head moves back to house size + movesize ceiling, kittest head_moves_not_comic; Kemi's backwards point path (acting.PLACES point back / mid / swing); chase drawn far to near in the corridor (places_site._beyond) and cover sees each guest and wolf and skips doorway-vs-wall; shot 2 framings sheet sent; May clip and chase clip sent (body check clean), Kemi before/after sheet sent. Chase order stuck while two overlap (_ranks; kittest chase_order_stuck).
+Next: chat 38 (OPUS, medium): Sam's notes 24.1-24.4 (Notes table: May's sharp dip at 4.17 s, the 'wolves' smirk, Blair's sleeve colour, his shirt-and-tie ridge), clips; then on Sam's number for shot 2: build it for real (the site's depths in brexit-is-done-places.txt and the action depths nearer, all four background actions and some grey sky kept in frame; not the preview's enlarging), board, then a Kemi clip (13.5-16 s, the point back); then Sonnet: pre-flight, animatic with Override only if Sam says so, finish.py, send.
+Needs Sam: shot 2 framing number; Y/N on check-knows-intent (V3). handover end (chat 37) REFUSED on 24 CAST SHEET stops (seated cross-legs and 'no bum' poses not used in this film; the judge record old): settle first.
+Read: guides/job-packs.md "Notes round".
+Open rule requests: none.
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2's distance to the site now Sam's to pick, note 23.2). No change to timing, lines, mouths, soundtrack.
+For Claude: preflight name 'brexit-is-done'; branch claude/elegant-knuth-xlgo94; staging hold: python3 source/staging.py pick brexit-is-done 2 N "words".
