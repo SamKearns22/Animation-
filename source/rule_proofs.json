@@ -63,13 +63,13 @@
    "kind_before": "code"
   },
   "24": {
-   "rule": "The cost estimate and forecast (paused by you on 18 Nov).",
+   "rule": "The estimate, tracked quietly (the budget alarms deleted on your word, 26 Nov).",
    "status": "proven",
    "tests": [
-    "estimate_forecast_and_alarm",
-    "stage_share_stop"
+    "quiet_cost_line",
+    "cost_rows_reach_the_main_line"
    ],
-   "example": "kittest estimate_forecast_and_alarm: Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned",
+   "example": "kittest quiet_cost_line: the cost line is recorded at a handover and nothing is shown (no forecast, no warning, no stop: Sam 26 Nov, his answer 2)",
    "notes": "CR1 (stages never marked, notes never logged)",
    "kind_before": "code"
   },
@@ -1246,16 +1246,6 @@
    "notes": "entry added chat 38 (the handover stop: rule 93 had no entry)",
    "plan": "a kittest runs pre-flight and the body check on a frame with a known fault through brexit_is_done.py final --span: the clip is written and override.advise prints the concern (the old stop refused it)",
    "kind_before": "code (override.advise)"
-  },
-  "W_one_question": {
-   "rule": "One question at a time; others waiting named in one line.",
-   "status": "owed",
-   "tests": [],
-   "example": "notes/learn/plain-words/bad-1-first-report-reply.md (five questions at once; Sam: \"Let's move through these one at a time in simple language\")",
-   "notes": "Sam 26 Nov, R8 chat 1",
-   "kind_before": "none",
-   "anchor": "One question at a time (Sam, 26 Nov, \"1. Y\"; this replaces \"every open decision in one message\" above):",
-   "owed": "R8 chat 2: the every-message plain-words checker also sends back a message with more than one question"
   }
  },
  "_baseline": {
@@ -1406,7 +1396,7 @@
    "The 3 lines at the bottom",
    "The Animation- project is always attached",
    "The brief is a checklist:",
-   "The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
+   "The chain stops only at a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
    "The channel is topical, absurdist news-of-the-week satire; every film is new.",
    "The cost watch (rule 85):",
    "The handover",

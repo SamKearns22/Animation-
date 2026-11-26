@@ -65,7 +65,6 @@ is in `guides/job-packs.md`.
   proposed as numbered steps, then why, what you'd notice, and the other option. One "Lost:" / "Added:" line each. This may run over the 10-line limit; never skipped.
 - **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision, across all
   jobs, goes in one message.**
-- **One question at a time (Sam, 26 Nov, "1. Y"; this replaces "every open decision in one message" above):** one question per message, fully explained, the next only after my answer; any others waiting are named in one plain line so none is lost.
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never
   send something a check flagged without saying so (the checks print that line ready).
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me (rule 30).
@@ -141,7 +140,7 @@ at session start (`.claude/hooks/setup.sh`).
   handover's model, effort and its place ("chat 3"); first it checks it can save to GitHub, else it stops and tells me.
   **The Animation- project is always attached** (`source_url` of the repo, revision the main line), and the reply must
   list it before I'm told the chat is working; a chat without it adds it before any work and says so.
-  **The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work
+  **The chain stops only at a question for me, a failed save, or a chat that pushed no new work
   on its job. I never start a chat or type a prompt unless it failed to save.** When a chat ends on a question
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
   the chain then goes on. A chat on the wrong model for its next stage opens one on the right model, never
