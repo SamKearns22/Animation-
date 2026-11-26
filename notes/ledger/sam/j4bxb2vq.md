@@ -57,3 +57,6 @@ And 1 will apply to all future films? We're just using this one as the test?
 ### 2026-11-26T21:01:34
 Are there any tools or programs out there that would improve your ability to look at our images, look at your own drawings/animations beyond what you can already do?
 
+### 2026-11-26T21:02:54
+Write that proposal on opus too
+
