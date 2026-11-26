@@ -2492,6 +2492,44 @@ def people_from_a_description():
 
 
 @test
+def kept_report_travels():
+    """Chat 22 (Sam, 26 Nov): chat 20 pushed brexit-is-done's clean render with no body-check report, so chat 22 could not
+    send the animatic. The saved example is that state: a kept clean render with no report is a fault at the start and the
+    end of a chat; a report that is not committed is a fault; a committed report is clean; a kept animatic with no fresh
+    critique says so."""
+    import shutil
+    import subprocess
+    import tempfile
+    import handover as H
+    bad = []
+    root = tempfile.mkdtemp()
+    try:
+        d = os.path.join(root, 'animations', 'drafts')
+        os.makedirs(d)
+        git = lambda *a: subprocess.run(['git', *a], cwd=root, capture_output=True, text=True, check=True)
+        git('init', '-q')
+        for k in ('clean', 'animatic'):
+            open(os.path.join(d, f'f-{k}.mp4'), 'wb').write(b'x')
+        got = H.kept_report_faults('f', root)
+        if sum(x.startswith('REPORT') and 'no body-check report' in x for x in got) != 2:
+            bad.append(f'a kept clean render with no report was not caught: {got}')
+        for k in ('clean', 'animatic'):
+            json.dump({'faults': [], 'critique': k == 'clean'}, open(os.path.join(d, f'f-{k}.mp4.bodycheck.json'), 'w'))
+        got = H.kept_report_faults('f', root)
+        if sum('not committed' in x for x in got) != 2:
+            bad.append(f'reports that are not committed were not caught: {got}')
+        git('add', '-A')
+        got = H.kept_report_faults('f', root)
+        if len(got) != 1 or not got[0].startswith('CRITIQUE') or 'animatic' not in got[0]:
+            bad.append(f'committed reports should leave only the animatic critique line: {got}')
+        if H.kept_report_faults('nothing-kept', root):
+            bad.append('a film with no kept video was flagged')
+    finally:
+        shutil.rmtree(root, ignore_errors=True)
+    return not bad, '; '.join(bad) or 'missing, uncommitted and committed reports and the critique line told apart'
+
+
+@test
 def places_from_a_description():
     """Ranking item 5 (overnight chat 5d): the places kit redraws Blessed's 13 paintings from 226 lines, and its boxes."""
     import glob

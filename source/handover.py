@@ -352,6 +352,47 @@ def model_faults(film, notes=None):
     return out
 
 
+def kept_report_faults(film, root=None, tracked=None):
+    """Chat 22 (Sam, 26 Nov): a clean render was pushed without its body-check report, so the next chat's send gate
+    refused the animatic and a whole chat was spent. Every kept video of the film in animations/drafts has its report
+    (VIDEO.bodycheck.json) next to it AND committed; a missing one is a fault at the start and at the end of a chat.
+    Also says, once the film is kept, whether the fresh critique (rule 89) is still to do."""
+    root = root or ROOT
+    d = os.path.join(root, 'animations', 'drafts')
+    slug = (film or '').replace('_', '-')
+    out = []
+    vids = [os.path.join(d, f'{slug}-{k}.mp4') for k in ('clean', 'animatic')]
+    vids = [v for v in vids if slug and os.path.exists(v)]
+    if not vids:
+        return out
+    if tracked is None:
+        try:
+            tracked = set(subprocess.run(['git', 'ls-files', '-co', '--exclude-standard', 'animations/drafts'], cwd=root,
+                                         capture_output=True, text=True, check=True).stdout.split('\n'))
+            gone = set(subprocess.run(['git', 'ls-files', '-o', '--exclude-standard', 'animations/drafts'], cwd=root,
+                                      capture_output=True, text=True, check=True).stdout.split('\n'))
+            tracked -= gone                                   # untracked files are not on GitHub yet
+        except Exception:
+            tracked = None
+    for v in vids:
+        rep = v + '.bodycheck.json'
+        rel = os.path.relpath(rep, root)
+        if not os.path.exists(rep):
+            out.append(f'REPORT: {os.path.relpath(v, root)} has no body-check report ({os.path.basename(rep)}): the send '
+                       'gate will refuse it. Make it (humancheck.Writer / film_engine render writes it) and commit it with the video')
+        elif tracked is not None and rel not in tracked:
+            out.append(f'REPORT: {rel} is not committed: the next chat will not have it (git add it and push)')
+        else:
+            try:
+                crit = json.load(open(rep)).get('critique')
+            except (OSError, ValueError):
+                crit = None
+            if not crit and v.endswith('animatic.mp4'):
+                out.append(f'CRITIQUE: {os.path.basename(v)} has no fresh critique yet (rule 89): critique.py pack, a NEW helper, '
+                           'then humancheck.py critiqued, before it can be sent')
+    return out
+
+
 def draft_faults(film, notes=None):
     """Rule P16 (Sam, 15 Nov: animatic 2 was lost with its chat, so a 3-second fix meant a 30-minute redraw): once a film's
     notes say an animatic was sent, its latest animatic and clean render are in animations/drafts/ and pushed."""
@@ -1015,7 +1056,7 @@ def main(argv):
             film = ledger.film_of(rec)
         nf = opt('--notes')
         checks = [('quick', quick_faults), ('notes', lambda: _run(turns(rec), film, nf)),
-                  ('model', lambda: model_faults(film, nf)), ('draft', lambda: draft_faults(film, nf)),
+                  ('model', lambda: model_faults(film, nf)), ('draft', lambda: draft_faults(film, nf)), ('report', lambda: kept_report_faults(film)),
                   ('finder', lambda: finder_faults(film, rec)), ('unrouted', lambda: unrouted_faults(rec)),
                   ('branch', lambda: branch_faults(film, nf)), ('sentence', sentence_faults), ('freeze', freeze_faults),
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
@@ -1030,6 +1071,8 @@ def main(argv):
         tail = pos[0].split('_')[-1][-8:].lower()
         p = os.path.join(LOGDIR, f'{tail}.md')
         for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
+            print(f)
+        for f in kept_report_faults(opt('--film')):              # chat 22: a missing report is found first, not at the send
             print(f)
         try:                                                     # rule 90: the kit tests at a film's first chat only
             import kitfilm
