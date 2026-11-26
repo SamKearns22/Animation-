@@ -374,3 +374,17 @@ into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, set
 - **Read:** guides/job-packs.md Checks and animatic.
 - **End check (chat 21), answered:** QUICK CHECK islamocommunism (2 ALLOWED_POPS rows, aoc through the door) is the posted film, its code untouched; it shows only because the renamed test now sits under its name: left to that film, no change. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats. The CLAUDE.md SENTENCE lines are Sam's own edits (named since chat 1).
 - **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats (named chat 20).
+
+
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 22 pushed there).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
+- **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
+- **Done (chat 22):** animatic made by finish.py (Hook Text, sign-off; 1.3 MB) and kept in animations/drafts; two tool bugs fixed in finish.py (it deleted its own inputs when they sat in animations/drafts; it did not keep the body-check records). Places kit test failed once inside the full run, passed alone (flaky, not a drawing fault).
+- **Blocked:** the send gate refused the animatic: the clean render's body-check record (animations/drafts/*.bodycheck.json) was never pushed by chat 20, so this container has none, and rule 89 also wants a fresh critique. Nothing forged. Sam has NOT seen the animatic.
+- **Next:** chat 23, Opus medium: either re-run the body check on the clean render (needs the drawing run again, about 12 min, Sam said no new render so ask or take it as routine under rule 59) or rebuild the record from the clean render's frames if humancheck can; then critique.py pack with a fresh helper, humancheck.py critiqued, finish.py from a copy outside animations/drafts, send, push, stop.
+- **Needs Sam:** nothing.
+- **Read:** guides/job-packs.md Checks and animatic.
+- **End check (chat 22), answered as in chat 21:** branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats; the CLAUDE.md SENTENCE lines (34f49840, 0945cc85) are Sam's own edits, named since chat 1.
+- **Open rule requests:** none. **For Claude:** 4 GTA branches left to GTA chats; kit-tests-when.md verdict stale.
+
