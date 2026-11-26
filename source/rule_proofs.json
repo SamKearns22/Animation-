@@ -914,18 +914,20 @@
    "kind_before": "none"
   },
   "N8": {
-   "rule": "Plain words, always.",
-   "status": "partly",
+   "rule": "Plain words, always; checked on every message.",
+   "status": "owed",
    "tests": [
     "plain_check_fields",
     "proposal_route_hook"
    ],
-   "example": "kittest plain_check_fields: the 10 Milburn lessons as sent (Sam 19 Nov: \"Explain\" on 2 and 6, \"don't know what you mean by brow cap\" on 9) fail the fixed fields; the same lesson in the fields passes; proposal_route_hook: a judge's For Sam missing a field or holding a file name is refused (proposals packed from 23 Nov)",
+   "example": "notes/learn/plain-words/bad-1-first-report-reply.md, bad-2-two-small-items.md (Sam: \"Let's move through these one at a time in simple language\", \"I don't understand\"); good-1-failing-tests.md passes",
    "notes": "CR (plain words failed in the 19 Nov review chat)",
    "kind_before": "none",
-   "miss": "every other message to Sam (status, notes rounds, handovers): no check reads them; and the fields do not prove the words are plain (Step 0: coined phrases pass A; the blind reader is advice only, Sam's answer 2)",
+   "miss": "every other message to Sam (status, questions, summaries): no check until the R8 chat 2 checker; examples saved 26 Nov in notes/learn/plain-words/",
    "plan": "plain-check Change 2 (the hook asks for the shown option text) and Change 3 (status explanations through the reader), each its own yes",
-   "done": "23 Nov (chain A chat 6): system asks and end-of-film lessons proven (plain-check Change 1)"
+   "done": "23 Nov (chain A chat 6): system asks and end-of-film lessons proven (plain-check Change 1)",
+   "owed": "R8 chat 2: the every-message plain-words checker (Stop hook), kittest proving it catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1",
+   "anchor": "Checked on every message (Sam, 26 Nov)."
   },
   "N9": {
    "rule": "Files under 50 MB, MP4 by default; only the finished film and the latest animatic on GitHub.",
