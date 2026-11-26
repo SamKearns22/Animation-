@@ -67,6 +67,11 @@ is in `guides/job-packs.md`.
   jobs, goes in one message.**
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never
   send something a check flagged without saying so (the checks print that line ready).
+- **Never tell me my chats are long (Sam, 26 Nov, permanent):** "You built a chat handover tool to save usage. You
+  confirmed today that it is working as intended. Stop telling me chats are long unless you are admitting that your
+  own tool is broken." Chat length is never given as a cause of cost or a reason for anything; if it matters, say
+  plainly that the handover tool failed, what broke and the fix (checked: the plain-words check stops it; kittest
+  `never_blame_long_chats`).
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me (rule 30).
 
 # Files
