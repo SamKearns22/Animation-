@@ -6,3 +6,6 @@ Explain why these weren't done earlier before you approached the animatic task, 
 ### 2026-11-26T08:46:22
 How would you fix the above problems?
 
+### 2026-11-26T08:47:56
+One and two seem simple enough that they don't need to go through the proposal route. So if you could fix those and then test them, thank you.
+
