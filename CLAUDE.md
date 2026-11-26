@@ -65,6 +65,7 @@ is in `guides/job-packs.md`.
   proposed as numbered steps, then why, what you'd notice, and the other option. One "Lost:" / "Added:" line each. This may run over the 10-line limit; never skipped.
 - **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision, across all
   jobs, goes in one message.**
+- **One question at a time (Sam, 26 Nov, "1. Y"; this replaces "every open decision in one message" above):** one question per message, fully explained, the next only after my answer; any others waiting are named in one plain line so none is lost.
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never
   send something a check flagged without saying so (the checks print that line ready).
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me (rule 30).
