@@ -51,3 +51,6 @@ So it seems like the check isn't being balanced against _what the scene is tryin
 ### 2026-11-26T20:26:31
 Run the proposal through the route on opus. The checks can't be stupid. They need to understand when something is intentional in the image. They need to be able to ask the image and the screenplay, when they are unsure, 'is this normal in the context of what we are trying to achieve'
 
+### 2026-11-26T21:00:57
+And 1 will apply to all future films? We're just using this one as the test?
+
