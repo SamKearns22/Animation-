@@ -6,3 +6,5 @@ board open-wounds-board.jpg delivered=1795516062 drawn=1795516053 commit=9bb2073
 shot 1 b5619ee94a may
 shot 2 6c18bf28a3 kemi
 shot 3 b707b8d333 blair
+board board-shot2.jpg delivered=1795733540 drawn=1795733534 commit=70c00cfb moves=3 (26 Nov 22:52)
+shot 2 2b12ddee05 kemi

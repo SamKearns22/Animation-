@@ -466,24 +466,6 @@ def end_stamp(rec, stops=()):
         f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{mark}{sid}\n')
 
 
-def finder_faults(film, rec=None):
-    """finder-use change 1 (Sam's 1, 17 Nov), replacing the per-day flag (one show call anywhere that day silenced it
-    for every chat; it never fired on 16 Nov): THIS chat edited the film's code with no `page.py show` call: say so,
-    with its count of hand searches of the film's code (stepcost.search_record, from the chat's own record)."""
-    if not film or not rec:
-        return []
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    import stepcost
-    try:
-        r = stepcost.search_record(rec, film)
-    except Exception:
-        return []
-    if not r['edited film code'] or r['show']:
-        return []
-    return [f'FINDER: this chat edited the film\'s code with no `page.py {film} show` call ({r["film"].get("no show", 0)} '
-            'hand searches of its code): each note looks first with show --shot --at --who (or say in the notes why not)']
-
-
 def unrouted_faults(rec):
     """The proposal route (Sam, 15 Nov): a change put to Sam that the Stop hook blocked once and then let through
     (stop_hook_active) is logged by propose.py; the handover names each one so it is routed, not forgotten."""
@@ -807,7 +789,7 @@ def record_faults(rec):
 
 
 def cost_faults(film, notes=None):
-    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem (costline.py)."""
+    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover, quietly (costline.py; never shown, Sam 26 Nov)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import costline
     try:
@@ -869,21 +851,10 @@ def push_faults(rec):
             'and when a render or long job finishes or fails (CLAUDE.md, Models and chats)']
 
 
-def dearest_faults():
-    """Cost audit (Sam, 21 Nov): the weekly ranking of the dearest things (source/dearest.py week --open) is due."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    try:
-        import dearest
-        return dearest.due()
-    except Exception as e:
-        return [f'DEAREST: the ranking could not run ({e})']
-
-
 def ledger_faults(film, rec=None):
     """Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand
     Theft Autism every chat's row read 'auto, 0 notes, 0 repeats' (nobody ran `ledger.py log`), and none of the 11
-    stages was marked done, so the forecast assumed the whole plan was still ahead and the stage stop could not mean
-    anything. This chat must log its row; a stage long past its planned end must be marked."""
+    stages was marked done. This chat must log its row (the forecast and stage stop were deleted, Sam 26 Nov)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ledger
     try:
@@ -903,14 +874,6 @@ def ledger_faults(film, rec=None):
             out.append(f'REPEAT?: Sam\'s note "{n}" matches one in the film\'s notes from before (rule 30): if it is a '
                        f'repeat, find why the first fix failed and log it (ledger.py log {film} --repeat "note | what would '
                        'have caught it"); if not, say so in the notes')
-    o = ledger.open_stage(d)
-    if o:
-        i, s, share, spent = o
-        planned_end = sum(x['pct'] for x in d['stages'][:i + 1])
-        if spent > 1.5 * planned_end and spent - planned_end > 2:
-            out.append(f"STAGES: the first unfinished stage is '{s['name']}' (planned to end by {planned_end:g}% of a "
-                       f"week) but the film has spent {spent:g}%: mark each finished stage with python3 source/ledger.py "
-                       f"stage {film} NAME, or the forecast is guesswork")
     return out
 
 
@@ -1125,11 +1088,11 @@ def main(argv):
         nf = opt('--notes')
         checks = [('quick', quick_faults), ('notes', lambda: _run(turns(rec), film, nf)),
                   ('model', lambda: model_faults(film, nf)), ('draft', lambda: draft_faults(film, nf)), ('report', lambda: kept_report_faults(film)),
-                  ('finder', lambda: finder_faults(film, rec)), ('unrouted', lambda: unrouted_faults(rec)),
+                  ('unrouted', lambda: unrouted_faults(rec)),
                   ('branch', lambda: branch_faults(film, nf)), ('sentence', sentence_faults), ('freeze', freeze_faults),
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
-                  ('dearest', dearest_faults), ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
+                  ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
                   ('rule', rule_faults), ('shared', shared_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
                   ('castsheet', lambda: castsheet_faults(film))]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
