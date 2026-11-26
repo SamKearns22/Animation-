@@ -4,7 +4,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 
 **Estimate 52.0% of a week; spent 68.48% (+16.48); 39 chats, 0 rounds, 15 notes, 7 repeated.**
 
-**Forecast: Spent 68.48% of the 44% planned so far; at this rate the film lands at 79.8%.**
+**Stages (tracked quietly):**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|

@@ -59,17 +59,17 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
 ## Where things stand (chat 40, 26 Nov, session_01J1JB7VYqTs1XsNJB5FmWzH)
-BUDGET STOP (rule 24): 67.51% of a week spent against 52%; waiting on Sam's Y to go on (cheapest way on: below).
-Rules that bite next: 24 (budget stop: no work before Sam's Y), 30 (a nod seen twice), 93 (checks advise, never lock).
-Done (chat 40): note 23.2 built for real: shot 2 at Sam's framing 2: every site piece and action at 2/3 of its depth, its place across scaled to keep its place on screen, own sizes kept (scaffold x -9 to 9.3, its 1.3 m depth kept; LIFT_D 16.28; ATTACK -0.93/4.67; runner 9.6 to LIFT_END -7.6; bars BAR_X -4; milling 2/3); sky and clouds left far (a strip of grey sky over the frame). Board drawn, sent, recorded (staging: nothing held).
-Next (after Sam's Y): chat 41 (OPUS, MEDIUM): the nod clips (final OUT --small --span: May 3.4-5.6, Kemi 17.0-19.2, Blair 26.8-29.4; look as a viewer, send), a Kemi clip 13.5-16 s; then Sonnet: pre-flight, animatic, finish.py, send.
-Needs Sam: Y/N to go on past the budget; Q1 the 7 px nod floor (after the clips); Q2 full kit check now (my pick N).
+Sam's Y (26 Nov) past the budget stop (67.5% of a week vs 52%): the cheapest way on: no separate nod or Kemi clips; they go straight into the animatic and Sam notes on that.
+Rules that bite next: 24 (budget: next stop 67.6%, already passed on Sam's Y; ask again only at the final), 30 (a nod seen twice), 93 (checks advise, never lock).
+Done (chat 40): note 23.2 built: shot 2 at Sam's framing 2 (every site depth 2/3, places on screen kept, own sizes kept; scaffold x -9 to 9.3; a strip of grey sky over the frame). Board sent and recorded (nothing held).
+Next: chat 41 (SONNET): pre-flight, animatic (whole film, --small; the nods of May 3.4-5.6, Kemi 17.0-19.2, Blair 26.8-29.4 and Kemi's point 13.5-16 are Sam's to look at in it), finish.py (Hook Text, sign-off), send, push the drafts.
+Needs Sam: his notes on the animatic; the smallest head movement (the 7 px nod floor) after he sees the nods in it. Sam (26 Nov): "If you ask about the shared drawing tools and you recommend N, you didn't need to ask": never ask a question whose pick is "no, don't"; the full kit check is dropped (kit tests run at the film's end as rule 90).
 Handover stops still open (wait on the women's build, note 5, Sam's pick): JUDGE May 3/4 woman 2; Kemi 3/4 woman 2, back man 2, seated man 3.
-Read: guides/job-packs.md "Notes round".
+Read: guides/job-packs.md "Checks and animatic".
 Open rule requests: none. Notes file over 4,000 words: trim at the animatic.
-Branches: claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, left.
-Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2, now built). No change to timing, lines, mouths, soundtrack.
-For Claude: main line claude/create-claude-md-oe8z4g; chat 40 branch claude/open-wounds-shot-2-a7cfu2; story/brexit-is-done-places.txt view site; brexit_is_done_action LIFT_END, BAR_X.
+Branches: claude/seeing-test-chat1 (the seeing test, its own job), claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: not this film's, left.
+Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2, built). No change to timing, lines, mouths, soundtrack.
+For Claude: main line claude/create-claude-md-oe8z4g; chat 40 branch claude/open-wounds-shot-2-a7cfu2; places view site; brexit_is_done_action LIFT_END, BAR_X.
 
 ## Open from chat 36 (Sam's picks pending)
 - Proposal check-knows-intent: Sam picked option 1 (26 Nov, R8 chat), built under R8 (notes/check-audit.md).
@@ -179,4 +179,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 67.23% of 15%; forecast 74.2% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 68.48% of a week (2026-11-26)

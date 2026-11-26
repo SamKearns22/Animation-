@@ -1,3 +1,3 @@
-brexit-is-done: BUDGET STOP at 67.5% of a week (budget 52%); waiting on Sam's Y.
+brexit-is-done: Sam's Y past the budget (67.5% of a week).
 Done chat 40: shot 2 built at framing 2, board sent.
-Next: nod clips, Kemi clip, then the animatic (Sonnet).
+Next: chat 41 (Sonnet): animatic with the nods in it, finish.py, send.
