@@ -5,3 +5,4 @@ notframing 13 1795709084 the worker's place and the wolves' timing inside the lo
 notframing 17 1795709084 sound only: wolf growls under the dialogue; no camera or framing
 hold 2 1795726607 note=23.2 Move Kemi a bit closer to the action so that everything isn't so distant.
 options 2 1795727267 kemi-options.jpg n=3
+pick 2 1795727938 2 Sam: 2 (the site a third closer)
