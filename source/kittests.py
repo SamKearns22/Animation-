@@ -5064,6 +5064,49 @@ def nod_reads_on_screen():
 
 
 @test
+def head_moves_not_comic():
+    """Open Wounds chat 37 (saved example: Sam's note 23.1, 26 Nov, notes/ledger/sam/s3zjpz4k.md: "May's lean, Kemi and
+    May's head bobbing, have all become comically large ... THIS IS A MAJOR ERROR"). Chat 32 and 35 drew May's lean in
+    at 15 degrees with roll 3 (166 px), her nods at 4.5-5 (28-34 px), Kemi's chin up 3.2 and nods 3.4-4.4 (22-29 px),
+    Blair's preen 2.6 and nod 3.0; the check had a floor only. With those amounts every one must be flagged too large;
+    with the film's own amounts none, too small or too large."""
+    import acting as A
+    import movesize as MS
+    import brexit_is_done as F
+    real = A.load
+    OLD = {('1', 'lean in'): (15.0, 3.0), ('1', 'nod'): 4.5, ('2', 'chin up'): 3.2, ('2', 'nod'): 3.6,
+           ('3', 'preen'): 2.6, ('3', 'nod'): 3.0}
+
+    def old(film):
+        d = real(film)
+        for key, b in d['shots'].items():
+            keep = []
+            for m in b['body']:
+                v = OLD.get((key, m['move']))
+                if v is None:
+                    continue
+                if isinstance(v, tuple):
+                    m = dict(m, amount=v[0], **{'with': dict(m.get('with') or {}, roll=v[1])})
+                else:
+                    m = dict(m, amount=v)
+                keep.append(m)
+            b['body'] = keep
+        return d
+    try:
+        A.load = old
+        F._MOVES.clear()
+        before = MS.faults('brexit-is-done')
+        A.load = real
+        F._MOVES.clear()
+        now = MS.faults('brexit-is-done')
+    finally:
+        A.load = real
+        F._MOVES.clear()
+    big = [x for x in before if 'comically large' in x]
+    return (len(big) >= 6 and not now, f'old amounts: {len(big)} of {len(before)} flagged too large; the film now: {now}')
+
+
+@test
 def early_move_size():
     """Open Wounds chat 35 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, pre-flight 26 Nov
     18:57: "MOVE SIZE: shot 2 kemi: the chin up at 9.89 s moves the head 3 px ... the nod at 17.55 s ... 8 px ... shot
