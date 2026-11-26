@@ -70,9 +70,9 @@ Locked by Sam: the script (as recorded), who is where, every background action, 
 For Claude: preflight name 'brexit-is-done'; main line claude/create-claude-md-oe8z4g; chat 38 branch claude/brexit-chat38; acting.HEAD_MIN, faces.SMIRK_UP, limbs.DARK_RIM/_lit, views.DARK_SLEEVE_LIFT now 0.
 
 ## Open from chat 36 (Sam's picks pending)
-- Proposal check-knows-intent: option 1 or 2 (notes/proposals/check-knows-intent.md).
+- Proposal check-knows-intent: Sam picked option 1 (26 Nov, R8 chat), built under R8 (notes/check-audit.md).
 - Proposal seeing-five-candidates: option 1 or 2 (replaces better-seeing-tools).
-- The 3 resting-hand faults (May's thigh 2.6 s, Blair's armrests 24 s): fix Y/N.
+- The 3 resting-hand faults: discarded by Sam (26 Nov, R8 chat: "I don't see anything wrong their resting hands, discard.").
 - Rule 93 still to build: circled stills and why-line (on Sam's word), kittest checks_advise_never_lock.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
