@@ -48,15 +48,14 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 23 pushed there).
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 24 pushed there).
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
 - **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
-- **Done (chat 23, Opus):** found the body-check record can only come from drawing the film again (humancheck runs while frames are drawn; it cannot read a finished video), so the old animatic cannot be sent as is. No code changed. The model guard sent the redraw to Sonnet.
-- **Next:** chat 24, Sonnet: (1) `python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp4 --small` (same code as chat 20's clean render, about 12 min; one wait) gives the clean render WITH its body-check record; any body fault: stop and hand back to Opus, nothing named blind. (2) `python3 source/critique.py pack` on it, a NEW critic helper, then `python3 source/humancheck.py critiqued source/data/brexit-is-done-clean.mp4 PACKDIR`. (3) `python3 source/finish.py source/data/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done` (replaces the unsent one; keep the new clean render in animations/drafts too). (4) Send the animatic to Sam with size, render time and any Checks line; push; notification; stop after one animatic.
-- **Needs Sam:** nothing until the animatic arrives.
+- **Done (chat 24, Sonnet):** pre-flight run (film name with hyphens); clean render redrawn, 12m10s. The body check STOPPED it with 6 lines, held as source/data/brexit-is-done-clean.held.mp4 (+ .faults.json): R arm hidden behind the body comes out on the far side (workers 2 at 9.17s; shot 3 guests 1,2,3,4 at 18.42-20.08s); guest 4 at 19.67s forearms crossed (folded=True?). No animatic made, nothing forged, no exceptions written.
+- **Next:** chat 25, Opus medium: look at those frames (held clip, .faults.json), fix the drawing of the hidden-arm pose in shot 2/3 crowd figures (no camera or shot change), redraw (Sonnet) with `python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp4 --small` (pre-flight first: `python3 source/preflight.py brexit-is-done OUTDIR`, ~2 min), then critic helper, humancheck critiqued, finish.py, send.
+- **Needs Sam:** nothing yet; the animatic is later than hoped.
 - **Read:** guides/job-packs.md Checks and animatic.
-- **End check (chat 23):** FINDER line: no film code was edited (only notes; read main() to find the render command); short chat because the model guard moved the render to Sonnet. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats; the CLAUDE.md SENTENCE lines (34f49840, 0945cc85) are Sam's own edits, named since chat 1.
-- **Open rule requests:** none. **For Claude:** 4 GTA branches left to GTA chats; kit-tests-when.md verdict stale; finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts (chat 22 fix) so this never repeats.
+- **Open rule requests:** none. **For Claude:** finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts; preflight takes the hyphen film name; 4 GTA branches left to GTA chats.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.

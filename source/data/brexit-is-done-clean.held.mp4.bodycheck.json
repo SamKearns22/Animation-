@@ -1,0 +1,16 @@
+{
+ "video": "brexit-is-done-clean.held.mp4",
+ "faults": [
+  "BODY: brexit-is-done-clean.mp4 9.17 s: the site's workers 2: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (20 drawings)",
+  "BODY: brexit-is-done-clean.mp4 18.42 s: shot 3's fleeing staff and guests 1: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (20 drawings)",
+  "BODY: brexit-is-done-clean.mp4 19.08 s: shot 3's fleeing staff and guests 3: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (14 drawings)",
+  "BODY: brexit-is-done-clean.mp4 19.33 s: shot 3's fleeing staff and guests 2: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (14 drawings)",
+  "BODY: brexit-is-done-clean.mp4 19.67 s: shot 3's fleeing staff and guests 4: forearms drawn crossed, each hand on the other side of the body (hands given to the wrong arms? folded arms on purpose: folded=True) (2 drawings)",
+  "BODY: brexit-is-done-clean.mp4 20.08 s: shot 3's fleeing staff and guests 4: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (8 drawings)"
+ ],
+ "named": false,
+ "critique": null,
+ "answered": 0,
+ "made": 1795683608.2835705,
+ "out": "source/data/brexit-is-done-clean.mp4"
+}
