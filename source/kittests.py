@@ -3887,6 +3887,21 @@ def plain_check_fields():
 
 
 @test
+def never_blame_long_chats():
+    """Sam, 26 Nov (Open Wounds chat 39): "Stop telling me chats are long unless you are admitting that your own tool
+    is broken." Saved example: chat 39's own reply. The plain-words check stops it; a sentence that owns the handover
+    tool's failure passes."""
+    import plainwords as PW
+    bad = ("Long chats and heavy reading look like a big cause, and that can be checked for about 1-2% of a week. "
+           "This chat shows it: each step now costs over three times what it did at the start, because the history is long.")
+    ok = "My own handover tool failed here: it should have opened the next chat at 100 steps and didn't."
+    plain = "The nod now turns the head; Kemi's legs part up to the crotch."
+    got = [k for k, _, _ in PW.faults(bad, [])]
+    return (got.count('chatlong') >= 2 and not PW.faults(ok, []) and not PW.faults(plain, []),
+            f'example: {got.count("chatlong")} stopped; owned failure passes; plain passes')
+
+
+@test
 def plain_words_every_message():
     """CLAUDE.md "Checked on every message" (Sam, 26 Nov; R8 chat 2): the every-message plain-words check sends back
     the two replies Sam could not follow (bad-1: "Let's move through these one at a time in simple language"; bad-2:
