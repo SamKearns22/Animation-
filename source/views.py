@@ -1102,7 +1102,9 @@ class Rolled:
 # nearest us, the outline at the edge) and turned in 3D about that point, then seen straight on again: from the front
 # the eyes, nose and mouth slide down inside the outline and the lower face shortens, the chin tucks over the
 # collar, the crown moves about a third as far; side-on it is the reference's turn; three-quarter a mix.
-NOD_DEG = 4.5          # degrees of pitch per nod unit (a moves file's 'nod': 0.9 a unit; 'chin up' -2.5 = 11 up)
+NOD_DEG = 2.9          # degrees of pitch per nod unit: the face travels as far as the old bob's 5 units did, so the
+#                        sizes Sam passed (chat 37: 12-16 px) stay; only the shape changed (chat 39: at 4.5 May's nod
+#                        measured 25 px, comically large)
 NOD_PIVOT = (0.35, 0.2)   # the pivot below the head's centre (of hh) and behind it (of the head's depth)
 NOD_DEPTH = 1.15       # the head's depth front to back over its width (hw)
 NOD_FACING = {'front': (0.0, 1.0), 'three': (0.70710678, 0.70710678), 'side': (1.0, 0.0),
