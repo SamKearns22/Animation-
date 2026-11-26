@@ -6461,7 +6461,168 @@
    "round": null,
    "cost": 2.22,
    "notes": 5,
-   "repeats": []
+   "repeats": [],
+   "steps": 92,
+   "hist_k": 247,
+   "kinds": {
+    "tool search": 16.4,
+    "whole-file .py read": 5.2,
+    "renders": 2.9,
+    "pictures": 7.7,
+    "other": 67.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 46,
+    "whole-file .py read": 11,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 28,
+    "other": 25
+   },
+   "split": {
+    "usd": 7.5195,
+    "total": 7.5195,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 32.2,
+     "Claude's words": 27.5,
+     "carried history": 27.1,
+     "start-up floor": 13.3
+    },
+    "origins": {
+     "Claude's words": 40.8,
+     "messages and reminders": 32.9,
+     "start-up floor": 13.4,
+     "result: tool search": 8.7,
+     "result: pictures": 3.3,
+     "result: whole-file .py read": 0.5,
+     "result: other": 0.3,
+     "result: renders": 0.2
+    },
+    "named": {
+     "messages and reminders": 32.9,
+     "thinking": 21.8,
+     "start-up reading (rules, tools, first files)": 13.4,
+     "writing code": 12.8,
+     "reading kit code": 5.6,
+     "commands": 4.2,
+     "looking at pictures": 3.3,
+     "reading notes": 2.2,
+     "writing notes": 1.4,
+     "running checks and tools": 0.7,
+     "git and saving": 0.6,
+     "messages to Sam": 0.6,
+     "renders": 0.2,
+     "other commands": 0.2,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 44,
+    "work_pct": 0.84,
+    "reads": [
+     [
+      "source/solid_seat.py",
+      9.1,
+      0.1448
+     ],
+     [
+      "source/views.py",
+      3.3,
+      0.0442
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-34-far-leg.jpg",
+      1.6,
+      0.0278
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair.jpg",
+      1.6,
+      0.0278
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-apart-crotch-line-knees.jpg",
+      1.6,
+      0.0278
+     ],
+     [
+      "notes/learn/pose-kit/learn_sheet.py",
+      1.5,
+      0.0258
+     ],
+     [
+      "source/sitting.py",
+      1.6,
+      0.0247
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_side.png",
+      1.6,
+      0.0243
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_front_apart.png",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_three-quarter.png",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_front.png",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/z34.png",
+      1.6,
+      0.0237
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/zside.png",
+      1.6,
+      0.0237
+     ],
+     [
+      "guides/pose-kits.md",
+      1.4,
+      0.0236
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/sides.png",
+      1.6,
+      0.0229
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/edgeside.png",
+      1.6,
+      0.0191
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/hits.png",
+      1.6,
+      0.018
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/aparts.png",
+      1.6,
+      0.0171
+     ],
+     [
+      "notes/learn/seated/solid/sheet_solid.py",
+      0.5,
+      0.0087
+     ]
+    ],
+    "base_pct": 18.4
+   }
   }
  ],
  "checks": {},
