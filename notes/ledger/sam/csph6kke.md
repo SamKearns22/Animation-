@@ -18,3 +18,6 @@ Definitely not the case as this was happening long before the crowd packs existe
 ### 2026-11-26T15:20:33
 Hello, why are you rendering them again? Because we've already seen them and I said they were fine. Please take note of my message about the crowd packs.
 
+### 2026-11-26T15:22:33
+Please ensure that the builders in OpenWinds are using the crowd pack. Open up the crowd pack to all of the combinations that we've used before across all cities. So if we use, so if we have generic people in any of our films, you can just make them from a generic pooled crowd pack.
+
