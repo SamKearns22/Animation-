@@ -15,3 +15,6 @@ Once the build is done, implement this rule on the entirety of Open Wounds.
 
 Please be conscious of usage and unnecessary steps
 
+### 2026-11-26T14:15:03
+N. These fixes were built specifically for Open Wounds, and similar problems going forward. Implement.
+
