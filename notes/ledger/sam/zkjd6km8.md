@@ -24,3 +24,9 @@ If we made Netanyahoo today, a film I know cost 12%, how much would you predict 
 ### 2026-11-26T22:55:07
 That’s not a fair comparison as many of those films were bloated by expensive tool production.
 
+### 2026-11-26T22:56:12
+If I asked you to build Netanyahoo from scratch from the same information I gave you then, would that be a more reasonable test?
+
+### 2026-11-26T22:57:13
+Whole film rebuild. Patriots 2 instead. New reserve job.
+
