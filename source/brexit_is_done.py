@@ -36,6 +36,7 @@ import places as PL                  # noqa: E402
 import sitting as S                  # noqa: E402
 import brexit_is_done_action as ACT  # noqa: E402  the background action (shots 2 and 3)
 from satire_style import install_circle_hands   # noqa: E402
+READ_TIMES = ACT.READ_TIMES              # note 22: pre-flight's readtime check
 
 B = PPt.B
 V = PPt.V
@@ -351,7 +352,7 @@ def blair_shot(t):
     u = scene_of(t)[1]                                 # the room's pieces run on shot time (the doors open at 0.3 s)
     room, beyond = ACT.room_actors(u, L)               # the chase: guests and wolves among the room's pieces
     PL.paint_with(img, _DESC, 'blair', B.Cam(1.0, 540, 960), u, room, beyond=beyond)
-    ACT.lunger(img, L, u)                              # Wp, at his depth just behind his shoulder, 9.0 s (cut 9.4)
+    ACT.lunger(img, L, u, cut=SHOTS[2][2] - SHOTS[2][1])   # Wp: creeps in, coils, leaps; the cut on the lunge (note 22)
     B.SS = 1
     sp, j = acted('3', 'blair', t)
     seated(img, 'blair', L, BLAIR['x'], BLAIR['d'], t, BLAIR['yaw'], pose='armchair', chair=True, look=sp, joints=j)

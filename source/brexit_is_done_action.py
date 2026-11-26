@@ -817,30 +817,62 @@ def _glass_down(img, L, st, n):
     dd.polygon(bowl, fill=(236, 240, 244, 200), outline=OUT)        # the bowl's broken lower half still on the stem
 
 
-def lunger(img, L, u):
-    """Wp: in from frame right in mid-leap, coming down on Blair's head from above right, jaws wide, forepaws out; the
-    film cuts at 9.4 s (its last frame 9.333 at 12 fps), before it reaches him (item 13). It closes from 3.0 m to his
-    shoulder's depth (2.3 m: just behind him, so his head would hide it, never pass through it), growing as it comes.
-    Chat 14 (critique r5 (a): "a brown blob with teeth at the right edge for 2 frames"): at 12 fps the lunge has five
-    frames (9.0-9.333); the old path had the jaws off the edge for three of them. Now the jaws are on screen from the
-    first frame and the head (ear, eye, open jaws) and forepaws are in frame from the second."""
-    if u < LUNGE_T:
+def lunger(img, L, u, cut=None):
+    """Wp, the last pounce on Blair; the film cuts on the lunge (item 13, locked), before it reaches him. It closes
+    from 3.2 m to his shoulder's depth (just behind him, so his head would hide it, never pass through it).
+    Note 22 (Sam, 26 Nov: "The final wolf pounce on Tony, so quick it's barely registered by the viewer"; seen
+    before: note 13, the worker's pounce): it was a 0.33 s leap (four frames) from off-screen, in mid-air from its
+    first frame: no wolf before it, no wind-up, so the eye had nothing to follow. Now it is acted in three beats
+    that read at phone size, the cut still on the lunge: (1) from 1.6 s before the cut it creeps in low behind his
+    shoulder at frame right (seen, crouched, snarling, eyes on his head) while he grins; (2) 0.4 s of coil, the body
+    sinking back on its haunches; (3) the leap, 0.6 s (seven frames), up and over onto his head, the jaws widening;
+    the cut before it lands. `cut`: the shot's length (s), from the film's SHOTS (its voices set it)."""
+    C = LUNGE_CUT if cut is None else cut
+    t_in, t_coil, t_leap = C - LUNGE_CREEP, C - LUNGE_COIL - LUNGE_LEN, C - LUNGE_LEN
+    if u < t_in:
         return
-    v = min(1.0, (u - LUNGE_T) / LUNGE_LEN)
-    (x0, y0), (x1, y1) = LUNGE_PATH
-    jaw_x, jaw_y = x0 + (x1 - x0) * v, y0 + (y1 - y0) * v      # screen px: the right edge -> just above his hair
-    d = 3.2 - 0.85 * v
-    P = WF.pose('leap', 0.75 + 0.25 * v, jaw=1.0, snarl=1.0)
-    s = wolf_s(L, d)
+    d0 = LUNGE_D
+    s0 = wolf_s(L, d0)
+    xs, xe = LUNGE_STALK                                     # world x (m): in from beyond the right edge, to its mark
+    if u < t_leap:                                           # (1) the creep in and (2) the coil, feet on the floor
+        k = min(1.0, (u - t_in) / (t_coil - t_in))
+        k = 1 - (1 - k) ** 2                                 # slows to its mark
+        x = xs + (xe - xs) * k
+        if u < t_coil:
+            P = WF.pose('walk', 90.0 * (u - t_in) / 0.5 * 2, jaw=0.5, snarl=1.0, neck=-0.32)
+            P['M'] = (P['M'][0], P['M'][1] + 34)             # low, the belly near the boards: stalking
+        else:
+            c = min(1.0, (u - t_coil) / LUNGE_COIL)
+            P = WF.pose('leap', 0.0, lift=-28 * c, jaw=0.5 + 0.3 * c, snarl=1.0)
+        wolf_at(img, L, x, d0, 0.0, -1, P, pal=1, blood=0.0, seed=70)
+        return
+    v = min(1.0, (u - t_leap) / LUNGE_LEN)                   # (3) the leap
     from PIL import Image
     probe = Image.new('RGBA', (8, 8))
+    P0 = WF.pose('leap', 0.0, lift=-28, jaw=0.8, snarl=1.0)
+    px, py = L.p(xe, d0, 0.0)
+    jx0, jy0 = WF.draw(_ctx(probe, s0), px, py, s0, -1, 1, P0, blood=0.0, seed=70)   # the coiled jaws, screen
+    x1, y1 = LUNGE_PATH[1]
+    e = v * v * (3 - 2 * v) * 0.35 + v * 0.65                # quick off the floor, still going at the cut
+    jaw_x = jx0 + (x1 - jx0) * e
+    jaw_y = jy0 + (y1 - jy0) * e - 140.0 * math.sin(math.pi * min(1.0, e * 0.9))   # up and over, not a slide
+    d = d0 - (d0 - 2.35) * e
+    P = WF.pose('leap', 0.2 + 0.8 * v, jaw=0.8 + 0.2 * v, snarl=1.0)
+    s = wolf_s(L, d)
     jx, jy = WF.draw(_ctx(probe, s), 0.0, 0.0, s, -1, 1, P, blood=0.0, seed=70)
     WF.draw(_ctx(img, s), jaw_x - jx, jaw_y - jy, s, -1, 1, P, blood=0.0, seed=70)
 
 
-LUNGE_LEN = 0.333                                       # s: 9.0 -> the last frame before the cut
-LUNGE_PATH = ((960.0, 215.0), (750.0, 365.0))          # the jaws' front, screen px, first and last frame
-LUNGE_T = 9.0
+LUNGE_CUT = 9.4                                         # s: the shot's length when the voices don't say
+LUNGE_LEN = 0.6                                         # s: the leap (note 22: was 0.333, four frames)
+LUNGE_COIL = 0.4                                        # s: sinking back on its haunches before the leap
+LUNGE_CREEP = 1.6                                       # s before the cut it comes into view
+LUNGE_D = 4.2                                           # m: its depth behind him (the floor shows right of his chair)
+LUNGE_STALK = (2.6, 1.38)                               # world x (m) at LUNGE_D: off the right edge, to its mark
+LUNGE_PATH = ((960.0, 215.0), (750.0, 365.0))          # the jaws' front at the cut (second point), screen px
+LUNGE_T = LUNGE_CUT - LUNGE_LEN                          # the leap's start (critique tools read it)
+# readtime.py (note 22): (name, seen before the wind-up, wind-up, action), seconds
+READ_TIMES = [('shot 3: the last pounce on Blair', LUNGE_CREEP - LUNGE_COIL - LUNGE_LEN, LUNGE_COIL, LUNGE_LEN)]
 
 
 def room_actors(u, L):

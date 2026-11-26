@@ -576,6 +576,8 @@ def main():
     if hasattr(film, 'LINES') and 'voices' in has:   # rule 7: script v recordings v subtitles, and the mouths drawn
         import voices
         shared += voices.check(film)
+    import readtime                         # note 22 (Open Wounds): story actions long enough to be seen
+    shared += readtime.faults(film)
     import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
     shared += viewchecks.faults(kf)       # effects hidden behind figures (rule 20 runs on the drawing pass)
     import film_engine

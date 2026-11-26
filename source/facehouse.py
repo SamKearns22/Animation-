@@ -630,7 +630,10 @@ def _peak(kh):
 def house_head(img, p, sp, t, hx, hy):
     """The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece."""
     with PP._Big():
-        return _head(img, p, sp, t, hx, PP._lift(hy))
+        # Brexit Is Done note 20 (Sam, 26 Nov, Tony "a bit doll like"): the bigger house face grows down over the
+        # neck, and a long-jawed face (Blair's) left almost none: a head on the collar like a doll's. `neck_up` (face
+        # heights) lifts this person's head to show the house neck (Netanyahu's: about a seventh of the head).
+        return _head(img, p, sp, t, hx, PP._lift(hy) - sp['kit_house'].get('neck_up', 0.0) * 172.0)
 
 
 def _head(img, p, sp, t, hx, hy):
@@ -1733,7 +1736,7 @@ def install_turned():
             key = _turn_person(sp)
             with PP._Big():
                 return TH.draw(img, p, dict(sp, who=key, ears_hidden=kh['hair'] == 'braids' and not kh.get('ears')),
-                               t, view, hx, PP._lift(hy))
+                               t, view, hx, PP._lift(hy) - kh.get('neck_up', 0.0) * 172.0)   # note 20, as the front
         return V.NOT_MINE
     V.TURNED_HEADS['kit_house'] = head_view     # one list of turned heads in views.py, newest tried first
 
@@ -1793,7 +1796,7 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
     'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
                     hairline=-0.07, brow_thick=0.058, head=False),
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7, collar='open',
-                     brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
+                     brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, age_boost=0.0, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True, head=False),
     'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
                      mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
@@ -1803,7 +1806,8 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
     'may': dict(hair='bob', outfit=('suit', (118, 38, 92)), shirt=(246, 246, 246), height=1.73, collar='open',   # Brexit
                 pearls=True, hair_c=(208, 202, 192), brow_c=(150, 124, 108), brow_thick=0.034, age_boost=1.5,
                 brow_arch=0.03, brow_taper=0.5, head=False),                                                                     # Is Done, 23 Nov: first try
-    'blair': dict(hair='back', ear_k=1.35, lift=0.08, hair_c=(208, 204, 198), back_crown=-0.54, outfit=('suit', (28, 30, 40)), shirt=(246, 246, 246), tie=(150, 30, 40), height=1.83,
+    'blair': dict(hair='back', ear_k=1.35, lift=0.08, hair_c=(208, 204, 198), back_crown=-0.54, neck_up=0.09,
+                  brow_c=(150, 140, 130), age_boost=1.5, lid=0.2,   # note 20: neck, grey brows, his age (73) shown outfit=('suit', (28, 30, 40)), shirt=(246, 246, 246), tie=(150, 30, 40), height=1.83,
                   mouth=dict(kind='grin'), head=False),                                          # (Brexit Is Done)
 }
 
@@ -1847,6 +1851,73 @@ def dome_faults(name, lines=None, src=None, variant=None):
     return out
 
 
+def line_faults(name, lines=None, src=None):
+    """Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
+    real life Kemi." Why nobody saw it: agelines measures a line as a dark band in the photo, and on a darker skin the
+    ordinary shade under round cheeks and eyes reads as a deep line: Kemi (46) measured the deepest smile folds and eye
+    bags of all 13 faces, deeper than May (70) or Blair (73), and the drawing drew them. A face whose photo skin is
+    dark (sum under 360) may not have a line DRAWN that ranks in the set's top two: look at the photos and lower
+    `age_boost` (the real face decides, not the measure)."""
+    import json
+    c = dict(lines if lines is not None else CAST.get(name, {}))
+    try:
+        pk = json.load(open(pick_file(name, src)))
+    except Exception:
+        return []
+    skin, age = pk.get('colours', {}).get('skin'), pk.get('age') or {}
+    if not skin or sum(skin) >= 360:
+        return []
+    bo, lk = c.get('age_boost', 1.0), LOOKS['detail']
+    out = []
+    for k, v in (age.get('strength') or {}).items():
+        r = (age.get('rank') or {}).get(k, '')
+        if v * bo >= lk['age_min'] and r and int(r.split()[0]) >= int(r.split()[-1]) - 1:
+            out.append(f"LINES: {name}'s {k.replace('_', ' ')} drawn at {v * bo:.2f}, the {r} deepest of the faces, "
+                       f"measured on a dark skin (shade read as a line?): Sam, note 21, \"make her look less like\"; "
+                       f"compare with the photos and lower age_boost")
+    return out
+
+
+def doll_faults(name, lines=None, with_head=None, without_head=None):
+    """Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
+    characters like Netanyahu, Trump or Brand, there's something off ... He's a bit doll like?" Lined up with the
+    house's Netanyahu, what differed: (1) brown brows under grey hair (a doll's painted brows: Netanyahu's, and
+    Blair's own, are grey), (2) the head sat on the collar with almost no neck (the bigger house face grows down over
+    it; Netanyahu's neck shows about a tenth of his head's height, Tony's 5-8%), (3) a 73-year-old's face with almost
+    no lines. (1) from the lines; (2) when given the drawing with and without the head (numpy RGB arrays): the
+    neck's skin column under the jaw's ink, against the head's height; (3) a grey-haired face whose age lines are
+    weaker than the measure (age_boost under 1)."""
+    import numpy as np
+    sp = person(name, 'detail', **dict(lines if lines is not None else CAST.get(name, {})))
+    kh, out = sp['kit_house'], []
+    lum = lambda c: 0.3 * c[0] + 0.59 * c[1] + 0.11 * c[2]      # noqa: E731
+    hc, bc = sp.get('hair_c'), sp.get('brow_c')
+    grey = hc and max(hc) - min(hc) < 30 and lum(hc) > 150
+    if grey and bc and lum(bc) < 0.55 * lum(hc):
+        out.append(f"DOLL: {name}'s brows {tuple(bc)} far darker than the grey hair {tuple(hc)} (painted-on brows): "
+                   f"Sam, note 20, \"a bit doll like\"")
+    if grey and kh.get('age_boost', 1.0) < 1.0:
+        out.append(f"DOLL: {name} grey-haired with the age lines turned down (age_boost {kh.get('age_boost')})")
+    if with_head is not None:
+        a, b = with_head.astype(int), without_head.astype(int)
+        nsk = np.abs(b - np.array(sp['skin'])).sum(2) < 50
+        h = min(1300, a.shape[0])
+        x = int(np.argmax(nsk[:h].sum(0)))
+        y = int(np.nonzero(nsk[:h, x])[0].min())
+        while y + 1 < h and nsk[y + 1, x]:
+            y += 1
+        ink = a[:, x].max(1) < 100
+        jaw = y
+        while jaw > 0 and not ink[jaw]:
+            jaw -= 1
+        top = int(np.nonzero((np.abs(a - b).sum(2) > 30).any(1))[0].min())
+        r = (y - jaw) / max(1, y - top)
+        if r < 0.09:
+            out.append(f"DOLL: {name}'s neck shows {r:.0%} of the head's height under the jaw (the house's, "
+                       f"Netanyahu's: about 10%): the head sits on the collar; raise neck_up")
+    return out
+
+
 def draw(name, look, out, size=900, lines=None, src=None, variant=None):
     """One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
     person's house lines (CAST's for that face otherwise); `src`/`variant`: one of facepick's heads (load())."""
@@ -1857,6 +1928,8 @@ def draw(name, look, out, size=900, lines=None, src=None, variant=None):
     TC = install()
     sp = person(name, look, src=src, variant=variant, **(lines if lines is not None else CAST[name]))
     for f in dome_faults(name, lines, src, variant):       # rule 49: the head's shape, before anyone sees it
+        print(f)
+    for f in line_faults(name, lines, src):                # note 21: lines the photos don't show
         print(f)
     TC.HEADS[sp['who']] = house_head
     TC.TORSOS[sp['who']] = lambda *a: None

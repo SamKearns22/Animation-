@@ -15013,9 +15013,11 @@
   "16": "house look (it measures people's lines, not the wolf kit's)",
   "17": "none (a wish)",
   "18": "none",
-  "12": "none (P7 is a by-hand critique line and the board went out with no critique; the kit still ringed a knee aimed at the lens, and drew no bottom at all)",
+  "19": "to name (body chat): the check that looks at hands resting on a seat's arms",
+  "20": "to name (body chat): house look",
+  "21": "to name (body chat): likeness / name test",
+  "22": "to name (body chat): the check on how long an action holds on screen",
   "9": "none (a wish, not a fault)",
-  "7": "none (the learn step judged woman or man only, never \"is this HER body\"; Kemi's photo was not measured)",
   "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)"
  },
  "quick_checks": [
@@ -15257,6 +15259,11 @@
    "date": "2026-11-26",
    "spent": 45.39,
    "forecast": 52.4
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 47.66,
+   "forecast": 54.7
   }
  ]
 }

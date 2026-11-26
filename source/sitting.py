@@ -42,6 +42,7 @@ SIT = 40.0                   # the hip joint sits this far above the seat: the t
 FLOOR = 928.0
 ANKLE_UP = FLOOR - V.ANKLE_Y  # 38: the ankle above the sole
 PERCH_SIT = 30.0             # perched on a desk, the hip joint this far above its top (a thigh lying on it)
+ARMREST_DROP = 22.0          # Open Wounds note 19: a resting hand's centre this far below the forearm's line
 SLEEVE = 17.0                # a resting forearm's centre line is this far above the surface it lies on
 DUR = {'stand_up': 1.1, 'stand_up_quick': 0.7, 'stand_up_weary': 1.8, 'sit_down': 1.3, 'plonk': 0.55,
        'sit_down_careful': 2.0, 'lean_back': 0.6}
@@ -390,6 +391,20 @@ def arm_rest(hand, surface_y, shape='fist'):
                 rest=surface_y - SLEEVE)
 
 
+def armrest_faults(seat, a, s='R'):
+    """Open Wounds note 19 (Sam, 26 Nov: Tony's "hands hover rather than resting on the chair arms"). Why nobody saw
+    it: rule 78 checked the forearm lay ON the armrest (its line SLEEVE above the top), and the hand was put on that
+    same line, so the round house hand's centre sat level with the top edge: half the hand in the air, no check
+    looking. A hand resting on a seat's arm must have its centre at or below the arm's top (curled over the end)."""
+    if not getattr(seat, 'arms', None) or a.get('rest') is None:
+        return []
+    top = seat.surface() - seat.arms
+    if abs(a['rest'] + SLEEVE - top) > 1.0 or a['hand'][1] >= top:
+        return []
+    return [f'{s} hand hovers over the armrest: its centre {top - a["hand"][1]:.0f} units above the arm\'s top '
+            f'(Sam, note 19, "hover rather than resting")']
+
+
 def realize(sp, seat, spec, lap=True):
     """The joints for views.person: hips on the seat (or rising off it), feet on the floor, arms solved."""
     j = V.standing(sp)
@@ -426,6 +441,7 @@ def realize(sp, seat, spec, lap=True):
         U, Fo = F.UPPER * 0.98, F.FORE * 0.98 + off
         pole = (a['pole'][0] * sg, a['pole'][1], a['pole'][2])
         plane = a.get('rest') if a.get('rest') is not None else a.get('elbow_rest')
+        j['_faults'] += armrest_faults(seat, a, s)
         if plane is not None:
             E = _elbow_on_plane(S, H, plane, U, Fo, sg)
             if E is None:
@@ -571,7 +587,12 @@ def spec_lean_back(sp, seat, hands='head', amount=18.0):
 def spec_armrests(sp, seat):
     """Back in an armchair, forearms along the armrests, hands over their ends."""
     y = seat.surface() - seat.arms
-    arms = {s: arm_rest((seat.width + 26.0, y, seat.front - 35.0), y, 'palm') for s in 'LR'}
+    # Open Wounds note 19 (Sam, 26 Nov: "his hands hover rather than resting on the chair arms"): the hand's centre
+    # sat ON the armrest's top edge, so half of each round house hand stood above it in the air. A resting hand lies
+    # at the arm's front end with its fingers curled over it: the hand's centre DROP below the forearm's line, onto
+    # the front corner, the forearm still along the top (rule 78).
+    arms = {s: dict(arm_rest((seat.width + 26.0, y, seat.front - 12.0), y, 'palm'),
+                    hand=(seat.width + 26.0, y - SLEEVE + ARMREST_DROP, seat.front - 12.0)) for s in 'LR'}
     return _spec(lean=-17.0, arms=arms, back_on='shoulders', feet={'L': (-74, 285.0), 'R': (74, 285.0)})
 
 

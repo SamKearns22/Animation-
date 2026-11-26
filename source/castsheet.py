@@ -781,7 +781,12 @@ def seated_look_faults(film, who=None, cast=None, force=False, raw=False):
                     img = Image.new('RGBA', (1080, 1920), BG + (255,))
                     V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s_, s_, sp, 0.0, yaw, j)
                     a = np.asarray(img.convert('RGB'))
-                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}", tones=yaw != 90)
+                    # Sam, 26 Nov, note 1 (examples/sam-26nov-kemi-34-far-leg.jpg: "the legs are different colour
+                    # ... the darker right leg doesn't seem connected"), later than the R7 judges' "one dark mass"
+                    # (25 Nov): on the body kit, legs side by side are ONE tone (solid_seat.leg_tone_faults); only
+                    # a crossed under leg takes the shadow tone, so only crossed poses are asked for two
+                    side = sp0.get('seat_solid') == 'body' and 'cross' not in pose
+                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}", tones=yaw != 90 and not side)
     finally:
         V.knee_cap, V.seat_bottom, V.leg = real_cap, real_bottom, real_leg
     return out
@@ -845,7 +850,10 @@ def seated_faults(film, who=None, cast=None, raw=False):
                 if rings:
                     out.append(f"SEATED {name} at {yaw}: a knee drawn as a ball (an outlined ring {rings[0][0]:.0f} "
                                f"wide): Sam, 24 Nov, \"circular knees\"")
-                if not bottoms or raw:                  # raw: the bottom was never drawn (spy_bottom draws nothing)
+                body = sp0.get('seat_solid') == 'body' and not raw   # the body kit draws its own bottom (the
+                if (not bottoms and not body) or raw:   # trunk under the hem: solid_seat.SEAT_TROUSERS), never through
+                    #                                     seat_bottom: the picture check (seated_look) judges it
+                    # raw: the bottom was never drawn (spy_bottom draws nothing)
                     out.append(f"SEATED {name} at {yaw}: no bottom on the seat: Sam, 24 Nov, \"No bum\"")
     finally:
         V.knee_cap, V.seat_bottom = real_cap, real_bottom

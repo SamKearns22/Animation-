@@ -3213,7 +3213,9 @@ def facehouse_whole_head():
     import facehouse as FH
     import people
     import turnhead as TH
-    held = {'burnham': '4f13fdafb1c7d29d2c492a16fbe949c4', 'badenoch': 'a2cbd8ae06ef3b53bd9921c3111961d9'}
+    held = {'burnham': '4f13fdafb1c7d29d2c492a16fbe949c4', 'badenoch': '286fdc3a67bb7b6714d99414c330f955'}
+    # re-held 26 Nov (Open Wounds chat 30, Sam's note 21: Kemi's mouth and eye lines "make her look less like the
+    # real life Kemi"): her age lines off (age_boost 0; facehouse.line_faults), nothing else changed
     # re-held 21 Nov (check repairs 2): both changed at aa09376a only (Sam, 20 Nov: one smooth shoulder line), found by
     # bisecting; the pictures differ only below the collar (rows 707-767 of 1038), the faces identical.
     # re-held 19 Nov (front-on focus chat 2): both changed at 594f94ba only (Sam, 14 Nov: the flat dark shadow side
@@ -3290,6 +3292,84 @@ def dome_not_a_carrot():
     caught, fixed, hair = FH.dome_faults('mcfadden', old), FH.dome_faults('mcfadden'), FH.dome_faults('walliams')
     ok = len(caught) == 2 and not fixed and not hair
     return ok, f'old dome: {len(caught)} faults; fixed dome: {len(fixed)}; Walliams (hair): {len(hair)}'
+
+
+@test
+def face_lines_photos_show():
+    """Brexit Is Done note 21 (Sam, 26 Nov: Kemi's mouth and eye lines "make her look less like the real life Kemi"):
+    facehouse.line_faults flags Kemi as drawn (the shade on a dark skin measured as the deepest lines of all faces)
+    and passes her fixed lines and the lighter-skinned faces whose lines are real (May, Blair, Walliams, McFadden)."""
+    import facehouse as FH
+    old = dict(FH.CAST['badenoch'])
+    old.pop('age_boost', None)
+    caught, fixed = FH.line_faults('badenoch', old), FH.line_faults('badenoch')
+    others = sum(len(FH.line_faults(n)) for n in ('may', 'blair', 'walliams', 'mcfadden'))
+    return len(caught) == 2 and not fixed and not others, f'old: {len(caught)}; fixed: {len(fixed)}; others: {others}'
+
+
+@test
+def house_head_not_a_doll():
+    """Brexit Is Done note 20 (Sam, 26 Nov: Tony "a bit doll like" beside the house's Netanyahu, Trump, Brand):
+    facehouse.doll_faults flags Blair as chat 27 drew him (brown brows under grey hair; his neck 5-8% of the head
+    in the film's own frame at 24 s) and passes him fixed, and May's brows."""
+    import numpy as np
+    from PIL import Image
+    import facehouse as FH
+    import brexit_is_done as F
+    V = FH.PP.V
+    old = dict(FH.CAST['blair'])
+    for k in ('neck_up', 'brow_c', 'age_boost', 'lid'):
+        old.pop(k, None)
+
+    def frame(head, neck_up):
+        img = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        sp, j = F.acted('3', 'blair', 24.0)
+        sp = dict(sp, kit_house=dict(sp['kit_house'], neck_up=neck_up))
+        keep = V.TURNED_HEADS['kit_house']
+        if not head:
+            V.TURNED_HEADS['kit_house'] = lambda *a, **k: None
+        try:
+            F.seated(img, 'blair', F._cam('blair'), F.BLAIR['x'], F.BLAIR['d'], 24.0, F.BLAIR['yaw'],
+                     pose='armchair', chair=True, look=sp, joints=j)
+        finally:
+            V.TURNED_HEADS['kit_house'] = keep
+        return np.asarray(img.convert('RGB'))
+    caught = FH.doll_faults('blair', old, frame(True, 0.0), frame(False, 0.0))
+    fixed = FH.doll_faults('blair', None, frame(True, FH.CAST['blair']['neck_up']), frame(False, 0.0))
+    may = FH.doll_faults('may')
+    ok = len(caught) == 2 and not fixed and not may
+    return ok, f'as drawn: {len(caught)} ({"; ".join(c[:40] for c in caught)}); fixed: {len(fixed)} {fixed}; May: {len(may)}'
+
+
+@test
+def hands_rest_on_armrests():
+    """Open Wounds note 19 (Sam, 26 Nov: Tony's "hands hover rather than resting on the chair arms"):
+    sitting.armrest_faults flags the armchair pose's hands as chat 27 drew them (centre on the arm's top edge) and
+    passes the fixed pose (curled over the front end) and a desk rest (a hand flat on a desk is ON it)."""
+    import sitting as SIT
+    seat = SIT.seat_for('armchair')
+    if callable(seat):
+        seat = seat()
+    sp = {}
+    new = SIT.spec_armrests(sp, seat)['arms']
+    y = seat.surface() - seat.arms
+    old = SIT.arm_rest((seat.width + 26.0, y, seat.front - 35.0), y, 'palm')
+    caught = SIT.armrest_faults(seat, old)
+    fixed = sum(len(SIT.armrest_faults(seat, a, k)) for k, a in new.items())
+    desk = SIT.armrest_faults(seat, SIT.arm_rest((40.0, y - 80, 100.0), y - 80, 'palm'))
+    return len(caught) == 1 and not fixed and not desk, f'old: {caught}; fixed: {fixed}; desk: {len(desk)}'
+
+
+@test
+def pounce_long_enough_to_read():
+    """Open Wounds note 22 (Sam, 26 Nov: "The final wolf pounce on Tony, so quick it's barely registered"; note 13
+    before it): readtime flags the pounce as chat 27 drew it (four frames from off-screen in mid-air: 0.33 s, no
+    wind-up) and passes the film's acted pounce (creep, coil, leap)."""
+    import readtime
+    import brexit_is_done_action as A
+    old = readtime.check('old pounce', 0.0, 0.0, 0.333)
+    new = sum((readtime.check(*r) for r in A.READ_TIMES), [])
+    return len(old) == 3 and not new, f'old: {len(old)}; new: {new}'
 
 
 @test
