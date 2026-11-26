@@ -48,6 +48,9 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
   Crowds varied by default (craft change 1, 16 Nov): what a crowd's lines leave unsaid comes per member from EPR's
     mix (skin, haircut, build, hair colour, face, tops, trousers, shoes, a hat on some: varied() below). Its own lines:
     mix: paris | hats: 0.3 | count: 40 | same: top because WHY   (MIXES; a hat share; the crowd's size; alike on purpose)
+  The pooled crowd pack (crowd pool chat 1, Sam 26 Nov): every new film's crowds (not in BEFORE_POOL) draw from one pool
+    of every crowd look used before (POOL_*: pool_varied below); 'mix: pool PLACE' puts an older crowd on it;
+    pooled(i, place) is one passer-by with no people file. Kittest crowd_pool.
   Turned heads (chat 4d; people_turned.py): every invented face turns with its own face card, colours, haircut,
     beard and glasses (Blessed's press pack's way); before, the side and back were the engine's plain head.
 
@@ -293,6 +296,8 @@ def varied(d, m, i):
     """Member i's defaults for what the crowd's lines leave unsaid (EPR's mix; the same member in every shot)."""
     import zlib
     import numpy as np
+    if d.get('crowd_pool'):
+        return pool_varied(d, m, i)
     said = _said(d)
     r = np.random.default_rng(zlib.crc32(f"{d['crowd']['kind']}-{i}".encode()))
     mix = d.get('crowd_mix') or MIXES['mixed']
@@ -354,6 +359,155 @@ def varied(d, m, i):
     return m
 
 
+# ------------------------------------------------------------------------------------- the pooled crowd pack
+# Sam, 26 Nov: "Open up the crowd pack to all of the combinations that we've used before across all cities. So if we
+# have generic people in any of our films, you can just make them from a generic pooled crowd pack." Every crowd look
+# used before, in one pool: the kit's EPR mix above, Blessed's press pack, EPR's marchers (t1-t4) and tourists, GTA's
+# walkers and cops, Open Wounds' workers and guests (their story/*-people.txt crowd lines). A crowd takes it with
+#     mix: pool london          (or 'mix: pool': the mixed skins) the pool's looks, the place's skins and dress
+# and every crowd in a film not in BEFORE_POOL takes it by default (its own 'mix: PLACE' still picks the skins). What
+# the crowd's lines say still wins; the sameness check still runs. pooled(i, place) gives one person with no people
+# file (a test scene's passer-by: CLAUDE.md "People in tests"). Kittest crowd_pool.
+BEFORE_POOL = {'blessed': 'posted', 'facetool': 'test cast', 'grand-theft-autism': 'posted', 'milburn': 'posted',
+               'protest-tiers': 'posted', 'brexit-is-done': 'Open Wounds, locked by Sam (its workers and guests drawn '
+               'as approved; chat 27 is changing its code)'}
+POOL_SKINS = {g: list(v) for g, v in SKIN_TONES.items()}          # the kit's tones, and the named ones crowds used
+for _g, _w in (('light', 'pale'), ('light', 'pink'), ('olive', 'olive'), ('tan', 'brown'), ('dark', 'deep')):
+    POOL_SKINS[_g].append(COLOURS[_w])
+POOL_HAIR = dict(
+    men=[('short', .2), ('crop', .17), ('crop buzz', .06), ('side', .14), ('curly', .11),
+         ('receding', .1), ('bald', .08), ('long', .06), ('short', .08)],
+    women=[('bob', .24), ('long', .22), ('pony', .14), ('pony high', .04), ('pony loose', .04), ('bun', .08),
+           ('bun messy', .05), ('curly', .13), ('short', .06)])
+# Left out: Milburn's 'big' curls (drawn big from the front only; turned they shrink to a plain curly: learn first).
+POOL_HAIR_C = dict(        # (colour, weight): every crowd's hair colours (dark: for darker skins; all: anyone)
+    dark=[((22, 18, 16), .3), ((30, 24, 22), .2), ((28, 24, 22), .1), ((40, 30, 24), .15), ((30, 26, 24), .1),
+          ((40, 32, 28), .15)],
+    all=[((34, 28, 24), .14), ((58, 44, 36), .1), ((52, 40, 32), .08), ((70, 50, 34), .1), ((40, 32, 28), .06),
+         ((110, 70, 46), .07), ((100, 64, 42), .06), ((110, 80, 50), .06), ((120, 80, 50), .05), ((150, 110, 70), .05),
+         ((140, 100, 64), .04), ((196, 160, 96), .04), ((196, 160, 100), .03), ((180, 150, 100), .02),
+         ((150, 70, 40), .03)])
+POOL_GREYS = [(150, 146, 140), (170, 166, 162), (180, 170, 160), (196, 196, 192)]   # older heads (Blessed, EPR)
+POOL_FACES = FACES + ['face_wide 0.05, jaw_wide 0.06', 'jaw_wide 0.08', 'face_wide 0.06', 'face_wide -0.02',
+                      'jaw_wide +0.05, face_wide +0.04', 'jaw_wide +0.03, chin_long +0.02', 'jaw_wide +0.06, face_wide +0.05']
+POOL_TOPS = dict(          # (colour, weight); 'bright' weighs more in a warm place (POOL_PLACES)
+    plain=TOPS + [((34, 40, 62), .06), ((46, 46, 54), .06), ((110, 40, 50), .04), ((70, 90, 120), .04),
+                  ((90, 96, 80), .04), ((150, 120, 90), .04), ((60, 60, 70), .04), ((40, 42, 48), .03),
+                  ((52, 56, 50), .03), ((30, 34, 44), .03), ((40, 44, 56), .03), ((70, 30, 34), .03), ((50, 56, 48), .03),
+                  ((186, 70, 40), .03), ((60, 90, 140), .03), ((220, 210, 190), .03), ((120, 40, 90), .02),
+                  ((40, 50, 80), .03), ((150, 40, 40), .03), ((230, 226, 216), .02), ((80, 90, 70), .03),
+                  ((120, 100, 70), .03), ((60, 56, 50), .03), ((44, 50, 60), .03), ((90, 80, 66), .03),
+                  ((226, 220, 204), .02), ((34, 44, 78), .03), ((26, 26, 28), .02), ((26, 28, 34), .02),
+                  ((30, 30, 32), .02), ((30, 30, 34), .02), ((34, 34, 40), .02), ((40, 44, 40), .02),
+                  ((46, 48, 54), .02), ((80, 30, 30), .02), ((90, 84, 70), .02)],
+    bright=[((236, 120, 140), 1), ((90, 190, 200), 1), ((250, 220, 120), 1), ((240, 240, 236), 1), ((120, 200, 150), 1),
+            ((230, 150, 90), 1), ((60, 90, 150), 1), ((200, 120, 200), 1), ((92, 160, 210), 1), ((236, 120, 150), 1)])
+POOL_LEGS = LEGS + [((40, 40, 46), .1), ((54, 58, 72), .08), ((70, 66, 58), .06), ((62, 66, 72), .05),
+                    ((46, 52, 70), .05), ((92, 90, 70), .04), ((70, 72, 64), .04), ((150, 170, 200), .04),
+                    ((236, 230, 214), .03), ((196, 170, 130), .04), ((196, 176, 128), .03)]
+POOL_SHOES = SHOES + [((30, 28, 26), .1), ((24, 20, 18), .06), ((70, 52, 36), .06), ((96, 70, 44), .04),
+                      ((40, 36, 32), .05), ((240, 240, 236), .06)]
+POOL_LIPS = [(178, 84, 86), (200, 96, 110), (190, 122, 112), (170, 90, 90)]
+POOL_PLACES = {'miami': dict(bright=.55, short=.7), 'barcelona': dict(bright=.15, short=.15),
+               'tirana': dict(bright=.08, short=.1)}                 # else: bright .08, no short sleeves
+# Kit limit (crowd pool chat 1): the short sleeve turned to three-quarter keeps a square corner on the far shoulder (GTA's
+# walkers show it too, posted): short sleeves stay to warm places until the sleeve's turned drawing is learned.
+POOL_DRESS = dict(suit=.12, glasses=.1, stubble=.22, grey=.08, hats=.22)   # shares: a jacket over a shirt (Blessed's
+#                                                                          press), glasses, stubble, grey hair, a hat
+
+
+def pool_varied(d, m, i):
+    """Member i's look from the pooled pack (what the crowd's lines leave unsaid), the same member in every shot."""
+    import zlib
+    import numpy as np
+    said = _said(d)
+    m['pony_edge'] = True                            # a turned ponytail hangs from the head's back edge (people_turned)
+    r = np.random.default_rng(zlib.crc32(f"pool-{d['crowd']['kind']}-{i}".encode()))
+    mix = d.get('crowd_mix') or MIXES['mixed']
+    place = POOL_PLACES.get(d.get('crowd_place'), dict(bright=.08, short=0))
+    g = list(mix)[int(r.choice(len(mix), p=np.array(list(mix.values())) / sum(mix.values())))]
+    if 'skin' not in said:
+        m['skin'] = POOL_SKINS[g][int(r.integers(len(POOL_SKINS[g])))]
+    woman = r.random() < .47
+    if d.get('crowd_sex') and 'body' not in said:
+        m['sex'] = 'woman' if woman else 'man'
+    if 'hair' not in said:
+        cut = _pick(r, POOL_HAIR['women' if woman else 'men']).split(' ')
+        m['hair_style'] = cut[0]
+        for q in cut[1:]:                            # the GTA and Milburn cuts: buzz, big curls, high or loose pony, messy bun
+            if q == 'big':
+                m['hair_big'] = 1.5
+            elif q == 'high':
+                m['pony_high'] = True
+            else:
+                m['hair_' + q] = True
+    older = r.random() < POOL_DRESS['grey']
+    if 'hair_c' not in said:
+        darker = g not in ('light',) or m.get('skin', (0,))[0] < 215
+        m['hair_c'] = POOL_GREYS[int(r.integers(len(POOL_GREYS)))] if older else \
+            _pick(r, POOL_HAIR_C['dark' if darker else 'all'])
+    if m.get('hair_style') == 'bald' and 'hair_c' not in said:
+        m['hair_c'] = (128, 120, 114)                # Blessed's bald press: the stubble ring's colour
+    if 'hair_seed' not in said and 'strand_seed' not in m:
+        m['strand_seed'] = 500 + i % 40
+    if 'brows' not in said:
+        m['brows_dk'] = .8
+    if 'face' not in said:
+        f = POOL_FACES[(3 * i + int(r.integers(2))) % len(POOL_FACES)]
+        if f:
+            _fact(m, 'face', f, {})
+        m.setdefault('face_m', {})['nose_long'] = round(float(r.uniform(-.04, .05)), 3)
+    if 'body' not in said:
+        if woman:
+            m.update(height=round(float(r.uniform(1.55, 1.74)), 2), shoulders=int(r.integers(134, 146)), hw=62, hh=94)
+        else:
+            m.update(height=round(float(r.uniform(1.64, 1.90)), 2), shoulders=int(r.integers(146, 168)), hw=66, hh=94)
+    if 'taller' not in said and 'body' in said:
+        m['taller'] = float(r.choice([-.05, -.02, 0, .03, .06, .08]))
+    if woman and 'lashes' not in said:
+        m['lashes'] = True
+        if 'lips' not in said:
+            m['lips'] = POOL_LIPS[int(r.integers(len(POOL_LIPS)))]
+    if not woman and 'beard' not in said and r.random() < POOL_DRESS['stubble']:
+        m['stub'] = .84
+    if 'glasses' not in said and r.random() < POOL_DRESS['glasses']:
+        m['glasses'] = (40, 36, 34)
+    if 'outfit' not in said:
+        top = _pick(r, POOL_TOPS['bright'] if r.random() < place['bright'] else POOL_TOPS['plain'])
+        if r.random() < POOL_DRESS['suit']:          # a jacket over a shirt, open neck (Blessed's press pack)
+            m.update(outfit='suit', jacket=top, sleeve=top, shirt=(236, 236, 232), tie=None)
+        else:
+            m.update(outfit='jumper', jacket=top, sleeve=top, shirt=top if r.random() < .5 else (236, 236, 232),
+                     tie=None)
+        if m['outfit'] == 'jumper' and r.random() < place['short']:   # GTA's walkers: short sleeves in the warm
+            _fact(m, 'outfit', m['outfit'] + ', sleeves short', {})
+            m['jacket'] = m['sleeve'] = top
+    if 'trousers' not in said:
+        m['trousers'] = _pick(r, POOL_LEGS)
+    if 'shoes' not in said:
+        m['shoe'] = _pick(r, POOL_SHOES)
+    share = d.get('crowd_hats', POOL_DRESS['hats'])
+    if d.get('crowd_hat_kind') and 'hat' not in said:
+        m['kit_hat'] = d['crowd_hat_kind']
+        c = KIT_HATS_ALL[d['crowd_hat_kind']][i % len(KIT_HATS_ALL[d['crowd_hat_kind']])]
+        m['hat_c'] = (c, tuple(int(v * .72) for v in c))
+    elif 'hat' not in said and share and m.get('hair_style') not in ('bob', 'pony', 'bun', 'long') and \
+            not m.get('hair_big') and r.random() < min(1.0, share * 1.8):   # the share of the whole crowd: only
+        #                                                              short cuts wear one, so their own share is higher
+        m['kit_hat'] = 'beanie' if r.random() < .55 else 'cap'
+        c = HATS[(i + i // 10) % len(HATS)]          # one step round per member, a jump each ten (no two alike nearby)
+        m['hat_c'] = (c, tuple(int(v * .72) for v in c))
+    return m
+
+
+def pooled(i, place='mixed', kind='pool', film=None):
+    """One person from the pooled pack with no people file: member i of a bare pooled crowd at this place (a test
+    scene's passer-by). The same i and place give the same person. Call install() before drawing (head_faults)."""
+    d = parse(f'# {kind}: Passer-by\ncrowd: {kind}\nmix: pool {place}\n')[kind]
+    d.update(crowd_defaults=True, crowd_sex=True, seat_r7=seat_r7(film or 'pool'))
+    return crowd_person(d, i)
+
+
 def member(d, i, s=0, job=None):
     """Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description."""
     cr = d['crowd']
@@ -384,8 +538,14 @@ def _fact(d, key, val, people):
         d['crowd'] = dict(kind=val, cycle=[], when=[])
     elif key in ('mix', 'hats', 'count', 'same') and d.get('crowd') is None:
         raise DescriptionError(f'{key}: a crowd\'s line (after "crowd: ...")')
+    elif key == 'mix' and val.strip().lower().split(' ')[0] == 'pool':     # the pooled pack (POOL), a place's skins
+        place = val.strip().lower()[4:].strip() or 'mixed'
+        if place not in MIXES:
+            raise DescriptionError(f'mix: pool PLACE ({", ".join(MIXES)})')
+        d['crowd_pool'], d['crowd_place'], d['crowd_mix'] = True, place, dict(MIXES[place])
     elif key == 'mix':
         if val.strip().lower() in MIXES:
+            d['crowd_place'] = val.strip().lower()
             d['crowd_mix'] = dict(MIXES[val.strip().lower()])
         else:
             mx = {w: float(v) for w, v in (q.rsplit(' ', 1) for q in parts)}
@@ -630,7 +790,8 @@ def person(d):
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
               'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w', 'sleeve_taper', 'smile', 'figure', 'arm_w',
-              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c', 'bangles', 'jacket_hem'):
+              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c', 'bangles', 'jacket_hem',
+              'pony_edge'):
         if k in d:
             sp[k] = d[k]
     _sexed(sp, d)
@@ -736,6 +897,9 @@ def load(film):
                                    f"(e.g. 'body: 1.70 m, woman'; Sam's note 5, people.BEFORE_SEX)")
         for d in ds.values():
             d['_new'] = True
+    for d in ds.values():
+        if film not in BEFORE_POOL:              # crowd pool chat 1: a new film's turned ponytails hang from the back edge
+            d['pony_edge'] = True
     out = {w: person(d) for w, d in ds.items()}
     if seat_r7(film):                             # R7: the seated lower body as one shape (BEFORE_SEATED keep the old)
         for sp in out.values():
@@ -753,6 +917,8 @@ def crowds(film):
         d['crowd_defaults'] = film not in BEFORE_DEFAULTS
         d['crowd_sex'] = film not in BEFORE_SEX     # Open Wounds: crowd women get the woman's body
         d['seat_r7'] = seat_r7(film)                # R7: a seated crowd member's lower body as one shape
+        if film not in BEFORE_POOL and d['crowd_defaults']:   # the pooled pack (POOL): every new film's crowds
+            d['crowd_pool'] = True
     return out
 
 
@@ -848,6 +1014,19 @@ def _head_parts():
 EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
           'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank', 'workwear', 'pattern')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
+
+
+def head_faults(sp):
+    """Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"): a
+    crowd-pack person drawn while the pack is not installed falls back to the old default head (bald, no hard hat).
+    One line when so; [] when the pack's own head will draw. Kittest crowd_head_installed."""
+    import people_parts as PP
+    if not (sp.get('kit_crowd') or sp.get('kit_face')):
+        return []
+    import people_hats as PH                     # install() hangs the turned heads, the hats and the vests: without it
+    if kit_torso_view in PP.V.TORSO_EXTRAS and PH.draw in PP.V.HEAD_WEAR:   # the old side head, no hat, no hi-vis
+        return []
+    return [f"{sp.get('name') or sp.get('who')}: old default head (bald, no hat): people.install(people.load(FILM)) not run"]
 
 
 def install(cast):

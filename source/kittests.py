@@ -13,6 +13,10 @@ import os
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# Checks on request (Sam, 26 Nov): the body check, the final-only send gate and the proposal guard are off unless
+# asked; the kit tests test those tools themselves, so here they are asked for (kittest practice_mode tests them off).
+for _k in ('BODYCHECK', 'PROPOSE_GUARD', 'SENDGATE_ALL'):
+    os.environ.setdefault(_k, '1')
 sys.path.insert(0, HERE)
 
 TESTS = []
@@ -4886,6 +4890,118 @@ def handover_status_checks():
           and no_push and not push and st)
     return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
                 f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
+
+
+@test
+def crowd_head_installed():
+    """Sam, 26 Nov (pose-test chat 1, saved example notes/learn/pose-test/sheet-keyframes.jpg): a test scene that never
+    installed the crowd pack drew every worker and guest with the old default head, bald with no hard hat. The check
+    must flag that scene's worker, and pass the same worker once the film's pack is installed."""
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); import people as PK; w = PK.crowd_person(PK.crowds('brexit-is-done')"
+            "['worker'], 0); a = PK.head_faults(w); PK.install(PK.load('brexit-is-done')); b = PK.head_faults(w); "
+            "print(len(a), len(b))") % HERE
+    r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE)
+    got = (r.stdout.strip().split('\n') or [''])[-1]
+    return got == '1 0', f'without the pack: flagged, with it: clean -> {got!r} {r.stderr[-200:] if got != "1 0" else ""}'
+
+
+@test
+def crowd_pool():
+    """Sam, 26 Nov (crowd pool chat 1: "Open up the crowd pack to all of the combinations that we've used before across
+    all cities ... generic people in any of our films ... from a generic pooled crowd pack"): every haircut, hair colour,
+    skin and top an earlier film's crowd lines used is in the pool; a new film's crowd takes the pool by default and a
+    posted or locked film's crowds draw exactly as before; each city's pooled crowd passes the sameness check and
+    varies; a pooled passer-by draws the pack's own head once installed; a turned ponytail hangs from the head's back
+    edge (saved example: the pool's first sheet, a three-quarter ponytail drawn over the cheek)."""
+    import re as _re
+    import kitchecks as K
+    import people as PK
+    pool_c = {c for v in PK.POOL_HAIR_C.values() for c, _ in v} | set(PK.POOL_GREYS) | {(128, 120, 114)}
+    tops = {c for v in PK.POOL_TOPS.values() for c, _ in v}
+    skins = {c for v in PK.POOL_SKINS.values() for c in v}
+    cuts = {c.split(' ')[0] for v in PK.POOL_HAIR.values() for c, _ in v}
+    missing = []
+    for film in PK.BEFORE_POOL:
+        if not os.path.exists(PK.people_file(film)):
+            continue
+        for w, d in PK.crowds(film).items():
+            for key, _, items in d['crowd']['cycle'] + [f for _, _, fs in d['crowd']['when'] for f in fs]:
+                for it in items:
+                    if key == 'hair' and it.split(',')[0].strip() not in cuts:
+                        missing.append(f'{film} {w} haircut {it}')
+                    elif key == 'hair colour' and PK.colour(it) not in pool_c:
+                        missing.append(f'{film} {w} hair colour {it}')
+                    elif key == 'skin' and PK.colour(it) not in skins:
+                        missing.append(f'{film} {w} skin {it}')
+                    elif key == 'jacket' and _re.fullmatch(r'[\d ]+|[a-z ]+', it) and PK.colour(it) not in tops:
+                        missing.append(f'{film} {w} top {it}')
+    old = [f for f in PK.BEFORE_POOL if os.path.exists(PK.people_file(f))
+           and any(d.get('crowd_pool') for d in PK.crowds(f).values())]
+    import tempfile
+    tmp = os.path.join(tempfile.mkdtemp(), 'new-people.txt')       # a new film's people file: its crowd on the pool
+    open(tmp, 'w').write('# m: Marchers\ncrowd: m\nmix: london\n')
+    pf, PK.people_file = PK.people_file, lambda film: tmp
+    try:
+        new = PK.crowds('a-new-film')['m']
+    finally:
+        PK.people_file = pf
+    same, varied = {}, {}
+    for city in ('london', 'paris', 'miami', 'tirana', 'barcelona', 'frankfurt', 'mixed'):
+        d = PK.parse(f'# m: M\ncrowd: m\nmix: pool {city}\n')['m']
+        d.update(crowd_defaults=True, crowd_sex=True)
+        ms = [PK.crowd_person(d, i) for i in range(64)]
+        same[city] = K.same_faults(city, ms, d.get('crowd_mix'))
+        varied[city] = (len({m.get('kit_face', {}).get('hair') or m.get('hair') for m in ms}),
+                        len({m.get('jacket') for m in ms}), len({m.get('skin') for m in ms}))
+    import subprocess                                    # in its own process: no earlier test's install
+    code = ("import sys; sys.path.insert(0, %r); import people as PK; p = PK.pooled(3, 'london'); "
+            "a = PK.head_faults(p); PK.install({'p': p}); print(len(a), len(PK.head_faults(p)))") % HERE
+    got = (subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE).stdout.strip()
+           .split('\n') or [''])[-1].split()
+    before, after = (int(got[0]), int(got[1])) if len(got) == 2 else (0, 1)
+    edge = PK.pooled(1, 'paris').get('pony_edge') and not any(
+        sp.get('pony_edge') for sp in PK.load('protest-tiers').values())
+    ok = (not missing and not old and new.get('crowd_pool') and new.get('crowd_place') == 'london' and not any(same.values())
+          and all(a >= 5 and b >= 15 and c >= 3 for a, b, c in varied.values()) and before and not after and edge)
+    return ok, dict(missing=missing[:6], old_on_pool=old, sameness={k: v[:2] for k, v in same.items() if v},
+                    varied=varied, head=(before, after), pony_edge=bool(edge))
+
+
+@test
+def practice_mode():
+    """Sam, 26 Nov ("override all checks and produce it"; "advise whether you want to run a certain suite of checks";
+    the proposal route on request): with nothing asked, a render runs no body check, a practice clip or animatic goes
+    to Sam with no record, only a final is held; a practice job (Kind: practice) starts no kit tests; the proposal
+    guard never stops a reply. Saved example: pose-test chat 1 (a 3 s clip took 12 min under the body check; 112 kit
+    tests ran for a test clip)."""
+    import tempfile
+    import humancheck as HC
+    import kitfilm as KF
+    import propose as P
+    saved = {k: os.environ.pop(k, None) for k in ('BODYCHECK', 'PROPOSE_GUARD', 'SENDGATE_ALL')}
+    try:
+        d = tempfile.mkdtemp()
+        HC._ENTRIES.append({'kind': 'flat'})
+        HC.frame_begin()
+        off = HC.frame_end(0.0) == [] and not HC._ENTRIES and not HC.asked()
+        clip = os.path.join(d, 'pose-test-runner.mp4')
+        open(clip, 'wb').write(b'0')
+        sent = HC.send_faults(clip) == []
+        root = os.path.dirname(HERE)
+        final = HC.is_final(os.path.join(root, 'animations', 'open-wounds.mp4'))
+        draft = HC.is_final(os.path.join(root, 'animations', 'drafts', 'open-wounds-animatic.mp4'))
+        open(os.path.join(d, 'zz-practice.md'), 'w').write('# x\nKind: practice\n')
+        open(os.path.join(d, 'zz-film.md'), 'w').write('# x\n')
+        prac = KF.practice('zz-practice', d) and not KF.practice('zz-film', d)
+        quiet = P.hook('{"transcript_path": "/nonexistent"}') == 0
+    finally:
+        for k, v in saved.items():
+            if v is not None:
+                os.environ[k] = v
+    ok = off and sent and final and not draft and prac and quiet and not KF.ANIMATIC_GATE
+    return ok, (f'body check off {off}; practice clip sent {sent}; final held {final}, animatic not {not draft}; '
+                f'practice job {prac}; proposal guard quiet {quiet}; no kit gate before animatics {not KF.ANIMATIC_GATE}')
 
 
 @test

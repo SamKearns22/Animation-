@@ -9,7 +9,7 @@ Notes and results: notes/learn/pose-test/.
   STAND .............. the body tool, opened to standing and moving people for this scene only (views.r7_on is
                        seated only): stand_solid on the spec; lay_over (seated knees over the jacket) off when not
                        seated; _smooth cropped to the person (same result, a quarter of the time)
-  cam(), at() ........ a level 3D camera (sets.Cam) on a 540 x 960 canvas; someone at floor point x, z, height up
+  cam(), at() ........ a level 3D camera (sets.Cam) on a 1080 x 1920 canvas; someone at floor point x, z, height up
   torn(u) ............ item 6: W1 digging, the hit (0.6 s), knees and hips (moves.fall) on the body tool; from the hips
                        landing (1.1 s) the body on the floor CANNOT be drawn on the body tool yet: drawn by the old
                        lying body (lying.draw), labelled so on the frame
@@ -35,12 +35,15 @@ import brexit_is_done_action as A    # noqa: E402  (read only: the film's poses 
 import lying                         # noqa: E402
 import moves as MV                   # noqa: E402
 import people_parts as PPt           # noqa: E402
+import people as PK                  # noqa: E402
 import sets                          # noqa: E402
 import solid_seat as SS              # noqa: E402
 
 B, V = PPt.B, PPt.V
+PK.install(PK.load('brexit-is-done'))   # the crowd pack's heads, hair and hats, as the film installs them (Sam, 26 Nov:
+#                                         without it everyone fell back to the old default head: bald, no hard hat)
 OUT = os.path.join(HERE, '..', 'notes', 'learn', 'pose-test')
-W, H, FPS, SECS = 540, 960, 24, 5.0
+W, H, FPS, SECS = 1080, 1920, 24, 5.0   # full film size (Sam, 26 Nov: no low-resolution practice)
 BG = (236, 232, 224)
 FLOOR = (205, 199, 188)
 
@@ -81,7 +84,7 @@ def body(sp):
 # ================================================================================================= camera
 def cam(dist=3.2, hgt=1.0):
     """Level, 1.0 m up, looking north at a floor point `dist` m away, centred on the canvas."""
-    return sets.Cam((0.0, hgt, -dist), (0.0, hgt, 0.0), focal=1000.0, shake=(W / 2 - 540, H / 2 - 960))
+    return sets.Cam((0.0, hgt, -dist), (0.0, hgt, 0.0), focal=1000.0 * W / 540, shake=(W / 2 - 540, H / 2 - 960))
 
 
 def at(img, c, sp, x, z, yaw, j, t, up=0.0, shadow=True):
@@ -94,7 +97,13 @@ def at(img, c, sp, x, z, yaw, j, t, up=0.0, shadow=True):
         g.ellipse([Xf - 150 * s * k, Yf - 18 * s * k, Xf + 150 * s * k, Yf + 18 * s * k], fill=(0, 0, 0, 55))
     B.SS = 1
     y = Yf - A.FEET * s - up * ppm
-    jj = V.person(img, B.Cam(1.0, 540, 960), Xf, y, s, sp, t, yaw, j)
+    # drawn on a sheet just round the person, then laid on the frame: the body tool works over its whole canvas, so
+    # at full film size a whole-frame canvas cost about 15x (same picture: the camera is shifted to the sheet)
+    hw, top, bot = int(700 * s), int(y - 520 * s), int(y + (A.FEET + 160) * s)
+    x0, y0 = int(Xf) - hw, top
+    sub = Image.new('RGBA', (2 * hw, bot - top), (0, 0, 0, 0))
+    jj = V.person(sub, B.Cam(1.0, x0 + 540, y0 + 960), Xf, y, s, sp, t, yaw, j)
+    img.alpha_composite(sub, (max(0, x0), max(0, y0)), (max(0, -x0), max(0, -y0)))
     return A._screen(jj, Xf, y, s, yaw)
 
 
@@ -115,7 +124,7 @@ def canvas(c, scroll=0.0, edge=None):
             continue
         a = c.project((x, 0.0, 0.6))[0]
         b = c.project((x, 0.0, -0.6))[0]
-        g.line([a, b], fill=(186, 180, 170), width=2)
+        g.line([a, b], fill=(186, 180, 170), width=3)
     return img
 
 
@@ -249,6 +258,9 @@ def render(who, frames=None):
     n = int(SECS * FPS) if frames is None else frames
     tmp = tempfile.mkdtemp(prefix='pt_' + who, dir=os.environ.get('PT_TMP'))
     sp = SPEC[who]()
+    bad = PK.head_faults(sp)
+    if bad:
+        sys.exit('pose_test REFUSED: ' + '; '.join(bad))
     faults, what = [], {}
     import humancheck as HC
     wr = HC.Writer('pose-test ' + who)

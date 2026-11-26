@@ -6,3 +6,18 @@ Hello, this is just taking far too long. First of all, the kit tests we had agre
 ### 2026-11-26T15:02:27
 On that note, I don't want to see these low-resolution, early film, bold practice heads anymore. I just don't want to see them. I would rather you either render something entirely neutral, like you did with the grey tests from GTA, or you rendered the character as it should be. But this middle ground is hopeless.
 
+### 2026-11-26T15:08:22
+For the checks problem, yes, I agree to a practice clip mode. No, I don't think we need to run it through the proposal step. And the clips you've sent me are fine for now. So you don't really need to learn anything more because you've already done it to an acceptable quality for background people. I think what you need to do is advise whether you want to run a certain suite of checks, because currently you're automatically doing them and it's burning through so much time. And I think you should be able to justify why the checks should be run at that moment. For example, sometimes I just need an animatic or a clip to see how something moves. It doesn't have to be perfect. And then I could ask you to run the checks if there's a whole bunch of body flaws. I think also we will turn the proposal route not into an automatic rule, but into something that either I manually tell you to do or something that you suggest suggest that I should do because it's a demanding ask and you need to get it right. You should always test anything that we build, however, make sure that is still clear. On the second question, which is about the bold heads, we don't want to be doing that anymore. That is a very old image from a very early film, and I think I've asked for it to not be in use anymore, and it keeps appearing. For example, when you were doing the citizens in Grand Theft Auto, and I'm pretty sure we have a crowd pack, which is a large randomized body of expressions, hairstyles, skin colors, etc. And I'd much rather you make people using that pack than repeat these random low-resolution bold heads that no longer match our style. I think the problem with the bold head is that our art style has advanced and moved on since then. And so it's just no longer fit for purpose. However, the crowd pack was made for European protests ranks and Grand Theft Autism, which are much further along in terms of our film qualities, and they are drawn from a crowd pack. So let's use those.
+
+### 2026-11-26T15:20:08
+How long will it be until Kemi, Tony, and May are updated in the new style and I can see them? Please make this as quick as possible.
+The bald heads likely come from the shared crowd pack rather than an old drawing, and I'm checking whether my test removed the workers' hard hats.
+
+Definitely not the case as this was happening long before the crowd packs existed
+
+### 2026-11-26T15:20:33
+Hello, why are you rendering them again? Because we've already seen them and I said they were fine. Please take note of my message about the crowd packs.
+
+### 2026-11-26T15:22:33
+Please ensure that the builders in OpenWinds are using the crowd pack. Open up the crowd pack to all of the combinations that we've used before across all cities. So if we use, so if we have generic people in any of our films, you can just make them from a generic pooled crowd pack.
+

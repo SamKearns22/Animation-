@@ -766,6 +766,8 @@ def _retry_text(reply, blocked, last_msg):
 
 
 def hook(stdin=None):
+    if os.environ.get('PROPOSE_GUARD') != '1':  # Sam, 26 Nov: the proposal route is on request (Sam asks, or Claude suggests it
+        return 0                                # for a demanding ask), never an automatic stop; PROPOSE_GUARD=1 turns it on
     try:
         data = json.loads(stdin if stdin is not None else sys.stdin.read() or '{}')
     except ValueError:

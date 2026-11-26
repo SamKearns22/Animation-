@@ -33,7 +33,8 @@ ROOT = os.path.dirname(HERE)
 FILMS = os.path.join(ROOT, 'notes', 'kittest-films.tsv')
 START_STALE = os.path.join(ROOT, 'notes', 'logs', 'kittest-stale-start.txt')   # local to the machine (.gitignore)
 MAJOR = 20                  # tests made stale by one chat's own changes before a full check is suggested to Sam
-ANIMATIC_GATE = True        # Change 2 (Sam's Y, 25 Nov): finish.py's kit gate before every animatic, not only the final
+ANIMATIC_GATE = False       # Sam, 26 Nov: "the kit tests we had agreed only happen at the beginning and the end of a major film"
+#                             (was True: Change 2, 25 Nov, the kit gate before every animatic)
 
 
 def sid_now():
@@ -95,7 +96,9 @@ def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_f
         os.makedirs(os.path.dirname(sp), exist_ok=True)
         with open(sp, 'w', encoding='utf-8') as f:
             f.write(f'{sid}\t{",".join(st)}\n')
-    if film and first_chat(film, sid, path):
+    if film and practice(film):
+        out.append(f'kit tests: {film} is a practice job: no kit tests (Sam, 26 Nov: only at the start and end of a major film)')
+    elif film and first_chat(film, sid, path):
         if not any(_norm(r[0]) == _norm(film) and r[1] == 'start' and r[3] == sid for r in rows(path)):
             _add(_norm(film), 'start', sid, path)
         (launch_fn or _launch)()
@@ -104,6 +107,16 @@ def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_f
     elif film:
         out.append('kit tests: not this chat (rule 90: only a film\'s first chat and its final run them)')
     return out
+
+
+def practice(film, notes_dir=None):
+    """A practice job (a test clip, a learn job): its notes file has a line 'Kind: practice' (Sam, 26 Nov). No kit
+    tests at its start or end; a never-passed test of a tool it builds still runs once (always test what is built)."""
+    p = os.path.join(notes_dir or os.path.join(ROOT, 'notes'), f'{_norm(film)}.md')
+    try:
+        return any(ln.strip().lower() == 'kind: practice' for ln in open(p, encoding='utf-8'))
+    except OSError:
+        return False
 
 
 def _launch():

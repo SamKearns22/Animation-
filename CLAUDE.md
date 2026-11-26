@@ -80,8 +80,13 @@ at session start (`.claude/hooks/setup.sh`).
   before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
 - **Every animatic carries the Hook Text and the CranbriJoos sign-off**, made as the final is (`finish.py` on its
   clean render); a check sheet, when I ask for one, shows the Hook Text frame.
-- **No check sheet before an animatic unless I ask**: once the checks pass (every fault fixed or named),
-  render the animatic and send it; my notes come on the animatic itself.
+- **Checks are advised, not automatic (Sam, 26 Nov):** "sometimes I just need an animatic or a clip to see how
+  something moves. It doesn't have to be perfect." Before a clip or animatic, one line names the checks I'd run, why
+  now and how long; they run on my Y or when I ask. Finals keep their checks. **Practice clips** (`Kind: practice` in
+  the job's notes, results in `notes/learn/`): no kit tests, body check or critique; sent as made. The body check runs
+  only when asked (`BODYCHECK=1`); kit tests at a major film's start and end only (kittest `practice_mode`).
+  **Always test anything we build** (its own kit test, run once).
+- **No check sheet before an animatic unless I ask**: render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
 - **"Override" skips everything between me and that one ask (Sam's pick, 23 Nov):** when my own latest message has
   the word, every check, guard and step in the way is skipped for that ask only (e.g. an unchecked animatic at 99%
@@ -117,10 +122,13 @@ at session start (`.claude/hooks/setup.sh`).
 - **The channel is topical, absurdist news-of-the-week satire; every film is new.**
   Never suggest doing less, making it worse, trimming the joke, or repeating old characters, places or material. Reuse
   means the means (rig, hands, poses, house look, checks), never the content.
-- **The proposal route:** "Every change to
-  rules, tools, checks, kits or how films are built that is put to Sam goes through the proposal route first (helpers,
-  blind judge, top two in plain English with Lost/Added and Critiqued). The guard refuses an unjudged ask. Changes made
-  without asking are listed and judged in the end-of-film review against the film's results." (`source/propose.py`)
+- **The proposal route, on request only (Sam, 26 Nov):** helpers, blind judge, top two in plain English with
+  Lost/Added and Critiqued (`source/propose.py`), run when I ask, or suggested to me for a demanding ask that must be
+  got right. No automatic guard (`PROPOSE_GUARD=1` turns it back on).
+- **People in tests are the crowd pack or grey (Sam, 26 Nov):** a test scene draws people exactly as the film does
+  (`people.install(people.load(FILM))`: the crowd pack's faces, hair, hats) at full size, or a plain grey figure;
+  never the old default head (bald, no hat) that a scene without the install falls back to (check `people.head_faults`,
+  kittest `crowd_head_installed`).
 
 # Models and chats
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
