@@ -48,3 +48,4 @@
 2026-11-26T19:19+00:00	1190ae09	sam	Open Wounds, chat 35 (files named brexit-is-done). Opus, medium effort. First check you can push to GitHub; if not, stop and tell Sam. The Animation- project must be attached (list it first). Read CLAUDE.md, then run: python3 source/handover.py start session_01J1JB7ZiGN74A5xC2A1weQQ --film brexit-is
 2026-11-26T19:54+00:00	3083f467	sam	Override
 2026-11-26T19:54+00:00	3083f467	skipped	render REFUSED (rule 59): pre-flight has not been run on brexit_is_done in this session: python3 source/preflight.py brexit_is_done OUT_DIR
+2026-11-26T19:54+00:00	3083f467	sam	<task-notification> <task-id>b3um40r1z</task-id> <tool-use-id>toolu_01W2rNRH6wVLkeMG5T7TnqPf</tool-use-id> <output-file>/tmp/claude-0/-home-user-Animation-/3083f467-1ad2-58bf-b84c-a4c468ca401f/tasks/b3um40r1z.output</output-file> <status>completed</status> <summary>Background command "python3 source
