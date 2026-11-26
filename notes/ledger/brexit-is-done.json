@@ -12398,6 +12398,297 @@
    "cost": 0.33,
    "notes": 0,
    "repeats": []
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "9cd061e7",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.3,
+   "src": "estimate",
+   "sid": "session_01U3pKQxfULjUCibccVo7wqh",
+   "steps": 27,
+   "hist_k": 113,
+   "kinds": {
+    "tool search": 24.9,
+    "routine": 0.6,
+    "renders": 2.8,
+    "other": 71.6
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 20,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 1,
+    "renders": 1,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 1.1033,
+    "total": 1.1033,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 50.4,
+     "Claude's words": 21.9,
+     "new writes": 20.9,
+     "carried history": 6.9
+    },
+    "origins": {
+     "start-up floor": 50.4,
+     "Claude's words": 30.5,
+     "result: tool search": 14.7,
+     "messages and reminders": 3.2,
+     "result: renders": 0.7,
+     "result: other": 0.4,
+     "result: routine": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 50.4,
+     "commands": 10.5,
+     "thinking": 6.9,
+     "writing code": 5.1,
+     "start-up and handover tools": 4.9,
+     "writing notes": 4.7,
+     "reading notes": 4.3,
+     "reading kit code": 3.8,
+     "messages and reminders": 3.2,
+     "helper and chat prompts": 1.9,
+     "git and saving": 1.6,
+     "messages to Sam": 1.5,
+     "other commands": 0.4,
+     "running checks and tools": 0.4,
+     "app tools (chats, files sent)": 0.3,
+     "renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 11,
+    "work_pct": 0.15,
+    "reads": [
+     [
+      "source/freeze.py",
+      2.5,
+      0.0286
+     ],
+     [
+      "source/model_body_test.py",
+      0.7,
+      0.0084
+     ],
+     [
+      "source/data/freeze/count-baseline.json",
+      0.1,
+      0.0013
+     ]
+    ],
+    "base_pct": 35.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 5,
+     "shared:freeze.py": 4,
+     "shared:model_body_test.py": 3,
+     "film notes": 2,
+     "shared:islamocommunism_model_body.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -3 && git remote -v | head -1 && git log --oneline -1 && git p",
+      "",
+      378
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status --short | head; git checkout -B claude/brexit-chat21 2>&1|tail -1; gi",
+      "",
+      4911
+     ],
+     [
+      3,
+      "other",
+      "shared:freeze.py",
+      "notes/logs/overrides.log source/freeze.py",
+      "kit_files_loading_a_film_file",
+      "",
+      3589
+     ],
+     [
+      4,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "def main\\|'count'\\|--list",
+      "",
+      2992
+     ],
+     [
+      5,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/",
+      "^BASE\\|^FILM",
+      "",
+      854
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "source/data/freeze/count-baseline.json",
+      "cat source/data/freeze/count-baseline.json; C=$(git log -1 --format=%h -- source",
+      "",
+      446
+     ],
+     [
+      7,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "import",
+      "",
+      923
+     ],
+     [
+      8,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "model_body_test\\|model body test",
+      "",
+      2972
+     ],
+     [
+      9,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py notes/kittest-stamps.tsv notes/proposals/model-body-all.md note",
+      "model_body_test",
+      "",
+      7094
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all.md",
+      "Where things stand",
+      "",
+      789
+     ],
+     [
+      11,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py source/islamocommunism_model_body.py notes/proposals/m",
+      " notes/r7.md && python3 -c \"\nimport sys; sys.path.insert(0,",
+      "",
+      91
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md story/status.md notes/archive/brexit-is-done-handovers.m",
+      "^## Where things stand",
+      "",
+      862
+     ],
+     [
+      15,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/archive/brexit-is-done-handovers.md",
+      "End check (chat 20)",
+      "",
+      1052
+     ],
+     [
+      16,
+      "other",
+      "shared:handover.py",
+      "notes/islamocommunism* notes/archive/islamocommunism* source/islamocommunism*.py",
+      "ALLOWED_POPS",
+      "",
+      656
+     ],
+     [
+      17,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/archive/islamocommunism.md notes/brexit-is-done.md",
+      "## Exceptions",
+      "",
+      2750
+     ],
+     [
+      18,
+      "other",
+      "shared:handover.py",
+      "notes/brexit-is-done.md source/handover.py",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() a='- **Open rule",
+      "",
+      1436
+     ],
+     [
+      19,
+      "other",
+      "shared:islamocommunism_model_body.py",
+      "source/__pycache__/islamocommunism_model_body* source/islamocommunism_model_body",
+      "rm -rf source/__pycache__/islamocommunism_model_body* ; git add -A source/islamo",
+      "",
+      2042
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "git add -A source notes story && git commit -qm \"brexit-is-done chat 21: freeze ",
+      "",
+      1189
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "notes/logs/overrides.log",
+      "git show --stat 2757d3cd | head -12; tail -3 notes/logs/overrides.log | cut -c1-",
+      "",
+      1036
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "git show --stat 2757d3cd | head -10; python3 -c \" import sys; sys.path.insert(0,",
+      "",
+      247
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
