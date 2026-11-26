@@ -23,7 +23,7 @@ castsheet.hair_spike_faults, mouth_spike_faults; A5 crotch limit in the body kit
 A6 one line weight for every kit (house_ctx like wolf.house_ctx); A7 cuff limit in limbs (confirm what exists);
 A8 one ffmpeg join tool at 24 fps (rule S4).
 B smarter: B1 say-once (report.group + stills); NO 'Reopened' list: Sam declined that 26 Nov 20:19 (notes/ledger/sam/j4bxb2vq.md: "if something changes, it should just recheck the new film and recognise that it is fine again"); Q2 re-asked in his terms; B2 door-aware
-pops (notes/proposals/check-knows-intent.md); B3 sizes read set kinds; B4 one planning list (preflight.gates,
+pops (notes/proposals/check-knows-intent.md); B3 bookcases: not its own check, an input fault in sizes.py PROP_SIZES (the film lists a wall of shelves as kind 'bookcase', one 0.8 m bay): describe it as a row of bookcases (fix the input, keep the check); B4 one planning list (preflight.gates,
 gate_warnings, benchmark/plan/audits nags, rule 8/61/74 warnings); B5 castsheet_faults only for new/changed cast;
 B6 kittest_gate_faults only at film start/end (kitfilm); B7 kitinputs local copy; B8 look at linecheck May/Blair.
 C merge: C1 finder (keep finderwarn hook; drop watcher.finder_faults, handover.finder_faults); C2 drop
