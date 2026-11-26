@@ -4729,37 +4729,22 @@ def finder_reminder_per_chat():
     """finder-use (Sam's 1, 17 Nov): the per-day flag went silent for every chat once any chat called show (16 Nov:
     6 of 19 chats never did). Now: one line at a chat's first film-code search with no show; the end check names
     THIS chat when it edited the film's code with no show."""
-    import io, contextlib, tempfile
-    import handover as H
+    import io, contextlib
     W = _hook('finderwarn')
     out = io.StringIO()
     with contextlib.redirect_stdout(out):
         ok = W.test() == 0
     bad = [] if ok else [out.getvalue().strip()]
-    tmp = tempfile.mkdtemp()
-
-    def rec(tag, cmds):
-        p = os.path.join(tmp, tag + '.jsonl')
-        with open(p, 'w') as f:
-            for c in cmds:
-                f.write(json.dumps({'type': 'assistant', 'message': {'content': [
-                    {'type': 'tool_use', 'name': 'Bash', 'input': {'command': c}}]}}) + '\n')
-        return p
-    grep, edit = 'grep -n "def flag" source/protest_tiers.py', "sed -i 's/a/b/' source/protest_tiers.py"
-    show = 'python3 source/page.py protest-tiers show "the flag" --shot 3'
-    if not H.finder_faults('protest-tiers', rec('noshow', [grep, grep, edit])):
-        bad.append('a chat that edited film code with no show was not named')
-    if H.finder_faults('protest-tiers', rec('show', [show, grep, edit])):
-        bad.append('a chat that used show was named')
-    return not bad, '; '.join(bad) or 'one line at the first film search with no show; end names only the chat that skipped it'
+    return not bad, '; '.join(bad) or 'one line at the first film search with no show (the after-the-fact end check was dropped: check audit C1, Sam 26 Nov)'
 
 
 @test
 def watcher_catches_last_weeks_four():
     """early-warning (Sam's 1, 17 Nov): the number to beat. Last week's four silent failures, each from its own kind
-    of record: the message saver (chat C, 17 Nov), routine work on Opus (16 Nov splice), the finder skipped (16 Nov),
-    the kit list behind Sam's Y (people kit, before 16 Nov). Quiet on a clean record; a new system with no promise
-    is flagged (Sam: "it needs to adapt to new systems we build too")."""
+    of record. Since the check audit (Sam's Y, 26 Nov, C1-C3) the saver, the model guard and the finder reminder are
+    each their own live check (their own kit tests), so the watcher keeps one: the kit list behind Sam's Y (people kit,
+    before 16 Nov), quiet on today's list; and a new system with no promise is flagged (Sam: "it needs to adapt to new
+    systems we build too")."""
     import tempfile, shutil, subprocess
     from datetime import datetime, timezone, timedelta
     import watcher as W
@@ -4777,31 +4762,12 @@ def watcher_catches_last_weeks_four():
     res = lambda i, text: {'type': 'user', 'message': {'content': [{'type': 'tool_result', 'tool_use_id': f't{i}',
                                                                       'content': text}]}}
     try:
-        then = (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
-        typed = {'type': 'user', 'timestamp': then, 'origin': {'kind': 'human'},
-                 'message': {'role': 'user', 'content': '1. This guard should already exist in the code somewhere'}}
-        os.makedirs(os.path.join(tmp, 'sam'))
-        if not W.saver_faults(rec('saver', [typed]), sid='session_01TESTCHATC', logdir=os.path.join(tmp, 'sam')):
-            bad.append('saver: a typed message missing from the log was not flagged')
-        splice = 'ffmpeg -i a.mp4 -i b.mp4 -filter_complex concat=n=2 animations/drafts/protest-tiers-animatic.mp4'
-        if not W.guard_faults(rec('guard', [use(1, splice), res(1, 'done')])):
-            bad.append('guard: a 16 Nov splice on Opus was not flagged')
-        if W.guard_faults(rec('guard2', [use(1, splice), res(1, 'MODEL GUARD: this chat runs on Opus')])):
-            bad.append('guard: a refused splice was flagged')
-        grep, edit = 'grep -n "def flag" source/protest_tiers.py', "sed -i 's/a/b/' source/protest_tiers.py"
-        if not W.finder_faults(rec('finder', [use(1, grep), use(2, grep), use(3, edit)]), 'protest-tiers'):
-            bad.append('finder: a chat that skipped the finder was not flagged')
         old = subprocess.run(['git', 'show', '2362763f:guides/kit-catalogue.md'], cwd=W.ROOT, capture_output=True,
                              text=True).stdout
         if not any('people kit' in f for f in W.kit_faults(text=old)):
             bad.append('kits: the 14-16 Nov people kit line was not flagged')
         if W.kit_faults():
             bad.append(f'kits: false alarm on today\'s list: {W.kit_faults()}')
-        clean = rec('clean', [use(1, 'python3 source/page.py protest-tiers show "flag"'), res(1, 'ok'),
-                              use(2, 'python3 source/protest_tiers.py final /tmp/c.mp4 --small --span 3 5'), res(2, 'ok')])
-        if W.saver_faults(clean, sid='session_01CLEAN', logdir=os.path.join(tmp, 'sam')) + W.guard_faults(clean) \
-                + W.finder_faults(clean, 'protest-tiers'):
-            bad.append('false alarm on a clean record')
         root = os.path.join(tmp, 'root')            # a system built tomorrow, with no promise
         for d in ('.claude', 'source', 'guides'):
             os.makedirs(os.path.join(root, d))
@@ -4821,8 +4787,7 @@ def watcher_catches_last_weeks_four():
             bad.append(f'a system today has no promise: {W.unlisted()}')
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    return not bad, '; '.join(bad) or ('all four caught (saver, guard, finder, kit list); quiet on a clean record and '
-                                       'today\'s kit list; a new hook, check and tool with no promise flagged')
+    return not bad, '; '.join(bad) or ('the people-kit line caught, quiet on today\'s kit list; a new hook, check and tool with no promise flagged')
 
 
 @test

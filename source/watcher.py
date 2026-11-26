@@ -64,7 +64,6 @@ PROMISES = {
     'kept_report_faults': ('a kept animatic or clean render has its body-check record beside it, found at hand-over, not at the send', 'kittest kept_report_travels'),
     'draft_faults': ('the latest animatic and its clean render are on GitHub', 'named: its own fault line in handover end is the proof'),
     'quick_faults': ('handover end runs the quick film checks', 'named: its own fault line in handover end is the proof'),
-    'finder_faults': ('a chat that edited a film\'s code without the finder is named at handover', 'kittest finder_reminder_per_chat'),
     'rule_faults': ('no rule without a working check: every rule has its saved bad example and a kittest that catches it; a new rule with none stops the handover (lesson 7)', 'kittest rule_proofs_gate'),
     'shared_faults': ('a check fix written in one film\'s code stops the handover until moved to the shared tools or Sam says it stays (CLAUDE.md "Every rule and fix is for all films", rule N26)', 'kittest move_to_shared_catches_film_fixes'),
     'kittest_gate_faults': ('a kit test red at two handovers in a row, or unable to run, stops the handover (named-lines change 4)', 'kittest kittest_red_twice_stops_handover'),
@@ -147,102 +146,6 @@ def unlisted():
 
 
 # ------------------------------------------------------------------------------------------------ live checks
-def _records_lines(path):
-    try:
-        for raw in open(path, encoding='utf-8', errors='replace'):
-            try:
-                yield json.loads(raw)
-            except ValueError:
-                continue
-    except (OSError, TypeError):
-        return
-
-
-def typed_messages(path):
-    """[(timestamp, text)] Sam typed in this chat, by the record's own marks (handover.py TYPED/ROBOT)."""
-    import handover as H
-    out = []
-    for d in _records_lines(path):
-        if d.get('type') != 'user' or d.get('isSidechain') or d.get('isMeta'):
-            continue
-        c = (d.get('message') or {}).get('content')
-        if isinstance(c, list):
-            if any(isinstance(b, dict) and b.get('type') == 'tool_result' for b in c):
-                continue
-            c = ' '.join(b.get('text', '') for b in c if isinstance(b, dict) and b.get('type') == 'text')
-        text = (c or '').strip()
-        kind = (d.get('origin') or {}).get('kind')
-        robot = kind not in H.TYPED and (kind in H.ROBOT or d.get('promptSource') == 'system')
-        if text and H._is_sam(text) and not robot:
-            out.append((d.get('timestamp') or '', text))
-    return out
-
-
-def saver_faults(path, sid=None, logdir=None, now=None):
-    """Each message Sam typed in this chat is in his saved log (the saver writes it there within ~20 s)."""
-    sid = sid or os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '')
-    if not sid:
-        return []
-    logdir = logdir or os.path.join(ROOT, 'notes', 'ledger', 'sam')
-    p = os.path.join(logdir, sid.split('_')[-1][-8:].lower() + '.md')
-    saved = open(p, encoding='utf-8').read() if os.path.exists(p) else ''
-    now = now or datetime.now(timezone.utc)
-    missed = 0
-    for ts, text in typed_messages(path):
-        try:
-            age = (now - datetime.fromisoformat(ts.replace('Z', '+00:00'))).total_seconds()
-        except ValueError:
-            age = 999
-        if age > 60 and ' '.join(text.split())[:60] not in ' '.join(saved.split()):
-            missed += 1
-    return [f'saver|the message saver missed {missed} of Sam\'s messages in this chat (handover.py log); his words '
-            'are not on GitHub'] if missed else []
-
-
-def guard_faults(path):
-    """No routine command ran on Opus/Fable without the guard stopping it (or a logged GUARD_OK escape)."""
-    import modelguard as G
-    pending, ran = {}, []
-    for d in _records_lines(path):
-        m = d.get('message') or {}
-        if d.get('isSidechain'):
-            continue
-        if d.get('type') == 'assistant':
-            for b in m.get('content') or []:
-                if isinstance(b, dict) and b.get('type') == 'tool_use' and b.get('name') == 'Bash':
-                    cmd = (b.get('input') or {}).get('command', '')
-                    if G.routine(cmd) and G.DEAR.search(m.get('model') or '') and not re.search(r'(^|[;&|\n]\s*)GUARD_OK=', cmd):
-                        pending[b.get('id')] = G.routine(cmd)
-        elif d.get('type') == 'user' and isinstance(m.get('content'), list):
-            for b in m['content']:
-                if isinstance(b, dict) and b.get('tool_use_id') in pending:
-                    res = json.dumps(b.get('content'))
-                    if 'MODEL GUARD' not in res:
-                        ran.append(pending[b['tool_use_id']])
-    return [f'guard|the model guard let routine work run on Opus ({", ".join(sorted(set(ran)))})'] if ran else []
-
-
-def finder_faults(path, film=None):
-    """A chat that edited a film's code with no show call was reminded at its first hand search."""
-    import stepcost
-    if not film:
-        try:
-            import ledger
-            film = ledger.film_of(path)
-        except Exception:
-            return []
-    try:
-        r = stepcost.search_record(path, film)
-    except Exception:
-        return []
-    if not r['edited film code'] or r['show'] or not r['film'].get('no show'):
-        return []
-    told = any('FINDER: this is a hand search' in json.dumps(d) for d in _records_lines(path)
-               if d.get('type') in ('attachment', 'user', 'system'))
-    return [] if told else [f'finder|this chat hand-searched {film}\'s code {r["film"]["no show"]} times with no show '
-                            'call and the finder reminder never fired']
-
-
 def kit_faults(root=ROOT, text=None):
     """The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to."""
     cat = text if text is not None else open(os.path.join(root, 'guides', 'kit-catalogue.md'), encoding='utf-8').read()
@@ -260,15 +163,10 @@ def kit_faults(root=ROOT, text=None):
     return out
 
 
-def kittest_faults():
-    """The last background kit-test run (setup.sh at chat start) passed."""
-    if not os.path.exists(KITLOG):
-        return []
-    txt = open(KITLOG, encoding='utf-8', errors='replace').read()
-    if 'kittests:' not in txt:
-        return []                                  # still running
-    fails = re.findall(r'^FAIL (\w+)', txt, re.M)
-    return [f'kittests|kit tests failing: {", ".join(fails)}'] if fails else []
+def wiring_faults(path=None):
+    """check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
+    has been seen running (was two: hook_faults and ran_faults)."""
+    return hook_faults() + ran_faults(path)
 
 
 def hook_faults():
@@ -423,8 +321,9 @@ def _rule_faults():
 
 def check(path, film=None):
     faults = []
-    for fn in (lambda: saver_faults(path), lambda: guard_faults(path), lambda: finder_faults(path, film),
-               kit_faults, kittest_faults, hook_faults, unwired, lambda: ran_faults(path), _rule_faults):
+    # check audit (Sam's Y, 26 Nov): the saver, model-guard, finder and kit-test re-checks are gone (C1-C4: the live
+    # step itself is the check: handover.py log, modelguard.py, finderwarn.py, kitfilm.py); the wiring checks are one (C5)
+    for fn in (kit_faults, lambda: wiring_faults(path), unwired, _rule_faults):
         try:
             faults += fn()
         except Exception as e:                      # a check that breaks is itself a fault, never hidden
@@ -548,7 +447,7 @@ def main(argv):
         try:
             stop()
         except Exception:
-            pass                                   # never break a chat; hook_faults sees a missing wire
+            pass                                   # never break a chat; wiring_faults sees a missing wire
         return 0
     if cmd == '_day':
         import mainline

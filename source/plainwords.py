@@ -229,10 +229,13 @@ def score():
 
 def main(argv):
     cmd = argv[0] if argv else '-h'
-    if cmd == 'hook':
-        return hook()
-    if cmd == 'learn':
-        return learn()
+    if cmd in ('hook', 'learn'):
+        try:
+            sys.path.insert(0, os.path.join(ROOT, 'source'))
+            __import__('hookran').ran('plainwords.py ' + cmd)     # the watcher's "seen running" mark
+        except Exception:
+            pass
+        return hook() if cmd == 'hook' else learn()
     if cmd == 'check':
         text = sys.stdin.read() if len(argv) < 2 or argv[1] == '-' else open(argv[1], encoding='utf-8').read()
         fs = faults(text)
