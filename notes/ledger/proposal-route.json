@@ -19889,6 +19889,216 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "c1138e19",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.13,
+   "src": "estimate",
+   "sid": "session_01U3pKR2obrdPXz4iHwSFj7S",
+   "steps": 18,
+   "hist_k": 111,
+   "kinds": {
+    "tool search": 26.7,
+    "other": 73.3
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 13,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 4
+   },
+   "split": {
+    "usd": 0.4889,
+    "total": 0.4889,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 49.1,
+     "Claude's words": 24.0,
+     "new writes": 22.1,
+     "carried history": 4.8
+    },
+    "origins": {
+     "start-up floor": 49.1,
+     "Claude's words": 30.6,
+     "result: tool search": 18.2,
+     "result: other": 1.1,
+     "messages and reminders": 1.0
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 49.1,
+     "writing code": 10.9,
+     "reading notes": 9.6,
+     "thinking": 9.5,
+     "running checks and tools": 7.3,
+     "commands": 5.7,
+     "messages to Sam": 2.5,
+     "start-up and handover tools": 2.1,
+     "writing notes": 2.0,
+     "messages and reminders": 1.0,
+     "reading chat records": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 10,
+    "work_pct": 0.08,
+    "reads": [
+     [
+      "notes/proposals/session-value.md",
+      1.4,
+      0.0077
+     ],
+     [
+      "source/stepcost.py",
+      1.0,
+      0.0051
+     ],
+     [
+      "source/dearest.py",
+      1.0,
+      0.0051
+     ],
+     [
+      "notes/proposals/session-value/learn-job.md",
+      0.5,
+      0.0027
+     ]
+    ],
+    "base_pct": 29.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "film notes": 6,
+     "shared:stepcost.py": 2,
+     "shared:dearest.py": 2,
+     "shared:costwatch.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git fetch origin claude/create-claude-md-oe8z4g 2>&1 ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/proposals/session-value/learn-job.md notes/proposals/session-value.md",
+      "Final version",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/proposals/session-value.md notes/ledger notes/ledger/",
+      "ledger|stepcost|dearest",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:stepcost.py",
+      "notes/ledger/brexit-is-done notes/ledger/grand-theft-autism* notes/ledger/ sourc",
+      "ls notes/ledger/brexit-is-done notes/ledger/grand-theft-autism* | head -30; pyth",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:dearest.py",
+      "notes/ledger/ notes/ledger/grand-theft-autism.json source/dearest.py",
+      "python3 - <<'E' import json for f in [\"grand-theft-autism\",\"brexit-is-done\"]: d=",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:dearest.py",
+      "source/dearest.py source/ledger.py notes/ledger/grand-theft-autism.json",
+      "week",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:stepcost.py",
+      "/root/.claude/projects/*/ notes/ledger/ source/stepcost.py",
+      "def named\\|'named'",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "notes/ledger/ notes/archive .claude/settings.json",
+      "grand|brexit",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/archive/*-handovers.md notes/archive/brexit-is-done-handovers.md",
+      "grand|brexit",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md",
+      "^- \\*\\*Next",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md",
+      "Next",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py .claude/hooks/finderwarn.py .claude/hooks/modelguard.",
+      "Opus\\|opus",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "film notes",
+      "notes/proposals/session-value/results.md",
+      "cat > notes/proposals/session-value/results.md <<'E' # Session-value learn job: ",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
