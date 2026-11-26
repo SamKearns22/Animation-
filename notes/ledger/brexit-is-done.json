@@ -13848,6 +13848,884 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "dabc0ec2",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.96,
+   "src": "estimate",
+   "sid": "session_01U3pKR2gyjRcVjW35wkF7BD",
+   "steps": 110,
+   "hist_k": 270,
+   "kinds": {
+    "film-file search": 8.3,
+    "tool search": 17.5,
+    "whole-file .py read": 0.8,
+    "renders": 3.3,
+    "pictures": 3.4,
+    "other": 66.6
+   },
+   "calls": {
+    "film-file search": 26,
+    "tool search": 53,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 6,
+    "pictures": 11,
+    "other": 24
+   },
+   "split": {
+    "usd": 7.1707,
+    "total": 7.1707,
+    "floor_k": 98,
+    "blocks": {
+     "start-up floor": 31.0,
+     "Claude's words": 26.8,
+     "carried history": 23.1,
+     "new writes": 19.2
+    },
+    "origins": {
+     "Claude's words": 43.2,
+     "start-up floor": 31.0,
+     "result: tool search": 12.8,
+     "result: film-file search": 6.3,
+     "result: pictures": 3.8,
+     "messages and reminders": 1.5,
+     "Claude's edits": 1.0,
+     "result: other": 0.3,
+     "result: renders": 0.2,
+     "result: whole-file .py read": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 31.0,
+     "thinking": 19.0,
+     "writing code": 11.8,
+     "commands": 7.2,
+     "reading kit code": 6.4,
+     "reading film code": 6.0,
+     "writing notes": 4.1,
+     "looking at pictures": 3.8,
+     "reading notes": 3.3,
+     "messages to Sam": 2.2,
+     "messages and reminders": 1.5,
+     "start-up and handover tools": 1.1,
+     "renders": 0.9,
+     "other commands": 0.7,
+     "running checks and tools": 0.4,
+     "reading guides": 0.4,
+     "git and saving": 0.3,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 98,
+    "work_step": 37,
+    "work_pct": 0.52,
+    "reads": [
+     [
+      "notes/brexit-is-done.md",
+      3.0,
+      0.0783
+     ],
+     [
+      "source/wolf.py",
+      3.0,
+      0.072
+     ],
+     [
+      "source/brexit_is_done_action.py",
+      1.9,
+      0.0465
+     ],
+     [
+      "source/cryminister.py",
+      1.8,
+      0.0446
+     ],
+     [
+      "source/brexit_is_done.py",
+      1.6,
+      0.0412
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scratchpad/an/sheet.png",
+      1.6,
+      0.0393
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scratchpad/st/c1.png",
+      1.6,
+      0.0364
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scratchpad/st/c2.png",
+      1.6,
+      0.0364
+     ],
+     [
+      "source/linecheck.py",
+      0.5,
+      0.0121
+     ],
+     [
+      "source/lying.py",
+      0.5,
+      0.0121
+     ],
+     [
+      "story/status.md",
+      0.4,
+      0.0111
+     ]
+    ],
+    "base_pct": 27.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 26
+    },
+    "other": {
+     "film notes": 7,
+     "other": 17,
+     "guides": 3,
+     "shared:handover.py": 2,
+     "shared:cryminister.py": 5,
+     "shared:wolf.py": 5,
+     "shared:views.py": 1,
+     "shared:linecheck.py": 1,
+     "shared:body.py": 1,
+     "shared:kittests.py": 4,
+     "shared:lying.py": 2,
+     "shared:pose_test.py": 1,
+     "shared:places.py": 1,
+     "shared:places_site.py": 2,
+     "shared:moves.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md notes/open-wounds*.md",
+      "Where things stand",
+      "",
+      1613
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "open-wounds\\|Open Wounds",
+      "",
+      950
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "notes/films",
+      "cd /home/user/Animation-; git checkout -q -B claude/stoic-bohr-iq1p6s origin/cla",
+      "",
+      266
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "open wounds",
+      "",
+      783
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^#",
+      "",
+      1357
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "cd /home/user/Animation-; sed -n 1,80p notes/brexit-is-done.md; sed -n 132,200p ",
+      "",
+      11805
+     ],
+     [
+      7,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "cd /home/user/Animation-; timeout 600 python3 source/handover.py start session_0",
+      "",
+      6160
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "brexit|ow_|wound|wolf|cry",
+      "",
+      677
+     ],
+     [
+      9,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/brexit_is_done_action.py source/wolf.py source/c",
+      "cd /home/user/Animation-; wc -l source/brexit_is_done.py source/brexit_is_done_a",
+      "",
+      4197
+     ],
+     [
+      10,
+      "film",
+      "before show",
+      "source/brexit_is_done.py /root/.claude/uploads/dabc0ec2-d52d-5f92-ad85-453c9df5d",
+      "voice\\|\\.m4a\\|\\.wav\\|sound\\|audio",
+      "",
+      1058
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "/root/.claude/uploads/dabc0ec2-d52d-5f92-ad85-453c9df5d52c",
+      "mean_vol|max_vol",
+      "",
+      1218
+     ],
+     [
+      12,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "cd /home/user/Animation-; sed -n 1,60p source/brexit_is_done.py; sed -n 230,260p",
+      "",
+      6471
+     ],
+     [
+      13,
+      "other",
+      "guides",
+      "source/*.py guides/job-packs.md",
+      "Lucia.m4a\\|\\.m4a",
+      "",
+      579
+     ],
+     [
+      14,
+      "other",
+      "shared:cryminister.py",
+      "source/cryminister.py",
+      "m4a\\|def sound\\|lipsync\\|rhubarb\\|align\\|TRACK\\b\\|words_at\\|onset",
+      "",
+      671
+     ],
+     [
+      15,
+      "other",
+      "shared:cryminister.py",
+      "source/cryminister.py",
+      "cd /home/user/Animation-; sed -n 120,215p source/cryminister.py; sed -n 1590,164",
+      "",
+      7166
+     ],
+     [
+      18,
+      "film",
+      "before show",
+      "notes/archive/brexit-is-done*.md notes/brexit-is-done.md source/brexit_is_done_a",
+      "^| [0-9]\\+ |",
+      "",
+      719
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      " | new: line weight (the wolf kit's ink is not the house's) | house look (it mea",
+      "",
+      83
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      "",
+      351
+     ],
+     [
+      21,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py guides/house-look.md notes/house-look.md",
+      "width\\|LINE\\|INK\\b\\|lw\\b\\|outline",
+      "",
+      5337
+     ],
+     [
+      22,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py source/satire_style.py",
+      "class Ctx",
+      "",
+      6795
+     ],
+     [
+      23,
+      "film",
+      "before show",
+      "source/brexit_is_done_action.py source/satire_style.py source/people.py source/p",
+      "ol\\b\\|\\.ol\\s*=\\|ol=",
+      "",
+      3277
+     ],
+     [
+      24,
+      "film",
+      "before show",
+      "source/brexit_is_done_action.py source/people_parts.py",
+      "def _ctx",
+      "",
+      1881
+     ],
+     [
+      25,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "cd /home/user/Animation-; S=/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f",
+      "",
+      266
+     ],
+     [
+      29,
+      "other",
+      "shared:views.py",
+      "source/views.py source/people_parts.py source/body*.py source/figure.py guides/f",
+      "LW\\s*=\\|def lw\\|OUTLINE\\s*=\\|LINE\\s*=",
+      "",
+      31
+     ],
+     [
+      30,
+      "other",
+      "guides",
+      "source/*.py guides/*.md",
+      "line weight\\|lineweight\\|line_w\\b\\|LINE_W\\b",
+      "",
+      1788
+     ],
+     [
+      31,
+      "other",
+      "shared:linecheck.py",
+      "source/linecheck.py source/lying.py",
+      "cd /home/user/Animation-; sed -n 1,30p source/linecheck.py; sed -n 55,95p source",
+      "",
+      4361
+     ],
+     [
+      32,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "def kemi_shot",
+      "",
+      1623
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; S=/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f",
+      "",
+      441
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; S=/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f",
+      "",
+      94
+     ],
+     [
+      35,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "class Pen",
+      "",
+      519
+     ],
+     [
+      36,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "^def draw\\b\\|^def draw(\\|^def draw_front\\|^def shadow\\|o.line(\\|\\.render(X)",
+      "",
+      1912
+     ],
+     [
+      37,
+      "other",
+      "shared:kittests.py",
+      "source/*.py source/kittests.py",
+      "WF.draw\\|wolf.draw\\|WF\\.draw_front",
+      "",
+      172
+     ],
+     [
+      41,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def kt_\\|^def test_\\|^TESTS\\|^def _register\\|@kit",
+      "",
+      34
+     ],
+     [
+      42,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "fold_stub",
+      "",
+      3533
+     ],
+     [
+      44,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3\\|usage",
+      "",
+      428
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "source/*.py",
+      "^def pauses",
+      "",
+      1174
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scra",
+      "",
+      605
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scra",
+      "",
+      605
+     ],
+     [
+      50,
+      "film",
+      "before show",
+      "source/brexit_is_done_action.py",
+      "cd /home/user/Animation-; sed -n 200,355p source/brexit_is_done_action.py",
+      "",
+      605
+     ],
+     [
+      51,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 200+160",
+      "",
+      8796
+     ],
+     [
+      52,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 136+64",
+      "",
+      2889
+     ],
+     [
+      53,
+      "other",
+      "shared:cryminister.py",
+      "/home/user/Animation-/source/cryminister.py",
+      "pounce|def .*leap|land on|lands on|knock",
+      "",
+      162
+     ],
+     [
+      54,
+      "other",
+      "shared:cryminister.py",
+      "/home/user/Animation-/source/cryminister.py",
+      "maul|leap=|wolf_at|def .*wolf",
+      "",
+      1370
+     ],
+     [
+      55,
+      "other",
+      "shared:cryminister.py",
+      "/home/user/Animation-/source/cryminister.py",
+      "lines 700+110",
+      "",
+      6302
+     ],
+     [
+      56,
+      "other",
+      "shared:lying.py",
+      "source/lying.py",
+      "^def fall",
+      "",
+      605
+     ],
+     [
+      57,
+      "other",
+      "shared:lying.py",
+      "/home/user/Animation-/source/lying.py",
+      "^def fall",
+      "",
+      1919
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; python3 -c \" import sys;sys.path.insert(0,'source');sy",
+      "",
+      605
+     ],
+     [
+      59,
+      "other",
+      "shared:wolf.py",
+      "/home/user/Animation-/source/wolf.py",
+      "def pose|kind == 'leap'|kind == 'land'|'leap':|'land':|lift",
+      "",
+      1821
+     ],
+     [
+      60,
+      "other",
+      "shared:wolf.py",
+      "/home/user/Animation-/source/wolf.py",
+      "lines 516+60",
+      "",
+      3804
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "/home/user/Animation-/source",
+      "ATTACK|HIT\\b|WA\\[|WB\\[|RUN_V",
+      "",
+      2125
+     ],
+     [
+      64,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 203+30",
+      "",
+      1520
+     ],
+     [
+      70,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "^/tmp",
+      "",
+      31
+     ],
+     [
+      72,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 468+82",
+      "",
+      4765
+     ],
+     [
+      73,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 436+34",
+      "",
+      1944
+     ],
+     [
+      78,
+      "film",
+      "before show",
+      "source/*.py source/brexit_is_done_action.py source/brexit_is_done.py",
+      "_bar_man\\|ACT.LUNGES\\|LUNGES",
+      "",
+      300
+     ],
+     [
+      79,
+      "other",
+      "shared:pose_test.py",
+      "source/pose_test.py",
+      "A._bar_man",
+      "",
+      48
+     ],
+     [
+      83,
+      "film",
+      "before show",
+      "source/brexit_is_done_action.py source/brexit_is_done.py",
+      ",1)\ns=s.replace(",
+      "",
+      1
+     ],
+     [
+      85,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 640+80",
+      "",
+      4429
+     ],
+     [
+      86,
+      "film",
+      "before show",
+      "/home/user/Animation-/story/brexit-is-done-places.txt",
+      "beyond|corridor|doorway|door",
+      "",
+      204
+     ],
+     [
+      87,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/brexit_is_done_action.py",
+      "lines 610+32",
+      "",
+      2802
+     ],
+     [
+      89,
+      "other",
+      "shared:places.py",
+      "source/places.py",
+      "beyond",
+      "",
+      386
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "source/places*.py source/place_*.py",
+      "through\\|def double_doors\\|'double doors'\\|corridor",
+      "",
+      1838
+     ],
+     [
+      91,
+      "other",
+      "shared:places_site.py",
+      "/home/user/Animation-/source/places_site.py",
+      "lines 478+60",
+      "",
+      4175
+     ],
+     [
+      92,
+      "other",
+      "shared:places_site.py",
+      "story/*places*.txt source/places_site.py source/places.py source/moves.py",
+      "double doors",
+      "",
+      727
+     ],
+     [
+      93,
+      "film",
+      "before show",
+      "source/places_site.py story/brexit-is-done-places.txt",
+      "s edge, so perspective keeps all of it inside the doorway), a wall\n    # light. ",
+      "",
+      178
+     ],
+     [
+      95,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "^/tmp",
+      "",
+      31
+     ],
+     [
+      97,
+      "other",
+      "shared:moves.py",
+      "/home/user/Animation-/source/moves.py",
+      "lines 275+30",
+      "",
+      1789
+     ],
+     [
+      103,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scra",
+      "",
+      170
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f92-ad85-453c9df5d52c/scra",
+      "",
+      1026
+     ],
+     [
+      105,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "cd /home/user/Animation-; (time timeout 1700 python3 source/brexit_is_done.py fi",
+      "",
+      398
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; S=/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f",
+      "",
+      834
+     ],
+     [
+      109,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "cd /home/user/Animation-; S=/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f",
+      "",
+      398
+     ],
+     [
+      110,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "cd /home/user/Animation-; timeout 600 python3 source/handover.py end --film brex",
+      "",
+      3420
+     ],
+     [
+      112,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; S=/tmp/claude-0/-home-user-Animation-/dabc0ec2-d52d-5f",
+      "",
+      921
+     ],
+     [
+      113,
+      "film",
+      "before show",
+      "source/wolf.py source/brexit_is_done_action.py source/places_site.py source/pose",
+      "cd /home/user/Animation-; git add -A source/wolf.py source/brexit_is_done_action",
+      "",
+      448
+     ],
+     [
+      114,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "cd /home/user/Animation-; git diff notes/brexit-is-done.md | head -60",
+      "",
+      4202
+     ],
+     [
+      115,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "<<<<<<<\\|>>>>>>>",
+      "",
+      570
+     ],
+     [
+      116,
+      "other",
+      "film notes",
+      "notes/logs/handover-end.log story/status.md notes/brexit-is-done.md",
+      "cd /home/user/Animation-; git show :3:notes/logs/handover-end.log > /tmp/claude-",
+      "",
+      129
+     ],
+     [
+      117,
+      "film",
+      "before show",
+      "story/brexit-is-done-staging.txt source/brexit_is_done.py",
+      "cd /home/user/Animation-; git add story/brexit-is-done-staging.txt; git commit -",
+      "",
+      227
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
