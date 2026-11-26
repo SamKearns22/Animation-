@@ -175,3 +175,20 @@ Locked by Sam: May mode 'body' front and side; both three-quarters and shoes as 
 was (jacket point stays, Sam N 26 Nov); her posted outfit; Open Wounds' seated frames (switch off); the bum/seat.
 For Claude: propose.py show pose-kit-format prints both options; verdict in pose-kit-format.md. Branch claude/r7-chat12-pose-kit-format.
 
+
+## Where things stand (chat 12, 26 Nov, session_01U3pKQzd7WtTW95LHF7F6LQ)
+Rules that bite next: 87 (two flat rounds stop), 30 (fix the method), the proposal route (each later piece is one Lost/Added line Sam can refuse).
+Done: Sam picked pose-kit-format option 1, changed: other tools allowed when a pose needs them, no hard stop, the
+first reply names the default tool. Built: guides/pose-kits.md (named in job-packs.md "A pose kit job", kit-catalogue);
+billing by --film plus ledger.py rebook (R7 chats 1-5 moved; R7's own record 26.5%); the start check's POSE JOB line.
+Kittests ledger_told_film, ledger_rebook, pose_job_line pass on saved examples (notes/learn/pose-kit/examples/).
+Next: chat 13, Opus medium: pose-kit-format Learn (changes nothing): one filtered pass over R7's 11 chats (each Sam
+note, its layer, what would have caught it, its cost) into notes/learn/pose-kit/learn.md; then Kemi and Blair seated
+in mode 'body' under their posted outfits, beside their posted look, every R7 layer-edge check run: which carry, miss
+or cannot run. Then C2 (the one pose command, Opus high), each sent to Sam first as one Lost/Added line.
+Needs Sam: look at c11 (upright, apart; may-front-apart-r7c11.jpg); OK on c10c (shoes).
+Read: the pose kit job pack (guides/pose-kits.md); notes/proposals/pose-kit-format.md (Final version, Sam's pick). Open rule requests: none.
+Locked by Sam: May mode 'body' front and side; both three-quarters and shoes as on c10c once OKed; 'upright' as it
+was (jacket point stays); her posted outfit; Open Wounds' seated frames (switch off); the bum/seat. Kemi/Blair: look only.
+For Claude: handover end's "SENTENCE lost" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's. 2c60330e is double-booked (r7 0.11, proposal-route 0.08; not in R7's handovers, left). Branch claude/r7-chat12-pose-kit-format, main line pushed.
+

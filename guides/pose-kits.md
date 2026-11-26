@@ -53,7 +53,7 @@ Standing and moving poses on the body; Kemi, Blair or anyone but May in mode 'bo
 trousers (vest, skirt, dress). The next step (Learn, chat 13) tries Kemi and Blair seated and lists which checks carry.
 
 ## Still to build (pose-kit-format, in order)
-Learn (Kemi and Blair, changes nothing) → the tool as one command (body, outfit on top, layers, four views beside the
+Learn (done 26 Nov: `notes/learn/pose-kit/learn.md`, which checks carry to Kemi and Blair) → the tool as one command (body, outfit on top, layers, four views beside the
 posted look and reference, every carrying check, locked diff) → checks on every person → the stall stop, live once the
 scorers agree with Sam's verdict on May. Done 26 Nov: billing by `--film` and `rebook` (kittests `ledger_told_film`,
 `ledger_rebook`); the start line (kittest `pose_job_line`).

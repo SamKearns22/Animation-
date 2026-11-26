@@ -1,0 +1,174 @@
+{
+ "kemi front": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 1,
+  "seated_look": [
+   "SEATED front: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "kemi three-quarter": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "turned curves": 1,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": [
+   "SEATED three-quarter: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "kemi side": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": [
+   "SEATED side: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "kemi legs crossed": {
+  "seat crossings": 0,
+  "leg-leg crossings": 6,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "turned curves": 1,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": [
+   "SEATED legs crossed: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "kemi front apart": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 1,
+  "apart faults": [
+   "legs spread: 37 wider than the jacket",
+   "jacket triangle: hangs 105 below its hem between the thighs"
+  ],
+  "seated_look": [
+   "SEATED front apart: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "blair front": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 1,
+  "seated_look": [
+   "SEATED front: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "blair three-quarter": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 1,
+  "seated_look": [
+   "SEATED three-quarter: no bottom on the seat: only 22% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "blair side": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 1,
+  "seated_look": [
+   "SEATED side: no bottom on the seat: only 36% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "blair legs crossed": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 1,
+  "seated_look": [
+   "SEATED legs crossed: no bottom on the seat: only 21% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "blair front apart": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "apart faults": [
+   "jacket triangle: hangs 21 below its hem between the thighs",
+   "jacket triangle: only 0 of trousers under it"
+  ],
+  "seated_look": [
+   "SEATED front apart: no bottom on the seat: only 0% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "may front": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": [
+   "SEATED front: no bottom on the seat: only 84% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ },
+ "may three-quarter": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "turned curves": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": []
+ },
+ "may side": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": []
+ },
+ "may legs crossed": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "turned curves": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "seated_look": []
+ },
+ "may front apart": {
+  "seat crossings": 0,
+  "leg-leg crossings": 0,
+  "trousers pieces (picture)": 0,
+  "shoes pieces (picture)": 0,
+  "jacket under the hem": 0,
+  "shoe faults": 0,
+  "apart faults": [],
+  "seated_look": [
+   "SEATED front apart: no bottom on the seat: only 82% of the jacket's hem has the trousers under it (the seat shows under the rest): Sam, 24 Nov, \"No bum\""
+  ]
+ }
+}
