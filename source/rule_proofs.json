@@ -1246,16 +1246,6 @@
    "notes": "entry added chat 38 (the handover stop: rule 93 had no entry)",
    "plan": "a kittest runs pre-flight and the body check on a frame with a known fault through brexit_is_done.py final --span: the clip is written and override.advise prints the concern (the old stop refused it)",
    "kind_before": "code (override.advise)"
-  },
-  "W_one_question": {
-   "rule": "One question at a time; others waiting named in one line.",
-   "status": "owed",
-   "tests": [],
-   "example": "notes/learn/plain-words/bad-1-first-report-reply.md (five questions at once; Sam: \"Let's move through these one at a time in simple language\")",
-   "notes": "Sam 26 Nov, R8 chat 1",
-   "kind_before": "none",
-   "anchor": "One question at a time (Sam, 26 Nov, \"1. Y\"; this replaces \"every open decision in one message\" above):",
-   "owed": "R8 chat 2: the every-message plain-words checker also sends back a message with more than one question"
   }
  },
  "_baseline": {
