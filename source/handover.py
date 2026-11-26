@@ -647,7 +647,7 @@ def reach_faults(edited=None, shows=None, files_fn=None, notes_fn=None):
     said = ' '.join(notes_fn(film) for film in shows).lower()
     out = []
     for f in edited:
-        if f in REACH_FREE or f'finder reach: {f.lower()}' in said:
+        if f in REACH_FREE or re.search(rf'finder reach:[^\n]*\b{re.escape(f.lower())}', said):   # one line may name several
             continue
         if not any(f in c for c in covered.values()):
             out.append(f'FINDER REACH: this chat used the code finder ({", ".join(sorted(shows))}) and then edited {f}, '

@@ -4001,7 +4001,7 @@ def finder_reach_end_check():
     b = handover.reach_faults(chat39, shows, new, blank)
     c = handover.reach_faults(['views.py'], {'brexit-is-done': {'views.py'}}, new, blank)
     d = handover.reach_faults(chat39, {}, new, blank)
-    e = handover.reach_faults(['views.py'], shows, new, lambda film: 'finder reach: views.py (a new tool)')
+    e = handover.reach_faults(['views.py', 'body.py'], shows, new, lambda film: 'finder reach: views.py, body.py (a new tool)')
     bad = ([f'old finder: {len(a)} of 3 blind spots'] if sum(x.startswith('FINDER REACH') for x in a) != 3 else []) + \
           ([f'new finder: {len(b)} of 3 misses'] if sum(x.startswith('FINDER MISSED') for x in b) != 3 else []) + \
           (['a pointed-to edit flagged'] if c else []) + (['a chat with no show call flagged'] if d else []) + \
