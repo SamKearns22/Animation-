@@ -16796,17 +16796,27 @@
  ],
  "checks": {
   "quick check": {
-   "runs": 7,
-   "faults": 257,
+   "runs": 8,
+   "faults": 292,
    "kinds": {
     "benchmark": 4,
     "blair": 7,
-    "drawing": 175,
+    "drawing": 199,
     "house style": 4,
-    "may": 7,
-    "other": 26,
+    "may": 8,
+    "other": 31,
     "plan": 4,
-    "caption": 30
+    "caption": 34,
+    "kit inputs": 1
+   }
+  },
+  "pre-flight": {
+   "runs": 1,
+   "faults": 3,
+   "kinds": {
+    "critique": 1,
+    "drawing": 1,
+    "other": 1
    }
   }
  },
