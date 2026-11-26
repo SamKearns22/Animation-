@@ -19109,6 +19109,187 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "3083f467",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.09,
+   "src": "estimate",
+   "sid": "session_01J1JB7YNoonB7shJ4bXB2Vq",
+   "steps": 15,
+   "hist_k": 101,
+   "kinds": {
+    "film-file search": 1.8,
+    "tool search": 12.5,
+    "renders": 5.9,
+    "other": 79.7
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 9,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 0.3345,
+    "total": 0.3345,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 60.1,
+     "new writes": 19.6,
+     "Claude's words": 16.8,
+     "carried history": 3.5
+    },
+    "origins": {
+     "start-up floor": 60.1,
+     "Claude's words": 21.5,
+     "result: tool search": 9.1,
+     "result: renders": 5.0,
+     "messages and reminders": 2.6,
+     "result: other": 1.6,
+     "result: film-file search": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 60.1,
+     "commands": 11.0,
+     "start-up and handover tools": 5.1,
+     "thinking": 5.1,
+     "renders": 5.1,
+     "reading kit code": 3.1,
+     "writing code": 3.1,
+     "messages and reminders": 2.6,
+     "messages to Sam": 2.3,
+     "reading chat records": 1.4,
+     "reading guides": 0.7,
+     "other commands": 0.2,
+     "app tools (chats, files sent)": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 5,
+    "work_pct": 0.04,
+    "reads": [],
+    "base_pct": 35.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 3,
+     "shared:handover.py": 2,
+     "guides": 1,
+     "film notes": 1,
+     "shared:preflight.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; git fetch origin claude/cr",
+      "",
+      220
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/brexit-is-done.md",
+      "Where things stand",
+      "",
+      1036
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/brexit-is-done.md",
+      "Where things stand",
+      "",
+      7503
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "awk '/^## Checks and animatic/{f=1} f{print} /^## Final and posting/{exit}' guid",
+      "",
+      1030
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "render\\|animatic\\|override",
+      "",
+      54
+     ],
+     [
+      10,
+      "film",
+      "before show",
+      "source/data source/brexit_is_done.py source/data/brexit-is-done-clean.mp4",
+      "mkdir -p source/data && (time python3 source/brexit_is_done.py final source/data",
+      "",
+      267
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "sleep 60; tail -15 /tmp/claude-0/render.log",
+      "",
+      315
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "tail -15 /tmp/claude-0/render.log",
+      "",
+      31
+     ],
+     [
+      14,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "(time python3 source/preflight.py brexit_is_done /tmp/claude-0/pf --text) 2>&1 |",
+      "",
+      1264
+     ],
+     [
+      15,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "(time python3 source/preflight.py brexit-is-done /tmp/claude-0/pf --text) 2>&1 |",
+      "",
+      4458
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
