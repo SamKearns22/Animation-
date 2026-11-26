@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 52.0% of a week; spent 68.74% (+16.74); 39 chats, 0 rounds, 15 notes, 7 repeated.**
+**Estimate 52.0% of a week; spent 69.12% (+17.12); 39 chats, 0 rounds, 16 notes, 8 repeated.**
 
 **Stages (tracked quietly):**
 
@@ -60,8 +60,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-26 | 3083f467 | est | opus | auto |  | 4.09 |  | 0 | 0 |
 | 2026-11-26 | 05626271 | est | opus | auto |  | 2.5 |  | 0 | 0 |
 | 2026-11-26 | 35855f13 | est | opus | notes |  | 2.86 |  | 5 | 3 |
-| 2026-11-26 | 2fda13cc | est | opus | auto |  | 3.18 |  | 0 | 0 |
-| 2026-11-26 | 5d708050 | est | opus | auto |  | 0.61 |  | 0 | 0 |
+| 2026-11-26 | 2fda13cc | est | opus | auto |  | 3.44 |  | 0 | 0 |
+| 2026-11-26 | 5d708050 | est | opus | build |  | 0.73 |  | 1 | 1 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-23 9db844b1 (auto): 144 steps, history 273k at the end; other 66.1%, tool search 20.6%, pictures 7.1%, renders 5.5%, film-file search 0.6%, page.py 0.2%
@@ -96,8 +96,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 3083f467 (auto): 138 steps, history 196k at the end; other 86.6%, tool search 9.7%, renders 2.7%, pictures 0.7%, film-file search 0.3%
 - 2026-11-26 05626271 (auto): 155 steps, history 281k at the end; other 65.1%, tool search 17.4%, film-file search 10.2%, pictures 4.9%, renders 1.5%, page.py 0.7%, whole-file .py read 0.2%
 - 2026-11-26 35855f13 (notes): 179 steps, history 297k at the end; other 70.2%, tool search 19%, film-file search 4.6%, pictures 4.1%, page.py 1.4%, renders 0.5%, routine 0.2%
-- 2026-11-26 2fda13cc (auto): 175 steps, history 295k at the end; other 69.2%, tool search 22.4%, pictures 5.3%, film-file search 1.5%, renders 1.3%, page.py 0.3%
-- 2026-11-26 5d708050 (auto): 40 steps, history 153k at the end; other 63.9%, film-file search 25.2%, tool search 8.7%, pictures 1.5%, page.py 0.8%
+- 2026-11-26 2fda13cc (auto): 187 steps, history 308k at the end; other 69.3%, tool search 22.6%, pictures 5.2%, film-file search 1.4%, renders 1.2%, page.py 0.3%
+- 2026-11-26 5d708050 (build): 40 steps, history 153k at the end; other 63.9%, film-file search 25.2%, tool search 8.7%, pictures 1.5%, page.py 0.8%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-23 9db844b1 (auto): carried history 33.2%, start-up floor 27%, Claude's words 22.4%, new writes 17.4%. Biggest origins: Claude's words 41.2%, start-up floor 27%, result: tool search 15%. Leftover 0%
@@ -132,11 +132,11 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 3083f467 (auto): new writes 41%, carried history 22.2%, start-up floor 21.9%, Claude's words 14.9%. Biggest origins: messages and reminders 24.9%, Claude's words 22.5%, start-up floor 22%. Leftover 0%
 - 2026-11-26 05626271 (auto): start-up floor 33.4%, carried history 30%, Claude's words 20.8%, new writes 15.9%. Biggest origins: Claude's words 37.8%, start-up floor 33.4%, result: tool search 13.3%. Leftover 0%
 - 2026-11-26 35855f13 (notes): carried history 36.8%, start-up floor 27.9%, Claude's words 19%, new writes 16.3%. Biggest origins: Claude's words 36%, start-up floor 27.9%, result: tool search 15.1%. Leftover 0%
-- 2026-11-26 2fda13cc (auto): carried history 34.4%, start-up floor 26.5%, Claude's words 23.4%, new writes 15.7%. Biggest origins: Claude's words 45.1%, start-up floor 26.5%, result: tool search 14%. Leftover 0%
-- 2026-11-26 5d708050 (auto): start-up floor 35.4%, Claude's words 27.8%, new writes 25.3%, carried history 11.5%. Biggest origins: Claude's words 39.6%, start-up floor 35.4%, result: film-file search 10.9%. Leftover 0%
+- 2026-11-26 2fda13cc (auto): carried history 35.6%, start-up floor 25.9%, Claude's words 23.3%, new writes 15.3%. Biggest origins: Claude's words 45.6%, start-up floor 25.9%, result: tool search 14%. Leftover 0%
+- 2026-11-26 5d708050 (build): start-up floor 35.4%, Claude's words 27.8%, new writes 25.3%, carried history 11.5%. Biggest origins: Claude's words 39.6%, start-up floor 35.4%, result: film-file search 10.9%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 14% of the film (9.94% of a week over 34 chats: start 9.64, re-learning 0.30; 0.29% a chat; step-1 context re-read is 27% of a chat on average).
+A new chat's start and re-learning cost 14% of the film (9.95% of a week over 34 chats: start 9.64, re-learning 0.31; 0.29% a chat; step-1 context re-read is 27% of a chat on average).
 - 2026-11-23 9db844b1: step-1 context 84k; first real work at step 17 (0.26% of a week); read before it: source/facehouse.py 4.4k, source/turnhead.py 1.8k, notes/sam-notes/brexit-cast-v1/n2-blair-threequarter-not-same.jpg 1.6k, notes/sam-notes/brexit-cast-v1/n3-kemi-orange-gone-threequarter.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scratchpad/t0.jpg 1.6k, notes/sam-notes/brexit-cast-v1/notes.md 1.4k
 - 2026-11-23 f27fff03: step-1 context 84k; first real work at step 10 (0.12% of a week); read before it: notes/logs/broken.md 1k, source/watcher.py 0.4k, .claude/settings.json 0.3k, source/hookran.py 0.3k, source/data/freeze/films.json 0.2k
 - 2026-11-23 f960632f: step-1 context 84k; first real work at step 40 (0.53% of a week); read before it: source/castsheet.py 2.4k, source/sitting.py 2.2k, notes/next-jobs.md 1.6k, notes/brexit-is-done.md 1.6k, notes/sam-notes/brexit-cast-v2/n5-kemi-body-like-a-mans.jpg 1.6k, notes/sam-notes/brexit-cast-v2/n5-may-body.jpg 1.6k
@@ -180,6 +180,7 @@ A new chat's start and re-learning cost 14% of the film (9.94% of a week over 34
 - 24.2 smirk | smile moved the lip corners half a pixel: the kit could not draw a smirk
 - 24.4 shirt ridge | chat 12 moved the V, never reshaped it
 - 25 leg gap | the one-cloth trousers broke the tone the seated legs rely on
+- never ask a question whose pick is no | a check that a question's own pick is not 'N, don't'
 
 ## Checks (runs, faults, by kind)
 - pre-flight: 2 runs, 9 faults (MOVE SIZE 4, critique 2, drawing 1, other 1, CAMERA FEEL 1)
