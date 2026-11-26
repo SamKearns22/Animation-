@@ -22208,68 +22208,70 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.28,
+   "cost": 2.56,
    "src": "estimate",
    "sid": "session_01U3pKR1vBToEnKSzkJd6kM8",
-   "steps": 127,
-   "hist_k": 254,
+   "steps": 142,
+   "hist_k": 268,
    "kinds": {
-    "film-file search": 1.9,
-    "tool search": 24.8,
-    "page.py": 0.4,
-    "renders": 0.8,
+    "film-file search": 1.7,
+    "tool search": 24.3,
+    "page.py": 0.3,
+    "renders": 1.1,
     "pictures": 5.4,
-    "other": 66.6
+    "other": 67.2
    },
    "calls": {
     "film-file search": 9,
-    "tool search": 70,
+    "tool search": 80,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
-    "renders": 3,
+    "renders": 4,
     "pictures": 19,
-    "other": 27
+    "other": 28
    },
    "split": {
-    "usd": 7.4235,
-    "total": 7.4235,
+    "usd": 8.4453,
+    "total": 8.4453,
     "floor_k": 85,
     "blocks": {
-     "start-up floor": 28.3,
-     "carried history": 27.5,
-     "Claude's words": 26.0,
-     "new writes": 18.3
+     "carried history": 29.8,
+     "start-up floor": 27.6,
+     "Claude's words": 25.2,
+     "new writes": 17.4
     },
     "origins": {
-     "Claude's words": 44.8,
-     "start-up floor": 28.3,
+     "Claude's words": 45.0,
+     "start-up floor": 27.6,
      "result: tool search": 13.9,
-     "result: pictures": 5.3,
-     "messages and reminders": 4.9,
-     "result: other": 1.1,
+     "result: pictures": 5.4,
+     "messages and reminders": 5.1,
+     "result: other": 1.2,
+     "result: film-file search": 0.6,
      "Claude's edits": 0.6,
-     "result: film-file search": 0.5,
-     "result: page.py": 0.5
+     "result: page.py": 0.5,
+     "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 28.3,
-     "thinking": 19.9,
-     "writing code": 9.8,
-     "reading kit code": 8.5,
-     "commands": 7.6,
-     "writing notes": 5.7,
-     "looking at pictures": 5.3,
-     "messages and reminders": 4.9,
-     "reading notes": 3.2,
-     "start-up and handover tools": 2.1,
-     "messages to Sam": 1.5,
+     "start-up reading (rules, tools, first files)": 27.6,
+     "thinking": 19.3,
+     "writing code": 9.2,
+     "reading kit code": 8.4,
+     "commands": 7.9,
+     "writing notes": 6.3,
+     "looking at pictures": 5.4,
+     "messages and reminders": 5.1,
+     "reading notes": 3.4,
+     "messages to Sam": 2.1,
+     "start-up and handover tools": 2.0,
      "helper and chat prompts": 0.8,
      "running checks and tools": 0.6,
+     "other commands": 0.6,
      "reading guides": 0.6,
-     "other commands": 0.5,
      "helper results": 0.4,
-     "renders": 0.2
+     "renders": 0.2,
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
@@ -22281,60 +22283,60 @@
      [
       "source/views.py",
       3.2,
-      0.0917
+      0.1003
      ],
      [
       "source/castsheet.py",
       2.8,
-      0.0815
+      0.0891
      ],
      [
       "source/solid_seat.py",
       2.3,
-      0.0601
+      0.0663
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57482c2/scratchpad/kemi_front.png",
       1.6,
-      0.0453
+      0.0497
      ],
      [
       "notes/sam-notes/brexit-cast-v3/n8-camel-toe.jpg",
       1.6,
-      0.0448
+      0.0491
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57482c2/scratchpad/kemi_crotch_zoom.png",
       1.6,
-      0.0442
+      0.0485
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57482c2/scratchpad/may_crotch_zoom.png",
       1.6,
-      0.0428
+      0.0471
      ],
      [
       "source/page.py",
       0.8,
-      0.0229
+      0.025
      ],
      [
       "source/body.py",
       0.7,
-      0.0201
+      0.0221
      ],
      [
       "guides/job-packs.md",
       0.6,
-      0.0164
+      0.0179
      ],
      [
       "source/people.py",
       0.5,
-      0.0125
+      0.0138
      ]
     ],
-    "base_pct": 26.0
+    "base_pct": 25.6
    },
    "search": {
     "show": 1,
@@ -22344,16 +22346,16 @@
      "after show": 9
     },
     "other": {
-     "other": 26,
+     "other": 30,
      "shared:handover.py": 2,
-     "shared:views.py": 11,
+     "shared:views.py": 12,
      "guides": 2,
      "shared:castsheet.py": 5,
      "shared:people.py": 1,
      "shared:solid_seat.py": 3,
      "shared:sitting.py": 1,
      "shared:blessed_cast.py": 1,
-     "film notes": 3,
+     "film notes": 8,
      "shared:kittests.py": 6,
      "shared:people_parts.py": 1,
      "shared:facehouse.py": 5,
@@ -23074,6 +23076,96 @@
       "until [ $(ls /tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57",
       "",
       267
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds chat 39: hard hat tips whole in a nod,",
+      "",
+      106
+     ],
+     [
+      130,
+      "other",
+      "other",
+      "",
+      "^\\s*$",
+      "",
+      1351
+     ],
+     [
+      132,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds chat 39: handover (nod clips and shot ",
+      "",
+      295
+     ],
+     [
+      133,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git diff --name-only --diff-filter=U; git show origin/claude/create-claude-md-oe",
+      "",
+      760
+     ],
+     [
+      134,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/logs/handover-end.log",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      "",
+      310
+     ],
+     [
+      135,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 60,82p notes/brexit-is-done.md | cut -c1-220",
+      "",
+      2594
+     ],
+     [
+      136,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/logs/handover-end.log story/status.md notes/check-",
+      "<<<<<<<",
+      "",
+      93
+     ],
+     [
+      138,
+      "other",
+      "shared:views.py",
+      "source/views.py source/kittests.py",
+      "^NOD_DEG",
+      "",
+      1252
+     ],
+     [
+      139,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() a=\"Judge faults ",
+      "",
+      192
+     ],
+     [
+      140,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      "",
+      103
      ]
     ]
    },
