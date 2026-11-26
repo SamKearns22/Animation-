@@ -6,3 +6,6 @@ Animation project, the job that makes the code search reach every file we use (f
 ### 2026-11-26T23:30:33
 In light of learning that this essential tool was only slightly working (just like the communication tool), how can I know if all essential tools are working?
 
+### 2026-11-26T23:31:23
+List our essential tools for usage reduction.
+
