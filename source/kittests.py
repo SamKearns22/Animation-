@@ -704,6 +704,35 @@ def jacket_triangle():
 
 
 @test
+def solid_crop_same():
+    """Speed (Sam's Y, 26 Nov: "A 10 second clip taking 15 mins is unsustainable"): the seated body is drawn over its
+    own box, not the whole picture (solid_seat.CROP). Proven to change nothing: May's shot 1 frame and a crossed-legs
+    sheet tile pixel for pixel with the box off and on, and the box faster."""
+    import sys
+    import time
+    import numpy as np
+    sys.path.insert(0, 'source')
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import solid_seat as SO
+    import brexit_is_done as F
+    import sheet_solid as SH
+    SH.MODE = 'body'
+    keep, out, secs = SO.CROP, {}, {}
+    try:
+        for c in (False, True):
+            SO.CROP = c
+            t0 = time.time()
+            out[c] = [np.asarray(F.may_shot(3.0).convert('RGB'))]
+            secs[c] = time.time() - t0
+            out[c].append(np.asarray(SH.tile('kemi', -45, 'cross, knee over knee', full=True)[0]))
+    finally:
+        SO.CROP = keep
+    moved = [int((np.abs(a.astype(int) - b.astype(int)).sum(-1) > 0).sum()) for a, b in zip(out[False], out[True])]
+    return not any(moved) and secs[True] < secs[False], (
+        f"dots moved (May's frame, Kemi crossed tile): {moved}; May's frame {secs[False]:.1f} s -> {secs[True]:.1f} s")
+
+
+@test
 def fold_stub():
     """Open Wounds chat 27 (May on the seated body tool, shot 1): a fold line inside her back leg (the calf over the
     thigh) faded out in the open at the seat's edge, a loose ink tick (examples/ow-c27-may-calf-fold-tick.png, the
