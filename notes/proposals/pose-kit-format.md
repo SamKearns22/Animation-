@@ -133,11 +133,3 @@ You'd notice: The same true cost and first sheets beside the posted look.
 Other option: Option 1, which builds the method into the tool itself.
 Lost: Patching hand-drawn legs.
 Added: A list checked at hand-over; about 5% of a week once.
-
-## Sam's pick (26 Nov, chat 12)
-Sam: "Y though give me the options to use other tools for a pose if a situation requires it. No hard stop on
-handover. Just tell me you're using the default tool when you start unless I say otherwise"
-So: option 1 (V3), changed: C3 has no hand-over refusal; instead the start of every pose job says "Pose job: using the
-default pose tool (posekit) unless you say otherwise", and the tool accepts another tool by a named reason (logged,
-told to Sam). The tool's own refusals stay only where a CLAUDE.md lock is at stake (a locked pose moved, the posted
-outfit redrawn); a missing reference photo is a named warning, not a stop.
