@@ -18323,83 +18323,97 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.29,
+   "cost": 0.78,
    "src": "estimate",
    "sid": "session_01U3pKQxkZw5Lj6ByMN1w4UA",
-   "steps": 16,
-   "hist_k": 132,
+   "steps": 46,
+   "hist_k": 184,
    "kinds": {
-    "tool search": 22.8,
-    "other": 77.2
+    "tool search": 29.2,
+    "renders": 2.9,
+    "other": 68.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 13,
+    "tool search": 37,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
+    "renders": 2,
     "pictures": 0,
     "other": 2
    },
    "split": {
-    "usd": 1.0768,
-    "total": 1.0768,
+    "usd": 2.8519,
+    "total": 2.8519,
     "floor_k": 99,
     "blocks": {
-     "start-up floor": 51.0,
-     "new writes": 24.3,
-     "Claude's words": 20.7,
-     "carried history": 4.0
+     "start-up floor": 38.1,
+     "Claude's words": 25.4,
+     "new writes": 23.8,
+     "carried history": 12.7
     },
     "origins": {
-     "start-up floor": 51.0,
-     "Claude's words": 27.2,
-     "result: tool search": 19.7,
-     "messages and reminders": 2.0,
-     "result: other": 0.1
+     "start-up floor": 38.1,
+     "Claude's words": 36.2,
+     "result: tool search": 23.9,
+     "messages and reminders": 1.4,
+     "result: renders": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 51.0,
-     "reading notes": 18.0,
-     "thinking": 9.6,
-     "writing code": 7.5,
-     "messages to Sam": 4.1,
-     "commands": 3.5,
-     "writing notes": 2.5,
-     "messages and reminders": 2.0,
-     "start-up and handover tools": 1.1,
-     "running checks and tools": 0.7
+     "start-up reading (rules, tools, first files)": 38.1,
+     "reading notes": 18.6,
+     "thinking": 14.3,
+     "writing code": 8.6,
+     "commands": 5.6,
+     "messages to Sam": 4.7,
+     "start-up and handover tools": 3.2,
+     "writing notes": 3.0,
+     "messages and reminders": 1.4,
+     "reading guides": 1.3,
+     "running checks and tools": 0.9,
+     "renders": 0.1,
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
    "start": {
     "floor_k": 99,
-    "work_step": null,
-    "work_pct": null,
+    "work_step": 26,
+    "work_pct": 0.45,
     "reads": [
      [
       "notes/proposals/chat-size-and-model.md",
       0.7,
-      0.0057
+      0.0095
      ],
      [
       "notes/proposals/chat-size-and-model/sam.md",
       0.7,
-      0.0057
+      0.0095
      ],
      [
       "notes/proposals/dearest-week.md",
       0.7,
-      0.0057
+      0.0095
+     ],
+     [
+      "notes/logs/grand-theft-autism-show.log",
+      0.6,
+      0.0081
      ],
      [
       "story/status.md",
       0.4,
-      0.0044
+      0.0067
+     ],
+     [
+      "notes/steps-breakdown.md",
+      0.1,
+      0.0008
      ]
     ],
-    "base_pct": 25.0
+    "base_pct": 28.3
    },
    "search": {
     "show": 0,
@@ -18407,11 +18421,13 @@
      "no show": 0
     },
     "other": {
-     "film notes": 5,
-     "other": 5,
+     "film notes": 14,
+     "other": 11,
      "shared:ledger.py": 1,
      "shared:costline.py": 1,
-     "shared:handover.py": 1
+     "shared:handover.py": 6,
+     "shared:kittests.py": 1,
+     "guides": 3
     },
     "ticked": 0,
     "edited film code": false,
@@ -18532,6 +18548,222 @@
       "fewer steps\\|rework",
       "",
       701
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "notes/archive notes/ledger/grand-theft-autism.json notes/logs/grand-theft-autism",
+      "grand|brexit",
+      "",
+      2470
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md notes/archive/brexit-is-done-hando",
+      "^\\- \\*\\*Done\\|^- Done\\|Done (",
+      "",
+      6559
+     ],
+     [
+      17,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md",
+      "^#",
+      "",
+      3579
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/ledger/grand-theft-autism.json notes/archive/brexit-is-done-handovers.md",
+      "^## \\|^- Done",
+      "",
+      4349
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "notes/archive/brexit-is-done-handovers.md",
+      "done",
+      "",
+      8100
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/ledger/brexit-is-done.json notes/archive/brexit-is-done-handovers.md",
+      "Done",
+      "",
+      4985
+     ],
+     [
+      21,
+      "other",
+      "film notes",
+      "notes/steps-breakdown.md notes/ledger/*.json",
+      " Done lines.\nChats mapped to jobs by handover order (approximate: a few strands ",
+      "",
+      284
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      "",
+      135
+     ],
+     [
+      23,
+      "other",
+      "shared:kittests.py",
+      "notes/learn story/grand-theft-autism-shots.json guides/film-quality-rules.md sou",
+      "^| *9[0-9]\\|^## \\|^### 9",
+      "",
+      2860
+     ],
+     [
+      24,
+      "other",
+      "shared:handover.py",
+      "source/handover.py guides/pose-kits.md",
+      "learn-first\\|learn first\\|obscene",
+      "",
+      8852
+     ],
+     [
+      25,
+      "other",
+      "film notes",
+      "notes/ledger/sam notes/brexit-is-done.md",
+      "obscene",
+      "",
+      2334
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git status -sb | head -3; git push -u origin claude/ex",
+      "",
+      343
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      "",
+      73
+     ],
+     [
+      28,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py",
+      "LEARN\\|learn_first\\|def learn",
+      "",
+      599
+     ],
+     [
+      29,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py",
+      "cd /home/user/Animation-; git branch --show-current; git log --oneline -3; sed -",
+      "",
+      5449
+     ],
+     [
+      30,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md story/grand-theft-autism-page.md notes/ledger notes/",
+      ".\\{60\\}\\(lean.out\\|leans out\\|climbs out\\|window ledge\\).\\{40\\}",
+      "",
+      490
+     ],
+     [
+      31,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-notes.md notes/ledger/pose-test.json",
+      "brief checklist\\|^## ",
+      "",
+      3166
+     ],
+     [
+      32,
+      "other",
+      "guides",
+      "guides/pose-kits.md guides/film-quality-rules.md notes/learn/pose-kit/examples/",
+      "| 91 |",
+      "",
+      2807
+     ],
+     [
+      35,
+      "other",
+      "shared:handover.py",
+      "source/*.py source/handover.py source/kittests.py",
+      "pose_families\\|pose-kits.md",
+      "",
+      308
+     ],
+     [
+      36,
+      "other",
+      "shared:handover.py",
+      "guides/pose-kits.md guides/film-quality-rules.md source/handover.py source/kitte",
+      "cd /home/user/Animation-; git add guides/pose-kits.md guides/film-quality-rules.",
+      "",
+      1563
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "notes/sam-notes",
+      "cd /home/user/Animation-; ls notes/sam-notes | head -30; ls notes/sam-notes | wc",
+      "",
+      53
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "notes/sam-notes/* notes/sam-notes/*/*.md notes/sam-notes/*/*.txt",
+      "cd /home/user/Animation-; ls notes/sam-notes/*; for f in notes/sam-notes/*/*.md ",
+      "",
+      4095
+     ],
+     [
+      39,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "^## \\|solid\\|hide\\|occlu\\|in front",
+      "",
+      1802
+     ],
+     [
+      40,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "cd /home/user/Animation-; sed -n 125,175p guides/kit-catalogue.md | cut -c1-260",
+      "",
+      9569
      ]
     ]
    },
