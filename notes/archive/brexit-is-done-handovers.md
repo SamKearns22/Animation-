@@ -362,3 +362,15 @@ into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, set
 - **Read:** guides/job-packs.md Checks and animatic; source/freeze.py count.
 - **End check (chat 20), answered:** the GTA branches are GTA's; the CLAUDE.md SENTENCE lines are Sam's own edits, named since chat 1; FREEZE 20 to 21 is the open stop above; the RECORD line is my `preflight.py --help` (no run, saves nothing).
 - **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats.
+
+
+## chat 21 handover
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 21 pushed there).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
+- **Rules that bite next:** 59 (render lock), 89 (fresh look), 13 (every waived line has its row).
+- **Done (chat 21):** freeze stop fixed in the kit, baseline untouched: the 21st file was model_body_test.py (the finished model-body investigation, added 25 Nov), which redraws Islamocommunism and holds only that film's pieces; filed on the film side as source/islamocommunism_model_body.py. Freeze count back to 20, no faults.
+- **Next:** chat 22, Sonnet: python3 source/finish.py animations/drafts/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done (no new render; clean render 1.3 MB, drawn in 12 min in chat 20); send the animatic to Sam in the chat with any Checks line, its size and the 12 min; push main line and animations/drafts; push notification; stop.
+- **Needs Sam:** nothing until the animatic.
+- **Read:** guides/job-packs.md Checks and animatic.
+- **End check (chat 21), answered:** QUICK CHECK islamocommunism (2 ALLOWED_POPS rows, aoc through the door) is the posted film, its code untouched; it shows only because the renamed test now sits under its name: left to that film, no change. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats. The CLAUDE.md SENTENCE lines are Sam's own edits (named since chat 1).
+- **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats (named chat 20).

@@ -303,6 +303,10 @@ def main():
         for a, b in ((dst, f'{slug}-animatic.mp4'), (src, f'{slug}-clean.mp4')):
             if os.path.realpath(a) != os.path.realpath(os.path.join(keep, b)):
                 shutil.copy(a, os.path.join(keep, b))
+        import humancheck as _hc                   # the body-check records travel with the kept pair (chat 22: a new chat found none, so the send gate refused)
+        for a, b in ((dst, f'{slug}-animatic.mp4'), (src, f'{slug}-clean.mp4')):
+            if os.path.exists(_hc._side(a)) and os.path.realpath(_hc._side(a)) != os.path.realpath(_hc._side(os.path.join(keep, b))):
+                shutil.copy(_hc._side(a), _hc._side(os.path.join(keep, b)))
         if os.path.exists(src + cover.SIDE):       # what it drew, so a later finish from the kept copy can check it
             shutil.copy(src + cover.SIDE, os.path.join(keep, f'{slug}-clean.mp4' + cover.SIDE))
         print(f'kept on GitHub: animations/drafts/{slug}-animatic.mp4 and -clean.mp4 (commit and push them)')

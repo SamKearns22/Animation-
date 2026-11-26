@@ -48,15 +48,16 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 21 pushed there).
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 22 pushed there).
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
-- **Rules that bite next:** 59 (render lock), 89 (fresh look), 13 (every waived line has its row).
-- **Done (chat 21):** freeze stop fixed in the kit, baseline untouched: the 21st file was model_body_test.py (the finished model-body investigation, added 25 Nov), which redraws Islamocommunism and holds only that film's pieces; filed on the film side as source/islamocommunism_model_body.py. Freeze count back to 20, no faults.
-- **Next:** chat 22, Sonnet: python3 source/finish.py animations/drafts/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done (no new render; clean render 1.3 MB, drawn in 12 min in chat 20); send the animatic to Sam in the chat with any Checks line, its size and the 12 min; push main line and animations/drafts; push notification; stop.
-- **Needs Sam:** nothing until the animatic.
+- **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
+- **Done (chat 22):** animatic made by finish.py (Hook Text, sign-off; 1.3 MB) and kept in animations/drafts; two tool bugs fixed in finish.py (it deleted its own inputs when they sat in animations/drafts; it did not keep the body-check records). Places kit test failed once inside the full run, passed alone (flaky, not a drawing fault).
+- **Blocked:** the send gate refused the animatic: the clean render's body-check record (animations/drafts/*.bodycheck.json) was never pushed by chat 20, so this container has none, and rule 89 also wants a fresh critique. Nothing forged. Sam has NOT seen the animatic.
+- **Next:** chat 23, Opus medium: either re-run the body check on the clean render (needs the drawing run again, about 12 min, Sam said no new render so ask or take it as routine under rule 59) or rebuild the record from the clean render's frames if humancheck can; then critique.py pack with a fresh helper, humancheck.py critiqued, finish.py from a copy outside animations/drafts, send, push, stop.
+- **Needs Sam:** nothing.
 - **Read:** guides/job-packs.md Checks and animatic.
-- **End check (chat 21), answered:** QUICK CHECK islamocommunism (2 ALLOWED_POPS rows, aoc through the door) is the posted film, its code untouched; it shows only because the renamed test now sits under its name: left to that film, no change. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats. The CLAUDE.md SENTENCE lines are Sam's own edits (named since chat 1).
-- **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats (named chat 20).
+- **End check (chat 22), answered as in chat 21:** branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats; the CLAUDE.md SENTENCE lines (34f49840, 0945cc85) are Sam's own edits, named since chat 1.
+- **Open rule requests:** none. **For Claude:** 4 GTA branches left to GTA chats; kit-tests-when.md verdict stale.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
@@ -141,4 +142,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 46.69% of 15%; forecast 53.7% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 46.99% of 15%; forecast 54% (2026-11-26)
