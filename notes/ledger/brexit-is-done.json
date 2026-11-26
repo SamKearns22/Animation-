@@ -12689,6 +12689,242 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "e9cb65f9",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.15,
+   "src": "estimate",
+   "sid": "session_01U3pKR2T5L4URKFwtfiPeY5",
+   "steps": 23,
+   "hist_k": 111,
+   "kinds": {
+    "tool search": 17.1,
+    "routine": 3.4,
+    "renders": 6.0,
+    "other": 73.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 14,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 3,
+    "renders": 3,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 0.5495,
+    "total": 0.5495,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 51.5,
+     "Claude's words": 23.5,
+     "new writes": 19.5,
+     "carried history": 5.5
+    },
+    "origins": {
+     "start-up floor": 51.5,
+     "Claude's words": 30.6,
+     "result: tool search": 13.2,
+     "messages and reminders": 1.9,
+     "result: routine": 1.6,
+     "result: other": 0.6,
+     "result: renders": 0.5
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 51.5,
+     "commands": 9.9,
+     "thinking": 5.5,
+     "writing notes": 5.1,
+     "writing code": 4.9,
+     "running checks and tools": 3.9,
+     "reading notes": 3.6,
+     "messages to Sam": 3.4,
+     "start-up and handover tools": 2.8,
+     "renders": 2.4,
+     "messages and reminders": 1.9,
+     "helper and chat prompts": 1.8,
+     "reading kit code": 1.6,
+     "git and saving": 1.0,
+     "app tools (chats, files sent)": 0.6
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 12,
+    "work_pct": 0.09,
+    "reads": [
+     [
+      "source/kittests.py",
+      1.3,
+      0.0073
+     ],
+     [
+      "notes/kittest-stamps.tsv",
+      0.5,
+      0.0029
+     ],
+     [
+      "source/finish.py",
+      0.5,
+      0.0024
+     ]
+    ],
+    "base_pct": 33.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 1,
+     "shared:kittests.py": 2,
+     "shared:finish.py": 1,
+     "shared:humancheck.py": 3,
+     "film notes": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; git fetch origin claude/cr",
+      "",
+      358
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1 | tail -1; git ",
+      "",
+      5046
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "places_from_a_description",
+      "",
+      2067
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs/kittests-last.log source/kittest*.py .claude",
+      "places_from",
+      "",
+      6913
+     ],
+     [
+      5,
+      "other",
+      "shared:kittests.py",
+      "notes/kittest-stamps.tsv source/kittests.py source/sets.py source/places.py",
+      "^places_from",
+      "",
+      5210
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv",
+      "git log --format='%h %ad %s' --date=format:%H:%M -8 | cut -c1-150; sed -n 279p n",
+      "",
+      2129
+     ],
+     [
+      7,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 source/kittests.py --help 2>&1 | head -8; python3 source/kittests.py pla",
+      "",
+      298
+     ],
+     [
+      9,
+      "other",
+      "shared:finish.py",
+      "source/finish.py",
+      "git status --short | head; sed -n 285,310p source/finish.py",
+      "",
+      1884
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit FETCH_",
+      "",
+      254
+     ],
+     [
+      17,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "def copy_record",
+      "",
+      1804
+     ],
+     [
+      18,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sys.argv\\|argparse\\|add_argument\\|cmd ==",
+      "",
+      3436
+     ],
+     [
+      19,
+      "other",
+      "shared:humancheck.py",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md source/humanch",
+      "bodycheck",
+      "",
+      412
+     ],
+     [
+      21,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 50,64p notes/brexit-is-done.md | cut -c1-120",
+      "",
+      1411
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "python3 - <<'E' p='notes/brexit-is-done.md' s=open(p).read() s=s.replace(\"- **Op",
+      "",
+      81
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
