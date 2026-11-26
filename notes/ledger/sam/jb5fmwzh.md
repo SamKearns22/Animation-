@@ -9,3 +9,8 @@ Still open for Sam (ask once, numbered, with anything new): Q1 the 7 px nod floo
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 now framing 2). No change to timing, lines, mouths, soundtrack.
 For Claude: main line claude/create-claude-md-oe8z4g (chat 39's work merged and pushed there); chat 39 branch claude/brexit-chat39; views.Pitched/face_box/NOD_DEG/NOD_SOLID/_split_long, solid_seat.STAND_LEG_GAP, source/wikifetch.py, notes/learn/nod/.
 
+### 2026-11-26T23:01:33
+1. Y
+
+If you ask about the shared drawing tools and you recommend N, you didn't need to ask about them. I believe I told you to only ask if you felt like it was required
+
