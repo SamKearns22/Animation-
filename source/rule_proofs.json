@@ -1160,6 +1160,61 @@
     "learn_first"
    ],
    "example": "Sam, 26 Nov (notes/learn/pose-kit/examples/sam-26nov-learn-first.md): \"Next time we need a new pose, quote this rule and what you need to learn before executing it.\" Open Wounds' brief (a worker running from wolves, men fighting with steel bars, Blair in an armchair) gets the rule and five families to learn; a sitting-only job gets nothing."
+  },
+  "N30": {
+   "rule": "Checks are advised, not automatic: before a clip or animatic, one line names the checks, why and how long; they run on Sam's Y or ask. Finals keep their checks.",
+   "anchor": "Checks are advised, not automatic (Sam, 26 Nov):",
+   "status": "proven",
+   "tests": [
+    "practice_mode"
+   ],
+   "example": "Sam, 26 Nov, pose-test chat 1 (session_01U3pKR3DtLpm97GCSPH6Kke): \"This is just a practice clip ... taking almost half an hour\"; a 3 s clip took 12 min under the body check and 112 kit tests ran for a test clip; kittest practice_mode replays it (no body check, no record, only a final held)",
+   "notes": "Sam, 26 Nov (pose-test chat 1); entry written by crowd pool chat 1 (the pose-test chat never ran handover end)",
+   "kind_before": "new"
+  },
+  "N31": {
+   "rule": "Practice clips (Kind: practice): no kit tests, body check or critique; sent as made.",
+   "anchor": "Practice clips",
+   "status": "proven",
+   "tests": [
+    "practice_mode"
+   ],
+   "example": "Sam, 26 Nov, pose-test chat 1 (session_01U3pKR3DtLpm97GCSPH6Kke): \"This is just a practice clip ... taking almost half an hour\"; a 3 s clip took 12 min under the body check and 112 kit tests ran for a test clip; kittest practice_mode: a practice job starts no kit tests",
+   "notes": "Sam, 26 Nov",
+   "kind_before": "new"
+  },
+  "N32": {
+   "rule": "The proposal route runs on request only; no automatic guard.",
+   "anchor": "The proposal route, on request only (Sam, 26 Nov):",
+   "status": "proven",
+   "tests": [
+    "practice_mode"
+   ],
+   "example": "Sam, 26 Nov 15:08 (pose-test chat 1): \"No, I don't think we need to run it through the proposal step.\" kittest practice_mode: the proposal guard never stops a reply unless PROPOSE_GUARD=1",
+   "notes": "Sam, 26 Nov",
+   "kind_before": "new"
+  },
+  "N33": {
+   "rule": "People in tests are the crowd pack or grey, never the old default bald head.",
+   "anchor": "People in tests are the crowd pack or grey (Sam, 26 Nov):",
+   "status": "proven",
+   "tests": [
+    "crowd_head_installed",
+    "crowd_pool"
+   ],
+   "example": "notes/learn/pose-test/sheet-keyframes.jpg (Sam, 26 Nov: \"these low-resolution, early film, bald practice heads ... I don't want to see them\"): kittest crowd_head_installed flags that scene's worker and passes it once installed; crowd_pool does the same for a pooled passer-by",
+   "notes": "Sam, 26 Nov",
+   "kind_before": "new"
+  },
+  "N34": {
+   "rule": "Always test anything we build: its own kit test, run once.",
+   "anchor": "Always test anything we build",
+   "status": "next",
+   "tests": [],
+   "example": "crowd pool chat 1 (26 Nov, notes/crowd-pool.md): the pooled pack's own kittest crowd_pool, run once, caught 9 tops and 2 grey hair colours missing from the pool and a hat-colour clash before it passed",
+   "plan": "a handover check that every new public function or kit file added in the chat's commits is named by a kittest (docstring or call); its example: a build commit with no test",
+   "notes": "Sam, 26 Nov",
+   "kind_before": "new"
   }
  },
  "_baseline": {

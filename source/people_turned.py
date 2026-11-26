@@ -121,6 +121,10 @@ def _hair(img, p, f, L, sp, look):
     TH.clipped(img, p, mask, strands)
     if st.get('pony'):                                         # a ponytail from the back of the head, a band round it
         x, y = bx, f.top + (0.36 if not fc.get('pony_high') else -0.12) * H   # GTA: a high ponytail (Lucia)
+        if sp.get('pony_edge') and yaw < 88:                   # crowd pool chat 1: turned less than side-on, the back of
+            sil = TH.silhouette(f, 0.02)                       # the skull is behind the head, so the tail hangs from the
+            v = min(max((y - f.top) / H, f.v0 + 0.05), f.v1 - 0.1)   # head's back edge, not over the cheek (new films)
+            x = min((r for r in sil if r[3] == 'near'), key=lambda r: abs(r[2] - v))[0] + 0.03 * H
         k = 1.0 if not fc.get('pony_high') else 1.7                     # a high tail falls past the nape
         fk = 1.35 if fc.get('pony_high') else 1.0                      # chat 9: Lucia's tail fuller (Sam)
         tail = [(x - 16, y), (x - 26 * k ** 0.5 * fk, y + 60 * k), (x - 20 * fk, y + 130 * k), (x - 4, y + 168 * k),

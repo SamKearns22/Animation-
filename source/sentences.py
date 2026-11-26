@@ -82,6 +82,19 @@ SAM_REWORDED = {   # sentences Sam himself rewrote (his words now stand in their
                                                      'aims at Statement One" in "Rules are permanent"',
     'Every stage aims at three things: high quality': 'the same, reworded again by Sam\'s 22 Nov Statement One',
     'Be honest about what I can do (Sam, 21 Nov)': 'Statement Two (Sam, 21 Nov), top of CLAUDE.md',
+    # Settled by crowd pool chat 1 (26 Nov): the two 23 Nov rewordings were Sam's (chat 48: Override, his pick; the
+    # Locked line out of messages, "it doesn't help me"), their current words stand in CLAUDE.md today; the 26 Nov ones
+    # are his pose-test chat 1 words ("No, I don't think we need to run it through the proposal step"; "advise
+    # whether you want to run a certain suite of checks"; "It doesn't have to be perfect").
+    'Every handover has a "Locked by Sam" line naming the cameras and beats that must not move':
+        'the same sentence, now "... It stays in the notes, never in messages to me" (Sam, 23 Nov)',
+    '"Just go"': '"Just go" (or any override) skips waiting for my yes ... (Sam\'s Override pick, 23 Nov)',
+    'No check sheet before an animatic unless I ask: once the checks pass':
+        '"No check sheet before an animatic unless I ask: render the animatic and send it" (checks advised, Sam 26 Nov)',
+    'The proposal route: "Every change to rules': 'The proposal route, on request only (Sam, 26 Nov)',
+    'The guard refuses an unjudged ask': 'The proposal route, on request only: "No automatic guard" (Sam, 26 Nov)',
+    'Changes made without asking are listed and judged in the end-of-film review':
+        'The proposal route, on request only (Sam, 26 Nov): run when Sam asks',
     'Choose views the drawing can carry.': 'Seeing like Sam 4, now bold-split by Sam\'s 21 Nov wording',
 }
 

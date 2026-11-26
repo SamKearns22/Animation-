@@ -4878,6 +4878,68 @@ def crowd_head_installed():
 
 
 @test
+def crowd_pool():
+    """Sam, 26 Nov (crowd pool chat 1: "Open up the crowd pack to all of the combinations that we've used before across
+    all cities ... generic people in any of our films ... from a generic pooled crowd pack"): every haircut, hair colour,
+    skin and top an earlier film's crowd lines used is in the pool; a new film's crowd takes the pool by default and a
+    posted or locked film's crowds draw exactly as before; each city's pooled crowd passes the sameness check and
+    varies; a pooled passer-by draws the pack's own head once installed; a turned ponytail hangs from the head's back
+    edge (saved example: the pool's first sheet, a three-quarter ponytail drawn over the cheek)."""
+    import re as _re
+    import kitchecks as K
+    import people as PK
+    pool_c = {c for v in PK.POOL_HAIR_C.values() for c, _ in v} | set(PK.POOL_GREYS) | {(128, 120, 114)}
+    tops = {c for v in PK.POOL_TOPS.values() for c, _ in v}
+    skins = {c for v in PK.POOL_SKINS.values() for c in v}
+    cuts = {c.split(' ')[0] for v in PK.POOL_HAIR.values() for c, _ in v}
+    missing = []
+    for film in PK.BEFORE_POOL:
+        if not os.path.exists(PK.people_file(film)):
+            continue
+        for w, d in PK.crowds(film).items():
+            for key, _, items in d['crowd']['cycle'] + [f for _, _, fs in d['crowd']['when'] for f in fs]:
+                for it in items:
+                    if key == 'hair' and it.split(',')[0].strip() not in cuts:
+                        missing.append(f'{film} {w} haircut {it}')
+                    elif key == 'hair colour' and PK.colour(it) not in pool_c:
+                        missing.append(f'{film} {w} hair colour {it}')
+                    elif key == 'skin' and PK.colour(it) not in skins:
+                        missing.append(f'{film} {w} skin {it}')
+                    elif key == 'jacket' and _re.fullmatch(r'[\d ]+|[a-z ]+', it) and PK.colour(it) not in tops:
+                        missing.append(f'{film} {w} top {it}')
+    old = [f for f in PK.BEFORE_POOL if os.path.exists(PK.people_file(f))
+           and any(d.get('crowd_pool') for d in PK.crowds(f).values())]
+    import tempfile
+    tmp = os.path.join(tempfile.mkdtemp(), 'new-people.txt')       # a new film's people file: its crowd on the pool
+    open(tmp, 'w').write('# m: Marchers\ncrowd: m\nmix: london\n')
+    pf, PK.people_file = PK.people_file, lambda film: tmp
+    try:
+        new = PK.crowds('a-new-film')['m']
+    finally:
+        PK.people_file = pf
+    same, varied = {}, {}
+    for city in ('london', 'paris', 'miami', 'tirana', 'barcelona', 'frankfurt', 'mixed'):
+        d = PK.parse(f'# m: M\ncrowd: m\nmix: pool {city}\n')['m']
+        d.update(crowd_defaults=True, crowd_sex=True)
+        ms = [PK.crowd_person(d, i) for i in range(64)]
+        same[city] = K.same_faults(city, ms, d.get('crowd_mix'))
+        varied[city] = (len({m.get('kit_face', {}).get('hair') or m.get('hair') for m in ms}),
+                        len({m.get('jacket') for m in ms}), len({m.get('skin') for m in ms}))
+    import subprocess                                    # in its own process: no earlier test's install
+    code = ("import sys; sys.path.insert(0, %r); import people as PK; p = PK.pooled(3, 'london'); "
+            "a = PK.head_faults(p); PK.install({'p': p}); print(len(a), len(PK.head_faults(p)))") % HERE
+    got = (subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE).stdout.strip()
+           .split('\n') or [''])[-1].split()
+    before, after = (int(got[0]), int(got[1])) if len(got) == 2 else (0, 1)
+    edge = PK.pooled(1, 'paris').get('pony_edge') and not any(
+        sp.get('pony_edge') for sp in PK.load('protest-tiers').values())
+    ok = (not missing and not old and new.get('crowd_pool') and new.get('crowd_place') == 'london' and not any(same.values())
+          and all(a >= 5 and b >= 15 and c >= 3 for a, b, c in varied.values()) and before and not after and edge)
+    return ok, dict(missing=missing[:6], old_on_pool=old, sameness={k: v[:2] for k, v in same.items() if v},
+                    varied=varied, head=(before, after), pony_edge=bool(edge))
+
+
+@test
 def practice_mode():
     """Sam, 26 Nov ("override all checks and produce it"; "advise whether you want to run a certain suite of checks";
     the proposal route on request): with nothing asked, a render runs no body check, a practice clip or animatic goes
