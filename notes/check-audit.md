@@ -41,6 +41,8 @@ tracking (costwatch, ledger auto, the cost line recorded).
 Work order (each item with its kittest and a Lost/Added line here): Q5 deletions; C1-C5; B6, B5, B7;
 check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), then steps 2-3 with
 say-once; B4; B3; B8; A2, A6, A4, A5 (Kemi front first), A3, A7 (confirm first), A8. Kit tests at the job's end only.
+Extra (Sam 26 Nov): E1 Y: find why body_check_back_view and finished_films_keep_their_bookmark keep going red; fix the test or the kit.
+Lesson (Sam 26 Nov): "This is the way you should be explaining things in all messages to me": what a thing is in everyday words, one question at a time, no item codes. My first Q1-Q5 and E1/E2 asks used report labels and jargon; CLAUDE.md names plain-check option 1 as the next step when this slips.
 Named branches (not this job, not merged): claude/brexit-chat39 (Open Wounds chat 39, live),
 claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
 
