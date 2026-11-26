@@ -19714,6 +19714,181 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "11625484",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.18,
+   "src": "estimate",
+   "sid": "session_01U3pKQzVsh8V3QU1io26QhN",
+   "steps": 11,
+   "hist_k": 110,
+   "kinds": {
+    "tool search": 14.7,
+    "renders": 4.9,
+    "other": 80.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 8,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 1
+   },
+   "split": {
+    "usd": 0.6704,
+    "total": 0.6704,
+    "floor_k": 96,
+    "blocks": {
+     "start-up floor": 66.4,
+     "new writes": 16.9,
+     "Claude's words": 15.0,
+     "carried history": 1.8
+    },
+    "origins": {
+     "start-up floor": 66.4,
+     "Claude's words": 19.6,
+     "result: tool search": 12.2,
+     "messages and reminders": 1.1,
+     "result: other": 0.5,
+     "result: renders": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 66.4,
+     "reading notes": 12.0,
+     "writing notes": 7.1,
+     "commands": 4.5,
+     "thinking": 3.5,
+     "helper and chat prompts": 2.8,
+     "messages to Sam": 1.7,
+     "messages and reminders": 1.1,
+     "app tools (chats, files sent)": 0.5,
+     "start-up and handover tools": 0.2,
+     "git and saving": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/proposals/session-value.md",
+      2.8,
+      0.0245
+     ],
+     [
+      "notes/proposals/cost-other.md",
+      0.8,
+      0.0073
+     ],
+     [
+      "source/costbreak.py",
+      0.8,
+      0.0073
+     ],
+     [
+      "notes/ledger/sam/1io26qhn.md",
+      0.4,
+      0.004
+     ],
+     [
+      "notes/proposals/session-value/learn-job.md",
+      0.1,
+      0.0008
+     ]
+    ],
+    "base_pct": 26.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "shared:costbreak.py": 1,
+     "film notes": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "notes/proposals notes/logs",
+      "slim",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "notes/proposals/*.md notes/*.md notes/proposals",
+      "slim",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:costbreak.py",
+      "notes/proposals/cost-other.md notes/proposals/cost-other source/costbreak.py",
+      "cd /home/user/Animation-; head -60 notes/proposals/cost-other.md; ls notes/propo",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "notes/proposals notes/ledger",
+      "small automatic checks\\|1% of a week per film\\|not the small one the article",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/ledger/sam/1io26qhn.md notes/proposals/session-value.md",
+      "slim\\|option\\|^## ",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/proposals/session-value.md",
+      "cd /home/user/Animation-; sed -n 1,60p notes/proposals/session-value.md; sed -n ",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/ledger/grand-theft-autism notes/ledger/brexit-is-done notes/ledger/brexit-",
+      "cd /home/user/Animation-; git remote get-url origin; ls notes/ledger/grand-theft",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git merge -q --no-edit FETCH_HEAD 2>&1 | tail -3; git ",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
