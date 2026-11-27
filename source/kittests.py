@@ -6657,6 +6657,44 @@ def critique_saw_it_column():
     return (not out), ('; '.join(out) or f'blank refused (note 2); old table not asked; counted {dict(c)}')
 
 
+@test
+def line_check_whole_person():
+    """Check audit B8 (26 Nov; saved example: Open Wounds' checks.jsonl, 'may: no outline at (674, 14)' and 'blair: edge
+    with no line at (502, 14)' on 6 runs): the line check drew each person alone with the head off the top of the
+    picture, so the cut read as a missing outline. Now the whole person fits (nothing touches the picture's edge),
+    May and Blair are clean (their brows and open mouth are flat on purpose; the face has its own checks), and a
+    flat patch painted on Blair's jacket with no line round it is still caught."""
+    import importlib
+    import body as B
+    import kitinputs as K
+    import linecheck as LC
+    from PIL import Image, ImageDraw
+    f = importlib.import_module('brexit_is_done')
+    B.SS = 1
+    subs = dict(K.line_subjects(f, {w: 1.6 for w in f.CAST})())
+    out = []
+    for who in ('may', 'blair'):
+        lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+        subs[who](lay)
+        x0, y0, x1, y1 = lay.getbbox()
+        if y0 <= 2 or y1 >= 1918 or x0 <= 2 or x1 >= 1078:
+            out.append(f'{who} touches the picture edge {lay.getbbox()}')
+    film = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [(w, subs[w]) for w in ('may', 'blair')])})
+    clean = LC.faults(film)
+    if clean:
+        out.append(f'faults on May and Blair: {clean}')
+
+    def patched(img):
+        got = subs['may'](img)                         # May's plum jacket (Blair's suit is near-black: read as ink)
+        ImageDraw.Draw(img).rectangle([470, 900, 610, 1040], fill=(230, 200, 60, 255))   # on the jacket, no line
+        return got
+    film2 = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [('may', patched)])})
+    caught = LC.faults(film2)
+    if not any('edge with no line' in x for x in caught):
+        out.append(f'an unlined patch on the jacket was missed: {caught}')
+    return (not out), ('; '.join(out) or f'whole people fit; May and Blair clean; the painted patch caught ({caught[0][:60]})')
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test

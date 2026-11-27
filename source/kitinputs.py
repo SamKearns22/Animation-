@@ -384,7 +384,22 @@ def line_subjects(film, scale=None):
                 continue
 
             def draw(img, sp=sp, s=scale.get(who, 1.26)):
-                V.person(img, B.Cam(1.0, 540, 960), 540, 960 - 500 * s, s, dict(sp), 0.0, 0.0)
+                # check audit B8 (26 Nov): drawn at 960 - 500 s the head ran off the top of the picture, and the cut
+                # edge read as 'no outline' (May, Blair on Open Wounds). Measure first, then fit the whole person
+                # inside with a margin: smaller only if they would not fit at their own size.
+                from PIL import Image
+                W, H = img.size
+                cam = B.Cam(1.0, 540, 960)
+                probe = Image.new('RGBA', (W, H * 3), (0, 0, 0, 0))
+                V.person(probe, cam, W / 2, H, s, dict(sp), 0.0, 0.0)
+                x0, y0, x1, y1 = probe.getbbox() or (0, H, W, 2 * H)
+                k = min(1.0, (H - 80) / max(1, y1 - y0), (W - 80) / max(1, x1 - x0))
+                s2 = s * k
+                top = H - (H - y0) * k                      # where the top lands at the scaled size, drawn at y = H
+                j2 = V.person(img, cam, W / 2, H - (top - 40), s2, dict(sp), 0.0, 0.0)
+                hx, hy = (j2.get('_drawn') or {}).get('head_at', (None, None))
+                if hx is not None:                  # the face: its brows and mouth are drawn flat on purpose
+                    return {'face': (hx, hy, sp.get('hw', 70) * s2 * 1.1, sp.get('hh', 92) * s2 * 1.1)}
             out.append((who, draw))
         return out
     return subjects
