@@ -2467,11 +2467,24 @@
   {
    "date": "2026-11-27",
    "spent": 7.99
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 8.48
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 8.48
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 8.48
   }
  ],
  "notes_tags": {
   "1": "none: I looked at the sheet at phone size only, not each body at full size (Seeing like Sam, 1); no check sees pieces drawn for an old body landing inside a new one",
   "2": "none: the shoulder join (limbs.py, the arm fading into the body near the shoulder) assumes the sleeve is the jacket's cloth; a grey sleeve on a black body fades as a smear",
-  "3": "none (I named them myself, unfixed)"
+  "3": "none (I named them myself, unfixed)",
+  "4": "none: my turned knit neck was shortened (note 3) and uncovered Patriots 3's flat lighter collar block; I looked at the collar side on only"
  }
 }
