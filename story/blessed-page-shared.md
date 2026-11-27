@@ -512,7 +512,7 @@
 - 167: `_faults` 
 - 201: `main` 
 
-## castsheet.py (1032 lines)
+## castsheet.py (1035 lines)
 - 32: HERE (data)
 - 34: ROOT (data)
 - 35: BG (data)
@@ -567,14 +567,14 @@
 - 712: R7_YAWS (data)
 - 715: `seated_look_faults` Every cast member drawn seated (R7_POSES, from the front, three-quarter both ways and the side), each picture
 - 766: `seated_faults` Every cast member seated (three-quarter both ways, the sitting kit's upright, which crosses a woman's legs):
-- 833: `teeth_faults` 
-- 859: JUDGE_MIN (data)
-- 860: JUDGES (data)
-- 863: JUDGE_FILES (data)
-- 867: `_same_outlines` Redraw the judge's outline sheet from the current drawing code (notes/learn/kemi-build/judge.py, its fixed
-- 891: `judge_faults` 
-- 930: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
-- 946: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
+- 836: `teeth_faults` 
+- 862: JUDGE_MIN (data)
+- 863: JUDGES (data)
+- 866: JUDGE_FILES (data)
+- 870: `_same_outlines` Redraw the judge's outline sheet from the current drawing code (notes/learn/kemi-build/judge.py, its fixed
+- 894: `judge_faults` 
+- 933: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
+- 949: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
 
 ## checkreplay.py (315 lines)
 - 27: ROOT (data)
@@ -3920,7 +3920,7 @@
 - 902: `_watch_usd` 
 - 916: `_load_fixture_facts` 
 
-## subtitles.py (299 lines)
+## subtitles.py (310 lines)
 - 41: _CACHE (data)
 - 42: HERE (data)
 - 43: FONT (data)
@@ -3931,12 +3931,13 @@
 - 146: `line_caption` The subtitle on screen `u` seconds into the line.
 - 157: `pieces` [(text, start)] seconds into the line: 3-5 words at a time, each up on the syllable it starts with (the take's
 - 193: `need` Seconds a piece needs on screen in the film's own time, so the delivered file (at `speed`) keeps it up at
-- 199: `fit` Check audit A2 (26 Nov; Open Wounds' captions flagged 'too fast to read' on 9 runs, the kit and the check neve
-- 235: `caption_at` The piece on screen at t (or None): each line's pieces from just before it starts to `tail` after it ends,
-- 246: `_font` 
-- 251: `rows` 
-- 256: `draw` The kit's caption on an RGBA picture or layer: large, lower third, at most two rows, Montserrat Black, white
-- 280: `readable_faults` Rule 62 on the delivered file (rule 70: played at `speed`): each piece at most 5 words and two rows that fit
+- 199: LATE (data)
+- 202: `fit` Check audit A2 (26 Nov; Open Wounds' captions flagged 'too fast to read' on 9 runs, the kit and the check neve
+- 246: `caption_at` The piece on screen at t (or None): each line's pieces from just before it starts to `tail` after it ends,
+- 257: `_font` 
+- 262: `rows` 
+- 267: `draw` The kit's caption on an RGBA picture or layer: large, lower third, at most two rows, Montserrat Black, white
+- 291: `readable_faults` Rule 62 on the delivered file (rule 70: played at `speed`): each piece at most 5 words and two rows that fit
 
 ## takes.py (145 lines)
 - 30: HERE (data)
