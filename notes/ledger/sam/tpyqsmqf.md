@@ -12,3 +12,8 @@ Y
 ### 2026-11-27T12:39:24
 From this project and the work you've done, are there any other opportunities for savings?
 
+### 2026-11-27T12:40:38
+That's great!
+
+On 1. Why do you redraw the still rather than taking the one you had already drawn?
+
