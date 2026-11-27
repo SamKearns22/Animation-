@@ -57,6 +57,12 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
   ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): `python3
   source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 --film NAME` (or `["Hook Text"]` for a film with no
   `HOOK`), from the clean render in `source/data/`.
+- **The every-frame watch (Sam's Y, 27 Nov; seeing test):** named in the one-line check offer before every clip or
+  animatic (about 1 minute a second of film to render plus the look). On his Y: `seeing.py render CASE --film MOD
+  --span T0 T1`, then `seeing.py watch CASE --film NAME`: only frames changed since that film's last watch are shown
+  (Sam: "doesn't check the same footage twice"); `--all` shows everything. Claude looks at every flag at full size
+  first (a third were real, most of the rest something hidden behind something in front: settle those with the
+  who-is-where view) and tells Sam only the real ones. Evidence: notes/seeing-test/flags-checked.md.
 
 ## Final and posting (Sonnet)
 - Read: `guides/tiktok-design.md` The video file, Sign-off, Posting; `guides/preflight.md` Stage 5.

@@ -31,13 +31,16 @@ MAP
   4 pose 480 ...... pose(case)
   5 watch ......... watch(case): every frame in order, 8 to a sheet, each person outlined (outline_image); the
                     "watch the clip" test (Sam's Y 27 Nov): the model sees pictures, not video, so this is the
-                    nearest honest thing to watching
+                    nearest honest thing to watching; with --film only the steps not watched before
+                    (new_steps, frame_hash, notes/seeing/FILM-seen.tsv; Sam 27 Nov)
   sheet 560 ....... sheet(case, view): 6 frames across the span, the plain frame left, the view right (view 'plain':
                     the plain frames only); the printed events beside it (case/VIEW.txt)
 
     python3 source/seeing.py render CASE_DIR --film MODULE --span T0 T1 [--src DIR]
     python3 source/seeing.py views CASE_DIR [plain whereis motion cutout pose]
     python3 source/seeing.py watch CASE_DIR                 every frame, 8 to a sheet, people outlined
+    python3 source/seeing.py watch CASE_DIR --film NAME     only frames changed since NAME's last watch (Sam 27 Nov);
+                                                            --all shows every frame again
     python3 source/seeing.py clip FILM T0 T1 OUT_DIR       render with this copy's code, then every view and sheet
 """
 import builtins
@@ -748,29 +751,96 @@ def busy_box(fr, thresh=25, keep=0.8, min_side=180, max_area=0.55):
     return box
 
 
-def watch(case, cols=WCOLS, rows=WROWS):
+SEEN = os.path.join(os.path.dirname(HERE), 'notes', 'seeing')   # per film: every frame-to-frame step already watched
+
+
+def frame_hash(png):
+    """A frame's fingerprint, the same whichever size it was rendered at (a --small clip and the animatic agree):
+    shrunk to 270x480 and each colour rounded to 16 steps. Any change a viewer could see (a finger, a hat) changes
+    it; a rare rounding flip only makes a frame count as new, so it is checked again, never skipped wrongly."""
+    a = np.asarray(Image.open(png).convert('RGB').resize((270, 480), Image.BILINEAR)) // 16
+    return hashlib.md5(a.astype(np.uint8).tobytes()).hexdigest()[:16]
+
+
+def _seen_path(film):
+    return os.path.join(SEEN, film.replace('_', '-') + '-seen.tsv')
+
+
+def _seen(film):
+    try:
+        return {tuple(l.split()) for l in open(_seen_path(film)) if l.strip()}
+    except FileNotFoundError:
+        return set()
+
+
+def new_steps(fr, film):
+    """Sam 27 Nov: "doesn't check the same footage twice and only does the frames that have changed". A step is one
+    frame and the next; it is new unless that exact pair of pictures was watched before for this film (so a frame
+    that stayed the same but now follows a changed one is still shown: the jump between them is new). Returns the
+    frames to show (each new step's two frames) and every step's pair, to record once the sheets are made."""
+    hs = [frame_hash(p) for p in fr]
+    pairs = [(hs[i - 1], hs[i]) for i in range(1, len(hs))] or [(hs[0], hs[0])]
+    seen = _seen(film)
+    if len(hs) == 1:
+        return ([] if pairs[0] in seen else [0]), pairs
+    keep = sorted({j for i in range(1, len(hs)) if pairs[i - 1] not in seen for j in (i - 1, i)})
+    return keep, pairs
+
+
+def remember(film, pairs):
+    os.makedirs(SEEN, exist_ok=True)
+    old = _seen(film)
+    with open(_seen_path(film), 'a') as f:
+        for a, b in dict.fromkeys(pairs):
+            if (a, b) not in old:
+                f.write(f'{a}\t{b}\n')
+
+
+def _runs(idx):
+    runs = []
+    for i in idx:
+        if runs and i == runs[-1][-1] + 1:
+            runs[-1].append(i)
+        else:
+            runs.append([i])
+    return runs
+
+
+def watch(case, cols=WCOLS, rows=WROWS, film=None):
     """Every frame of the span, in order, 8 to a sheet (each sheet starts on the last frame of the one before, so
-    no step between frames is unseen), each person outlined. Saved case/watch-NN.jpg; returns the paths."""
+    no step between frames is unseen), each person outlined. Saved case/watch-NN.jpg; returns the paths.
+    With `film`: only the frames that changed since this film's earlier watches (new_steps), and the steps shown
+    are then recorded as watched (notes/seeing/FILM-seen.tsv)."""
     meta, fr = case_frames(case)
     T = meta['times']
     per = cols * rows
-    starts = list(range(0, max(len(fr) - 1, 1), per - 1))
+    keep, pairs = (new_steps(fr, film) if film else (list(range(len(fr))), None))
+    pages = []
+    for run in _runs(keep):
+        pages += [run[s:s + per] for s in range(0, max(len(run) - 1, 1), per - 1)]
+    for old in glob.glob(os.path.join(case, 'watch-*.jpg')):
+        os.remove(old)
     out = []
-    box = busy_box(fr)
-    for zoom in ((None, box) if box else (None,)):
-        out += _watch_sheets(case, meta, fr, T, starts, per, cols, rows, zoom)
+    if pages:
+        note = '' if not film else f'only what changed: {len(keep)} of {len(fr)} frames; '
+        box = busy_box([fr[i] for i in keep])
+        for zoom in ((None, box) if box else (None,)):
+            out += _watch_sheets(case, meta, fr, T, pages, cols, rows, zoom, note)
+    if film:
+        remember(film, pairs)
+        print(f'watch: {len(keep)} of {len(fr)} frames changed since this film was last watched'
+              + ('' if keep else '; nothing new to look at'))
     return out
 
 
-def _watch_sheets(case, meta, fr, T, starts, per, cols, rows, zoom):
+def _watch_sheets(case, meta, fr, T, pages, cols, rows, zoom, note=''):
     out = []
-    for s_no, s in enumerate(starts):
-        idx = list(range(s, min(s + per, len(fr))))
+    for s_no, idx in enumerate(pages):
         head = 30
         S = Image.new('RGB', (cols * (WCELL[0] + 6), head + rows * (WCELL[1] + 20)), (255, 255, 255))
         d = ImageDraw.Draw(S)
         what = 'CLOSE-UP of where most moves' if zoom else 'whole frame'
-        d.text((6, 6), f'case {os.path.basename(case)}  {what}, sheet {s_no + 1} of {len(starts)}: every frame '
+        d.text((6, 6), f'case {os.path.basename(case)}  {what}, sheet {s_no + 1} of {len(pages)}: {note}every frame '
                        f'({meta["fps"]} a second), left to right, then the next row', fill=(0, 0, 0), font=_font(16))
         for k, i in enumerate(idx):
             x, y = (k % cols) * (WCELL[0] + 6), head + (k // cols) * (WCELL[1] + 20)
@@ -791,7 +861,8 @@ def main(a):
         print(__doc__)
         return 2
     if a[0] == 'watch':
-        print('\n'.join(watch(a[1])))
+        film = a[a.index('--film') + 1] if '--film' in a and '--all' not in a else None
+        print('\n'.join(watch(a[1], film=film)))
         return 0
     if a[0] == 'render':
         case = a[1]

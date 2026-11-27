@@ -6975,6 +6975,43 @@ def seeing_watch_shows_every_frame():
 
 
 @test
+def seeing_watch_only_changed():
+    """seeing.py watch --film (Sam 27 Nov: "doesn't check the same footage twice and only does the frames that have
+    changed in future clips and animatics"). 20 made-up frames watched once: all 20 shown. Watched again unchanged:
+    none. Then frames 10-12 gain a red dot (a fix touching three frames): only the steps into, through and out of
+    the change are shown, frames 9-13, and nothing else."""
+    import json
+    import shutil
+    import tempfile
+    import seeing as SE
+    from PIL import Image, ImageDraw
+    tmp = tempfile.mkdtemp()
+    case, keep_seen = os.path.join(tmp, 'case'), SE.SEEN
+    os.makedirs(os.path.join(case, 'frames'))
+    for i in range(20):
+        im = Image.new('RGB', (540, 960), (200, 220, 240))
+        ImageDraw.Draw(im).rectangle((40 + 10 * i, 600, 120 + 10 * i, 900), fill=(30, 30, 160))
+        im.save(os.path.join(case, 'frames', f'{i:03d}.png'))
+    json.dump({'times': [i / 12 for i in range(20)], 'fps': 12, 'layers': []}, open(os.path.join(case, 'meta.json'), 'w'))
+    SE.SEEN = os.path.join(tmp, 'seen')
+    try:
+        k1, _ = SE.new_steps(SE.case_frames(case)[1], 'kit-film')
+        SE.watch(case, film='kit-film')
+        k2, _ = SE.new_steps(SE.case_frames(case)[1], 'kit-film')
+        for i in (10, 11, 12):
+            f = os.path.join(case, 'frames', f'{i:03d}.png')
+            im = Image.open(f)
+            ImageDraw.Draw(im).ellipse((400, 100, 430, 130), fill=(220, 0, 0))
+            im.save(f)
+        k3, _ = SE.new_steps(SE.case_frames(case)[1], 'kit-film')
+    finally:
+        SE.SEEN = keep_seen
+        shutil.rmtree(tmp, ignore_errors=True)
+    ok = k1 == list(range(20)) and k2 == [] and k3 == [9, 10, 11, 12, 13]
+    return ok, f'first watch {len(k1)} frames; unchanged again {len(k2)}; after a 3-frame change {k3}'
+
+
+@test
 def body_model_downloads_once():
     """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
     not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight

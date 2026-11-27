@@ -305,10 +305,10 @@
    "date": "2026-11-27",
    "chat": "7a6d1e31",
    "model": "opus",
-   "stage": "check flags",
+   "stage": "build: watch only changed",
    "round": null,
-   "cost": 0.67,
-   "notes": 0,
+   "cost": 1.04,
+   "notes": 1,
    "repeats": []
   }
  ],
@@ -337,6 +337,10 @@
   {
    "date": "2026-11-27",
    "spent": 4.77
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 5.14
   }
  ]
 }
