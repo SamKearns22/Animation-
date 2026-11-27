@@ -18923,6 +18923,217 @@
     ],
     "base_pct": 19.3
    }
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "cb29989e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.16,
+   "src": "estimate",
+   "sid": "session_01J1JB7YavKKmix5DmAqXf5d",
+   "steps": 13,
+   "hist_k": 116,
+   "kinds": {
+    "tool search": 30.0,
+    "page.py": 1.1,
+    "other": 68.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 11,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 0.5829,
+    "total": 0.5829,
+    "floor_k": 85,
+    "blocks": {
+     "Claude's words": 39.4,
+     "start-up floor": 36.0,
+     "new writes": 21.1,
+     "carried history": 3.5
+    },
+    "origins": {
+     "Claude's words": 49.1,
+     "start-up floor": 36.0,
+     "result: tool search": 9.9,
+     "messages and reminders": 2.2,
+     "result: other": 1.6,
+     "Claude's edits": 1.0,
+     "result: page.py": 0.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 36.0,
+     "thinking": 26.5,
+     "writing notes": 8.2,
+     "writing code": 6.5,
+     "commands": 4.4,
+     "messages to Sam": 4.4,
+     "reading notes": 3.8,
+     "reading kit code": 3.4,
+     "start-up and handover tools": 2.6,
+     "messages and reminders": 2.2,
+     "reading chat records": 1.7,
+     "reading guides": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 3,
+    "work_pct": 0.05,
+    "reads": [
+     [
+      "notes/cost-diagnosis.md",
+      0.7,
+      0.0037
+     ],
+     [
+      ".claude/hooks/finderwarn.py",
+      0.7,
+      0.0037
+     ],
+     [
+      "notes/real-cost-answer.md",
+      0.7,
+      0.0037
+     ],
+     [
+      ".claude/settings.json",
+      0.3,
+      0.0017
+     ]
+    ],
+    "base_pct": 17.6
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "guides": 3,
+     "other": 3,
+     "shared:finderwarn.py": 1,
+     "shared:modelguard.py": 1,
+     "shared:stepcost.py": 1,
+     "shared:costwatch.py": 1,
+     "film notes": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "guides",
+      "guides/*.md",
+      "spike",
+      "",
+      2655
+     ],
+     [
+      1,
+      "other",
+      "other",
+      ".claude/settings.json .claude/hooks .claude/hooks/*",
+      "cat .claude/settings.json 2>/dev/null | head -40; ls .claude .claude/hooks; ls -",
+      "",
+      1300
+     ],
+     [
+      2,
+      "other",
+      "shared:finderwarn.py",
+      "notes/cost-diagnosis.md .claude/hooks/finderwarn.py notes/real-cost-answer.md",
+      "head -60 notes/cost-diagnosis.md; echo ----; sed -n 1,40p .claude/hooks/finderwa",
+      "",
+      8817
+     ],
+     [
+      3,
+      "other",
+      "guides",
+      "source/*.py guides/kit-catalogue.md ./source/*",
+      "map|index|find|catalog|search",
+      "",
+      474
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "",
+      "for f in page codemap catalogue stepcost; do echo \"=== $f\"; wc -l source/$f.py; ",
+      "",
+      9899
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/ledger notes/ledger/sam /.claude/projects/*/",
+      "spike|weekly|cost",
+      "",
+      870
+     ],
+     [
+      7,
+      "other",
+      "shared:modelguard.py",
+      ".claude/hooks/modelguard.py source/ledger.py source/stepcost.py",
+      "1h\\|ephemeral\\|cache_creation",
+      "",
+      4874
+     ],
+     [
+      9,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py .claude/hooks/costwatch.py notes/ledger/*.ts",
+      "P = \\|PRICE\\|prices\\|def price",
+      "",
+      1411
+     ],
+     [
+      10,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py notes/ledger/app-costs.tsv",
+      "sed -n 15,40p .claude/hooks/costwatch.py; python3 - <<'E' import json d=json.loa",
+      "",
+      1842
+     ],
+     [
+      14,
+      "other",
+      "guides",
+      "",
+      "python3 - <<'E' import ast,os,re,collections names=collections.Counter(); defs=[",
+      "",
+      90
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/proposals/cost-spike-fix.md",
+      "git add notes/proposals/cost-spike-fix.md && git commit -q -m \"Cost spike fix pr",
+      "",
+      165
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
