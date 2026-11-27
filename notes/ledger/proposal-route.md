@@ -142,6 +142,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 11625484 (auto): 11 steps, history 110k at the end; other 80.4%, tool search 14.7%, renders 4.9%
 - 2026-11-26 c1138e19 (auto): 18 steps, history 111k at the end; other 73.3%, tool search 26.7%
 - 2026-11-26 52f3dc5e (auto): 46 steps, history 184k at the end; other 68%, tool search 29.2%, renders 2.9%
+- 2026-11-27 5449ea5f (seeing test: build + blind judges): 93 steps, history 240k at the end; other 77.3%, tool search 20.7%, renders 1%, pictures 1%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 3a437266 (auto): Claude's words 33%, start-up floor 30.8%, new writes 20.8%, carried history 15.3%. Biggest origins: Claude's words 49.3%, start-up floor 30.8%, result: tool search 16.2%. Leftover 0%
@@ -178,9 +179,10 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 11625484 (auto): start-up floor 66.4%, new writes 16.9%, Claude's words 15%, carried history 1.8%. Biggest origins: start-up floor 66.4%, Claude's words 19.6%, result: tool search 12.2%. Leftover 0%
 - 2026-11-26 c1138e19 (auto): start-up floor 49.1%, Claude's words 24%, new writes 22.1%, carried history 4.8%. Biggest origins: start-up floor 49.1%, Claude's words 30.6%, result: tool search 18.2%. Leftover 0%
 - 2026-11-26 52f3dc5e (auto): start-up floor 38.1%, Claude's words 25.4%, new writes 23.8%, carried history 12.7%. Biggest origins: start-up floor 38.1%, Claude's words 36.2%, result: tool search 23.9%. Leftover 0%
+- 2026-11-27 5449ea5f (seeing test: build + blind judges): new writes 34.6%, Claude's words 25.4%, carried history 22%, start-up floor 18%. Biggest origins: Claude's words 37.1%, messages and reminders 29.1%, start-up floor 18.2%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 6% of the film (9.39% of a week over 34 chats: start 9.28, re-learning 0.11; 0.28% a chat; step-1 context re-read is 24% of a chat on average).
+A new chat's start and re-learning cost 7% of the film (10.23% of a week over 35 chats: start 10.12, re-learning 0.11; 0.29% a chat; step-1 context re-read is 24% of a chat on average).
 - 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
 - 2026-11-19 3498a80f: step-1 context 83k; first real work at step 31 (0.44% of a week); read before it: source/preflight.py 5.6k, source/posecheck.py 2.2k, source/milburn.py 1.9k, notes/proposals/front-on-focus/retirement-and-handover.md 1.1k, source/film_engine.py 1k, guides/job-packs.md 0.7k
 - 2026-11-19 6a247f23: step-1 context 82k; first real work at step None (None% of a week); read before it: notes/archive/milburn.md 2.8k, source/checkreplay.py 0.9k, notes/proposals/check-catches/replay/milburn.md 0.4k, notes/proposals/check-catches/replay/blessed.md 0.3k, notes/proposals/check-catches/replay/protest-tiers.md 0k
@@ -215,3 +217,4 @@ A new chat's start and re-learning cost 6% of the film (9.39% of a week over 34 
 - 2026-11-26 11625484: step-1 context 96k; first real work at step None (None% of a week); read before it: notes/proposals/session-value.md 2.8k, notes/proposals/cost-other.md 0.8k, source/costbreak.py 0.8k, notes/ledger/sam/1io26qhn.md 0.4k, notes/proposals/session-value/learn-job.md 0.1k
 - 2026-11-26 c1138e19: step-1 context 84k; first real work at step 10 (0.08% of a week); read before it: notes/proposals/session-value.md 1.4k, source/stepcost.py 1k, source/dearest.py 1k, notes/proposals/session-value/learn-job.md 0.5k
 - 2026-11-26 52f3dc5e: step-1 context 99k; first real work at step 26 (0.45% of a week); read before it: notes/proposals/chat-size-and-model.md 0.7k, notes/proposals/chat-size-and-model/sam.md 0.7k, notes/proposals/dearest-week.md 0.7k, notes/logs/grand-theft-autism-show.log 0.6k, story/status.md 0.4k, notes/steps-breakdown.md 0.1k
+- 2026-11-27 5449ea5f: step-1 context 84k; first real work at step 46 (0.84% of a week); read before it: notes/proposals/seeing-five-candidates.md 3.1k, source/cover.py 3.5k, notes/bench/learn-step.md 2.3k, notes/proposals/better-seeing-tools.md 1.4k, notes/archive/grand-theft-autism-notes.md 1.7k, source/branches.py 1.2k
