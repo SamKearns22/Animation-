@@ -96,3 +96,6 @@ Kit right, film's own fault (4, Open Wounds; named, not touched): head_moves_not
 Correction: chat 4 said none of the 13 came from this job; one did (Milburn's subtitles, A2). Chat 4 checked five on an old copy only.
 Lost: nothing a viewer sees (subtitle pieces on a crowded line may now be up a touch shorter, and the reading check still says so). Added: nothing.
 
+
+SEATED TEST MADE STEADY (chat 5, Sam's Y 27 Nov): seated_r7_switch compared whole pictures, so every shared fix to faces, sleeves, line weight or the chair turned it red with the legs unchanged (re-held by hand twice, 26 and 27 Nov). Now it compares only the legs' outline (trousers in a test red, 8 px squares) against source/data/seated-legs-ref.json: tool off under 10% (the taller chair seat hides up to 6%), tool on 29-79%. Passes on today's code and on the code of 26 Nov afternoon (before those changes).
+Lost: a change to the face or clothes of a seated person no longer shows in this test (the cast sheet's own checks cover those). Added: one small data file of leg outlines.
