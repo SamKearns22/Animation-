@@ -6822,6 +6822,25 @@ def line_check_whole_person():
     return (not out), ('; '.join(out) or f'whole people fit; May and Blair clean; the painted patch caught ({caught[0][:60]})')
 
 
+@test
+def subtitles_fit_where_made():
+    """Check audit A2 (Sam's Y, 26 Nov; saved example: Open Wounds' checks.jsonl, 'caption "The Prime Minister": 0.76 s
+    on screen at 1.1x for 3 words (too fast to read)' and three more, on 9 runs): the subtitle kit makes each piece
+    readable when it is made (moves its neighbours a little, or joins two short ones up to 5 words), so the check
+    agrees. Open Wounds' captions now pass at the delivered speed; a line spoken too fast for any timing is still
+    flagged; pieces with room stay where they were."""
+    import importlib
+    import subtitles as SUB
+    f = importlib.import_module('brexit_is_done')
+    ow = SUB.readable_faults(f.caption_at, getattr(f, 'BLACK_AT', getattr(f, 'DUR', 60)), getattr(f, 'FPS', 12))
+    roomy = SUB.fit([['one two three', 0.0], ['four five six', 2.0]], 4.5)
+    cram = [dict(n=1, text='one two three four. five six seven eight. nine ten eleven twelve.', start=0.0, end=1.5,
+                 _dur=1.5)]
+    bad = SUB.readable_faults(lambda t: SUB.caption_at(cram, t), 3.0, 12)
+    ok = not ow and roomy == [['one two three', 0.0], ['four five six', 2.0]] and bad
+    return ok, f'Open Wounds: {len(ow)} caption fault(s) {ow[:1]}; roomy pieces kept: {roomy}; crammed line flagged: {len(bad)}'
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
