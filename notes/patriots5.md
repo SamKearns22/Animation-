@@ -10,9 +10,9 @@ The joke (Sam): The Patriot and his crew of balaclava'd PP men try to break Tomm
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
 - **Locked by Sam:** all 11 shots as the screenplay sets them: cell dead ahead at the cot; side angle; close-up of the grate from inside; side-on outside with the tower; close-up through the grate at Danny; from behind Danny's head; the entrance with the two officers; the four 180s (boat, officers, Patriot, officers).
 - **Rules that bite next:** 24 (the estimate), 74 (acting list), 38 (front, side and back on the cast sheet).
-- **Done:** redesign chat 1: the Patriot on the new house head and balaclava, sheet sent (Sam's look pending). Plan chat 1 (Opus high): brief checklist, estimate 15.4%, shots and acting list; sister chat asked to carry on the Patriot redesign.
+- **Done:** redesign chat 1: the Patriot on the new house head and balaclava, sheet sent (Sam's look pending). Plan chat 1 (Opus high): brief checklist, estimate 15.4%, shots and acting list; sister chat asked to carry on the Patriot redesign. Redesign chat (Sam's sheet notes): belly lines fixed (shared 'stout' build), collar, zip, hem and chin fixed, sheet v2 sent; the grey sleeve fade answered, its fix waits for Sam's Y. Check not built yet: stray ink lines inside a jacket's fill (until then, every body looked at full size before a sheet goes).
 - **Next:** this chat, on Sam's answers: the cast sheet (Opus, high: new people and clothes), then practice clips of the tower, boat walk and climb.
-- **Needs Sam:** his look at the Patriot's sheet; photos of Danny Tommo's real model; the religious clothes; the boat; the tower; the Hook Text; two tones.
+- **Needs Sam:** Y or N on the shoulder-seam fix for the grey sleeve fade; his look at the Patriot's sheet v2; photos of Danny Tommo's real model; the religious clothes; the boat; the tower; the Hook Text; two tones.
 - **Read:** guides/job-packs.md, Build; guides/figure-rig.md 2-4, 5c.
 - **Open rule requests:** none.
 - **For Claude:** film name patriots5; boat = patriots2.shot_dinghy; cell, gates and officers = story/blessed-places.txt / blessed-people.txt; Patriot = patriots5_cast.patriot(mood) (`patriots5_cast.py sheet OUT.jpg`; balaclava facehouse_d). Open Wounds (brexit-is-done) notes stay in place: acting.py reads its acting list (move to shared: repoint, then archive).
@@ -140,7 +140,9 @@ the handover check refuses a blank one.
 
 | # | shot | time | note | line | should have caught | critique saw it? | status |
 |---|------|------|------|------|--------------------|------------------|--------|
-| 1 |      |      |      |      |                    |                  | open   |
+| 1 | cast sheet | front | "strange vertical lines in the belly area" | new | none: I looked at the sheet at phone size only, not each body at full size (Seeing like Sam, 1); no check sees pieces drawn for an old body landing inside a new one | no critique | fixed: Patriots 3's belly-swell edges no longer drawn; the shared body has a 'stout' build (belly in its own outline, side and three-quarter too) |
+| 2 | cast sheet | back, 3/4 back | "explain the greying out of the sleeves? You did that with Blair too" | seen before (Blair) | none: the shoulder join (limbs.py, the arm fading into the body near the shoulder) assumes the sleeve is the jacket's cloth; a grey sleeve on a black body fades as a smear | no critique | answered; fix waits for Sam's Y (a hard shoulder seam where the sleeve's colour differs from the body's) |
+| 3 | cast sheet | side, three-quarter | "Fix your notes": my named faults (collar a box beside the neck with a zip in the air; the chin's dark V) | new | none (I named them myself, unfixed) | no critique | fixed: the knit's neck stops at the collar so the collar wraps round it; zip and hem fitted to the stout body; ribs stop above the chin's bottom rings |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi). (redesign chat 1)

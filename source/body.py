@@ -537,8 +537,12 @@ FIGS = {'man': ((110, 0.98), (190, 0.92), (300, 0.81), (420, 0.85)),
         # bust 0.87, the waist barely in (0.85, and low: at the elbow, 275), the hips the widest part (0.97, at the
         # hip joint), wider than the chest; a man's box is widest at the chest (1.04) and narrows to the hip (0.85);
         # 'female' pinches to 0.70 just under the bust (the hourglass Sam said is May's; Kemi's photo: 0.76 there).
-        'straight': ((100, 0.92), (200, 0.87), (275, 0.85), (470, 0.97))}
-FIG_HEM = {'female': 0.92, 'straight': 0.96}   # the hem's width over the shoulders (else HEM)
+        'straight': ((100, 0.92), (200, 0.87), (275, 0.85), (470, 0.97)),
+        # 'stout' (Patriots 5, 27 Nov; Sam's note: "strange vertical lines in the belly area": the Patriot's belly was
+        # Patriots 3's swell pieces drawn over a body they no longer fitted): a thick-set man's belly in the body's own
+        # outline, widest over the belly (300), the jacket's hem wide; the side view's belly out in front (views_c).
+        'stout': ((110, 0.99), (200, 1.0), (300, 1.06), (420, 1.0))}
+FIG_HEM = {'female': 0.92, 'straight': 0.96, 'stout': 0.94}   # the hem's width over the shoulders (else HEM)
 WOMEN_FIGS = ('female', 'straight', 'woman')   # the builds a woman is drawn on (castsheet's build check)
 
 
