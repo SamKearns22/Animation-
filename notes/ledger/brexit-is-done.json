@@ -23892,6 +23892,131 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "c62c6596",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "haiku",
+   "cost": 0.02,
+   "src": "estimate",
+   "sid": "session_01J1JB7XHcymURGy1GhYNE9z",
+   "steps": 4,
+   "hist_k": 92,
+   "kinds": {
+    "tool search": 19.6,
+    "other": 80.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 4,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 1
+   },
+   "split": {
+    "usd": 0.0686,
+    "total": 0.0686,
+    "floor_k": 83,
+    "blocks": {
+     "start-up floor": 58.8,
+     "Claude's words": 24.1,
+     "new writes": 16.7,
+     "carried history": 0.3
+    },
+    "origins": {
+     "start-up floor": 58.8,
+     "Claude's words": 28.3,
+     "result: tool search": 7.3,
+     "messages and reminders": 4.3,
+     "result: other": 1.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 58.8,
+     "thinking": 12.9,
+     "commands": 8.8,
+     "git and saving": 7.9,
+     "messages to Sam": 6.6,
+     "messages and reminders": 4.3,
+     "reading notes": 0.6
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "story/status.md",
+      0.1,
+      0.0001
+     ],
+     [
+      "notes/ledger/sam/1ghyne9z.md",
+      0.1,
+      0.0001
+     ]
+    ],
+    "base_pct": 11.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "film notes": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head -30 && echo \"--- current:\" && git branch --show-curren",
+      "",
+      1843
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "ls && echo \"---\" && ls notes 2>/dev/null | head -50 && echo \"--- story:\" && ls s",
+      "",
+      1878
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "story/status.md notes/ledger/sam/1ghyne9z.md",
+      "echo \"=== status.md\" && cat story/status.md 2>/dev/null | head -80 && echo \"=== ",
+      "",
+      650
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/seeing-test.md",
+      "where things stand",
+      "",
+      8577
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
