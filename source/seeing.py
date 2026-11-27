@@ -29,11 +29,15 @@ MAP
                     movement (how true the measure is, for the test; never shown to a judge)
   3 cutout 430 .... cutout(case)
   4 pose 480 ...... pose(case)
+  5 watch ......... watch(case): every frame in order, 8 to a sheet, each person outlined (outline_image); the
+                    "watch the clip" test (Sam's Y 27 Nov): the model sees pictures, not video, so this is the
+                    nearest honest thing to watching
   sheet 560 ....... sheet(case, view): 6 frames across the span, the plain frame left, the view right (view 'plain':
                     the plain frames only); the printed events beside it (case/VIEW.txt)
 
     python3 source/seeing.py render CASE_DIR --film MODULE --span T0 T1 [--src DIR]
     python3 source/seeing.py views CASE_DIR [plain whereis motion cutout pose]
+    python3 source/seeing.py watch CASE_DIR                 every frame, 8 to a sheet, people outlined
     python3 source/seeing.py clip FILM T0 T1 OUT_DIR       render with this copy's code, then every view and sheet
 """
 import builtins
@@ -650,11 +654,141 @@ def views(case, which=('plain', 'whereis', 'motion', 'cutout', 'pose')):
         sheet(case, 'pose', [(T[i], plain[i], pose_image(fr[i], R[i], _trails(R, i))) for i in P], pose_events(case, R))
 
 
+# ---------------------------------------------------------------------------------------------- 5 watch
+WCELL = (300, 533)              # each frame on a watch sheet: big enough to see a hand on a chair arm
+WCOLS, WROWS = 4, 2             # 8 frames a sheet, read left to right, top to bottom
+
+
+def _owners(meta):
+    """Each person's layers grouped: owner -> [layer index]."""
+    by = {}
+    for k, L in enumerate(meta):
+        if _is_person(L):
+            by.setdefault(L['owner'], []).append(k)
+    return by
+
+
+def outline_image(frame_png, layers_npz):
+    """The plain frame with a thin line round each person's visible shape, one colour per person (the same
+    colour in every frame), and the person's name at the top of the shape."""
+    import cv2
+    im = Image.open(frame_png).convert('RGB')
+    if not os.path.exists(layers_npz):
+        return im
+    ids, _, meta = load_layers(layers_npz)
+    arr = np.asarray(im).copy()
+    labels = []
+    for owner, ks in _owners(meta).items():
+        m = np.isin(ids, ks).astype(np.uint8)
+        if m.sum() < 30:
+            continue
+        edge = m - cv2.erode(m, np.ones((3, 3), np.uint8))
+        edge = cv2.dilate(edge, np.ones((2, 2), np.uint8)).astype(bool)
+        h = int(hashlib.md5(owner.encode()).hexdigest()[:6], 16)
+        r, g, b = colorsys.hsv_to_rgb((h % 360) / 360.0, 1.0, 1.0)
+        arr[edge] = (int(r * 255), int(g * 255), int(b * 255))
+        n, lab, st, _ = cv2.connectedComponentsWithStats(m, connectivity=8)
+        big = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA])) if n > 1 else 0
+        if big and st[big, cv2.CC_STAT_AREA] > 1500:         # the name over the biggest piece of that person
+            x, y, w = st[big, cv2.CC_STAT_LEFT], st[big, cv2.CC_STAT_TOP], st[big, cv2.CC_STAT_WIDTH]
+            labels.append((int(x + w // 2 - 20), max(0, int(y) - 12), owner[:12],
+                           (int(r * 255), int(g * 255), int(b * 255))))
+    im = Image.fromarray(arr)
+    d = ImageDraw.Draw(im)
+    for x, y, s, c in labels:
+        d.text((x, y), s, fill=c, font=_font(11), stroke_width=2, stroke_fill=(0, 0, 0))
+    return im
+
+
+def busy_box(fr, thresh=25, keep=0.8, min_side=180, max_area=0.55):
+    """Where things move most across the span: the box holding the middle `keep` of every pixel that changed
+    between two frames in a row, padded. None when the whole picture moves (a moving camera) or the box is
+    already most of the frame (then the full frames are the close-up). Changes inside a person who already fills
+    an eighth of the frame are left out: they are big enough to see on the whole-frame sheets."""
+    prev, acc, moving = None, np.zeros((H, W), np.float32), 0
+    for f in fr:
+        g = np.asarray(Image.open(f).convert('L'), np.int16)
+        if prev is not None:
+            ch = np.abs(g - prev) > thresh
+            moving += ch.mean() > 0.35
+            lay = os.path.join(os.path.dirname(os.path.dirname(f)), 'layers', os.path.basename(f)[:-4] + '.npz')
+            if os.path.exists(lay):                # a person already big on screen needs no close-up
+                ids, _, meta = load_layers(lay)
+                for ks in _owners(meta).values():
+                    m = np.isin(ids, ks)
+                    if m.mean() > 0.12:
+                        ch &= ~m
+            acc += ch
+        prev = g
+    if acc.sum() == 0 or moving > len(fr) / 3:
+        return None
+    lo, hi = (1 - keep) / 2, 1 - (1 - keep) / 2
+
+    def span(v):
+        c = np.cumsum(v) / v.sum()
+        return int(np.searchsorted(c, lo)), int(np.searchsorted(c, hi))
+    x0, x1 = span(acc.sum(0))
+    y0, y1 = span(acc.sum(1))
+    px, py = max(20, (x1 - x0) // 6), max(20, (y1 - y0) // 6)
+    x0, x1, y0, y1 = x0 - px, x1 + px, y0 - py, y1 + py
+    w, h = max(x1 - x0, min_side), max(y1 - y0, min_side)
+    if h < w * WCELL[1] / WCELL[0]:              # the cell's shape, so nothing is squashed
+        h = int(w * WCELL[1] / WCELL[0])
+    else:
+        w = int(h * WCELL[0] / WCELL[1])
+    cx, cy = (x0 + x1) // 2, (y0 + y1) // 2
+    x0, y0 = min(max(0, cx - w // 2), max(0, W - w)), min(max(0, cy - h // 2), max(0, H - h))
+    box = (x0, y0, min(W, x0 + w), min(H, y0 + h))
+    if (box[2] - box[0]) * (box[3] - box[1]) > max_area * W * H:
+        return None
+    return box
+
+
+def watch(case, cols=WCOLS, rows=WROWS):
+    """Every frame of the span, in order, 8 to a sheet (each sheet starts on the last frame of the one before, so
+    no step between frames is unseen), each person outlined. Saved case/watch-NN.jpg; returns the paths."""
+    meta, fr = case_frames(case)
+    T = meta['times']
+    per = cols * rows
+    starts = list(range(0, max(len(fr) - 1, 1), per - 1))
+    out = []
+    box = busy_box(fr)
+    for zoom in ((None, box) if box else (None,)):
+        out += _watch_sheets(case, meta, fr, T, starts, per, cols, rows, zoom)
+    return out
+
+
+def _watch_sheets(case, meta, fr, T, starts, per, cols, rows, zoom):
+    out = []
+    for s_no, s in enumerate(starts):
+        idx = list(range(s, min(s + per, len(fr))))
+        head = 30
+        S = Image.new('RGB', (cols * (WCELL[0] + 6), head + rows * (WCELL[1] + 20)), (255, 255, 255))
+        d = ImageDraw.Draw(S)
+        what = 'CLOSE-UP of where most moves' if zoom else 'whole frame'
+        d.text((6, 6), f'case {os.path.basename(case)}  {what}, sheet {s_no + 1} of {len(starts)}: every frame '
+                       f'({meta["fps"]} a second), left to right, then the next row', fill=(0, 0, 0), font=_font(16))
+        for k, i in enumerate(idx):
+            x, y = (k % cols) * (WCELL[0] + 6), head + (k // cols) * (WCELL[1] + 20)
+            img = outline_image(fr[i], os.path.join(case, 'layers', f'{i:03d}.npz'))
+            if zoom:
+                img = img.crop(zoom)
+            S.paste(img.resize(WCELL, Image.LANCZOS), (x, y + 18))
+            d.text((x + 3, y + 1), f'{T[i]:.3f} s', fill=(0, 0, 0), font=_font(14))
+        p = os.path.join(case, f'watch-{"zoom-" if zoom else ""}{s_no + 1:02d}.jpg')
+        S.save(p, quality=90)
+        out.append(p)
+    return out
+
+
 # ---------------------------------------------------------------------------------------------- main
 def main(a):
-    if not a or a[0] not in ('render', 'views', 'clip'):
+    if not a or a[0] not in ('render', 'views', 'clip', 'watch'):
         print(__doc__)
         return 2
+    if a[0] == 'watch':
+        print('\n'.join(watch(a[1])))
+        return 0
     if a[0] == 'render':
         case = a[1]
         film = a[a.index('--film') + 1]
