@@ -603,6 +603,8 @@ def main():
         shared += voices.check(film)
     import readtime                         # note 22 (Open Wounds): story actions long enough to be seen
     shared += readtime.faults(film)
+    import acting as _AC                    # Open Wounds note 27: no point with the hand behind the body
+    shared += _AC.behind_points(name.replace('_', '-'))
     if hasattr(film, 'DRAWN') and os.path.exists(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'story', name.replace('_', '-') + '-moves.txt')):
         import movesize                     # Open Wounds chat 32 (critique r27): every named nod and lean moves the
         shared += ['MOVE SIZE: ' + x for x in movesize.faults(name.replace('_', '-'))]   # head far enough to see

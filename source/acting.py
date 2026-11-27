@@ -101,6 +101,8 @@ PLACES = {
     'point back': (1.0, 60.0, 10.0, -95.0, 'front', 'point'),     # a jab back past the shoulder, hand by the ear, elbow bent and low (our round hands have no thumb; Open Wounds chat 37, Sam note 23.3: at y -70, x 95 the arm reached up and out, "over there", not "backwards")
     'point back mid': (1.0, 75.0, 60.0, -40.0, 'down', 'palm'),   # its way up and back down: the hand by the shoulder, elbow down (chat 37: in front of the chest it crossed the belly)
     'point back swing': (1.0, 120.0, 230.0, -20.0, 'down', 'palm'),  # first from rest: the arm swings up at her side nearly straight (chat 37: any bent in-between at the waist read as a hand on the hip, Sam note 23.3)
+    'point side': (1.0, 350.0, 110.0, 170.0, 'down', 'point'),     # a plain point out to her own side, the arm nearly straight at shoulder height (Open Wounds chat 42, Sam note 27: 'point back' twisted the arm; "Perhaps she just points to the side instead")
+    'point side swing': (1.0, 200.0, 250.0, 60.0, 'down', 'palm'),  # its way out from rest and back: the arm swinging up straight at her side
     'hand low front': (1.0, -10.0, 330.0, 110.0, 'down', 'palm'), # from her side to the front of her thigh, elbow down (the swing out from rest read as a hand on the hip)
     'chop wide high': (0.0, 120.0, 130.0, 175.0, 'down', 'palm'),   # the chop out to its own side: a far hand standing three-quarter (chat 18: Kemi's chop high aimed its forearm at the lens)
     'chop wide low': (0.0, 120.0, 270.0, 180.0, 'down', 'palm'),
@@ -117,6 +119,34 @@ PLACES = {
 # a thumb-style point back over the shoulder can only be made with the elbow bent. The hand check's 'bent point'
 # (rule 41) is for a straight-armed point AT something (Open Wounds chat 18: May at 1.75 s, Kemi at 11.0 s).
 RAISED = {'finger up', 'finger tap', 'point back'}
+# A point aims the finger AT something, so the hand is out in front of or beside the body. A point with the hand
+# behind the shoulder (z < 0: behind the body's front-back middle) twists the arm round behind her: Open Wounds
+# note 23.3 (chat 37) and again note 27 (chat 42, Sam: "Kemi's point still twists her arm in a wrong and awkward
+# way"). Chat 37 retuned the in-betweens and kept the pose itself, and the hand check's 'point unreadable' warning on
+# it went by unanswered: the pose was the fault, not its path (Seeing like Sam 4: a limb behind the body breaks a flat
+# drawing). behind_points(film) flags any such point a film's moves use; pre-flight runs it (kittest point_never_behind).
+def behind_points(film):
+    """Faults: each pointing hand place a film's moves file uses with the hand behind the body."""
+    path = os.path.join(ROOT, 'story', f'{film}-moves.txt')
+    if not os.path.exists(path):
+        return []
+    names = sorted(PLACES, key=len, reverse=True)
+    out = []
+    for n, line in enumerate(open(path), 1):
+        if not re.match(r'\s*[RL]\s*:', line):
+            continue
+        body = line.split('#')[0]
+        for nm in names:
+            if re.search(r'(?<![\w ])\s*' + re.escape(nm) + r'(?= (?:at|from)\b)', ' ' + body.replace('|', '| ')):
+                pl = PLACES[nm]
+                if pl[5] == 'point' and pl[3] < 0:
+                    out.append(f'POINT BEHIND: {film} moves line {n}: "{nm}" points with the hand behind the body '
+                               f'(z {pl[3]:.0f}): the arm twists round behind (Sam, Open Wounds notes 23.3 and 27); '
+                               'point out to the side or forward instead')
+                body = body.replace(nm, ' ')
+    return out
+
+
 # Body moves: channels per unit of the move (the first channel is the one an AMOUNT sets; the rest scale with it).
 # lean: degrees forward; nod: + down; roll: head tilt; dip: down at the knees, feet kept; bob, head_dy: drops.
 BODY = {

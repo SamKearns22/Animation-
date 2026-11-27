@@ -25,6 +25,8 @@ colours: sky 206 208 210 | cloud 186 188 192 | cloud dark 168 170 176 | dust 190
 ## site a third nearer (depth x 2/3, each piece's place across scaled to keep its place on screen, its own size kept; the scaffold
 ## 18.3 m long so its left end stays at the frame's edge; its own 1.3 m depth and the frame 0.4 m behind it kept), the sky and clouds left far; the attack low left, the milling wolves across the middle, the
 ## bar fight on the 6.4 m lift, the runner on the 9.6 m lift running to its left end at the frame's edge)
+## chat 42 (Sam note 28: the leap was lost at the frame's edge; his fix): the building's left end shortened 4 m (frame x -4, scaffold x -5),
+## so its end is well inside the frame and he leaps off it into open air
 camera: up 1.58, horizon 800, lens 1100
 people: kemi 1.21, attack 4.67, milling 8, lift 16.28
 sky: x -120 to 120, z -10 to 400, depth 150, colour sky (the overcast)
@@ -33,14 +35,14 @@ cloud: at 22 124, depth 150, rx 46, ry 9, colour cloud dark, seed 12 (a darker b
 cloud: at 40 100, depth 150, rx 26, ry 5, colour cloud, seed 13 (a low cloud)
 tower crane: x 4.4 to 6, z 0 to 44, depth 40, jib -34, counter 12, hook 18, colour 52 84 168 (the blue crane)
 tower crane: x -16.27 to -14.67, z 0 to 66, depth 56.67, jib 30, counter 10, hook 24, colour 196 58 46 (the red crane)
-concrete frame: x -8 to 9.33, z 0 to 12.8, depth 17.33, storey 3.2, bay 6, core 4.5 7.5, blocks 0.25, seed 2 (the frame)
+concrete frame: x -4 to 9.33, z 0 to 12.8, depth 17.33, storey 3.2, bay 6, core 4.5 7.5, blocks 0.25, seed 2 (the frame)
 pipe: at 1.6 12.4, depth 17.13, to 1.6 0.4, radius 0.16, colour 38 38 42, open 0 (a drain run down the face)
 pipe: at -1.33 12.6, depth 17.18, to -1.33 3.5, radius 0.3, colour 216 112 40, open 0 (a big orange pipe riser)
 pipe: at 5.73 9.4, depth 17.18, to 5.73 0.3, radius 0.26, colour 216 112 40, open 0 (a second riser)
 pipe: at -2.8 9.5, depth 17.13, to -3.6 9.1, radius 0.3, colour 216 112 40 (a pipe end out of a slab)
 pipe: at 3.4 6.3, depth 17.13, to 4.3 5.9, radius 0.28, colour 216 112 40 (another pipe end)
-scaffold: x -9 to 9.3, z 0 to 11.2, depth 16.93, lifts 3.2 6.4 9.6, part back, ladder 3, seed 3 (the scaffold, inner)
-scaffold: x -9 to 9.3, z 0 to 11.2, depth 15.63, lifts 3.2 6.4 9.6, part front, barrier 0.35, seed 13 (the scaffold, outer; seed was 3: chat 11 keeps the 6.4 m lift open where the bar fight is, so the barrier boards never hide the tubes)
+scaffold: x -5 to 9.3, z 0 to 11.2, depth 16.93, lifts 3.2 6.4 9.6, part back, ladder 3, seed 3 (the scaffold, inner)
+scaffold: x -5 to 9.3, z 0 to 11.2, depth 15.63, lifts 3.2 6.4 9.6, part front, barrier 0.35, seed 13 (the scaffold, outer; seed was 3: chat 11 keeps the 6.4 m lift open where the bar fight is, so the barrier boards never hide the tubes)
 hoarding: x -10.67 to -4.13, z 0 to 2.4, depth 15.27 (the blue hoarding)
 skip: x -0.35 to 3.35, z 0 to 1.2, depth 14.93, seed 2 (the skip)
 pipe stack: x -4.9 to -1.9, z 0 to 2.6, depth 13.93, radius 0.5, rows 3 (the big pipes)

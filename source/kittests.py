@@ -3613,6 +3613,41 @@ def pounce_long_enough_to_read():
 
 
 @test
+def point_never_behind():
+    """Open Wounds note 27 (Sam, 27 Nov: "Kemi's point still twists her arm in a wrong and awkward way"; note 23.3
+    before it): acting.behind_points flags a moves file that points with the hand behind the body (the old jab back
+    over the shoulder, z -95) and passes the film's point out to her side."""
+    import os
+    import tempfile
+    import acting as A
+    old = open(os.path.join(A.ROOT, 'story', 'brexit-is-done-moves.txt')).read().replace(
+        'point side from', 'point back from')
+    root, A.ROOT = A.ROOT, tempfile.mkdtemp()
+    try:
+        os.makedirs(os.path.join(A.ROOT, 'story'))
+        open(os.path.join(A.ROOT, 'story', 'old-moves.txt'), 'w').write(old)
+        caught = A.behind_points('old')
+    finally:
+        A.ROOT = root
+    new = A.behind_points('brexit-is-done')
+    return len(caught) == 1 and not new, f'old: {caught}; new: {new}'
+
+
+@test
+def leap_inside_frame():
+    """Open Wounds note 28 (Sam, 27 Nov: "We have lost the moment where the person leaps from the construction
+    site"): readtime.on_screen flags the leap as chat 40 drew it (off the lift's end at x -7.6, the frame's edge) and
+    passes the shortened building's leap (x -3.6, into open air)."""
+    import readtime
+    import brexit_is_done as F
+    import brexit_is_done_action as A
+    L = F._cam('site')
+    old = readtime.on_screen('old leap', lambda u: L.p(-7.6 - 5.548 * u, A.LIFT_D, 9.6 + 3.2 * u - 4.9 * u * u), 0, 0.6)
+    new = sum((readtime.on_screen(*r) for r in F.ON_SCREEN), [])
+    return len(old) == 1 and not new, f'old: {old}; new: {new}'
+
+
+@test
 def facehouse_head_proportions():
     """Face tool chat 17 (rule 30 on Walliams: chat 16's row push x1.3 left his head a light bulb, the narrow chin
     under wide temples): the measured head's PROPORTIONS pushed from real faces' middle by the card. A broad-jawed

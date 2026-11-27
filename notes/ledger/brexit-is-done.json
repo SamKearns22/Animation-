@@ -25114,8 +25114,9 @@
   }
  },
  "notes_tags": {
-  "25": "why: chat 38 made his trousers the jacket's colour (a suit as one cloth); the seated legs' drawing shows the lap and crotch by the trousers' different tone, so the line between the legs ran up into the jacket (castsheet crotch check: blair 0.51)",
   "26": "why no check saw it: movesize and HEAD_MIN measure how far and how fast the eyes move, never HOW the head moves; the kit's nod (views.Rolled dy = nod x 5, plus 'down') slides the whole head down and up: a bob",
+  "27": "the HANDS check named it and the advice-only gate let it through unanswered",
+  "28": "no check lists the background actions as must-be-seen after a framing change",
   "9": "none (a wish, not a fault)",
   "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)"
  },
@@ -25246,6 +25247,10 @@
   },
   {
    "at": "2026-11-27T04:47+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-27T07:18+00:00",
    "faults": 0
   }
  ],
@@ -25459,6 +25464,14 @@
   {
    "date": "2026-11-27",
    "spent": 70.21
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 71.88
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 71.88
   }
  ],
  "budget_stop": 3

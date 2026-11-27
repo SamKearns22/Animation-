@@ -612,3 +612,24 @@ Branches: claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-ferm
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 now framing 2). No change to timing, lines, mouths, soundtrack.
 For Claude: preflight name 'brexit-is-done'; main line claude/create-claude-md-oe8z4g; chat 39 branch claude/brexit-chat39; views.Pitched/face_box/NOD_DEG/NOD_SOLID, solid_seat.STAND_LEG_GAP, source/wikifetch.py; notes/learn/nod/practice.py.
 
+
+
+## Where things stand (chat 41, 27 Nov, Sonnet)
+Rules that bite next: 30 (Kemi's point seen twice: find why the first fix failed), 5 of Seeing like Sam (a leap is cause and effect), 93 (checks advise, never lock).
+Done (chat 41): animatic of the whole film with Hook Text and sign-off sent to Sam and saved in animations/drafts (27 Nov). Sam's notes 27 and 28 are in the Notes table below.
+Next: chat 42 (OPUS, medium: a round of notes): fix note 27 (Kemi points to the side, a clean arm) and note 28 (the leaper's leap from the site comes back; shrink the building left of him, he leaps into space earlier); critique; one short clip of just those seconds (13.5-16 s Kemi; the leap's seconds), send it; then open the Sonnet chat for the animatic.
+Needs Sam: his look at the clip; nothing else open. The nod size question only if the nods still matter to him.
+Handover stops still open (wait on the women's build, note 5): JUDGE May 3/4 woman 2; Kemi 3/4 woman 2, back man 2, seated man 3.
+Read: guides/job-packs.md "A round of notes" if present, else "Checks and animatic"; `python3 source/page.py brexit-is-done show "..." --shot 2 --at SECONDS` for each note.
+Open rule requests: none.
+Locked by Sam: the script, who is where, every background action (the leap stays, he asked for it back), the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2). No change to timing, lines, mouths, soundtrack.
+For Claude: main line claude/create-claude-md-oe8z4g; chat 41 branch claude/open-wounds-chat41; brexit_is_done_action (site_actors, LIFT_END, BAR_X); Kemi's point is in brexit_is_done.py / acting; the leap is the top-lift runner's jump (the building at the runner's left is the scaffold/frame, shrink its width).
+
+
+## Chat 41 (Sonnet, 27 Nov): animatic done
+- Animatic of the whole film (--small, 17 min render, finish.py 38 s, 2.6 MB): animations/drafts/brexit-is-done-animatic.mp4 (+ clean render). Sent to Sam. Nods (May 3.4-5.6, Kemi 17.0-19.2, Blair 26.8-29.4), Kemi's point 13.5-16 and shot 2's nearer framing are his to look at.
+- Picture checks left 6 lines unanswered (advice only): HANDS 3.42 s May right arm; 11.08 s and 12.00 s workers; 14.33 s Kemi's point "doesn't read"; 17.42 s Kemi's hand pushed back; 24.00 s guests. Not looked at full size this chat; Sam's eye on the animatic first.
+- The 4 blind-judge refusals (May three-quarter woman 2/5; Kemi three-quarter woman 2/5, back man 2/5, seated man 3/5) wait on the women's build (note 5, Sam's pick); not redrawn.
+- Critique round 27 pass 2: 8 faults open, not fixed (animatic was asked for first).
+- Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2). No change to timing, lines, mouths, soundtrack.
+

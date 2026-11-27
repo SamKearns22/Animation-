@@ -375,9 +375,18 @@ def w1(img, L, cam3, u):
 
 
 # ================================================================================================= shot 2: runner
-RUN_FROM, RUN_T0, LEAP_T = 9.6, 1.5, 4.6                 # framing 2: the scaffold x -9 to 9.3 (its end at the frame's edge)
-LIFT_END = -7.6                                          # where he leaps, 1.4 m in from the lift's end
-RUN_SPEED = (RUN_FROM - LIFT_END) / (LEAP_T - RUN_T0)    # m/s: he reaches the lift's end as he leaps
+RUN_FROM, RUN_T0 = 9.6, 1.5                             # framing 2: the scaffold x -5 to 9.3 (chat 42, Sam note 28: was -9,
+LIFT_END = -3.6                                          # its end at the frame's edge, so the leap was lost off-screen); where
+RUN_SPEED = (RUN_FROM + 7.6) / 3.1                       # he leaps, 1.4 m in from the lift's end; the sprint's speed kept
+LEAP_T = RUN_T0 + (RUN_FROM - LIFT_END) / RUN_SPEED      # (5.5 m/s), so he leaps earlier (3.88 s, was 4.6), into open air
+LEAP_SEEN = 1.2                                          # s: drawn through the air until he is past the frame's left edge
+
+
+def leap_point(L, u):
+    """The runner's screen point at shot time u (for readtime.on_screen: is the leap inside the frame?)."""
+    x = _runner_x(min(u, LEAP_T))
+    v = max(0.0, u - LEAP_T)
+    return L.p(x - RUN_SPEED * v, LIFT_D, TOP + 3.2 * v - 4.9 * v * v)
 
 
 def _runner_x(u):
@@ -390,7 +399,7 @@ def runner(img_unused, L, u):
     out = []
 
     def man(img):
-        if u < RUN_T0 - 0.01 or u > LEAP_T + 0.6:
+        if u < RUN_T0 - 0.01 or u > LEAP_T + LEAP_SEEN:
             return
         x = _runner_x(min(u, LEAP_T))
         z = TOP

@@ -37,6 +37,9 @@ import sitting as S                  # noqa: E402
 import brexit_is_done_action as ACT  # noqa: E402  the background action (shots 2 and 3)
 from satire_style import install_circle_hands   # noqa: E402
 READ_TIMES = ACT.READ_TIMES              # note 22: pre-flight's readtime check
+# note 28 (chat 42): the runner's leap must happen inside the frame (readtime.on_screen); shot time u, the site's camera
+ON_SCREEN = [("shot 2: the runner's leap off the scaffold", lambda u: ACT.leap_point(_cam('site'), u), ACT.LEAP_T,
+              ACT.LEAP_T + 0.6)]
 
 B = PPt.B
 V = PPt.V
