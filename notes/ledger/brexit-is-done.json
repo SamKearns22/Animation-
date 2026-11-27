@@ -24522,6 +24522,280 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "68229d56",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.18,
+   "src": "estimate",
+   "sid": "session_01J1JB7VfvMuXRRnLyeHQQUR",
+   "steps": 22,
+   "hist_k": 114,
+   "kinds": {
+    "film-file search": 3.5,
+    "tool search": 13.3,
+    "renders": 2.2,
+    "pictures": 1.4,
+    "other": 79.7
+   },
+   "calls": {
+    "film-file search": 3,
+    "tool search": 15,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 1,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.644,
+    "total": 0.644,
+    "floor_k": 85,
+    "blocks": {
+     "new writes": 42.8,
+     "start-up floor": 23.7,
+     "carried history": 20.5,
+     "Claude's words": 13.0
+    },
+    "origins": {
+     "messages and reminders": 45.6,
+     "start-up floor": 24.6,
+     "Claude's words": 16.9,
+     "result: tool search": 7.9,
+     "result: pictures": 2.2,
+     "result: film-file search": 1.8,
+     "result: other": 0.8,
+     "result: renders": 0.2
+    },
+    "named": {
+     "messages and reminders": 45.6,
+     "start-up reading (rules, tools, first files)": 24.6,
+     "commands": 8.5,
+     "reading notes": 4.4,
+     "thinking": 4.1,
+     "writing notes": 3.9,
+     "running checks and tools": 2.3,
+     "looking at pictures": 2.2,
+     "renders": 1.9,
+     "reading kit code": 0.8,
+     "app tools (chats, files sent)": 0.8,
+     "messages to Sam": 0.4,
+     "reading guides": 0.3,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 5,
+    "work_pct": 0.05,
+    "reads": [
+     [
+      "guides/preflight.md",
+      1.6,
+      0.007
+     ],
+     [
+      "guides/job-packs.md",
+      0.9,
+      0.004
+     ],
+     [
+      "notes/brexit-is-done.md",
+      0.9,
+      0.004
+     ]
+    ],
+    "base_pct": 27.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 3
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "film notes": 4,
+     "guides": 1,
+     "shared:preflight.py": 3,
+     "shared:waivers.py": 3,
+     "other": 2,
+     "shared:critique.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status -sb | head -5 && git branch --show-current && git fetch origin claude",
+      "",
+      6046
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "Where things stand",
+      "",
+      227
+     ],
+     [
+      2,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "finish|animatic|render",
+      "",
+      1017
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "guides/job-packs.md notes/brexit-is-done.md",
+      "git checkout -B claude/open-wounds-chat41 2>&1 | tail -1; sed -n 53,84p guides/j",
+      "",
+      7050
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md guides/preflight.md",
+      "animatic|--small|OUT=|preflight",
+      "",
+      6389
+     ],
+     [
+      5,
+      "film",
+      "before show",
+      "guides/preflight.md source/brexit_is_done.py notes/brexit-is-done.md",
+      "final OUT\\|--small",
+      "",
+      6596
+     ],
+     [
+      6,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "mkdir -p /tmp/pf && (time python3 source/preflight.py brexit-is-done /tmp/pf --t",
+      "",
+      695
+     ],
+     [
+      7,
+      "other",
+      "shared:waivers.py",
+      "notes/brexit-is-done.md source/waivers.py",
+      "MOVESIZE_OK",
+      "",
+      2617
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^## ",
+      "",
+      2083
+     ],
+     [
+      9,
+      "other",
+      "shared:preflight.py",
+      "notes/brexit-is-done.md source/preflight.py",
+      "python3 - <<'E' p='notes/brexit-is-done.md' s=open(p).read() s=s.replace(\"| MOVE",
+      "",
+      3198
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "git status -sb | head; git fetch origin claude/create-claude-md-oe8z4g 2>&1|tail",
+      "",
+      383
+     ],
+     [
+      11,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "git add -A && git commit -qm \"Open Wounds chat 41: exception row fixed, prefligh",
+      "",
+      1183
+     ],
+     [
+      12,
+      "other",
+      "shared:waivers.py",
+      "notes/ledger/brexit-is-done.md source/waivers.py",
+      "git checkout --theirs notes/ledger/brexit-is-done.md 2>&1|tail -1; git add -A &&",
+      "",
+      1227
+     ],
+     [
+      13,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/critique.py",
+      "python3 source/brexit_is_done.py stills /tmp/pf 13.75 28.83 2>&1 | tail -2; ls /",
+      "",
+      256
+     ],
+     [
+      15,
+      "other",
+      "shared:critique.py",
+      "notes/critique* notes/ledger/brexit-is-done source/critique.py",
+      "ls notes/critique* notes/ledger/brexit-is-done 2>/dev/null | head -20; python3 s",
+      "",
+      2163
+     ],
+     [
+      17,
+      "other",
+      "shared:waivers.py",
+      "notes/brexit-is-done.md source/waivers.py source/critique.py",
+      "faults-named\\|named",
+      "",
+      706
+     ],
+     [
+      18,
+      "film",
+      "before show",
+      "source/data source/brexit_is_done.py source/data/brexit-is-done-clean.mp4",
+      "cp /tmp/pf/brexit-is-done-named.txt /dev/null; mkdir -p source/data && (time pyt",
+      "",
+      701
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "brexit_is_done.py final",
+      "",
+      434
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
