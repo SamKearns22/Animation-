@@ -42,3 +42,26 @@ We 180. The guards just stare at each other in baffled shock.
 
 In the meantime, send a message to the other film chat to continue the Patriot character design.
 
+### 2026-11-27T21:21:05
+1. Ask permission for big uk news sites and I'll grant it
+
+### 2026-11-27T21:30:39
+2. N. The joke is that they are clueless fascists and most of patriot platform's hatred is directed towards Muslims. This needs to be accurate for the joke to land. It is a joke that targets them, not the Muslims
+
+3. Y but let's make it orange.
+
+4. Y. This is the hardest thing in this film to pull off so you will have to learn this pose. It has been used in animation plenty.
+
+5. You never need to suggest book texts to me. Leave that blank until I provide it.
+
+6. Y
+
+7. Make the Allahu Akbar stumbling yet sincere. Like he's trying to play a role he's not used to, all of a sudden
+
+### 2026-11-27T21:36:05
+1. Please base these clothes on migrants/small boat people rather than locals
+
+2. Absolutely, yes. At least two of them.
+
+3. Y
+

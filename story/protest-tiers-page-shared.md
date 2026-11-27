@@ -263,7 +263,7 @@
 - 63: `sheet` One sheet: a row per place with our frame, up to three references and the list, each item ticked or crossed.
 - 109: `main` 
 
-## body.py (887 lines)
+## body.py (892 lines)
 - 25: HERE (data)
 - 27: HEM (data)
 - 28: SANS (data)
@@ -306,27 +306,27 @@
 - 512: ARM_TOP (data)
 - 515: `ink_units` The body's outline thickness in the person's own units (Pen.w grows slower than the drawing).
 - 525: FIGS (data)
-- 541: FIG_HEM (data)
-- 542: WOMEN_FIGS (data)
-- 545: `fig_half` The build's half width at height y (None: the house body's, as front_outline draws it). `hem`: the width at
-- 560: SEAT_HEM (data)
-- 561: SEAT_BACK_CORNER (data)
-- 564: `seat_hem` The hem width a person's outline ends on (None: the build's own).
-- 569: `trouser_seat` A short jacket: the body's outline below the jacket's hem painted in the trousers (the seat), its top edge the
-- 633: `_chaikin` Corners cut (n times), the ends kept: a smooth side from a few measured heights.
-- 644: `front_outline` The body's outline seen from the front (or the back): the collar, each shoulder sloping down and rounding over
-- 675: WOMAN_V (data)
-- 678: `_top_y` The body outline's top edge (the collar and the shoulder's slope) at x: the highest crossing above y 60.
-- 687: `_womans_neckline` 
-- 704: `plain_torso` 
-- 761: LAP_OPEN (data)
-- 766: `lap_open` Seated, knees apart, front view: the jacket's two front panels part below the button and curve away to the hem
-- 782: `torso` The body in its outfit, then the look's own torso pieces (TORSOS).
-- 790: `arms` Arm poses. front=False draws what sits behind the body, front=True what sits in front.
-- 812: `finger` One finger from point a in direction d.
-- 822: `pose_arms` 
-- 858: `person` Draw one person with the neck base at world (x, y) and scale s.
-- 874: `_house` The house limbs (limbs.py: one tube from shoulder to wrist, joined to the body's outline; legs curved through
+- 545: FIG_HEM (data)
+- 546: WOMEN_FIGS (data)
+- 549: `fig_half` The build's half width at height y (None: the house body's, as front_outline draws it). `hem`: the width at
+- 564: SEAT_HEM (data)
+- 565: SEAT_BACK_CORNER (data)
+- 568: `seat_hem` The hem width a person's outline ends on (None: the build's own).
+- 573: `trouser_seat` A short jacket: the body's outline below the jacket's hem painted in the trousers (the seat), its top edge the
+- 637: `_chaikin` Corners cut (n times), the ends kept: a smooth side from a few measured heights.
+- 648: `front_outline` The body's outline seen from the front (or the back): the collar, each shoulder sloping down and rounding over
+- 679: WOMAN_V (data)
+- 682: `_top_y` The body outline's top edge (the collar and the shoulder's slope) at x: the highest crossing above y 60.
+- 691: `_womans_neckline` 
+- 708: `plain_torso` 
+- 766: LAP_OPEN (data)
+- 771: `lap_open` Seated, knees apart, front view: the jacket's two front panels part below the button and curve away to the hem
+- 787: `torso` The body in its outfit, then the look's own torso pieces (TORSOS).
+- 795: `arms` Arm poses. front=False draws what sits behind the body, front=True what sits in front.
+- 817: `finger` One finger from point a in direction d.
+- 827: `pose_arms` 
+- 863: `person` Draw one person with the neck base at world (x, y) and scale s.
+- 879: `_house` The house limbs (limbs.py: one tube from shoulder to wrist, joined to the body's outline; legs curved through
 
 ## branches.py (140 lines)
 - 28: HERE (data)
@@ -817,132 +817,142 @@
 - 430: `render` 
 - 448: `main` 
 
-## facehouse.py (375 lines)
-- 93: HERE (data)
-- 95: ROOT (data)
-- 101: `curve` The closed curve, through each point once: ink.curve drops repeats itself now (R8 A4, 27 Nov).
-- 111: `pick_dir` Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
-- 117: `pick_file` 
-- 121: `load` Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
-- 133: TV (data)
-- 136: `_skin_rows` One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
-- 158: `trace` The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
-- 176: `overlay` Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over.
-- 204: HOUSE_SKIN (data)
-- 215: HV (data)
-- 216: OVAL (data)
-- 220: `_poly_halfw` A closed outline's half width at each row (nan where it does not reach).
-- 233: `_head_rows` One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
-- 284: EAR (data)
-- 287: `_canon_oval` The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units.
-- 296: `measure_head` The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
-- 323: `head_overlay` Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan).
+## facehouse.py (382 lines)
+- 100: HERE (data)
+- 102: ROOT (data)
+- 108: `curve` The closed curve, through each point once: ink.curve drops repeats itself now (R8 A4, 27 Nov).
+- 118: `pick_dir` Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
+- 124: `pick_file` 
+- 128: `load` Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
+- 140: TV (data)
+- 143: `_skin_rows` One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
+- 165: `trace` The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
+- 183: `overlay` Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over.
+- 211: HOUSE_SKIN (data)
+- 222: HV (data)
+- 223: OVAL (data)
+- 227: `_poly_halfw` A closed outline's half width at each row (nan where it does not reach).
+- 240: `_head_rows` One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
+- 291: EAR (data)
+- 294: `_canon_oval` The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units.
+- 303: `measure_head` The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
+- 330: `head_overlay` Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan).
 
-## facehouse_b.py (943 lines)
-- 48: `_photo_brows` One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
-- 95: SHARP (data)
-- 98: `browcheck` The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
-- 162: `house_tone` The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
-- 177: LOOKS (data)
-- 182: EYE_OPEN_MIN (data)
-- 184: LID0 (data)
-- 187: `face_layout` The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
-- 209: `_cheek` The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows.
-- 214: `feature_scale` Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
-- 232: SHAPE_PUSH (data)
-- 236: PROP_ROWS (data)
-- 237: SQUARE (data)
-- 240: `proportions` The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
-- 254: `_smooth` 
-- 259: `drawn_head` The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
-- 286: SKIN_BIAS (data)
-- 292: HEAD_EYES (data)
-- 293: EYE_OPEN_HEAD (data)
-- 296: `_sil` The head's measured silhouette (hair and skin) half width at row v.
-- 302: `_brow_gap` The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths.
-- 312: `_peak` Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured.
-- 318: `house_head` The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece.
-- 327: `_head` 
-- 392: `_focus_room` How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
-- 405: `ears` The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
-- 418: `_ear_L` The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
-- 424: `_eye` The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's.
-- 431: `stubble` A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
-- 466: SHORT_BEARD (data)
-- 470: `beard` The pick's beard: a solid short full beard where its lines say style 'short' (new picks since B1), else the
-- 476: `short_beard` B1 (replay test 2, Sam's Y, 27 Nov: El-Sayed's beard drawn as stubble with skin through it read grey-brown at
-- 531: `lashes` Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
-- 547: `sockets` The socket shade (the test's, kept for the 'detail' look): one flat crescent of darker skin under the brow,
-- 560: `_swept_shapes` The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light.
-- 587: `_swept_measured` Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
-- 628: `class _Squeeze` A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
-- 647: `_swept_strokes` The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail').
-- 669: `swept` Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
-- 680: `bald_shapes` Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
-- 694: `bald` The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left.
-- 707: `bob_shapes` Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
-- 737: `_bob_strokes` The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark
-- 759: `bob` 
-- 765: `earrings` Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
-- 777: `hard_hat` Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
-- 795: `_hard_hat_parts` 
-- 806: `turned_hat` The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
-- 862: `back_shapes` Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
-- 884: `_round_strokes` The hair's strokes on the side and back of a turned head, drawn on the hair's own surface (turnhead.hair_point
-- 925: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
-- 938: `back` 
+## facehouse_b.py (963 lines)
+- 51: `_photo_brows` One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
+- 98: SHARP (data)
+- 101: `browcheck` The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
+- 165: `house_tone` The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
+- 180: LOOKS (data)
+- 185: EYE_OPEN_MIN (data)
+- 187: LID0 (data)
+- 190: `face_layout` The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
+- 212: `_cheek` The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows.
+- 217: `feature_scale` Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
+- 235: SHAPE_PUSH (data)
+- 239: PROP_ROWS (data)
+- 240: SQUARE (data)
+- 243: `proportions` The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
+- 257: `_smooth` 
+- 262: `drawn_head` The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
+- 289: SKIN_BIAS (data)
+- 295: HEAD_EYES (data)
+- 296: EYE_OPEN_HEAD (data)
+- 299: `_sil` The head's measured silhouette (hair and skin) half width at row v.
+- 305: `_brow_gap` The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths.
+- 315: `_peak` Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured.
+- 321: `house_head` The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece.
+- 330: `_head` 
+- 397: `_focus_room` How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
+- 410: `ears` The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
+- 423: `_ear_L` The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
+- 429: `_eye` The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's.
+- 436: `stubble` A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
+- 471: SHORT_BEARD (data)
+- 475: `beard` The pick's beard: a solid short full beard where its lines say style 'short' (new picks since B1), else the
+- 481: `short_beard` B1 (replay test 2, Sam's Y, 27 Nov: El-Sayed's beard drawn as stubble with skin through it read grey-brown at
+- 551: `lashes` Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
+- 567: `sockets` The socket shade (the test's, kept for the 'detail' look): one flat crescent of darker skin under the brow,
+- 580: `_swept_shapes` The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light.
+- 607: `_swept_measured` Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
+- 648: `class _Squeeze` A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
+- 667: `_swept_strokes` The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail').
+- 689: `swept` Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
+- 700: `bald_shapes` Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
+- 714: `bald` The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left.
+- 727: `bob_shapes` Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
+- 757: `_bob_strokes` The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark
+- 779: `bob` 
+- 785: `earrings` Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
+- 797: `hard_hat` Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
+- 815: `_hard_hat_parts` 
+- 826: `turned_hat` The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
+- 882: `back_shapes` Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
+- 904: `_round_strokes` The hair's strokes on the side and back of a turned head, drawn on the hair's own surface (turnhead.hair_point
+- 945: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
+- 958: `back` 
 
-## facehouse_c.py (1059 lines)
-- 49: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
-- 83: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
-- 127: `_face_u` The face outline's half width at row v (our right side).
-- 134: VJ (data)
-- 135: VS (data)
-- 138: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
-- 159: `_out` 
-- 163: `_resample` A path resampled to n points evenly along its length.
-- 171: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
-- 184: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
-- 195: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
-- 220: `_looks` 
-- 226: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
-- 250: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
-- 280: `_strands` Long straight hair's strands (B2): n long lines down a strip whose edges are P(0) and P(1) (P(a) a path from
-- 291: `_long_tones` 
-- 296: `_long_tips` The straight cut across a curtain's foot, from its outer corner a to its inner corner b: a few short points.
-- 302: `long_hair` B2 (replay test 2, Sam's Y, 27 Nov: Ocasio-Cortez came out in May's bob; no piece for long straight hair).
-- 326: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
-- 362: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
-- 414: HAIR (data)
-- 417: `hair_fit` Replay test 2 (Sam's Y, 27 Nov): Ocasio-Cortez's long straight hair has no piece, and the plan only found out 
-- 431: TURN_PROF (data)
-- 439: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
-- 445: `_turn_key` 
-- 451: `_turn_mood` 
-- 459: `_turn_mouth` 
-- 469: `_turn_face` 
-- 476: `_turn_over` 
-- 482: `_turn_hair` 
-- 489: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
-- 508: `_turn_hair0` 
-- 545: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
-- 627: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
-- 641: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
-- 648: `_turn_person` 
-- 666: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
-- 687: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
-- 695: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
-- 734: CAST (data)
-- 757: `install` 
-- 765: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
-- 796: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
-- 823: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
-- 863: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
-- 887: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
-- 920: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
-- 985: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
-- 1031: KEPT (data)
-- 1041: `_fit` 
+## facehouse_c.py (1226 lines)
+- 54: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
+- 88: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
+- 132: `_face_u` The face outline's half width at row v (our right side).
+- 139: VJ (data)
+- 140: VS (data)
+- 143: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
+- 164: `_out` 
+- 168: `_resample` A path resampled to n points evenly along its length.
+- 176: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
+- 189: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
+- 200: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
+- 225: `_looks` 
+- 231: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
+- 255: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
+- 285: `_strands` Long straight hair's strands (B2): n long lines down a strip whose edges are P(0) and P(1) (P(a) a path from
+- 296: `_long_tones` 
+- 302: `_long_tips` The straight cut across a curtain's foot, from its outer corner a to its inner corner b: a few short points.
+- 308: `long_hair` B2 (replay test 2, Sam's Y, 27 Nov: Ocasio-Cortez came out in May's bob; no piece for long straight hair).
+- 332: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
+- 368: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
+- 420: HAIR (data)
+- 423: `hair_fit` Replay test 2 (Sam's Y, 27 Nov): Ocasio-Cortez's long straight hair has no piece, and the plan only found out 
+- 437: TURN_PROF (data)
+- 445: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
+- 451: `_turn_key` 
+- 457: `_turn_mood` 
+- 465: `_turn_mouth` 
+- 475: `_turn_face` 
+- 482: `_turn_over` 
+- 488: `_turn_hair` 
+- 498: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
+- 517: `_turn_hair0` 
+- 554: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
+- 638: NECKS (data)
+- 642: `_long_turned` B2 turned, hunt 2 (rule 89 critique r1: from behind the long hair read as a HOOD, a band across the crown
+- 794: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
+- 808: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
+- 815: `_turn_person` 
+- 833: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
+- 854: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
+- 862: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
+- 901: CAST (data)
+- 924: `install` 
+- 932: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
+- 963: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
+- 990: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
+- 1030: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
+- 1054: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
+- 1087: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
+- 1152: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
+- 1198: KEPT (data)
+- 1208: `_fit` 
+
+## facehouse_d.py (182 lines)
+- 20: `_talk_level` How far his jaw is open behind the knit (0 shut .. 1 wide), from the mouth shape the film gives him.
+- 29: `_slot_uv` The eye opening in face units: a soft-cornered band from above the brows to under the eyes, out past the
+- 46: `_knit` outer, slot: polygons in pen units (slot may be None); ribs(pen) draws the ribs; mouth: a polygon of the jaw
+- 104: `_mouth_uv` The jaw working under the knit: a soft dark hollow over the mouth, taller as it opens.
+- 111: `balaclava_front` 
+- 134: `balaclava_turned` 
 
 ## facepick.py (1053 lines)
 - 58: HERE (data)
@@ -3082,7 +3092,7 @@
 - 382: `can` A drinks can standing on a table (the point: its foot, middle; 6.6 cm across, 12 cm tall): its colour, a
 - 399: `coaster` A round coaster lying flat on a table (Milburn note 10): `at X Z, depth D` its middle, `width W` across in
 
-## plainwords.py (274 lines)
+## plainwords.py (294 lines)
 - 33: ROOT (data)
 - 34: EX (data)
 - 35: WORDS (data)
@@ -3101,18 +3111,23 @@
 - 76: `skip_line` 
 - 81: `explained` True when the sentence explains the word right where it is used.
 - 89: `faults` 
-- 120: CHAT_LONG_RE (data)
-- 124: OWN_TOOL_RE (data)
-- 128: `say` 
-- 135: `block_reason` 
-- 143: `_log` 
-- 150: `_last_reply` The chat's last reply text (all text blocks of the last assistant turn, after Sam's last real message).
-- 170: `hook` 
-- 195: `_terms` Terms a confusing message leaned on: its flagged project words and labels, and quoted or bold phrases.
-- 205: `learn` Sam's "I don't understand" / "explain": save the message he replied to, and add its terms to the list.
-- 232: `example_text` 
-- 237: `score` {name: (expected, faults)} over the saved examples: bad-* must fail, good-* must pass.
-- 247: `main` 
+- 120: HOOK_RE (data)
+- 121: SUGGEST_RE (data)
+- 123: NO_SUGGEST_RE (data)
+- 124: QUOTED_RE (data)
+- 127: `hook_suggested` True when the sentence offers Sam a wording for the Hook Text (opening caption).
+- 139: CHAT_LONG_RE (data)
+- 143: OWN_TOOL_RE (data)
+- 147: `say` 
+- 155: `block_reason` 
+- 163: `_log` 
+- 170: `_last_reply` The chat's last reply text (all text blocks of the last assistant turn, after Sam's last real message).
+- 190: `hook` 
+- 215: `_terms` Terms a confusing message leaned on: its flagged project words and labels, and quoted or bold phrases.
+- 225: `learn` Sam's "I don't understand" / "explain": save the message he replied to, and add its terms to the list.
+- 252: `example_text` 
+- 257: `score` {name: (expected, faults)} over the saved examples: bad-* must fail, good-* must pass.
+- 267: `main` 
 
 ## plan.py (446 lines)
 - 55: HERE (data)
@@ -4193,7 +4208,7 @@
 - 722: `_ring` 
 - 727: `chair` A plain office chair at knee height for anyone seated: `under` = the parts behind and below the person (drawn
 
-## views_c.py (716 lines)
+## views_c.py (719 lines)
 - 28: `class Tilted` A person's frame seen from a camera tilted down (Build list item 12, 25 Oct): heights squash by `c` towards
 - 45: `class Mirrored` A head's frame flipped about its own centre line (x = cx): the head faces its own way, whichever way the body'
 - 58: `class Rolled` A head's frame tipped `deg` degrees about the top of the neck (pivot) and dropped `dy` units (a nod): the
@@ -4215,20 +4230,20 @@
 - 420: TORSO_EXTRAS (data)
 - 423: `torso_outline` The turned torso's outline (torso_view's body), facing right, in the body's units (o: the outline's
 - 446: `_built_outline` A build's turned outline (GTA cast chat, 20 Nov): each side of the house outline below the shoulder scaled by
-- 517: LAST_TURNED (data)
-- 518: CURVE_BUMP (data)
-- 519: CURVE_HIP (data)
-- 524: `turned_curves_fault` R7 chat 10 (Sam, 25 Nov: "Way too curvaceous from this angle. She's Theresa May not a swimsuit model",
-- 552: SEAT_ROUND (data)
-- 555: `_seat_into_thighs` A short jacket's seat (body.trouser_seat), turned: each side's last SEAT_ROUND of the body eased (a quarter
-- 574: TURNED_SIDE (data)
-- 580: TURNED_BUST (data)
-- 581: TURNED_BUST_Y (data)
-- 582: TURNED_BUST_SD (data)
-- 588: `_side_depths` The side view's front and back depth at each height (the turned outline borrows them).
-- 601: `_fig_k` The build's width over the house body's at height y (1 over the shoulders, so the arms still hang there).
-- 607: `_span` The outline's left and right edges at height y (None above or below it).
-- 616: `class WrapPen` A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
+- 520: LAST_TURNED (data)
+- 521: CURVE_BUMP (data)
+- 522: CURVE_HIP (data)
+- 527: `turned_curves_fault` R7 chat 10 (Sam, 25 Nov: "Way too curvaceous from this angle. She's Theresa May not a swimsuit model",
+- 555: SEAT_ROUND (data)
+- 558: `_seat_into_thighs` A short jacket's seat (body.trouser_seat), turned: each side's last SEAT_ROUND of the body eased (a quarter
+- 577: TURNED_SIDE (data)
+- 583: TURNED_BUST (data)
+- 584: TURNED_BUST_Y (data)
+- 585: TURNED_BUST_SD (data)
+- 591: `_side_depths` The side view's front and back depth at each height (the turned outline borrows them).
+- 604: `_fig_k` The build's width over the house body's at height y (1 over the shoulders, so the arms still hang there).
+- 610: `_span` The outline's left and right edges at height y (None above or below it).
+- 619: `class WrapPen` A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
 
 ## views_d.py (580 lines)
 - 16: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.

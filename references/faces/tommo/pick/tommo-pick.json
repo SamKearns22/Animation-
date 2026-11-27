@@ -1,0 +1,240 @@
+{
+ "title": "tommo",
+ "fronts": [
+  "references/faces/tommo/m01-front-mirror.jpg",
+  "references/faces/tommo/m02-front-mirror.jpg"
+ ],
+ "tq": [
+  "references/faces/tommo/m03-close-mirror.jpg",
+  "references/faces/tommo/m04-threequarter-mirror.jpg"
+ ],
+ "unsure": [
+  "nose_long",
+  "lip_low",
+  "lip_top"
+ ],
+ "gain": 1.6,
+ "glasses": null,
+ "beard": {
+  "colour": [
+   105,
+   118,
+   131
+  ],
+  "moustache": [
+   105,
+   118,
+   131
+  ],
+  "coverage": 0.062,
+  "word": "dark"
+ },
+ "age": {
+  "depth": {
+   "nasolabial": 0.1334,
+   "crows_feet": 0.007,
+   "eye_bags": 0.1412,
+   "forehead": 0.0111,
+   "marionette": 0.0377,
+   "cheek_hollow": 0.0402
+  },
+  "strength": {
+   "nasolabial": 0.8,
+   "crows_feet": 0.0,
+   "eye_bags": 0.25,
+   "forehead": 0.0,
+   "marionette": 0.07,
+   "cheek_hollow": 0.28
+  },
+  "rank": {
+   "nasolabial": "10 of 14",
+   "crows_feet": "0 of 14",
+   "eye_bags": "10 of 14",
+   "forehead": "6 of 14",
+   "marionette": "5 of 14",
+   "cheek_hollow": "14 of 14"
+  },
+  "age": "43",
+  "age_factor": 0.7,
+  "fold_out": 0.101
+ },
+ "eyes": {
+  "scale": 1.0,
+  "dark": 0.81,
+  "sock": 0.36,
+  "iris_r": 1.39,
+  "pupil_r": 0.6,
+  "iris": [
+   57,
+   44,
+   43
+  ],
+  "shade": 1.0
+ },
+ "braids": false,
+ "colours": {
+  "skin": [
+   211,
+   168,
+   156
+  ],
+  "hair": [
+   104,
+   87,
+   80
+  ],
+  "hair2": [
+   162,
+   135,
+   124
+  ],
+  "lip": [
+   179,
+   105,
+   94
+  ],
+  "brow": [
+   98,
+   53,
+   40
+  ],
+  "cloth": [
+   63,
+   64,
+   95
+  ],
+  "rim": [
+   30,
+   28,
+   30
+  ]
+ },
+ "heads": {
+  "A": {
+   "what": "a short nose, a thin lower lip, a thin upper lip (as the photo)",
+   "measures": {
+    "face_wide": 0.8764829656598734,
+    "jaw_wide": 0.7806841212874254,
+    "forehead_wide": 0.9792111469702018,
+    "eyes_apart": 0.9841611862047597,
+    "eye_size": 0.21631455862739818,
+    "eye_open": 0.45271840287024523,
+    "eye_tilt": 6.130205401930716,
+    "brow_high": 0.24879882608047382,
+    "brow_slope": -2.5026276287632143,
+    "nose_long": 0.4328211910039948,
+    "nose_wide": 0.7729812916852673,
+    "mouth_wide": 0.8622396892343719,
+    "lip_top": -0.01689035384054663,
+    "lip_low": -0.02145123670207208,
+    "philtrum": 0.09906265585117938,
+    "chin_long": 0.46487644568665953
+   },
+   "score": 73.36605925270688,
+   "good": 4,
+   "timid": 8,
+   "wrong": 0,
+   "rank": "1 of 15",
+   "pass": true
+  },
+  "B": {
+   "what": "nose long half as far, lip low half as far, lip top half as far",
+   "measures": {
+    "face_wide": 0.8861963899539321,
+    "jaw_wide": 0.7618636425149699,
+    "forehead_wide": 0.9839187648978145,
+    "eyes_apart": 1.054776257484421,
+    "eye_size": 0.2091730708699652,
+    "eye_open": 0.4365221872408514,
+    "eye_tilt": 4.127286581605025,
+    "brow_high": 0.3046303639512842,
+    "brow_slope": -2.722101795621832,
+    "nose_long": 0.4004347213678549,
+    "nose_wide": 0.7690575649039371,
+    "mouth_wide": 0.7625028765780231,
+    "lip_top": 0.06004379612373709,
+    "lip_low": 0.0682950212980863,
+    "philtrum": 0.07540103351588598,
+    "chin_long": 0.46834195347558427
+   },
+   "score": 77.70962669629799,
+   "good": 4,
+   "timid": 8,
+   "wrong": 0,
+   "rank": "1 of 15",
+   "pass": true
+  },
+  "C": {
+   "what": "nose long the other way, lip low further, lip top further",
+   "measures": {
+    "face_wide": 0.8550779034352296,
+    "jaw_wide": 0.7623128789253268,
+    "forehead_wide": 0.9889531149254654,
+    "eyes_apart": 0.9978918067907986,
+    "eye_size": 0.2229052978694002,
+    "eye_open": 0.5087518887562804,
+    "eye_tilt": 7.25521605969213,
+    "brow_high": 0.2763231244119928,
+    "brow_slope": 1.5607530272564851,
+    "nose_long": 0.42015357400774195,
+    "nose_wide": 0.8178787869161411,
+    "mouth_wide": 0.7812657119459411,
+    "lip_top": -0.05067322064690988,
+    "lip_low": -0.08471330520094161,
+    "philtrum": 0.12444572095922876,
+    "chin_long": 0.45992379743474754
+   },
+   "score": 71.6441804028441,
+   "good": 6,
+   "timid": 6,
+   "wrong": 0,
+   "rank": "1 of 15",
+   "pass": true
+  }
+ },
+ "card": {
+  "face_wide": -0.03,
+  "jaw_wide": -0.93,
+  "forehead_wide": 0.08,
+  "eyes_apart": -0.87,
+  "eye_size": 0.44,
+  "eye_open": 0.68,
+  "eye_tilt": 0.18,
+  "brow_high": -1.46,
+  "brow_slope": 0.55,
+  "nose_long": -0.83,
+  "nose_wide": 0.95,
+  "mouth_wide": -0.12,
+  "lip_top": -0.78,
+  "lip_low": -0.79,
+  "philtrum": -0.57,
+  "chin_long": 1.99
+ },
+ "shapes_card": {
+  "hair_top": 0.5451539128104392,
+  "hair_wide": 1.308121908802324,
+  "hairline": 0.19675086887007157,
+  "fringe": 0.05016722408026756,
+  "hair_rgb": [
+   110,
+   89,
+   79
+  ],
+  "hair_below_ears": -0.058158537950070366,
+  "skin_rgb": [
+   201,
+   145,
+   130
+  ],
+  "beard": 0.27,
+  "moustache": 0.54,
+  "glasses": 0.0,
+  "skin_face": [
+   206,
+   157,
+   143
+  ]
+ },
+ "hair_piece": "swept",
+ "skin_way": "face"
+}
