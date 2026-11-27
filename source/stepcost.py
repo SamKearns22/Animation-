@@ -99,7 +99,7 @@ def thing_of(name, inp, film_re):
         w = _where(cmd)
         if any(h in SEARCH_CMDS or h in ('cat', 'sed', 'wc', 'ls', 'python3', 'python') for h in heads) and w:
             return 'reading ' + w if w != 'code' else ('reading film code' if film_re.search(cmd) else 'reading kit code')
-        return 'other commands'
+        return 'small shell commands (listing, moving, copying)'
     if name in ('Read', 'Grep', 'Glob'):
         t = ' '.join(str(inp.get(k, '')) for k in ('file_path', 'path', 'glob', 'pattern'))
         if name == 'Read' and IMG.search(inp.get('file_path', '')):
@@ -107,7 +107,7 @@ def thing_of(name, inp, film_re):
         w = _where(t)
         if w == 'code':
             return 'reading film code' if film_re.search(t) else 'reading kit code'
-        return 'reading ' + w if w else 'reading other files'
+        return 'reading ' + w if w else 'reading files outside the project (scratch, logs)'
     if name in EDIT_TOOLS:
         return 'edit results'
     if name in ('Agent', 'Task'):
@@ -229,7 +229,8 @@ def measure(path, film=None, helpers=True):
             k = byid[mid]
             for b in m.get('content') or []:
                 if isinstance(b, dict) and b.get('type') == 'tool_use':
-                    calls[b['id']] = (k, kind_of(b.get('name'), b.get('input'), film_re))
+                    calls[b['id']] = (k, kind_of(b.get('name'), b.get('input'), film_re),
+                                      thing_of(b.get('name'), b.get('input'), film_re))
                     steps[k][2].append(b['id'])
         elif d.get('type') == 'user' and isinstance(m.get('content'), list):
             for b in m['content']:
@@ -267,18 +268,32 @@ def measure(path, film=None, helpers=True):
             kind = calls[tid][1]
             if results[tid][2] and kind == 'other':
                 kind = 'pictures'
-            by[kind] += add * (w + r * later) / 1e6
+            if kind == 'other':                      # Sam, 28 Nov: nothing left as "other": its plain name
+                kind = calls[tid][2]
+            by[kind] = by.get(kind, 0.0) + add * (w + r * later) / 1e6
     for k, (u, _, ids) in enumerate(steps):          # the output that asked for each call, shared between them
         if ids:
             share = u.get('output_tokens', 0) * price[k][3] / 1e6 / len(ids)
             for tid in ids:
-                by[calls[tid][1]] += share
+                kk = calls[tid][1] if calls[tid][1] != 'other' else calls[tid][2]
+                by[kk] = by.get(kk, 0.0) + share
     named = sum(by.values())
     if named > main:                                 # estimates never claim more than the chat spent
         for kk in by:
             by[kk] *= main / named
         named = main
-    by['other'] += main - named
+    rest = main - named                              # what no call explains: named from the exact split's origins
+    try:
+        sp = split(path, film) if helpers else None
+    except Exception:
+        sp = None
+    og = {OTHER_NAMES[k]: v for k, v in ((sp or {}).get('origins') or {}).items() if k in OTHER_NAMES}
+    tot = sum(og.values())
+    for k, v in og.items():
+        by[k] = by.get(k, 0.0) + rest * v / tot
+    if not tot:
+        by["Claude's words, start-up and messages"] = by.get("Claude's words, start-up and messages", 0.0) + rest
+    by['other'] = 0.0
     if helpers:
         for h in costwatch.helper_files(path):
             hm = measure(h, film, helpers=False)
@@ -290,19 +305,20 @@ def measure(path, film=None, helpers=True):
     except Exception:
         srch = None
     try:
-        sp = split(path, film) if helpers else None
-    except Exception:
-        sp = None
-    try:
         cs = start(path, film) if helpers else None
     except Exception:
         cs = None
     return {'steps': len(steps), 'hist': ctx[-1], 'usd': round(total, 4), 'search': srch, 'split': sp, 'start': cs,
             'kinds': {k: round(100 * v / total, 1) for k, v in by.items() if total and round(100 * v / total, 1)},
-            'calls': {k: sum(1 for _, kk in calls.values() if kk == k) for k in KINDS if k != 'helpers'}}
+            'calls': {k: sum(1 for _, kk, _t in calls.values() if kk == k) for k in KINDS if k != 'helpers'}}
 
 
 EDIT_TOOLS = {'Edit', 'Write', 'NotebookEdit', 'MultiEdit'}
+# Sam, 28 Nov ("anything usually labelled 'other' gets an appropriate category"): the cost no tool call explains,
+# named by the exact split's origins (split()); a step's own "other" kind takes thing_of()'s plain name
+OTHER_NAMES = {"Claude's words": "Claude's words (thinking and writing)", 'start-up floor': 'start-up reading',
+               'cache re-write': 'memory lapses (re-paying for the whole chat after a gap)',
+               'messages and reminders': 'messages and reminders', 'unexplained': 'unexplained'}
 BLOCKS = ['start-up floor', 'carried history', 'new writes', "Claude's words", 'helpers']
 
 
@@ -815,6 +831,7 @@ def test():
     check('the file and pattern of a shell grep are read',
           _what('Bash', {'command': 'grep -n "def arm" source/blessed_cast.py | head'}) == ('source/blessed_cast.py', 'def arm'))
     check('the kinds add to 100%', m and abs(sum(m['kinds'].values()) - 100) < 1)
+    check('nothing is left as "other" (Sam, 28 Nov)', m and not any('other' in k for k in m['kinds']))
     check('the total matches the cost watch', m and abs(m['usd'] - _watch_usd(fx)) < 0.01)
     check('this fixture\'s searches are tool searches (no film files in a tool job)',
           m and m['kinds'].get('tool search', 0) > 0 and 'film-file search' not in m['kinds'])
