@@ -42,3 +42,6 @@ We 180. The guards just stare at each other in baffled shock.
 
 In the meantime, send a message to the other film chat to continue the Patriot character design.
 
+### 2026-11-27T21:21:05
+1. Ask permission for big uk news sites and I'll grant it
+
