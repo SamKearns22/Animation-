@@ -4484,6 +4484,1189 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "774a3f06",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.6,
+   "src": "estimate",
+   "sid": "session_01J1JB7Y1BHkjtYN6FKWQLTr",
+   "steps": 159,
+   "hist_k": 278,
+   "kinds": {
+    "tool search": 30.4,
+    "renders": 0.4,
+    "pictures": 5.5,
+    "other": 63.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 118,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 24,
+    "other": 20
+   },
+   "split": {
+    "usd": 9.2774,
+    "total": 9.2774,
+    "floor_k": 85,
+    "blocks": {
+     "carried history": 30.1,
+     "start-up floor": 28.1,
+     "Claude's words": 25.1,
+     "new writes": 16.6
+    },
+    "origins": {
+     "Claude's words": 45.8,
+     "start-up floor": 28.1,
+     "result: tool search": 15.4,
+     "result: pictures": 6.3,
+     "messages and reminders": 3.0,
+     "result: other": 1.2,
+     "Claude's edits": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 28.1,
+     "thinking": 20.4,
+     "writing code": 12.8,
+     "reading kit code": 9.5,
+     "commands": 9.0,
+     "looking at pictures": 6.3,
+     "messages and reminders": 3.0,
+     "running checks and tools": 2.5,
+     "reading notes": 2.2,
+     "messages to Sam": 1.6,
+     "writing notes": 1.6,
+     "other commands": 0.8,
+     "reading guides": 0.7,
+     "start-up and handover tools": 0.6,
+     "helper and chat prompts": 0.6,
+     "git and saving": 0.1,
+     "reading chat records": 0.1,
+     "renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 6,
+    "work_pct": 0.09,
+    "reads": [
+     [
+      "source/data/freeze/films.json",
+      0.6,
+      0.0231
+     ],
+     [
+      "source/freeze.py",
+      0.6,
+      0.0224
+     ]
+    ],
+    "base_pct": 26.2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 22,
+     "shared:handover.py": 2,
+     "shared:freeze.py": 3,
+     "film notes": 6,
+     "shared:critique.py": 8,
+     "shared:touch.py": 2,
+     "shared:facehouse_c.py": 34,
+     "shared:facepick.py": 4,
+     "shared:facehouse.py": 4,
+     "shared:castsheet.py": 1,
+     "shared:turnhead.py": 5,
+     "shared:views.py": 5,
+     "shared:people.py": 1,
+     "shared:people_parts.py": 2,
+     "shared:views_c.py": 4,
+     "shared:views_d.py": 3,
+     "shared:body.py": 1,
+     "shared:kittests_health.py": 6,
+     "shared:kittests.py": 5
+    },
+    "ticked": 1,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git branch --show-current && git log --oneline -3 && git",
+      "",
+      429
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -b claude/cost-test-4 && git push -u origin claude/cost-test-4 2>&1",
+      "",
+      3332
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "source/data/freeze/films.json",
+      "head -c 1500 source/data/freeze/films.json; echo; ls animations/ | head -40; git",
+      "",
+      2572
+     ],
+     [
+      3,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/films.json",
+      "open-wounds\\|brexit",
+      "",
+      1710
+     ],
+     [
+      4,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "def cmd_tag",
+      "",
+      2518
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "source/data/freeze/films.json source/films notes/brexit-is-done.md source/films/",
+      "module\\|source/films\\|\\.py",
+      "",
+      1850
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "source/*.py",
+      "brexit|wound",
+      "",
+      167
+     ],
+     [
+      7,
+      "other",
+      "shared:freeze.py",
+      "source/data/freeze/films.json source/freeze.py",
+      "python3 - <<'EOF' import json p='source/data/freeze/films.json';d=json.load(open",
+      "",
+      105
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md guides/fix-pack.md",
+      "awk '/^## B1-B4 built/,/^## [^B]/' notes/cost-spike-fix.md | head -80; wc -w not",
+      "",
+      5431
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "source/data/critique",
+      "find source/data/critique -path \"*cost-spike*\" | head; ls /tmp/claude-0/-home-us",
+      "",
+      55
+     ],
+     [
+      11,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "find . -path ./node_modules -prune -o -type d -name \"r1-p1\" -print 2>/dev/null |",
+      "",
+      2865
+     ],
+     [
+      12,
+      "other",
+      "shared:touch.py",
+      "source/touch.py source/facehouse.py source/facehouse_c.py",
+      "'long'\\|long_hair\\|def _turned_braids\\|plaited",
+      "",
+      1632
+     ],
+     [
+      13,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "sed -n 300,345p source/facehouse_c.py; echo ----; sed -n 545,660p source/facehou",
+      "",
+      9402
+     ],
+     [
+      14,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py notes/cost-spike-fix.md notes/archive/cost-spike-fix-notes.md",
+      "facepick.py\\|scratch",
+      "",
+      1846
+     ],
+     [
+      15,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "argv\\|add_argument\\|usage\\|def main",
+      "",
+      28
+     ],
+     [
+      16,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "sed -n 1030,1110p source/facepick.py",
+      "",
+      926
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      109
+     ],
+     [
+      18,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      398
+     ],
+     [
+      19,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "def turns\\|def turn_sheet\\|^def ",
+      "",
+      423
+     ],
+     [
+      20,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/kittests.py",
+      "turns",
+      "",
+      684
+     ],
+     [
+      21,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      142
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "sleep 1; cat /tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73a",
+      "",
+      31
+     ],
+     [
+      23,
+      "other",
+      "shared:facehouse_c.py",
+      "./notes/archive source/facehouse_c.py",
+      "cast-before-after",
+      "",
+      2118
+     ],
+     [
+      24,
+      "other",
+      "shared:castsheet.py",
+      "notes/learn/ source/*.py notes/*.md source/castsheet.py",
+      "cast-before-after\\|castsheet",
+      "",
+      2771
+     ],
+     [
+      26,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      2859
+     ],
+     [
+      27,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/facehouse.py source/facepick.py",
+      "^CAST\\|CAST\\[\\|CAST =",
+      "",
+      454
+     ],
+     [
+      28,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/facepick.py",
+      "sed -n 739,760p source/facehouse_c.py; sed -n 860,890p source/facehouse_c.py; se",
+      "",
+      6010
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      951
+     ],
+     [
+      31,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "^def hair\\|^def silhouette\\|^def clipped",
+      "",
+      259
+     ],
+     [
+      32,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "sed -n 347,450p source/turnhead.py",
+      "",
+      5909
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      591
+     ],
+     [
+      34,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "sed -n 722,738p source/facehouse_c.py; sed -n 676,700p source/facehouse_c.py",
+      "",
+      2697
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "hair piece\\|NEW",
+      "",
+      523
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      329
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      410
+     ],
+     [
+      40,
+      "other",
+      "shared:turnhead.py",
+      "source/*.py source/turnhead.py",
+      "neck_redrawn",
+      "",
+      1418
+     ],
+     [
+      41,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/turnhead.py",
+      "def draw",
+      "",
+      2702
+     ],
+     [
+      42,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py source/*.py",
+      "braids_behind",
+      "",
+      3587
+     ],
+     [
+      43,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "neck",
+      "",
+      107
+     ],
+     [
+      44,
+      "other",
+      "shared:people.py",
+      "source/people.py source/body.py source/people_parts.py",
+      "def neck\\|neck(",
+      "",
+      73
+     ],
+     [
+      45,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/people.py",
+      "Neck\\|_neck\\b\\|neck_w",
+      "",
+      632
+     ],
+     [
+      46,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "sed -n 940,975p source/people_parts.py",
+      "",
+      2212
+     ],
+     [
+      47,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sp\\['skin'\\]\\|skin,",
+      "",
+      31
+     ],
+     [
+      48,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "skin",
+      "",
+      19
+     ],
+     [
+      49,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def \\|^    def ",
+      "",
+      978
+     ],
+     [
+      50,
+      "other",
+      "shared:views_c.py",
+      "source/views_c.py source/views_b.py",
+      "neck",
+      "",
+      2403
+     ],
+     [
+      51,
+      "other",
+      "shared:views_c.py",
+      "source/views_c.py",
+      "sed -n 270,292p source/views_c.py; sed -n 352,362p source/views_c.py",
+      "",
+      2190
+     ],
+     [
+      52,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/views*.py",
+      "^def _strands\\|^class _Screen\\|^def _resample\\|^def _long_tones",
+      "",
+      1781
+     ],
+     [
+      53,
+      "other",
+      "shared:views_c.py",
+      "source/views_c.py source/facehouse_c.py",
+      "^import\\|^from",
+      "",
+      517
+     ],
+     [
+      54,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      ", 180: ",
+      "",
+      285
+     ],
+     [
+      55,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      135
+     ],
+     [
+      58,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      208
+     ],
+     [
+      59,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "class _Big",
+      "",
+      1496
+     ],
+     [
+      60,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py /home/user/Animation-/source/views.py /home/user/Animation",
+      "def person",
+      "",
+      1239
+     ],
+     [
+      61,
+      "other",
+      "shared:views_d.py",
+      "source/views_d.py",
+      "sed -n 480,505p source/views_d.py",
+      "",
+      1665
+     ],
+     [
+      62,
+      "other",
+      "shared:views_d.py",
+      "source/views_d.py",
+      "head_pen =\\|head_pen=\\|L0 =\\|body_pen\\|torso_view(",
+      "",
+      188
+     ],
+     [
+      63,
+      "other",
+      "shared:views_d.py",
+      "source/views_d.py",
+      "up_head =\\|up =\\|up_head=",
+      "",
+      1150
+     ],
+     [
+      64,
+      "other",
+      "shared:body.py",
+      "source/views*.py source/body.py",
+      "class Lean",
+      "",
+      524
+     ],
+     [
+      65,
+      "other",
+      "shared:views_c.py",
+      "source/views_c.py",
+      "sed -n 28,45p source/views_c.py",
+      "",
+      783
+     ],
+     [
+      66,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      513
+     ],
+     [
+      67,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py source/facehouse_c.py",
+      "^YAW",
+      "",
+      274
+     ],
+     [
+      68,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      ", 180: ",
+      "",
+      425
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      72,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      74,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      120
+     ],
+     [
+      75,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      77,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      81,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      83,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      269
+     ],
+     [
+      86,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      89,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "s edge met the curtain",
+      "",
+      136
+     ],
+     [
+      93,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      136
+     ],
+     [
+      98,
+      "other",
+      "shared:facehouse_c.py",
+      "S/copy/source/facehouse_c.py source/facehouse_c.py source/facehouse.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      272
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "source/kittests*.py",
+      "def long_hair_piece\\|def short_beard_solid",
+      "",
+      3558
+     ],
+     [
+      100,
+      "other",
+      "shared:kittests_health.py",
+      "source/kittests_health.py source/facehouse_c.py source/kittests.py",
+      "s mass lay over the curtain, and a step in at the shoulders where the\n    curtai",
+      "",
+      826
+     ],
+     [
+      101,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/people.py",
+      "^(PASS|FAIL|kittests)|^     ",
+      "",
+      697
+     ],
+     [
+      102,
+      "other",
+      "shared:kittests_health.py",
+      "source/kittests_health.py source/kittests.py",
+      "^(PASS|FAIL|kittests)|^     ",
+      "",
+      320
+     ],
+     [
+      103,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^\\s*[~^]*$",
+      "",
+      807
+     ],
+     [
+      104,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "Error|error:",
+      "",
+      65
+     ],
+     [
+      105,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/kittests.py",
+      "\nnew=",
+      "",
+      187
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      17
+     ],
+     [
+      107,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/people.py",
+      "hair_c",
+      "",
+      683
+     ],
+     [
+      108,
+      "other",
+      "shared:kittests_health.py",
+      "source/kittests_health.py source/kittests.py",
+      "^(PASS|FAIL|kittests)|^     |Error",
+      "",
+      76
+     ],
+     [
+      109,
+      "other",
+      "shared:kittests_health.py",
+      "source/kittests_health.py source/facehouse_c.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      534
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      44
+     ],
+     [
+      112,
+      "other",
+      "shared:kittests_health.py",
+      "source/kittests_health.py",
+      "python3 - <<'EOF' p='source/kittests_health.py'; t=open(p).read() old=\"\"\" def vi",
+      "",
+      553
+     ],
+     [
+      113,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      224
+     ],
+     [
+      116,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "python3 - <<'EOF' p='source/facehouse_c.py'; t=open(p).read() old=\"\"\" m[cv2.dila",
+      "",
+      248
+     ],
+     [
+      117,
+      "other",
+      "shared:touch.py",
+      "source/touch.py",
+      "python3 source/touch.py facehouse_c._turned_braids 2>&1 | head -15; python3 sour",
+      "",
+      1005
+     ],
+     [
+      118,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL|kittests)|^     ",
+      "",
+      267
+     ],
+     [
+      119,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "^def pack",
+      "",
+      3296
+     ],
+     [
+      120,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "^def _film_module",
+      "",
+      1946
+     ],
+     [
+      121,
+      "other",
+      "shared:facehouse_c.py",
+      "/home/user/Animation-/source/facehouse_c.py /home/user/Animation-/source/kittest",
+      "}, parts=",
+      "",
+      789
+     ],
+     [
+      122,
+      "other",
+      "other",
+      "source/data/ledger* notes/ledger* source/data/",
+      "cost-spike-fix",
+      "",
+      448
+     ],
+     [
+      124,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "^def hunts",
+      "",
+      1512
+     ],
+     [
+      125,
+      "other",
+      "other",
+      "/home/user/Animation-/source/data/critique/cost-spike-fix",
+      "r1-p1",
+      "",
+      62
+     ],
+     [
+      127,
+      "other",
+      "other",
+      "/home/user/Animation-/source/data/critique/cost-spike-fix/r1-p2",
+      "cd /home/user/Animation-/source/data/critique/cost-spike-fix/r1-p2 && ls; cat re",
+      "",
+      3469
+     ],
+     [
+      128,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "if yaw >= 135:",
+      "",
+      1027
+     ],
+     [
+      129,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "sed -n 664,672p source/facehouse_c.py; sed -n 706,716p source/facehouse_c.py; se",
+      "",
+      1511
+     ],
+     [
+      130,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "python3 - <<'EOF' p='source/facehouse_c.py'; t=open(p).read() old=\"\"\" shapes, st",
+      "",
+      136
+     ],
+     [
+      132,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "python3 - <<'EOF' p='source/facehouse_c.py'; t=open(p).read() old=\"\"\" farx = {ro",
+      "",
+      136
+     ],
+     [
+      134,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/facehouse.py",
+      "^(PASS|FAIL|kittests)",
+      "",
+      146
+     ],
+     [
+      135,
+      "other",
+      "shared:kittests_health.py",
+      "source/kittests_health.py source/facehouse_c.py",
+      "python3 - <<'EOF' p='source/kittests_health.py'; t=open(p).read() old=\"\"\" ok = b",
+      "",
+      769
+     ],
+     [
+      136,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scr",
+      "",
+      128
+     ],
+     [
+      137,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/cost-spike-fix/r1-p2",
+      "python3 source/critique.py record cost-spike-fix source/data/critique/cost-spike",
+      "",
+      1498
+     ],
+     [
+      138,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py fixed cost-spike-fix \"Hunt 2 (cost tests chat 4): the",
+      "",
+      93
+     ],
+     [
+      139,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "S=/tmp/claude-0/-home-user-Animation-/774a3f06-eebd-581a-8172-7fcb73aff986/scrat",
+      "",
+      514
+     ],
+     [
+      141,
+      "other",
+      "other",
+      "source/data/critique/cost-spike-fix/r1-p3/result.md",
+      "sed -n '/## Faults/,/## Checked/p' source/data/critique/cost-spike-fix/r1-p3/res",
+      "",
+      1942
+     ],
+     [
+      142,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "lo_x, hi_x = None, None",
+      "",
+      1235
+     ],
+     [
+      143,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "^import math",
+      "",
+      139
+     ],
+     [
+      149,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/cost-spike-fix/r1-p3",
+      "python3 source/critique.py record cost-spike-fix source/data/critique/cost-spike",
+      "",
+      162
+     ],
+     [
+      150,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md notes/archive/cost-spike-fix-handovers.md guides/fix-pac",
+      "s foot) and white hairlines down the neck, both fixed.\n- Slipped: chat 3",
+      "",
+      28
+     ],
+     [
+      151,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py end --film cost-spike-fix 2>&1 | grep -v WARN | tail ",
+      "",
+      1875
+     ],
+     [
+      154,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md",
+      "^kittests",
+      "",
+      31
+     ],
+     [
+      155,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py source/kittests_health.py source/data/freeze/films.json so",
+      "git add -A source/facehouse_c.py source/kittests_health.py source/data/freeze/fi",
+      "",
+      701
+     ],
+     [
+      156,
+      "other",
+      "other",
+      "notes/ledger/cost-spike-fix.json",
+      "git diff --name-only --diff-filter=U; git diff notes/ledger/cost-spike-fix.json ",
+      "",
+      23
+     ],
+     [
+      157,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md",
+      "git diff notes/cost-spike-fix.md | head -50",
+      "",
+      3087
+     ],
+     [
+      158,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md",
+      ": give it form, edge and grain so it reads as hair on a face, not a patch; check",
+      "",
+      80
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
