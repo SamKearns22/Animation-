@@ -23437,18 +23437,19 @@
  ],
  "checks": {
   "quick check": {
-   "runs": 8,
-   "faults": 292,
+   "runs": 9,
+   "faults": 321,
    "kinds": {
     "benchmark": 4,
     "blair": 7,
-    "drawing": 199,
+    "drawing": 220,
     "house style": 4,
     "may": 8,
-    "other": 31,
+    "other": 33,
     "plan": 4,
-    "caption": 34,
-    "kit inputs": 1
+    "caption": 38,
+    "kit inputs": 1,
+    "MOVE SIZE": 2
    }
   },
   "pre-flight": {
