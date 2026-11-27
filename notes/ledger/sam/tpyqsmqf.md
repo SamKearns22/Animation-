@@ -25,3 +25,8 @@ You're doing really important work.
 
 Are your fixes universal throughout the project? Do they apply to any conceivable action we take?
 
+### 2026-11-27T13:31:13
+Y
+
+Do you have any further insights into cost cutting from this project?
+
