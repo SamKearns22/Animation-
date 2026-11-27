@@ -1,0 +1,889 @@
+{
+ "film": "patriots5",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-27",
+   "chat": "4e93d9da",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.88,
+   "src": "estimate",
+   "sid": "session_01J1JB7XCcqv7vGytWyb2oNY",
+   "steps": 96,
+   "hist_k": 245,
+   "kinds": {
+    "tool search": 22.6,
+    "renders": 1.2,
+    "pictures": 2.7,
+    "other": 73.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 78,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 8,
+    "other": 8
+   },
+   "split": {
+    "usd": 6.8912,
+    "total": 6.8912,
+    "floor_k": 83,
+    "blocks": {
+     "new writes": 37.5,
+     "carried history": 26.1,
+     "start-up floor": 18.3,
+     "Claude's words": 18.1
+    },
+    "origins": {
+     "messages and reminders": 32.7,
+     "Claude's words": 26.3,
+     "start-up floor": 18.5,
+     "result: tool search": 17.2,
+     "result: pictures": 4.1,
+     "Claude's edits": 0.6,
+     "result: other": 0.5,
+     "result: renders": 0.1
+    },
+    "named": {
+     "messages and reminders": 32.7,
+     "start-up reading (rules, tools, first files)": 18.5,
+     "reading kit code": 11.5,
+     "thinking": 10.6,
+     "writing code": 8.3,
+     "commands": 5.3,
+     "looking at pictures": 4.1,
+     "reading notes": 2.3,
+     "messages to Sam": 1.5,
+     "writing notes": 1.3,
+     "reading guides": 1.1,
+     "start-up and handover tools": 1.0,
+     "renders": 0.7,
+     "running checks and tools": 0.7,
+     "other commands": 0.4,
+     "reading chat records": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": 52,
+    "work_pct": 0.8,
+    "reads": [
+     [
+      "source/patriots3_cast.py",
+      3.0,
+      0.0548
+     ],
+     [
+      "source/facehouse_c.py",
+      2.2,
+      0.0401
+     ],
+     [
+      "source/facehouse_b.py",
+      1.8,
+      0.0349
+     ],
+     [
+      "guides/job-packs.md",
+      1.7,
+      0.0336
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scratchpad/p3.jpg",
+      1.6,
+      0.0284
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scratchpad/turns.jpg",
+      1.6,
+      0.0284
+     ],
+     [
+      "source/people.py",
+      1.4,
+      0.0267
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scratchpad/ph.png",
+      1.6,
+      0.0252
+     ],
+     [
+      "story/status.md",
+      1.1,
+      0.0216
+     ],
+     [
+      "notes/_template.md",
+      1.1,
+      0.02
+     ],
+     [
+      "source/facepick.py",
+      1.2,
+      0.02
+     ],
+     [
+      "notes/ledger/sam/csph6kke.md",
+      1.0,
+      0.0197
+     ],
+     [
+      "notes/crowd-pool.md",
+      0.7,
+      0.0121
+     ],
+     [
+      "notes/ledger/patriots4.md",
+      0.3,
+      0.0068
+     ],
+     [
+      "notes/ledger/sam/twyb2ony.md",
+      0.1,
+      0.0019
+     ]
+    ],
+    "base_pct": 20.7
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 9,
+     "guides": 2,
+     "shared:people.py": 2,
+     "shared:facehouse_b.py": 2,
+     "shared:patriots3_cast.py": 3,
+     "shared:facehouse_c.py": 2,
+     "shared:facehouse.py": 1,
+     "other": 44,
+     "shared:ledger.py": 4,
+     "shared:facepick.py": 2,
+     "shared:likeness.py": 1,
+     "shared:acting.py": 1,
+     "shared:handover.py": 4,
+     "shared:branches.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md",
+      "patriot",
+      "",
+      2993
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/ledger/sam/twyb2ony.md",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline -1 FETCH",
+      "",
+      367
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "story/status.md notes/ledger",
+      "open|wound",
+      "",
+      1220
+     ],
+     [
+      3,
+      "other",
+      "guides",
+      "guides/job-packs.md guides/kit-catalogue.md",
+      "open wounds",
+      "",
+      6700
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md story/status.md guides/*.md notes/ledger/sam/*.md",
+      "style|look|draw|rig|redraw",
+      "",
+      2912
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/ledger/sam/csph6kke.md notes/ledger/sam/*.md notes/brexit-is-done.md",
+      "new style",
+      "",
+      4004
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "story/brexit-is-done-people.txt notes/ledger/patriots4.md",
+      "may",
+      "",
+      1387
+     ],
+     [
+      7,
+      "other",
+      "shared:people.py",
+      "source/people.py source/*.py",
+      "^head: house",
+      "",
+      1984
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "guides/kit-catalogue.md story/archive.md",
+      "patriot",
+      "",
+      5423
+     ],
+     [
+      9,
+      "other",
+      "shared:facehouse_b.py",
+      "source/facehouse_b.py source/facehouse_c.py",
+      "^def \\|^class ",
+      "",
+      7282
+     ],
+     [
+      10,
+      "other",
+      "shared:patriots3_cast.py",
+      "source/*.py source/patriots source/patriots3_cast.py",
+      "balaclava",
+      "",
+      5563
+     ],
+     [
+      11,
+      "other",
+      "shared:people.py",
+      "source/people.py guides/job-packs.md",
+      "cast sheet\\|turns\\|sheet",
+      "",
+      5680
+     ],
+     [
+      12,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "sed -n 859,930p source/facehouse_c.py; sed -n 1027,1084p source/facehouse_c.py",
+      "",
+      8609
+     ],
+     [
+      13,
+      "other",
+      "shared:facehouse_c.py",
+      "notes/crowd-pool.md source/facehouse_c.py",
+      "^def load",
+      "",
+      2618
+     ],
+     [
+      14,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse*.py source/facehouse.py",
+      "def load",
+      "",
+      1827
+     ],
+     [
+      15,
+      "other",
+      "shared:patriots3_cast.py",
+      "source/patriots3_cast.py source/patriots4_cast.py source/people.py",
+      "def patriot_eyes",
+      "",
+      6275
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && S=/tmp/claude-0/-home-user-Animation-/4e93d9d",
+      "",
+      294
+     ],
+     [
+      19,
+      "other",
+      "shared:ledger.py",
+      "notes/_template.md source/ledger.py",
+      "cd /home/user/Animation- && cat notes/_template.md | head -60; python3 source/le",
+      "",
+      4567
+     ],
+     [
+      20,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py source/facehouse.py",
+      "average\\|no photo\\|without photo\\|invent\\|fiction",
+      "",
+      4612
+     ],
+     [
+      22,
+      "other",
+      "shared:likeness.py",
+      "source/likeness.py source/facepick.py",
+      "AVERAGE\\|AVG\\|def average\\|MEAN =",
+      "",
+      2436
+     ],
+     [
+      23,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py source/facehouse.py",
+      "^import\\|^from\\|FA = \\|as FA",
+      "",
+      2663
+     ],
+     [
+      24,
+      "other",
+      "shared:patriots3_cast.py",
+      "source/patriots3_cast.py source/peepee.py source/facehouse.py",
+      "^P_SKIN\\|^BALA\\|^JACKET\\|^SLEEVE\\|^COMBAT\\|^INK",
+      "",
+      797
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "mkdir -p references/faces/patriot/pick && python3 - <<'EOF' import json avg={'fa",
+      "",
+      308
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scrat",
+      "",
+      308
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "dome_wide\\|'dome'",
+      "",
+      2489
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "sed -n 88,131p facehouse_c.py",
+      "",
+      2997
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "hard_hat\\|turned_hat\\|def house_head\\|def _head",
+      "",
+      1015
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "sed -n 321,395p facehouse_b.py; sed -n 795,870p facehouse_b.py; sed -n 440,560p ",
+      "",
+      14659
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "^def \\|hooks\\[\\|hook(",
+      "",
+      3542
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "sed -n 120,192p turnhead.py; sed -n 215,300p turnhead.py; sed -n 387,480p turnhe",
+      "",
+      14026
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "neck_c\\|'neck_col\\|neck_skin",
+      "",
+      866
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "def .*neck\\|sp\\['skin'\\].*neck\\|neck.*sp\\['skin'\\]\\|sp.get('neck",
+      "",
+      770
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "neck_redrawn\\|NECK_FILL\\|'neck'",
+      "",
+      2294
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "",
+      "neck",
+      "",
+      107
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "# neck\\|neck *$\\|-80)\\|, -80\\|-80 ",
+      "",
+      1143
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "",
+      "sed -n 340,395p views_c.py",
+      "",
+      3746
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "def _bare_neck",
+      "",
+      1532
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      "skin, INK, 2.6)",
+      "",
+      615
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "neck_over(p, f, view, skin)",
+      "",
+      454
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "sed -i \"21s/neck_over(p, f, view, sp.get('neck_c', skin))/neck_over(p, f, view, ",
+      "",
+      339
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' s=open('body.py').read() o=\" soft(img, p.cam, [(-32 + nx, -76 ",
+      "",
+      859
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "parts\\|facehouse_b\\|facehouse_c",
+      "",
+      714
+     ],
+     [
+      46,
+      "other",
+      "other",
+      "",
+      "def brows",
+      "",
+      965
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "",
+      "def talk_or",
+      "",
+      1619
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "belly\\|cargo\\|'patch[a-z]*'\\|poppy\\|boots\\|'zip'\\|combat\\|camo",
+      "",
+      1124
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "'patches'\\|patches\\b",
+      "",
+      4207
+     ],
+     [
+      50,
+      "other",
+      "other",
+      "",
+      "def zip_top\\|def zip_back",
+      "",
+      6394
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "sed -n 640,730p patriots3_cast.py",
+      "",
+      4188
+     ],
+     [
+      52,
+      "other",
+      "other",
+      "",
+      "class TurnFace",
+      "",
+      2293
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      ":\n        ex, ey_ = f.at(-0.62, ear_v, 0.0) if False else (None, None)\n\"\"\"\nasser",
+      "",
+      847
+     ],
+     [
+      55,
+      "other",
+      "other",
+      "",
+      "}.get(yaw, ",
+      "",
+      676
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scrat",
+      "",
+      132
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "",
+      "^YAW",
+      "",
+      171
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "",
+      "}.get(yaw, ",
+      "",
+      330
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scrat",
+      "",
+      190
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "neck_w",
+      "",
+      31
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scrat",
+      "",
+      90
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "",
+      ", ",
+      "",
+      582
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "def crowd_head_installed",
+      "",
+      2895
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "^  ",
+      "",
+      523
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "sed -n 25,40p kittests_faces.py; tail -5 kittests_faces.py",
+      "",
+      1200
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "",
+      "cat >> kittests_faces.py <<'EOF' @test def balaclava_every_view(): \"\"\"Patriots 5",
+      "",
+      300
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "sed -i \"s|^''' % HERE\\$|''' % os.path.dirname(os.path.abspath(__file__))|; s|cap",
+      "",
+      219
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "",
+      "}.get(round(yaw), ",
+      "",
+      300
+     ],
+     [
+      75,
+      "other",
+      "shared:facehouse_b.py",
+      "source/facehouse_b.py source/facehouse_c.py source/facehouse_d.py",
+      "balaclava",
+      "",
+      621
+     ],
+     [
+      76,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/ledger/",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..FE",
+      "",
+      289
+     ],
+     [
+      77,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "def cmd_coldstart\\|def coldstart",
+      "",
+      1602
+     ],
+     [
+      78,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "def film_of",
+      "",
+      1831
+     ],
+     [
+      79,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md source/*.py notes/archive story/archive.md",
+      "notes/brexit-is-done.md\\|'notes', 'brexit-is-done\\|notes/' + \\|notes/{",
+      "",
+      1944
+     ],
+     [
+      80,
+      "other",
+      "shared:acting.py",
+      "notes/brexit-is-done.md source/acting.py source/handover.py source/pose_test.py ",
+      "notes/brexit-is-done.md",
+      "",
+      998
+     ],
+     [
+      81,
+      "other",
+      "film notes",
+      "notes/_template.md notes/archive/brexit-is-done-handovers.md",
+      "sed -n 60,140p notes/_template.md | head -40; sed -n 1,30p notes/archive/brexit-",
+      "",
+      1840
+     ],
+     [
+      83,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "Passed the critique\\|hard hat\\|^| Kemi\\|facehouse",
+      "",
+      4473
+     ],
+     [
+      85,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "timeout 300 python3 source/handover.py end --film patriots5 2>&1 | tail -30",
+      "",
+      1526
+     ],
+     [
+      86,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def .*branch\\|named",
+      "",
+      1281
+     ],
+     [
+      88,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/ledger.py source/maps.py source/kittests_faces.py sour",
+      "sed -n 795,808p source/handover.py; python3 source/ledger.py appcost patriots5 4",
+      "",
+      1126
+     ],
+     [
+      89,
+      "other",
+      "shared:branches.py",
+      "source/branches.py",
+      "def unsettled",
+      "",
+      481
+     ],
+     [
+      90,
+      "other",
+      "shared:handover.py",
+      "notes/patriots5.md source/handover.py",
+      "sed -i 's/Branches named at start, not merged (logs and old GTA drafts only): jo",
+      "",
+      495
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -q -m \"Patriot 5 chat 1: film notes and ledger opened; ",
+      "",
+      367
+     ]
+    ]
+   },
+   "notes_auto": 0
+  }
+ ],
+ "checks": {}
+}
