@@ -1,0 +1,35 @@
+{
+ "round": 28,
+ "stage": "animatic",
+ "notes": [],
+ "panels": [
+  {
+   "t": 4.0,
+   "is": "Theresa May in her BBC interview (shot 1 of 3): seated, three-quarter, plum jacket, dark wood-panelled backdrop; framed waist up (locked).",
+   "parts": "AP",
+   "set": "may",
+   "refs": []
+  },
+  {
+   "t": 14.0,
+   "is": "Kemi Badenoch on a building site (shot 2 of 3): white hard hat, orange-and-navy hi-vis, pointing out to her side; site workers and wolves act behind her (locked framing).",
+   "parts": "AP",
+   "set": "site",
+   "refs": []
+  },
+  {
+   "t": 25.0,
+   "is": "Tony Blair in an armchair in his study (shot 3 of 3), just after the cut to him, before the double doors burst open; wolves not yet in the room.",
+   "parts": "AP",
+   "set": "blair",
+   "refs": []
+  },
+  {
+   "t": 30.0,
+   "is": "Tony Blair (shot 3 of 3): staff and guests run out of the burst-open double doors across the room while wolves chase them.",
+   "parts": "AP",
+   "set": "blair",
+   "refs": []
+  }
+ ]
+}

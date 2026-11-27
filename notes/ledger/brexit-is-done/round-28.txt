@@ -1,0 +1,36 @@
+== critique, round 28 pass 1 (2026-11-27): 10 fault(s), 2 can't tell
+-- look.md --
+1: Grey-haired woman in purple jacket sits on chair, mouth open mid-speech, dark curtain background. No text.
+2: Woman in white hard hat, orange vest, braids, looks worried; bloody animal brawl, scaffolding, workers behind. No text.
+3: Grey-haired man in dark suit, red tie, sits leaning forward in armchair; grey wolf in library. No text.
+4: Same man laughing in armchair; wolf, bloody beast, man in black running behind; library, chandelier. No text.
+-- result.md --
+## Faults
+FAULT P11 [3, 4]: Blair's head sits on a long thin neck, and the head is small for the wide torso.
+FAULT P5 P3 [3, 4]: Blair's arms. In 3 the left arm is a straight stick out to the side and the right arm hooks over the chair arm with a lumpy bend. In 4 the near arm starts at an odd point on the chest and the sleeve has a stray spike.
+FAULT P1 [3, 4]: Blair's ball hands hover. In 3 both hands are in the air touching nothing. In 4 one hand hangs in front of the chest and the other is at the chair's edge.
+FAULT P7 P10 [3, 4]: Blair's thighs vanish behind the armchair's arm, and his knees and shins poke out in front of the chair. He reads as sitting beside or in the chair, not on the seat, with legs through the chair.
+FAULT P6 [2]: Badenoch's pointing hand is a bare ball with no finger out along the forearm, so it doesn't read as pointing. The far hand is lost against the hip.
+FAULT P2 [2]: Her face is a small "o" mouth looking at the lens, not at what she points to. Too small for a phone.
+FAULT A1 [2, 4]: The wolves are unreadable. In 2 they are a brown and red gore pile that looks like a brawl of dogs. In 4 the second creature is a brown blob with red spots behind the running man.
+FAULT P10 [4]: The running man in black overlaps the brown creature; his leg and body merge into it, with no clear contact or ground.
+FAULT P7 [1]: May's dark trousers merge into the near-black floor. The seat is tiny and her lap and bottom are unclear, so she seems to hover in front of the chair.
+FAULT P2 [1, 3]: May's eyes are squinted half-shut. Blair's eyes in 3 are small and glance sideways. The feeling doesn't read at phone size.
+CAN'T TELL P12 [1-4]: no frames labelled with who speaks, so I can't tell whether the mouths match the words. All four are open.
+CAN'T TELL P4 [1, 2]: check sheet says "no reference" for both; a reference crop of each would show whether hair and glasses match.
+CAN'T TELL A4 [1-4]: a frame with the Hook Text box on it would show whether it covers a face or the action.
+CAN'T TELL A2 [1, 2]: no reference beside them.
+
+## Checked
+1-4
+
+## Cold look
+I wrote "grey-haired woman" for panel 1 (correct, May), "bloody animal brawl" for panel 2, and "wolf" in panel 3. The brief says wolves are not yet in the room in panel 3, and I saw no wolf there; I most likely misread the cut-off grey shape in 4. I named the brown blob "bloody beast", not a wolf, so the wolves are not readable as wolves (A1). I did not name Badenoch or Blair, as instructed.
+
+## Not on the list
+- Blood and gore at phone size. Suggested line: gore reads as a mark, not as a blob, and suits the channel.
+- A falling worker in 2 at the top left is tiny and unreadable. Suggested line: every action named in the brief is readable at phone size.
+- Floor and trousers blending in 1. Suggested line: figure against background contrast at phone size.
+- The man in black running in 4 is cropped at the right edge. Suggested line: nothing important cut by the frame edge.
+- The wolf in 4 is cut off at the left edge. Suggested line: the wolf is fully in frame or cut cleanly.
+

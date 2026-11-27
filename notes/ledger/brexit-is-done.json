@@ -25300,56 +25300,67 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.07,
+   "cost": 0.33,
    "src": "estimate",
    "sid": "session_01J1JB7X5yz8uHRr4bfdMGhc",
-   "steps": 14,
-   "hist_k": 94,
+   "steps": 45,
+   "hist_k": 123,
    "kinds": {
-    "film-file search": 1.4,
-    "tool search": 11.1,
-    "other": 87.5
+    "film-file search": 3.5,
+    "tool search": 10.3,
+    "routine": 1.7,
+    "renders": 1.7,
+    "other": 82.8
    },
    "calls": {
-    "film-file search": 1,
-    "tool search": 7,
+    "film-file search": 5,
+    "tool search": 22,
     "whole-file .py read": 0,
     "page.py": 0,
-    "routine": 0,
-    "renders": 0,
+    "routine": 3,
+    "renders": 2,
     "pictures": 0,
-    "other": 3
+    "other": 11
    },
    "split": {
-    "usd": 0.2699,
-    "total": 0.2699,
+    "usd": 1.0326,
+    "total": 1.0326,
     "floor_k": 0,
     "blocks": {
-     "new writes": 49.1,
-     "carried history": 39.2,
-     "Claude's words": 11.6
+     "carried history": 42.7,
+     "new writes": 39.7,
+     "Claude's words": 17.7
     },
     "origins": {
-     "messages and reminders": 73.1,
-     "Claude's words": 15.9,
-     "result: tool search": 8.1,
-     "start-up floor": 2.3,
-     "result: other": 0.4,
-     "result: film-file search": 0.1
+     "messages and reminders": 42.1,
+     "Claude's words": 26.8,
+     "cache re-write": 15.7,
+     "result: tool search": 8.6,
+     "result: film-file search": 3.1,
+     "result: routine": 2.3,
+     "result: other": 0.6,
+     "start-up floor": 0.6,
+     "result: renders": 0.1
     },
     "named": {
-     "messages and reminders": 73.1,
-     "commands": 13.2,
-     "start-up and handover tools": 3.7,
-     "reading guides": 3.3,
-     "start-up reading (rules, tools, first files)": 2.3,
-     "thinking": 1.6,
-     "messages to Sam": 1.1,
-     "other commands": 0.7,
-     "reading kit code": 0.4,
-     "app tools (chats, files sent)": 0.4,
-     "renders": 0.1,
-     "reading other files": 0.1
+     "messages and reminders": 42.1,
+     "memory lapses (re-paying for the whole chat)": 15.7,
+     "commands": 14.2,
+     "writing code": 5.4,
+     "thinking": 4.5,
+     "reading film code": 2.8,
+     "renders": 2.5,
+     "messages to Sam": 2.3,
+     "reading guides": 2.1,
+     "start-up and handover tools": 2.1,
+     "running checks and tools": 1.8,
+     "reading kit code": 1.3,
+     "reading notes": 1.0,
+     "start-up reading (rules, tools, first files)": 0.6,
+     "app tools (chats, files sent)": 0.5,
+     "other commands": 0.5,
+     "helper and chat prompts": 0.4,
+     "helper results": 0.1
     },
     "leftover": 0.0
    },
@@ -25363,15 +25374,20 @@
    "search": {
     "show": 0,
     "film": {
-     "no show": 1
+     "no show": 5
     },
     "other": {
-     "other": 4,
+     "other": 11,
      "shared:handover.py": 1,
-     "guides": 2
+     "guides": 2,
+     "film notes": 1,
+     "shared:kittest.py": 1,
+     "shared:kittests_late_nov.py": 1,
+     "shared:critique.py": 4,
+     "shared:humancheck.py": 1
     },
     "ticked": 0,
-    "edited film code": false,
+    "edited film code": true,
     "list": [
      [
       0,
@@ -25444,6 +25460,177 @@
       "brexit_is_done.py final",
       "",
       701
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "source/data/brexit-is-done-clean.mp4 source/data",
+      "ls -la source/data/brexit-is-done-clean.mp4 /tmp/claude-0/ren/; ls -t source/dat",
+      "",
+      744
+     ],
+     [
+      14,
+      "other",
+      "other",
+      "",
+      "ffprobe -v error -show_entries format=duration -of csv=p=0 animations/drafts/bre",
+      "",
+      143
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      "",
+      87
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Chat 43: logs saved Co-Authored-By: Claude Sonnet ",
+      "",
+      19
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "source/brexit_is_done*.py notes/brexit-is-done.md",
+      "wolf",
+      "",
+      2679
+     ],
+     [
+      20,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "^T\\b\\|T = \\|'door'\\|burst\\|'tony'",
+      "",
+      4603
+     ],
+     [
+      21,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/brexit_is_done_action.py source/audiokit.py",
+      "^SHOTS\\|^DUR\\|door",
+      "",
+      3450
+     ],
+     [
+      22,
+      "film",
+      "before show",
+      "source/*.py source/brexit_is_done.py",
+      "CHASE_DELAY\\s*=",
+      "",
+      963
+     ],
+     [
+      24,
+      "other",
+      "shared:kittest.py",
+      "source/kittest.py",
+      "^def test_\\|^def kit_\\|^TESTS",
+      "",
+      243
+     ],
+     [
+      25,
+      "other",
+      "shared:kittests_late_nov.py",
+      "source/kittests_late_nov.py",
+      "tail -25 source/kittests_late_nov.py",
+      "",
+      1675
+     ],
+     [
+      27,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "git add -A && git commit -qm \"Open Wounds: wolf growl silent from the cut to Bla",
+      "",
+      7
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds: final film (growl silent until the do",
+      "",
+      2
+     ],
+     [
+      33,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py pack animations/brexit-is-done-vertical.mp4 --film br",
+      "",
+      2138
+     ],
+     [
+      34,
+      "other",
+      "shared:critique.py",
+      "source/critique.py notes/critique* source/data/critique*",
+      "python3 source/critique.py status brexit-is-done 2>&1 | tail -8; ls notes/critiq",
+      "",
+      494
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "source/data/critique-src/brexit-is-done source/data/critique-src/brexit-is-done/",
+      "ls -t source/data/critique-src/brexit-is-done | head -5; f=$(ls -t source/data/c",
+      "",
+      778
+     ],
+     [
+      36,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/brexit-is-done/may-moves-spec.json source/critique.py",
+      "video\\|argv",
+      "",
+      641
+     ],
+     [
+      39,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/brexit-is-done/r28-p1 source/critique.py",
+      "P=source/data/critique/brexit-is-done/r28-p1; ls $P; cat $P/result.md | head -40",
+      "",
+      5082
+     ],
+     [
+      40,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/data/critique/brexit-is-done/r28-p1",
+      "python3 source/humancheck.py critiqued /home/user/Animation-/animations/brexit-i",
+      "",
+      94
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds: final critique recorded (round 28) Co",
+      "",
+      6
      ]
     ]
    },
@@ -25684,15 +25871,38 @@
      "1-5 P14: the eyes are tiny at this size; a full-size face crop is needed to see whether the pupil stays inside the eye.",
      "2-3 P12: mouths are closed or a thin line while the line is spoken ('remember', 'referendum'); a frame labelled with the audio would show it."
     ]
+   },
+   {
+    "round": 28,
+    "pass": 1,
+    "stage": "animatic",
+    "date": "2026-11-27",
+    "hunt": 1,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "3-4 P11: Blair's head sits on a long thin neck, and the head is small for the wide torso.",
+     "3-4 P5 P3: Blair's arms. In 3 the left arm is a straight stick out to the side and the right arm hooks over the chair arm with a lumpy bend. In 4 the near arm s",
+     "3-4 P1: Blair's ball hands hover. In 3 both hands are in the air touching nothing. In 4 one hand hangs in front of the chest and the other is at the chair's edg",
+     "3-4 P7 P10: Blair's thighs vanish behind the armchair's arm, and his knees and shins poke out in front of the chair. He reads as sitting beside or in the chair,",
+     "2 P6: Badenoch's pointing hand is a bare ball with no finger out along the forearm, so it doesn't read as pointing. The far hand is lost against the hip.",
+     "2 P2: Her face is a small \"o\" mouth looking at the lens, not at what she points to. Too small for a phone.",
+     "2,4 A1: The wolves are unreadable. In 2 they are a brown and red gore pile that looks like a brawl of dogs. In 4 the second creature is a brown blob with red sp",
+     "4 P10: The running man in black overlaps the brown creature; his leg and body merge into it, with no clear contact or ground.",
+     "1 P7: May's dark trousers merge into the near-black floor. The seat is tiny and her lap and bottom are unclear, so she seems to hover in front of the chair.",
+     "1,3 P2: May's eyes are squinted half-shut. Blair's eyes in 3 are small and glance sideways. The feeling doesn't read at phone size.",
+     "1-4 P12: no frames labelled with who speaks, so I can't tell whether the mouths match the words. All four are open.",
+     "1-2 P4: check sheet says \"no reference\" for both; a reference crop of each would show whether hair and glasses match."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 7,
+    "faults": 8,
     "false": 1
    },
    "P2": {
-    "faults": 18,
+    "faults": 20,
     "false": 1
    },
    "P4": {
@@ -25704,11 +25914,11 @@
     "false": 0
    },
    "P11": {
-    "faults": 4,
+    "faults": 5,
     "false": 2
    },
    "P1": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "P13": {
@@ -25724,19 +25934,19 @@
     "false": 0
    },
    "P3": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P5": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P7": {
-    "faults": 9,
+    "faults": 11,
     "false": 0
    },
    "P10": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "M1": {
@@ -25760,7 +25970,7 @@
     "false": 0
    },
    "P6": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    }
   }
