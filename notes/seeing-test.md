@@ -36,6 +36,13 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
 - claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, named
   and left by earlier chats (notes/check-audit.md, notes/next-jobs.md); nothing this job needs.
 
+## c10 settled (chat 3, 27 Nov)
+Posted GTA vertical matched to the c10 re-draw frame by frame (posted = c10 time minus 1.85 s). At full size, at the
+three moments every judge named (posted 19.17, 19.67, 20.08 s), Jason's legs stay hidden behind the door: his
+trousers show only in the open window above the door's top edge; his arm hangs over the outside as it should. In the
+version Sam flagged (c06, 21.33-22.75 s) the trousers bulge out below that edge. Picture: notes/seeing-test/c10-door.jpg
+(top: c06, Sam's note 8; bottom: posted). So the c10 door flag is a FALSE ALARM from the small six-frame pictures.
+
 ## Open
 - The who-is-where copy sees only what is drawn through the engine's layer recorder (cover.py: places pieces, the
   people kit's people, arms and heads) or a sorted item list (GTA's street). At these versions it could NOT see the
