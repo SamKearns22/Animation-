@@ -1230,6 +1230,25 @@ def fixpack_faults(film, notes=None):
     return []
 
 
+def nocheck_faults(film, notes=None):
+    """Fix pack step 4 (Sam's Y, 27 Nov: "find why nobody saw it, and fix or add the test", on every note): a row of
+    the film's notes table marked fixed names the check that now catches it ("Check: ...") or says why none can
+    ("No check: ..."). The replay test (27 Nov) fixed five notes' pictures and left no check on any of them."""
+    p = notes or (film and os.path.join(ROOT, 'notes', f'{film}.md'))
+    if not p or not os.path.exists(p):
+        return []
+    out = []
+    for ln in open(p, encoding='utf-8').read().splitlines():
+        cells = [c.strip() for c in ln.strip().strip('|').split('|')] if ln.lstrip().startswith('|') else []
+        if len(cells) < 2 or not re.match(r'^\d+(\.\d+)?$', cells[0]):
+            continue
+        last = cells[-1].lower()
+        if last.startswith('fixed') and not any(w in last for w in ('check', 'prevention', 'kittest')):
+            out.append(f'NO CHECK: note {cells[0]} is marked fixed but names no check that now catches it '
+                       f'("Check: ..." or "No check: why"; fix pack step 4)')
+    return out
+
+
 def touch_faults():
     """Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read every
     file, and every big code file opens with a MAP that matches it (source/maps.py)."""
@@ -1269,7 +1288,7 @@ def main(argv):
                   ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
                   ('rule', rule_faults), ('shared', shared_faults), ('reach', reach_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
                   ('castsheet', lambda: castsheet_faults(film)), ('touch', touch_faults),
-                  ('fixpack', lambda: fixpack_faults(film, nf)), ('appcost', appcost_faults)]
+                  ('fixpack', lambda: fixpack_faults(film, nf)), ('nocheck', lambda: nocheck_faults(film, nf)), ('appcost', appcost_faults)]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
         return report(faults, f'(end of chat, {film})')

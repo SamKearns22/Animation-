@@ -2,7 +2,7 @@
 
 For a round of Sam's notes (Opus, medium): read this page and the notes printout `handover.py start --film FILM`
 gives, nothing else of the guides unless a note names a rule (then only that rule's row:
-`grep -n '^| 41 ' guides/film-quality-rules.md`). Aim: **10-18 steps a note** (was ~35; every step re-reads the
+`grep -n '^| 41 ' guides/film-quality-rules.md`). Aim: **12-20 steps a note** (the check included) (was ~35; every step re-reads the
 whole chat, so steps are the cost).
 
 ## Locked by Sam
@@ -18,7 +18,7 @@ need to learn to draw it, before asking Sam.
 - **48** never look at an unchanged picture again; **19** every check ends PASS, FAULT or COULD NOT TEST.
 - Every fix is for all films: a fix that can only live in one film's code gets a "move to shared" line.
 
-## Each note, in this order (about 6-12 steps)
+## Each note, in this order (about 9-16 steps)
 1. **Mark it** (1 step, counted from here): `python3 source/notesteps.py note "8: the whale knocks the helideck"`.
    At 12 steps you are asked to say in one line what is stuck; at 20, stop the note: finish only an edit already
    made (its clip, the commit), write what is stuck in the film's notes and report it with the round.
@@ -28,11 +28,15 @@ need to learn to draw it, before asking Sam.
    `python3 source/touch.py NAME` (or `MODULE.NAME`): where it is, what calls it (film code and shared code apart),
    the checks it feeds and the kit tests that reach it, with the one command to rerun them. `touch.py "find WORD"`
    lists the functions whose name holds a word; `touch.py MODULE` shows a whole file's users. Never open the index.
-4. **Edit** (1-3 steps). After an edit to code the chat is told one line: `After this edit: ... RERUN (N kit tests,
+4. **Why nobody saw it** (2-4 steps; Seeing like Sam 3, Sam's Y 27 Nov): name the check that should have caught the
+   note, then fix that check or add one (with its kit test) so it catches this note on its own. Every note, not only
+   a repeat: the replay test (27 Nov) fixed five pictures as well as the originals but left no check, so the same
+   fault could come back. Say it in the close line ("Check: X now catches it").
+5. **Edit** (1-3 steps). After an edit to code the chat is told one line: `After this edit: ... RERUN (N kit tests,
    about T): python3 source/kittests.py --names ...` (or `--changed`). Run that line, not the whole suite.
-5. **Look** (1-2 steps): a short clip of just those seconds (`final OUT --small --span T0 T1`) or one cropped sheet of
+6. **Look** (1-2 steps): a short clip of just those seconds (`final OUT --small --span T0 T1`) or one cropped sheet of
    the changed frames; as a viewer at phone size first, then every point where two things meet at full size.
-6. **Close it**: one line in the notes table ("8: fixed - the whale now knocks the helideck away. Clip sent."), plus
+7. **Close it**: one line in the notes table ("8: fixed - the whale now knocks the helideck away. Check: X now catches it. Clip sent."), plus
    "Lost:" / "Added:" lines for anything taken away or added.
 
 ## When the code is the problem

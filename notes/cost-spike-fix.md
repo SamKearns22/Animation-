@@ -105,3 +105,7 @@ the parent chat, 27 Nov).
   not ask for (rule 30 / "Seeing like Sam" 3 do). Next: add "name and add the check" as a step in guides/fix-pack.md.
 - Kit tests: note 19's 7 (2 failed before the change too); 24.1's 2 and 28's 1 pass; note 21's run
   finished: 28 run, 23 pass, 5 fail (2 failed before, 1 a side-copy git name, 2 hold Kemi's old face on purpose).
+- Sam's Y (27 Nov) to "why nobody saw it, on every note": fix pack step 4 added (aim now 12-20 steps a note);
+  its check `handover.nocheck_faults` (a fixed note's row must name its check: "Check:", "prevention" or a kittest,
+  or "No check: why"), run by `handover.py end`; kit test `fix_names_its_check` (example: the replay's own close
+  line). No live film notes flagged.
