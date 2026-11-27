@@ -777,7 +777,6 @@ def castsheet_faults(film):
         return []
     t0 = datetime.now(timezone.utc)
     run = lambda: (castsheet.build_faults(film) + castsheet.crotch_faults(film) + castsheet.teeth_faults(film)
-                   + castsheet.mouth_spike_faults(film) + castsheet.hair_spike_faults(film)
                    + castsheet.seated_faults(film) + castsheet.judge_faults(film))
     faults, reads = kitstamps.traced(run)
     if not faults and reads is not None:

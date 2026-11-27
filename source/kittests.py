@@ -833,6 +833,58 @@ def one_line_weight_every_kit():
 
 
 @test
+def closed_curves_never_spike():
+    """R8 A4 (27 Nov): no hair, hat or mouth outline can spike. Sam's note 11 (Blair's grin: "a stray line comes off
+    the top of his smile on the right") and Open Wounds chat 9 (a nub on Kemi's turned hard hat) were closed outlines
+    given one point twice in a row. ink.curve, the one closed curve every outline uses, now drops the repeat itself
+    (ink.once), so castsheet's two after-the-fact spike checks were deleted. Red with ink.once switched off (the old
+    grin spikes; the Open Wounds cast hands the curve doubled points), green now (none reach the drawn outline)."""
+    import sys
+    sys.path.insert(0, 'source')
+    import ink
+    import castsheet as C
+    from PIL import Image
+    import sitting as S
+    hw, l13, l17 = 0.15, 0.712, 0.756                      # the grin's outline as Sam saw it (note 11)
+    grin = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03),
+            (hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+    keep = ink.once
+    given, drawn = [0], [0]
+
+    def poke(pts):                                         # how far the outline loops past its own points' box
+        import numpy as np
+        P, Q = np.asarray(pts, float), np.asarray(ink.curve(pts), float)
+        over = np.maximum(P.min(0) - Q.min(0), Q.max(0) - P.max(0)).max()
+        return float(max(0.0, over) / np.ptp(P[:, 0]))
+
+    def spy(pts):
+        q = keep(pts)
+        given[0] += len(pts) != len(q)
+        return q
+
+    def draw_cast():
+        cast, PP = C._setup('brexit-is-done', None)
+        for name, sp0 in cast.items():
+            for yaw, seated in ((0, False), (45, False), (180, False), (45, True)):
+                sp = dict(sp0)
+                s = 0.5 * sp['height'] / 1.75
+                j = S.pose(sp, 'upright') if seated else None
+                PP.V.person(Image.new('RGBA', (1080, 1920)), PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0,
+                            yaw, j)
+    try:
+        ink.once = lambda pts: list(pts)
+        old_grin = poke(grin)
+        ink.once = spy
+        draw_cast()
+        drawn[0] = poke(grin)
+    finally:
+        ink.once = keep
+    ok = old_grin > 0.025 and given[0] > 0 and drawn[0] < 0.015
+    return ok, (f'old curve: the grin pokes out {old_grin:.0%} of its width; Open Wounds cast handed the curve {given[0]} '
+                f'outlines with a point twice, all dropped; the grin now pokes {drawn[0]:.0%}')
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
     seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These
@@ -5179,8 +5231,7 @@ def castsheet_only_when_cast_changed():
     def fake(film, *a, **k):
         calls.append(open(src).read())
         return list(result[0])
-    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'mouth_spike_faults', 'hair_spike_faults',
-             'seated_faults', 'judge_faults')
+    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'seated_faults', 'judge_faults')
     keep = {n: getattr(C, n) for n in names}
     keep_stamps = H.CASTSTAMPS
     try:
@@ -5200,8 +5251,8 @@ def castsheet_only_when_cast_changed():
         H.CASTSTAMPS = keep_stamps
         shutil.rmtree(tmp, ignore_errors=True)
         os.remove(src)
-    ok = first == [] and n1 == 7 and n2 == n1 and n3 == 14 and third == [] and bad1 and bad2
-    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 14}; '
+    ok = first == [] and n1 == len(names) and n2 == n1 and n3 == 2 * len(names) and third == [] and bad1 and bad2
+    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 2 * len(names)}; '
                 f'faults stop it both times {bool(bad1) and bool(bad2)}')
 
 
