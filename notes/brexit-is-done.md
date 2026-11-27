@@ -184,3 +184,10 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 69.38% of a week (2026-11-26)
+
+## Chat 41 (Sonnet, 27 Nov): animatic done
+- Animatic of the whole film (--small, 17 min render, finish.py 38 s, 2.6 MB): animations/drafts/brexit-is-done-animatic.mp4 (+ clean render). Sent to Sam. Nods (May 3.4-5.6, Kemi 17.0-19.2, Blair 26.8-29.4), Kemi's point 13.5-16 and shot 2's nearer framing are his to look at.
+- Picture checks left 6 lines unanswered (advice only): HANDS 3.42 s May right arm; 11.08 s and 12.00 s workers; 14.33 s Kemi's point "doesn't read"; 17.42 s Kemi's hand pushed back; 24.00 s guests. Not looked at full size this chat; Sam's eye on the animatic first.
+- The 4 blind-judge refusals (May three-quarter woman 2/5; Kemi three-quarter woman 2/5, back man 2/5, seated man 3/5) wait on the women's build (note 5, Sam's pick); not redrawn.
+- Critique round 27 pass 2: 8 faults open, not fixed (animatic was asked for first).
+- Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2). No change to timing, lines, mouths, soundtrack.
