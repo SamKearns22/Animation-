@@ -74,6 +74,7 @@ No title by default (Sam, 15 Oct); the Hook Text opens the film instead. When Sa
 - Always drawn fresh at 1080 × 1920 (never an enlarged copy of a smaller title), onto an untitled render.
 
 ## Hook Text (Sam, 15 Oct)
+- **Sam writes it; never suggest one** (CLAUDE.md, Sam 27 Nov): leave it blank until he gives it.
 - A short line at the start that introduces the joke's situation (e.g. "Zack Polanski this week"); the eye reads the
   concept, then the viewer stays to see where the joke goes. Never gives the punchline away.
 - **Readability first, not our title style:** TikTok's own caption look - TikTok Sans Bold, sentence case, black on

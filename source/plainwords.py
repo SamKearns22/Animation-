@@ -109,7 +109,26 @@ def faults(text, wordlist=None):
         m = CHAT_LONG_RE.search(re.sub(r'"[^"]*"|\u201c[^\u201d]*\u201d', '', sent))   # Sam's own words quoted are not a claim
         if m and not OWN_TOOL_RE.search(sent):
             add('chatlong', m.group(0), sent)
+        if hook_suggested(sent):
+            add('hooksuggest', 'a suggested opening caption', sent)
     return out
+
+
+# Sam, 27 Nov (The Patriot 5, plan chat): "You never need to suggest hook texts to me. Leave that blank until I provide
+# it." (Sam's Y to the rule, 27 Nov.) A sentence about the Hook Text / opening caption that offers a wording in quotes
+# is stopped; asking Sam for his, or quoting the rule ("never suggest one"), passes.
+HOOK_RE = re.compile(r"\b(hook\s*text|hook|(opening|white)\s+caption|caption\s+box|caption)\b", re.I)
+SUGGEST_RE = re.compile(r"\b(my\s+pick|i\s+suggest|suggest(ed|ion)?|how\s+about|what\s+about|could\s+(be|say|read)|"
+                        r"e\.g\.|for\s+example|such\s+as|type\s+your\s+own|or\s+your\s+own|idea)\b", re.I)
+NO_SUGGEST_RE = re.compile(r"\b(never|not|n't|won'?t|don'?t|no\s+longer)\s+(to\s+)?suggest", re.I)
+QUOTED_RE = re.compile(r'"[^"]{3,}"|\u201c[^\u201d]{3,}\u201d')
+
+
+def hook_suggested(sent):
+    """True when the sentence offers Sam a wording for the Hook Text (opening caption)."""
+    bare = QUOTED_RE.sub('', sent)
+    return bool(HOOK_RE.search(bare) and SUGGEST_RE.search(bare) and QUOTED_RE.search(sent)
+                and not NO_SUGGEST_RE.search(bare))
 
 
 # Sam, 26 Nov (Open Wounds chat 39, after "Long chats and heavy reading look like a big cause"): "If you tell me my
@@ -128,7 +147,8 @@ OWN_TOOL_RE = re.compile(r"\b(my|our|the)\s+(own\s+)?(handover|hand-over|chat[- 
 def say(fs, limit=12):
     kinds = {'file': 'a file or folder name', 'code': 'a code name', 'label': 'a label or code',
              'word': 'a project word with no everyday explanation in the same sentence',
-             'chatlong': 'chat length given as a cause (Sam, 26 Nov: never, unless admitting the handover tool is broken)'}
+             'chatlong': 'chat length given as a cause (Sam, 26 Nov: never, unless admitting the handover tool is broken)',
+             'hooksuggest': 'a Hook Text offered to Sam (Sam, 27 Nov: never suggest one; leave it blank until he gives it)'}
     return '\n'.join(f'- "{w}" ({kinds[k]}): "{s[:140]}"' for k, w, s in fs[:limit])
 
 
