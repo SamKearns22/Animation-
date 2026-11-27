@@ -74,3 +74,7 @@ Continue
 ### 2026-11-27T22:22:11
 Please schedule all work in this Patriots 5 project to pick back up at 01:51
 
+### 2026-11-27T22:23:05
+You don't have to pause them, just schedule the continuation
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
