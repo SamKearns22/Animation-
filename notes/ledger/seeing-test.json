@@ -299,20 +299,20 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.99,
+   "cost": 2.8,
    "src": "estimate",
    "sid": "session_01J1JB7X4D5fXmWtyEsq1eUg",
-   "steps": 74,
-   "hist_k": 177,
+   "steps": 78,
+   "hist_k": 179,
    "kinds": {
-    "tool search": 12.3,
-    "renders": 3.8,
-    "pictures": 4.0,
-    "other": 79.9
+    "tool search": 12.2,
+    "renders": 3.6,
+    "pictures": 3.9,
+    "other": 80.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 36,
+    "tool search": 38,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
@@ -321,43 +321,44 @@
     "other": 30
    },
    "split": {
-    "usd": 4.2781,
-    "total": 4.2781,
+    "usd": 4.4299,
+    "total": 4.4299,
     "floor_k": 84,
     "blocks": {
-     "new writes": 35.9,
-     "start-up floor": 26.4,
-     "Claude's words": 21.6,
-     "carried history": 16.1
+     "new writes": 35.0,
+     "start-up floor": 25.5,
+     "Claude's words": 21.1,
+     "carried history": 18.5
     },
     "origins": {
-     "Claude's words": 31.5,
-     "messages and reminders": 28.5,
-     "start-up floor": 26.6,
-     "result: tool search": 6.2,
-     "result: pictures": 3.8,
-     "result: other": 2.5,
+     "Claude's words": 30.8,
+     "messages and reminders": 30.4,
+     "start-up floor": 25.7,
+     "result: tool search": 6.0,
+     "result: pictures": 3.7,
+     "result: other": 2.4,
      "Claude's edits": 0.7,
-     "result: renders": 0.2
+     "result: renders": 0.1
     },
     "named": {
-     "messages and reminders": 28.5,
-     "start-up reading (rules, tools, first files)": 26.6,
-     "writing code": 10.6,
-     "thinking": 10.2,
-     "commands": 8.3,
-     "looking at pictures": 3.8,
-     "reading kit code": 3.6,
-     "reading notes": 2.8,
+     "messages and reminders": 30.4,
+     "start-up reading (rules, tools, first files)": 25.7,
+     "writing code": 10.2,
+     "thinking": 9.9,
+     "commands": 8.4,
+     "looking at pictures": 3.7,
+     "reading kit code": 3.5,
+     "reading notes": 2.7,
      "helper and chat prompts": 1.5,
      "messages to Sam": 1.1,
-     "other commands": 0.7,
+     "other commands": 0.6,
      "reading guides": 0.5,
      "running checks and tools": 0.5,
      "writing notes": 0.5,
      "start-up and handover tools": 0.3,
      "renders": 0.2,
      "app tools (chats, files sent)": 0.1,
+     "git and saving": 0.1,
      "edit results": 0.1
     },
     "leftover": 0.0
@@ -408,7 +409,7 @@
       0.0038
      ]
     ],
-    "base_pct": 26.1
+    "base_pct": 26.6
    },
    "search": {
     "show": 0,
@@ -416,10 +417,10 @@
      "no show": 0
     },
     "other": {
-     "film notes": 5,
+     "film notes": 6,
      "shared:handover.py": 1,
      "shared:seeing.py": 11,
-     "other": 11,
+     "other": 12,
      "shared:mhuman.py": 1,
      "shared:kittest.py": 1,
      "shared:kittests.py": 6
@@ -750,6 +751,24 @@
       "git stash -q && git fetch -q origin claude/create-claude-md-oe8z4g && git checko",
       "",
       83
+     ],
+     [
+      81,
+      "other",
+      "film notes",
+      "notes/seeing-test.md notes/seeing-test/c10-door.jpg",
+      "git add notes/seeing-test.md notes/seeing-test/c10-door.jpg && git commit -qm \"S",
+      "",
+      316
+     ],
+     [
+      82,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git status -sb | head -2 &",
+      "",
+      467
      ]
     ]
    },
