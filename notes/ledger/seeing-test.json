@@ -299,62 +299,65 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.59,
+   "cost": 1.99,
    "src": "estimate",
    "sid": "session_01J1JB7X4D5fXmWtyEsq1eUg",
-   "steps": 46,
-   "hist_k": 141,
+   "steps": 74,
+   "hist_k": 177,
    "kinds": {
-    "tool search": 18.4,
-    "renders": 6.4,
-    "pictures": 3.1,
-    "other": 72.1
+    "tool search": 12.3,
+    "renders": 3.8,
+    "pictures": 4.0,
+    "other": 79.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 29,
+    "tool search": 36,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 4,
-    "pictures": 3,
-    "other": 12
+    "renders": 6,
+    "pictures": 9,
+    "other": 30
    },
    "split": {
-    "usd": 2.1424,
-    "total": 2.1424,
+    "usd": 4.2781,
+    "total": 4.2781,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 39.8,
-     "Claude's words": 27.5,
-     "new writes": 21.0,
-     "carried history": 11.7
+     "new writes": 35.9,
+     "start-up floor": 26.4,
+     "Claude's words": 21.6,
+     "carried history": 16.1
     },
     "origins": {
-     "start-up floor": 39.8,
-     "Claude's words": 39.6,
-     "result: tool search": 9.6,
-     "result: other": 3.6,
-     "messages and reminders": 3.1,
-     "result: pictures": 2.9,
-     "Claude's edits": 1.1,
+     "Claude's words": 31.5,
+     "messages and reminders": 28.5,
+     "start-up floor": 26.6,
+     "result: tool search": 6.2,
+     "result: pictures": 3.8,
+     "result: other": 2.5,
+     "Claude's edits": 0.7,
      "result: renders": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 39.8,
-     "writing code": 16.1,
-     "thinking": 14.3,
-     "commands": 9.0,
-     "reading kit code": 5.6,
-     "reading notes": 4.6,
-     "messages and reminders": 3.1,
-     "looking at pictures": 2.9,
-     "messages to Sam": 1.2,
-     "reading guides": 0.8,
-     "other commands": 0.8,
-     "running checks and tools": 0.8,
-     "start-up and handover tools": 0.5,
-     "renders": 0.3,
+     "messages and reminders": 28.5,
+     "start-up reading (rules, tools, first files)": 26.6,
+     "writing code": 10.6,
+     "thinking": 10.2,
+     "commands": 8.3,
+     "looking at pictures": 3.8,
+     "reading kit code": 3.6,
+     "reading notes": 2.8,
+     "helper and chat prompts": 1.5,
+     "messages to Sam": 1.1,
+     "other commands": 0.7,
+     "reading guides": 0.5,
+     "running checks and tools": 0.5,
+     "writing notes": 0.5,
+     "start-up and handover tools": 0.3,
+     "renders": 0.2,
+     "app tools (chats, files sent)": 0.1,
      "edit results": 0.1
     },
     "leftover": 0.0
@@ -367,45 +370,45 @@
      [
       "source/seeing.py",
       3.9,
-      0.058
+      0.0707
      ],
      [
       "notes/seeing-test.md",
       1.0,
-      0.015
+      0.018
      ],
      [
       "notes/seeing-test/scores.md",
       0.5,
-      0.0078
+      0.0094
      ],
      [
       "notes/seeing-test/key.md",
       0.5,
-      0.0078
+      0.0094
      ],
      [
       "notes/seeing-test/cases.tsv",
       0.5,
-      0.0078
+      0.0094
      ],
      [
       "notes/seeing-test/next-prompt.md",
       0.5,
-      0.0078
+      0.0094
      ],
      [
       "notes/seeing-test/findings/plain.md",
       0.4,
-      0.0055
+      0.0068
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/aacaa857-8b43-5a98-ae20-a6f28cdb551d/scratchpad/wt/0945cc85/source/mhuman.py",
       0.2,
-      0.003
+      0.0038
      ]
     ],
-    "base_pct": 32.1
+    "base_pct": 26.1
    },
    "search": {
     "show": 0,
@@ -415,8 +418,8 @@
     "other": {
      "film notes": 5,
      "shared:handover.py": 1,
-     "shared:seeing.py": 7,
-     "other": 8,
+     "shared:seeing.py": 11,
+     "other": 11,
      "shared:mhuman.py": 1,
      "shared:kittest.py": 1,
      "shared:kittests.py": 6
@@ -684,6 +687,69 @@
       "git pull -q --rebase origin claude/create-claude-md-oe8z4g 2>&1 | tail -3; git p",
       "",
       271
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/aacaa857-8b43-5a98-ae20-a6f28cdb551d/scrat",
+      "",
+      315
+     ],
+     [
+      49,
+      "other",
+      "shared:seeing.py",
+      "source/seeing.py",
+      "S=/tmp/claude-0/-home-user-Animation-/aacaa857-8b43-5a98-ae20-a6f28cdb551d/scrat",
+      "",
+      56
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "",
+      "^c16 exit",
+      "",
+      301
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/aacaa857-8b43-5a98-ae20-a6f28cdb551d/scrat",
+      "",
+      79
+     ],
+     [
+      70,
+      "other",
+      "shared:seeing.py",
+      "source/seeing.py",
+      "date; git status --short | head; git log --oneline -1; S=/tmp/claude-0/-home-use",
+      "",
+      237
+     ],
+     [
+      71,
+      "other",
+      "shared:seeing.py",
+      "source/seeing.py",
+      "git diff HEAD -- source/seeing.py | head -30; ls /tmp/claude-0/-home-user-Animat",
+      "",
+      907
+     ],
+     [
+      72,
+      "other",
+      "shared:seeing.py",
+      "source/seeing.py",
+      "git stash -q && git fetch -q origin claude/create-claude-md-oe8z4g && git checko",
+      "",
+      83
      ]
     ]
    },
