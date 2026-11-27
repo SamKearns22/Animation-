@@ -18,4 +18,4 @@ Finished notes: notes/archive/check-audit.md (evidence, Sam's answers, every ite
 - Named branches: claude/upbeat-dirac-w16tn9 (Sam's plain-words log, a waiting-list archive), claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31, claude/seeing-test-chat1: not this job, not merged.
 - For Claude: subtitles.LATE / fit; castsheet.seated_faults(raw) pops seat keys; kittests._legs_cells + data/seated-legs-ref.json; freeze drift-baseline blessed 2.12; kittests._moves_same_as_blessed; acting.HEAD_MIN.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 10.14% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 10.46% of a week (2026-11-27)
