@@ -1,22 +1,21 @@
-# Notes for patriots5 (The Patriot 5) (one file, numbered; mark each done as it is fixed)
+# Notes for patriots5 (The Patriot 5; one file, numbered; mark each done as it is fixed)
 
-> **Held for the next film (Sam, 16 Nov), raise at the plan, then delete this note from the template:** the estimates
-> proposal (`notes/proposals/estimates.md`, options 1 and 2). Sam: use this film as the learning apparatus for budget
-> and costliness; no price tests or measures on European Protests or Blessed (too mixed with other work). Put it to
-> Sam again in the plan's questions, without the past-film measuring step, before `ledger.py estimate`.
+Kind: film (satire-style, flat people). Started 27 Nov from Sam's screenplay and title (chat session_01J1JB7VmBNix1SpRrBBfJas).
+The Patriot redesign (the new drawing style) runs in a sister chat, session_01J1JB7XCcqv7vGytWyb2oNY ("The Patriot
+character redesign"), asked by Sam at 19:16; this chat does the plan. Its results come into this film when it pushes.
 
-## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/patriots5-handovers.md)
-- **Rules that bite next:** 89 (critique before the cast sheet goes back), 30 (a repeat note: find why the first fix failed), 24 (the estimate, once the screenplay is in).
-- **Done (chat 1, 27 Nov):** the Patriot on the new house head (made by hand, no photos: references/faces/patriot/pick) under a new house balaclava (facehouse_d, every turn); his Patriots 3 clothes kept; kit test balaclava_every_view (fails on the first sheet's missing three-quarter eye opening); sheet v1 sent; notes 1 and 3 fixed, sheet v2 sent; note 2 answered.
-- **Check not built yet (note 1):** a check that finds stray ink lines inside a jacket's fill; needs a way to tell the drawing's own seams (zip, hem) from stray ones. Until then: every body looked at full size before a sheet goes.
-- **Spent against the estimate:** no estimate yet (Sam is still writing the screenplay).
-- **Next:** Sam's notes on the Patriot's sheet (Opus, medium); then, when Sam gives the screenplay and title, the plan (Opus, high): kitfilm.py begin patriots5.
-- **Needs Sam:** Y or N on the shoulder-seam fix (note 2); his look at sheet v2.
-- **Read:** guides/job-packs.md Notes round (for sheet notes), Plan (when the screenplay comes).
-- **Lost / Added:** Lost: his old big cartoon eyes and boxy head. Added: house eyes and brows, a rounded knit hood fitted to the head, the knit moving over the mouth.
+The real event (Sam): Danny Tommo, founder of Patriot Platform, has been arrested and charged for knifing a boat.
+The joke (Sam): The Patriot and his crew of balaclava'd PP men try to break Tommo out; absurdity ensues.
+
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
+- **Locked by Sam:** all 11 shots as the screenplay sets them: cell dead ahead at the cot; side angle; close-up of the grate from inside; side-on outside with the tower; close-up through the grate at Danny; from behind Danny's head; the entrance with the two officers; the four 180s (boat, officers, Patriot, officers).
+- **Rules that bite next:** 24 (the estimate), 74 (acting list), 38 (front, side and back on the cast sheet).
+- **Done:** redesign chat 1: the Patriot on the new house head and balaclava, sheet sent (Sam's look pending). Plan chat 1 (Opus high): brief checklist, estimate 15.4%, shots and acting list; sister chat asked to carry on the Patriot redesign. Redesign chat (Sam's sheet notes): belly lines fixed (shared 'stout' build), collar, zip, hem and chin fixed, sheet v2 sent; the grey sleeve fade answered, its fix waits for Sam's Y. Check not built yet: stray ink lines inside a jacket's fill (until then, every body looked at full size before a sheet goes).
+- **Next:** this chat, on Sam's answers: the cast sheet (Opus, high: new people and clothes), then practice clips of the tower, boat walk and climb.
+- **Needs Sam:** Y or N on the shoulder-seam fix for the grey sleeve fade; his look at the Patriot's sheet v2; photos of Danny Tommo's real model; the religious clothes; the boat; the tower; the Hook Text; two tones.
+- **Read:** guides/job-packs.md, Build; guides/figure-rig.md 2-4, 5c.
 - **Open rule requests:** none.
-- **Locked by Sam:** nothing yet (no shots); the Patriot's clothes, badges and poppy are as Sam approved them in Patriots 3.
-- **For Claude:** `python3 source/patriots5_cast.py sheet OUT.jpg`; person: patriots5_cast.patriot(mood), draw(); balaclava: facehouse_d (balaclava_front/turned), turned via _turn_hair, ears hidden; `neck_c` (shared): a covered neck's colour in body.plain_torso, views_c, turnhead.neck_over. Open Wounds (brexit-is-done) posted 27 Nov; its notes file stays in place because acting.py reads its acting list (move to shared: repoint that, then archive it). Branches named at start, not merged (logs and old GTA drafts only, nothing for this film): claude/jolly-ramanujan-2lcl2o, claude/upbeat-dirac-w16tn9, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+- **For Claude:** film name patriots5; boat = patriots2.shot_dinghy; cell, gates and officers = story/blessed-places.txt / blessed-people.txt; Patriot = patriots5_cast.patriot(mood) (`patriots5_cast.py sheet OUT.jpg`; balaclava facehouse_d). Open Wounds (brexit-is-done) notes stay in place: acting.py reads its acting list (move to shared: repoint, then archive).
 
 ## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
 its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees
@@ -30,9 +29,53 @@ First line: how much of the total is unmeasured. Each cost is the nearest measur
 animatic1, round, final; board: the shot board of rule 11, ended by `rough.py sent FILM OUT.jpg --delivered --board`; one 'round' row per notes round, priced from past films' real rounds); the stage totals go
 into `ledger.py estimate FILM PCT --stages "cast 2, sets 2.5, ..."` and each stage's end runs `ledger.py stage FILM NAME`.
 
+First line: about 40% of this estimate is unmeasured (the tower of men, the boat walk with legs, the climb onto the
+bunk, the religious clothes have no past cost); the rest is from Brexit Is Done's and Milburn's stage rows in
+notes/ledger/. Honest risk: Brexit Is Done ran 1.4x and Grand Theft Autism 2x over their estimates, both on moves.
+
 | thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
 |---|---|---|---|---|---|---|
-|   |   |   |   |   |   |   |
+| The Patriot, redesigned | KNOWN once the sister chat pushes (patriots3_cast PATRIOT, new style) | front, side, behind, three-quarter; balaclava, PP badges | cast | 0 here (sister chat's own cost) | - | |
+| 7 more PP men (Nick and six) | NEW: crowd-pack or made-up house heads with balaclava=True (shared, facehouse_d) and neck_c; untested on a crowd | must read as 8 different men at phone size | cast | 1 | Milburn sets/props rows (people-file variants) | |
+| Islamic religious clothes over the outfits (skull caps, checked headscarves, robes, beads) | NEW outfit extras | worn over balaclava and jacket; front and side; turn with the body | cast | 1 | unmeasured | |
+| Danny Tommo (real person) | NEW likeness (face tool from Sam's photos) | front, side, from behind (shot 6), seated slumped, standing on the bunk | cast | 1.5 | Brexit Is Done cast row (3 likenesses, 9.5 planned): about a third | |
+| Two prison officers | KNOWN (story/blessed-people.txt officer, guard2) | front and side, eyes that track | cast | 0.2 | known | |
+| Cell, evening, moonlight: front, side, up at the grate, from behind Danny | KNOWN pieces (places kit prison cell: barred window, bed, brick) in new views | one plan, 4 cameras; window above the cot; night light | sets | 1 | Milburn sets 1.8 | |
+| Outside the cell wall at night (brick wall, the grate, ground), close-up through the grate | NEW view from the same plan | the tower stands against it; the grate seen both sides | sets | 0.8 | unmeasured | |
+| Prison entrance (gatehouse) | KNOWN (story/blessed-places.txt gates) | guards' side and the boat's side (reverse angles) | sets | 0.4 | known | |
+| The small boat (grey inflatable, Patriots 2) with 8 leg holes | KNOWN boat (patriots2 shot_dinghy), NEW holes and legs | side-on, walking; 16 legs in step | moves | 1.5 | unmeasured | |
+| The tower of men on shoulders, swaying (risky) | NEW pose | each sits on the shoulders below, hands on heads; the whole stack bends as one | moves | 2 | unmeasured | |
+| Danny climbs onto the bunk (risky) | NEW move | a knee up, weight onto the mattress, stands under the window | moves | 0.8 | unmeasured | |
+| Patriot's big hand gestures, swaying at the grate | KNOWN (pose gallery: flapping, pointing) | seen through bars from behind Danny | moves | 0.3 | known | |
+| Guards' eyes following right to left; the stare at each other | KNOWN (face kit gaze keys) | pupils only, then heads turn | moves | 0.2 | known | |
+| The Patriot startles | KNOWN (acting kit 'start') | inside the boat, arms jump | moves | 0.2 | known | |
+| Shot board | KNOWN (rough.py board) | 11 shots | board | 1 | Brexit Is Done board 2 | |
+| First animatic | KNOWN | | animatic1 | 0.5 | Milburn 0.4 | |
+| Notes rounds (two) | | | round | 2 | Milburn round 2.6 | |
+| Final and posting | KNOWN | | final | 1 | Brexit Is Done final 1 + post 2, halved for a shorter film | |
+| **Total** | | | | **15.4** | | |
+
+Rehearsal clips first (rule 8): the swaying tower, the boat walk, the climb onto the bunk: 2-3 s practice clips each,
+before the rest is built.
+
+## Shots and the acting list (rule 74; ask first, write second: open tones are "ask Sam")
+Length: 66 spoken words, about 20 s at Sam's pace, plus the silent beats (sigh, climb, eyes, boat walk, last stare):
+about 33 s.
+
+| line | who | shot and why | face | body | lands on |
+|---|---|---|---|---|---|
+| (silent) | Danny | 1: dead ahead at the cot, window above; sets the cell | eyes down, brows sagging | a deep sigh, shoulders rise and drop | the sigh's breath out |
+| 1 "Danny?" | Patriot | 1: his head pops up in the window, small, the joke of the reveal | eyes wide, peering in | head pops up from below the sill | "Danny" |
+| 2 "Boys? Is that you?" | Danny | 2: side angle in the cell | surprise, brows up, then hopeful | looks up, climbs onto the bunk, stands under the window | "Boys" (look up); climb under "Is that you" |
+| 3 "Yeah, boss, it's us." | Patriot | 3: close-up of the grate and the Patriot (from inside) | eager | nods, fingers through the grate | "boss" |
+| 4 "Nick's head is up my arse..." | Patriot (Nick under him) | 4: side-on outside the wall, the whole swaying tower | wince on "arse", then brisk on "Anyway" | the tower sways slowly; he shifts his seat on "arse" | "arse", "Anyway" |
+| 5 "That's amazing, boys. What's the plan?" | Danny | 5: close-up through the grate at Danny (from outside) | ask Sam (my pick: sincerely touched) | hands on the bars, face close | "amazing" |
+| 6 "We've been watching your videos, boss..." | Patriot | 6: from behind Danny's head, the Patriot behind the grate | proud, conspiratorial | swaying back and forth, big hand gestures | "videos", "plan", "invisible" (a big wide sweep) |
+| (silent) | two officers | 7: the entrance, both facing the camera | blank | only the pupils move, right to left, slowly | the boat's walk |
+| (silent) | 8 PP men in the boat | 8: reverse, they walk left to right in the boat, legs through holes | sheepish, eyes down | shuffling in step, the boat bobbing | - |
+| 7 "Uuuh, what are you doing?" | left officer | 9: reverse, the two officers stare | flat, unimpressed | still; a slight lean | "doing" |
+| 8 "Oh, uh. Allahu Akbar." | Patriot | 10: reverse, the boat | ask Sam (my pick: caught out, an unsure mumble) | startles (arms jump), then a weak little wave | "Oh" (start), "Akbar" (wave) |
+| (silent) | two officers | 11: reverse, they turn and stare at each other | baffled shock | heads turn to each other, hold | - |
 
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py FILM sketch OUT.jpg`); places
 benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark.py FILM OUT.jpg`)
@@ -48,8 +91,30 @@ rule 14)
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
 |---|------|------|
-| 1 | Sam, 27 Nov: "run The Patriot character through our new drawing style to bring him up to speed" | sheet sent, awaiting Sam |
-| 2 | Sam, 27 Nov: "Start a new film file/ledger for The Patriot 5. I am still writing the screenplay." | yes |
+| 0a | Sam, 27 Nov: "run The Patriot character through our new drawing style to bring him up to speed" | sheet sent, awaiting Sam; known faults told to Sam: side-view collar sticks out with a thin white gap under it; three-quarter hood comes to a slight point at the chin; the from-behind-at-the-grate view untested |
+| 0b | Sam, 27 Nov: "Start a new film file/ledger for The Patriot 5. I am still writing the screenplay." | yes |
+| 1 | Shot 1: "We are in a British Prison cell. It is evening. We look dead ahead at the cot at the end of the room." | |
+| 2 | Shot 1: "Danny Tommo is in the process of sighing deeply, downcast." | |
+| 3 | Shot 1: "Above him, a grated window, letting in moonlight." | |
+| 4 | Shot 1: "The Patriot's head appears suddenly at the window." Line: "Danny?" | |
+| 5 | Shot 2: "From a side angle, we see Danny look up, react with surprise, and climb atop the bunk." Line (Danny): "Boys? Is that you?" | |
+| 6 | Shot 3: "Close up of the grate and the Patriot." Line (Patriot): "Yeah, boss, it's us." | |
+| 7 | Shot 4: "the side on view but on the other side of the wall. There's a tower of Patriot Platform people sitting on each other's shoulders to reach the cell window." | |
+| 8 | Shot 4: "The tower is swaying slightly back and forth." | |
+| 9 | Shot 4 line (Patriot): "Nick's head is up my arse. It's blood horrible. Anyway, we're 'ere to get you out." (Sam wrote "blood"; he records it, his take decides) | |
+| 10 | Shot 5: "Close up on grate looking through at Danny." Line (Danny): "That's amazing, boys. What's the plan?" | |
+| 11 | Shot 6: "We see from behind Danny's head. The Patriot is swaying back and forth behind the gr[ate]." | |
+| 12 | Shot 6: "He is exaggerating with his hands." Line (Patriot): "We've been watching your videos, boss. We've got a plan. We've come up with a means of infiltration that's completely invisible to British authorities." | |
+| 13 | Cut to shot 7: "Prison entrance. Two prison officers are looking forward at the camera, watching something from the right move slowly to the left with their pupils." | |
+| 14 | Shot 8 (180): "The patriot platform boys are walking from left to right, eight of them, in a small boat (see patriots 2)." | |
+| 15 | Shot 8: "They have clearly cut holes in the boat so their legs can come through and they can pilot it with their legs." | |
+| 16 | Shot 8: "They are sheepishly coming up towards the guards." | |
+| 17 | Shot 8: "They have a variety of Islamic religious gear wrapped over their usual stupid balaclava fascist outfits." | |
+| 18 | Shot 9 (180): "The guards stare. The one on the left goes: uuuh, what are you doing?" | |
+| 19 | Shot 10 (180): "The Patriot startles, clearly not expecting to be seen." Line: "Oh, uh. Allahu Akbar." | |
+| 20 | Shot 11 (180): "The guards just stare at each other in baffled shock." | |
+| 21 | Every video: Hook Text and the CranbriJoos sign-off; no title by default; MP4 under 50 MB | |
+| 22 | Sound: voices only (the script names no sound effects) | |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 | reference | what it shows (count, colours, positions, facing, brands, proportions) | ours matches? |
@@ -80,5 +145,37 @@ the handover check refuses a blank one.
 | 3 | cast sheet | side, three-quarter | "Fix your notes": my named faults (collar a box beside the neck with a zip in the air; the chin's dark V) | new | none (I named them myself, unfixed) | no critique | fixed: the knit's neck stops at the collar so the collar wraps round it; zip and hem fitted to the stout body; ribs stop above the chin's bottom rings |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
-- The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi).
-- Kind: character update (no film shots yet).
+- The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi). (redesign chat 1)
+- One film name, patriots5 (the redesign chat's); the plan chat's patriots-5 files folded in, 27 Nov.
+- The template's held estimates note is already settled: Sam said Y to option 1 on 17 Nov (notes/archive/milburn-handovers.md); not asked again.
+- Branches the start listed (also named by the redesign chat) (jolly-ramanujan, upbeat-dirac, gta-v5-sound-draft, gta-chat46-build, dreamy-fermi, gta-chat31): logs, an archive note and old Grand Theft Autism files only, nothing for this film; left as they are.
+- Photos of the real man Danny Tommo stands for: news tag page had none; the free photo library refused (too many requests); Openverse had only protest photos. Asked Sam (27 Nov).
+- The small boat "see patriots 2" = Patriots 2's grey inflatable (source/patriots2.py, shot_dinghy).
+- 
+
+Screenplay and title: given 27 Nov 2026 (the film's start: kit tests, rule 90)
+
+## Kit found at the start
+(kitfilm begin, 27 Nov: the catalogue's best rows per brief line; the face tool per real person filed under references/faces; a row is KNOWN only once a person checks it)
+- "Shot 1: "We are in a British Prison cell. It is evening. We look dead ": Places from a description (the places kit; ranking item 5, 14 Nov; APPROVED FOR  [`source/places.py` (`parse`, `load`, `install`, `set_boxes`,]; Seated lower body as one shape (R7, 25 Nov; Sam's "No bum/circular knees"): the  [`source/views.py` (`seated_lower`, `seated_knee_over`, `r7_o]
+- "Shot 1: "Danny Tommo is in the process of sighing deeply, downcast."": A car chase through a stand-in junction from a low kerb camera: a route with a s [`source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `]; The shot board and its gate (rule 11; craft chats 7-8, 17-18 Nov). Every shot in [`source/rough.py` (`board`, `board_frames`, `board_rows`, `m]
+- "Shot 1: "Above him, a grated window, letting in moonlight."": A car chase through a stand-in junction from a low kerb camera: a route with a s [`source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `]; Places from a description (the places kit; ranking item 5, 14 Nov; APPROVED FOR  [`source/places.py` (`parse`, `load`, `install`, `set_boxes`,]
+- "Shot 1: "The Patriot's head appears suddenly at the window." Line: "Da": People from a description (the people kit; ranking item 4, 14 Nov; APPROVED FOR  [`source/people.py` (`parse`, `load`, `crowds`, `crowd_person]; A famous person's head for any film, READY (Sam, 14 Nov: look 2 'detail'): the f [`source/facehouse.py` (MAP; `person`, `house_head`, `swept`,]
+- "Shot 2: "From a side angle, we see Danny look up, react with surprise,": A famous person's head for any film, READY (Sam, 14 Nov: look 2 'detail'): the f [`source/facehouse.py` (MAP; `person`, `house_head`, `swept`,]; People from a description (the people kit; ranking item 4, 14 Nov; APPROVED FOR  [`source/people.py` (`parse`, `load`, `crowds`, `crowd_person]
+- "Shot 3: "Close up of the grate and the Patriot." Line (Patriot): "Yeah": Moves from the acting list (the moves kit; ranking item 7, 14 Nov; APPROVED FOR  [`source/acting.py` (`parse`, `load`, `pose`, `face`, `check`]; Space, flat cartoon (Halo No-No): planet (bands, dusk and night side, any light  [`source/halo_sets.py` (`space_wide`, `ring_close`, `_planet`]
+- "Shot 4: "the side on view but on the other side of the wall. There's a": Blessed (11 Nov), flat paintings, one per camera, real metres: Southwark Crown C [`source/blessed_sets.py` (`back`/`mid`/`front(view, img, cam]; Seated lower body as one shape (R7, 25 Nov; Sam's "No bum/circular knees"): the  [`source/views.py` (`seated_lower`, `seated_knee_over`, `r7_o]
+- "Shot 4: "The tower is swaying slightly back and forth."": Blessed (11 Nov), flat paintings, one per camera, real metres: Southwark Crown C [`source/blessed_sets.py` (`back`/`mid`/`front(view, img, cam]; Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]
+- "Shot 4 line (Patriot): "Nick's head is up my arse. It's blood horrible": People from a description (the people kit; ranking item 4, 14 Nov; APPROVED FOR  [`source/people.py` (`parse`, `load`, `crowds`, `crowd_person]; A famous person's head for any film, READY (Sam, 14 Nov: look 2 'detail'): the f [`source/facehouse.py` (MAP; `person`, `house_head`, `swept`,]
+- "Shot 5: "Close up on grate looking through at Danny." Line (Danny): "T": David Walliams (kit person, 22 Nov: the head Sam approved 15 Nov; face tool pick [`story/facetool-people.txt` (`walliams`: copy the 4 lines in]; Space, flat cartoon (Halo No-No): planet (bands, dusk and night side, any light  [`source/halo_sets.py` (`space_wide`, `ring_close`, `_planet`]
+- "Shot 6: "We see from behind Danny's head. The Patriot is swaying back ": Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]; Blessed (11 Nov), flat paintings, one per camera, real metres: Southwark Crown C [`source/blessed_sets.py` (`back`/`mid`/`front(view, img, cam]
+- "Shot 6: "He is exaggerating with his hands." Line (Patriot): "We've be": Places from a description (the places kit; ranking item 5, 14 Nov; APPROVED FOR  [`source/places.py` (`parse`, `load`, `install`, `set_boxes`,]; People from a description (the people kit; ranking item 4, 14 Nov; APPROVED FOR  [`source/people.py` (`parse`, `load`, `crowds`, `crowd_person]
+- "Cut to shot 7: "Prison entrance. Two prison officers are looking forwa": Humpback whale (one model in metres, drawn flat in house style from ANY view and [`source/whale.py` (`draw(cam, pose, pattern, t, flap, beat, ]; The shot board and its gate (rule 11; craft chats 7-8, 17-18 Nov). Every shot in [`source/rough.py` (`board`, `board_frames`, `board_rows`, `m]
+- "Shot 8 (180): "The patriot platform boys are walking from left to righ": The Normandy coast from the air, painted in moving layers: cliff-face casemates  [`source/patriots3_coast.py` (`picture`, `burst`, `craft`)]; Humpback whale (one model in metres, drawn flat in house style from ANY view and [`source/whale.py` (`draw(cam, pose, pattern, t, flap, beat, ]
+- "Shot 8: "They have clearly cut holes in the boat so their legs can com": Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]; Fire, smoke and water effects, flat house style, in metres through any camera, e [`source/flying_whales_fx.py` (`fireball_sprite`, `Puff` + `p]
+- "Shot 8: "They are sheepishly coming up towards the guards."": Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]; A car chase through a stand-in junction from a low kerb camera: a route with a s [`source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `]
+- "Shot 8: "They have a variety of Islamic religious gear wrapped over th": Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]; People from a description (the people kit; ranking item 4, 14 Nov; APPROVED FOR  [`source/people.py` (`parse`, `load`, `crowds`, `crowd_person]
+- "Shot 9 (180): "The guards stare. The one on the left goes: uuuh, what ": A car chase through a stand-in junction from a low kerb camera: a route with a s [`source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `]; Humpback whale (one model in metres, drawn flat in house style from ANY view and [`source/whale.py` (`draw(cam, pose, pattern, t, flap, beat, ]
+- "Shot 10 (180): "The Patriot startles, clearly not expecting to be seen": People from a description (the people kit; ranking item 4, 14 Nov; APPROVED FOR  [`source/people.py` (`parse`, `load`, `crowds`, `crowd_person]; Moves from the acting list (the moves kit; ranking item 7, 14 Nov; APPROVED FOR  [`source/acting.py` (`parse`, `load`, `pose`, `face`, `check`]
+- "Shot 11 (180): "The guards just stare at each other in baffled shock."": Offshore oil rig (Jackdaw-style) in 31 breakable pieces at real size, painted fl [`source/flying_whales_rig.py` (`draw(base, t, xf, gone, extr]; A car chase through a stand-in junction from a low kerb camera: a route with a s [`source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `]
+- "Every video: Hook Text and the CranbriJoos sign-off; no title by defau": Hook Text beside a person, three rows (`--w`); 😅 emoji [`source/hook_text.py`, `1f605.png`]; Word times from Sam's takes (speech-to-text; Open Wounds chat 29, 26 Nov, Sam's  [`source/words.py` (`times`, `text`, `track`, `at_word`); in ]
+- "Sound: voices only (the script names no sound effects)": The proposal route (Sam, 15 Nov): any change to rules, tools, checks, kits or ho [`source/propose.py` (`new`, `pack`, `judge`, `record`, `show]; Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]
