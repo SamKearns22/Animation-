@@ -63,6 +63,13 @@ The "before" trace count is a floor (one search per function on the path, none w
   check_audit_lists_and_flags_repeats and critique_saw_it_column (touch.py's own test left a stand-in loaded).
 - App figure for this chat: $7.86; the estimate $8.81 (12% over, so not flagged). One chat proves nothing yet.
 
+- 5c (chat 2), the whole suite on both copies: old copy 218 passed, 6 failed; split copy 217 passed, 8 failed at
+  first. Both: the four Open Wounds film checks above (not this job's). Old only, fixed here: watcher (three tools had
+  no promise line) and maps (a stale MAP). Split copy only, all four the code finder, all fixed and passing:
+  page.files followed a module's imports but not its parts' (solid_seat fell out of reach), a page built before that
+  fix (the finder now rebuilds its page when it changes itself), and the tool-health replay compared a part's name
+  with last week's edit to the whole module.
+
 ## Handover check settled (end of chat)
 - 95 QUICK CHECK lines on 20 finished films: their code only gained a MAP at the top (no code changed, ast-proved);
   the faults are theirs from before (rule 61: finished films are not retrofitted). Not fixed, on purpose.
