@@ -1640,33 +1640,34 @@
 - 789: `faces` Rule 50 (Job L; was by hand): every name in the film's FAMOUS list gets at least one drawn frame with the face
 - 824: `main` 
 
-## kitfilm.py (247 lines)
-- 34: HERE (data)
-- 35: ROOT (data)
-- 36: FILMS (data)
-- 37: START_STALE (data)
-- 38: MAJOR (data)
-- 39: ANIMATIC_GATE (data)
-- 43: `sid_now` 
-- 47: `rows` 
-- 54: `_add` 
-- 61: `_norm` 
-- 65: `first_chat` The film's first chat: no start row yet, or the start row is this chat's own. No film (a tool job): False.
-- 74: `started_here` handover end: this chat wrote a film's start row at its start (so it is that film's first chat). Needs no film
-- 81: `_stale_names` 
-- 88: `at_start` handover.py start. Returns the lines to print. In the film's first chat: the start row and the background run.
-- 124: BEGUN (data)
-- 127: `begun` True when the film's notes say Sam gave the screenplay and title (the film's start, Sam 26 Nov).
-- 136: `begin` Sam gave the screenplay and title in this chat: the start line in the notes, the start row, the run.
-- 150: `lessons` Sam asked for the film's lessons (the film's end): run the stale kit tests now and write the 'end' row.
-- 163: `practice` A practice job (a test clip, a learn job): its notes file has a line 'Kind: practice' (Sam, 26 Nov). No kit
-- 173: `_launch` 
-- 178: `never_green` Tests with no stamp line at all: a new tool's own kit test (run once at its chat's handover).
-- 187: `made_stale` The tests stale now that were not stale at this chat's start (None when the start list is not this chat's).
-- 201: `major_line` handover end: '' or one plain line suggesting a full kit check to Sam (his Y runs it).
-- 215: `setup_faults` Rule 90's check on the start-up hook: no kit run when a machine starts (the old fault: every chat ran them).
-- 223: `final_row` 
-- 228: `main` 
+## kitfilm.py (265 lines)
+- 36: HERE (data)
+- 37: ROOT (data)
+- 38: FILMS (data)
+- 39: START_STALE (data)
+- 40: MAJOR (data)
+- 41: ANIMATIC_GATE (data)
+- 45: `sid_now` 
+- 49: `rows` 
+- 56: `_add` 
+- 63: `_norm` 
+- 67: `first_chat` The film's first chat: no start row yet, or the start row is this chat's own. No film (a tool job): False.
+- 76: `started_here` handover end: this chat wrote a film's start row at its start (so it is that film's first chat). Needs no film
+- 83: `_stale_names` 
+- 90: `_health` R14 (Sam, 26 Nov): the tool health report runs beside the kit tests, one plain line per tool for Sam.
+- 100: `at_start` handover.py start. Returns the lines to print. In the film's first chat: the start row and the background run.
+- 138: BEGUN (data)
+- 141: `begun` True when the film's notes say Sam gave the screenplay and title (the film's start, Sam 26 Nov).
+- 150: `begin` Sam gave the screenplay and title in this chat: the start line in the notes, the start row, the run.
+- 166: `lessons` Sam asked for the film's lessons (the film's end): run the stale kit tests now and write the 'end' row.
+- 181: `practice` A practice job (a test clip, a learn job): its notes file has a line 'Kind: practice' (Sam, 26 Nov). No kit
+- 191: `_launch` 
+- 196: `never_green` Tests with no stamp line at all: a new tool's own kit test (run once at its chat's handover).
+- 205: `made_stale` The tests stale now that were not stale at this chat's start (None when the start list is not this chat's).
+- 219: `major_line` handover end: '' or one plain line suggesting a full kit check to Sam (his Y runs it).
+- 233: `setup_faults` Rule 90's check on the start-up hook: no kit run when a machine starts (the old fault: every chat ran them).
+- 241: `final_row` 
+- 246: `main` 
 
 ## kitinputs.py (502 lines)
 - 44: HERE (data)
@@ -2932,6 +2933,38 @@
 - 382: `can` A drinks can standing on a table (the point: its foot, middle; 6.6 cm across, 12 cm tall): its colour, a
 - 399: `coaster` A round coaster lying flat on a table (Milburn note 10): `at X Z, depth D` its middle, `width W` across in
 
+## plainwords.py (274 lines)
+- 33: ROOT (data)
+- 34: EX (data)
+- 35: WORDS (data)
+- 36: LET_LOG (data)
+- 37: STATE (data)
+- 39: FILE_RE (data)
+- 42: CODE_RE (data)
+- 43: LABEL_RE (data)
+- 44: URL_RE (data)
+- 46: LABEL_OK (data)
+- 47: CODE_OK (data)
+- 49: EXPLAIN_RE (data)
+- 51: CONFUSED_RE (data)
+- 56: `words` 
+- 64: `_sentences` Sentences, one per line piece; markdown marks dropped, so '**kit tests**' reads as 'kit tests'.
+- 76: `skip_line` 
+- 81: `explained` True when the sentence explains the word right where it is used.
+- 89: `faults` 
+- 120: CHAT_LONG_RE (data)
+- 124: OWN_TOOL_RE (data)
+- 128: `say` 
+- 135: `block_reason` 
+- 143: `_log` 
+- 150: `_last_reply` The chat's last reply text (all text blocks of the last assistant turn, after Sam's last real message).
+- 170: `hook` 
+- 195: `_terms` Terms a confusing message leaned on: its flagged project words and labels, and quoted or bold phrases.
+- 205: `learn` Sam's "I don't understand" / "explain": save the message he replied to, and add its terms to the list.
+- 232: `example_text` 
+- 237: `score` {name: (expected, faults)} over the saved examples: bad-* must fail, good-* must pass.
+- 247: `main` 
+
 ## plan.py (426 lines)
 - 35: HERE (data)
 - 37: FONT (data)
@@ -3605,6 +3638,61 @@
 - 119: `plays_shared_loader` Does the film's code play its recordings through mossad_audio.line (the shared loader the voice check reads)?
 - 133: `_test` 
 
+## toolhealth.py (701 lines)
+- 30: HERE (data)
+- 31: ROOT (data)
+- 34: MAIN (data)
+- 35: DAYS (data)
+- 36: OUT (data)
+- 37: RED_K (data)
+- 38: CHAIN_RE (data)
+- 40: NOT_SAM_RE (data)
+- 44: `_git` 
+- 51: `class Rec` The real records, read on first use. Any attribute may be set beforehand (a kittest's saved example).
+- 186: `_plural` 
+- 190: `_real_sam` Sam's own typed messages: not a chat's opening prompt written by the chain, not a system notice.
+- 196: `handover_reach` 
+- 207: `handover_use` What actually happened: a request of Sam's that no notes line carried, which he then had to make again later
+- 239: `costwatch_reach` 
+- 248: `costwatch_use` 
+- 256: `routine_commands` The commands the guides and notes tell a chat to run for a whole-film render or the finishing step, as written
+- 271: `modelguard_reach` 
+- 281: `modelguard_use` An Opus chat whose record counts a routine step: caught if the guard's log refused it in that chat; slipped if
+- 298: `_dyn_imports` source/ modules a file loads by name (__import__('x'), importlib.import_module('x')): the plain import scan
+- 309: `_tools` The project's own tools (the watcher's list of systems, the hooks): a note on a film never lands in these, so
+- 316: `closure` Every source file the film's code loads, worked out here on its own (not with the finder's list): its own
+- 343: `finder_reach` 
+- 355: `_edits_by_session` {session tail: [(iso time, file)]}: code files each chat changed this week (source/*.py).
+- 365: REPLAY_MAX (data)
+- 368: `finder_use` Last week's real notes, asked again of the finder as it is NOW: does it point to a drawing file that chat then
+- 393: `finderwarn_reach` 
+- 403: `finderwarn_use` 
+- 412: `page_reach` 
+- 420: `page_use` 
+- 429: `packs_reach` 
+- 438: `packs_use` 
+- 452: `kittests_reach` 
+- 467: `kittests_use` 
+- 481: `ledger_reach` 
+- 496: `ledger_use` 
+- 504: CHANNELS (data)
+- 509: `plain_reach` 
+- 520: `plain_use` 
+- 538: `save_reach` 
+- 552: `save_use` 
+- 568: `body_reach` 
+- 582: `body_use` 
+- 592: `cast_reach` 
+- 611: `cast_use` 
+- 624: `missing` 
+- 628: TOOLS (data)
+- 645: RANK (data)
+- 648: `_run` 
+- 655: `check` 
+- 666: `line` 
+- 676: `report` 
+- 685: `at_start` A film's start (kitfilm.at_start / begin): the report beside the kit tests, saved for handover start.
+
 ## turnhead.py (739 lines)
 - 35: H (data)
 - 36: NECK (data)
@@ -3888,7 +3976,7 @@
 - 289: `release` A render held for its picture checks (film_engine) goes under its own name once every line saved beside it
 - 308: `main` 
 
-## watcher.py (484 lines)
+## watcher.py (486 lines)
 - 38: ROOT (data)
 - 41: LOGS (data)
 - 42: BROKEN (data)
@@ -3896,26 +3984,26 @@
 - 44: KITLOG (data)
 - 45: STATE (data)
 - 47: PROMISES (data)
-- 109: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
-- 135: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
-- 149: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
-- 166: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
-- 172: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
-- 201: OFF (data)
-- 205: SWITCHES (data)
-- 208: `_read` 
-- 217: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
-- 236: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
-- 263: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
-- 316: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
-- 322: `check` 
-- 337: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
-- 356: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
-- 366: `standing` The open faults on the standing list (main line).
-- 371: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
-- 382: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
-- 429: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
-- 443: `main` 
+- 111: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
+- 137: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
+- 151: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
+- 168: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
+- 174: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
+- 203: OFF (data)
+- 207: SWITCHES (data)
+- 210: `_read` 
+- 219: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
+- 238: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
+- 265: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
+- 318: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
+- 324: `check` 
+- 339: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
+- 358: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
+- 368: `standing` The open faults on the standing list (main line).
+- 373: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
+- 384: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
+- 431: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
+- 445: `main` 
 
 ## wolf.py (1247 lines)
 - 22: PALS (data)

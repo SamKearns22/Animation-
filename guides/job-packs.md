@@ -73,6 +73,7 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 ## A tool job (Opus, high to design; medium to build)
 - Read: the job's own section in `notes/next-jobs.md`; the tool's MAP; `source/kittests.py` for its tests.
 - Bite: 86, 13, 85. Every tool gets a kittest; its rule's check column names it (on Sam's yes).
+- An essential tool also gets its line in `source/toolhealth.py` TOOLS: a plain promise, a reach test worked out from the project now, a real-use test on last week's records (R14).
 
 ## A pose kit job (Opus, high to build a new pose; medium for notes on it)
 - Read: `guides/pose-kits.md` (the default tool, the layers, the order of work); the film's Brief checklist.

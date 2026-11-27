@@ -87,6 +87,8 @@ PROMISES = {
     'finish.py': ('Hook Text and sign-off on every animatic and final', 'named: rule 75 checks in preflight'),
     'handover.py': ('nothing Sam says is dropped between chats', 'live saver'),
     'kittests.py': ('every kit check passes against the fault that taught it', 'live kittests'),
+    'toolhealth.py': ('every essential tool is tested at each film\'s start and end for what it still reaches (computed from the project as it is now) and how it did on the last week\'s real records; one plain line per tool for Sam: working / partly / broken / not built (R14, Sam 26 Nov)', 'kittest tool_health_report'),
+    'reach_faults': ('a chat that used the code finder and then changed code the finder cannot see, or never pointed to, is stopped at hand-over (R12)', 'kittest finder_reach_end_check'),
     'kitfilm.py': ('the kit tests run at a film\'s first chat and its final, never at every machine start or handover; a big kit change is suggested to Sam (rule 90, Sam 25 Nov)', 'kittest kit_tests_per_film'),
     'kitstamps.py': ('only the kit tests whose files changed run again, and no animatic or final on files a kit test has not passed on (Sam\'s pick 1, 25 Nov)', 'kittest kit_tests_rerun_only_what_changed'),
     'ledger.py': ('every film\'s cost is recorded', 'kittest cost_rows_reach_the_main_line'),
