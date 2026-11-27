@@ -1,0 +1,34 @@
+== critique, round 1 pass 1 (2026-11-27): 8 fault(s), 2 can't tell
+-- look.md --
+1: Front view, bearded man, dark hair, navy suit, white shirt, neutral calm face. No text.
+2: Bearded man turned slightly, three-quarter view, navy suit, ear visible, neutral expression. No text.
+3: Bearded man in side profile, navy suit, grey patch on hair side, neutral. No text.
+4: Front view, long-haired woman, dark hair, red lips, black jacket, white shirt, neutral. No text.
+5: Woman turned three-quarter, long dark hair, red lips, black jacket, white neck gap, neutral. No text.
+6: Woman in side profile, long dark hair, black jacket, neutral expression. No text.
+7: Woman from behind, long dark hair, dark jacket shoulders. No text.
+-- result.md --
+## Faults
+FAULT P4 [1-3]: hair - the reference has short, close-cropped dark hair. Ours is a tall swept-up quiff with large grey side patches (huge in 3) that the reference does not have.
+FAULT P4 A2 [1-3]: beard - the reference is a short, trimmed stubble beard that follows the jaw. Ours is a thick, heavy, longer block that hangs below the chin and reads as a different beard. The man's skin is also paler and more yellow than the reference's olive-brown.
+FAULT P4 P2 [1-3]: eyes - the reference's eyes are wide open and alert. Ours are narrow, heavy-lidded slits, so the face looks sleepy and bored.
+FAULT P11 [2, 3]: neck - the neck is long and thin under the head, and in 3 the head perches on it like a pole. Panel 1 is fine.
+FAULT A1 P4 [7]: hair from behind - a straight horizontal band cuts across the crown and the sides step in at the shoulders, so it reads as a beanie or hood on a long cloak. It does not read as one flowing hair piece.
+FAULT P4 A2 [4-6]: hair - the reference hair is smooth and soft, with volume at the crown and a natural parting. Ours is a flat helmet with hard vertical stripes, like cords or dreadlocks. Lips are dark maroon and small, where the reference is bright red. Eyebrows are heavy and thick, the eyes are small, and the face is longer and narrower.
+FAULT P13 P11 [4]: collar and neck - a white horizontal bar sits across the base of the neck, wider than the neck. It reads as a stray piece or a gap, not a collar.
+FAULT P8 P4 [5]: white gaps show on both sides of the neck, between the neck and the hair. The face is turned but the shoulders and jacket barely turn, and the jaw is wide and angular. The shoulders on the left look cut off.
+CAN'T TELL P12 [1-7]: only one mouth is visible per panel, but there is no speech frame. A talking frame would show it.
+CAN'T TELL P1 [1-7]: no hands or props are in view. A full-body frame would show them.
+
+## Checked
+1-7
+
+## Cold look
+look.md against brief.md (line A1): I named the beard and the long hair, but called every face "neutral" and missed the sleepy heavy-lidded eyes. I read panel 7 as just "long dark hair" and missed that the crown band makes it read as a beanie or hood. I said "grey patch" on the man's hair but not that it is wrong against the reference. I did not mention that the woman's hair reads as stripes or cords.
+
+## Not on the list
+- Skin tone and lip colour drift from the reference (the man's too pale, the woman's lips too dark). Suggested line: "skin and lip colours match the reference within a clear shade."
+- Hair texture and shape (smooth versus striped or cord-like, quiff versus crop) are only covered under P4's wording. Suggested line: "hair silhouette and texture read as the reference's, at phone size, in every view."
+- Back-of-head views have no reference, so nothing checks them. Suggested line: "back views read as the same hair piece as the front, with no band or step."
+- Collar and neck-gap artefacts at the shoulders (white bars, gaps). Suggested line: "no background shows through between neck, collar and hair."
+
