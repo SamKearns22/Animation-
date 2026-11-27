@@ -43,7 +43,7 @@ B, V = PP.B, PP.V
 SEAT_UP = 52.0            # sitter's hip joints this far above the lower man's neck base (seated on the shoulders)
 SEAT = (-163.0, -52.0)     # sitter's hip joint: behind the neck (his crotch against the back of the head), on the shoulders
 KNEE_POLE = 0.55          # how far up the knee is pushed (thighs forward over the shoulders, not hanging)
-FOOT = (0.0, 230.0)      # sitter's ankle: tucked back under the lower man's arm, at the side of his chest (a
+FOOT = (15.0, 212.0)      # sitter's ankle: tucked back under the lower man's arm, at the side of his chest (a
 #                           cheerleader's shoulder sit: with our big heads, feet at the belly stood on the head below)
 LEG_OUT = 150.0           # sitter's feet apart: the shins round the outside of the lower man's chest, his own units
 GRIP = 0.8               # where the lower man holds the shin (0 knee .. 1 ankle)
@@ -164,7 +164,7 @@ class Tower:
                     j['foot' + sd] = (sg * LEG_OUT, f[1], f[0])
                     j['knee_pole' + sd] = (0.25 * sg, -KNEE_POLE, 1.0)
             if i < n - 1:
-                j['head_lean'] = HEAD_TIP
+                j['head_lean'], j['bent_neck'] = HEAD_TIP, True      # bowed under the seat; the neck bends with it
             js.append(j)
         info = []
         for i, j in enumerate(js):
@@ -303,12 +303,14 @@ class Tower:
             over = (h & b).sum()
             if area and over / area > CLIP_LIMIT:
                 self.clips.append(f'{t:.2f}s man {i + 1}\'s head {100 * over / area:.0f}% inside man {i + 2}\'s body')
-        for i in range(n):                    # nobody's shoe on anybody else's head (a foot over a face reads as a kick)
-            h = _world(img, *masks[i]['head'])
+        from PIL import ImageFilter
+        for i in range(n):                    # nobody's shoe on, or touching, anybody else's head (reads as a kick)
+            hm, ho = masks[i]['head']         # the head grown by a few pixels: a shoe resting on the hair counts
+            h = _world(img, hm.filter(ImageFilter.MaxFilter(4 * B.SS + 1)), ho)
             for m in range(n):
                 if m != i:
                     over = (h & _world(img, *masks[m]['feet'])).sum()
-                    if over > 20 * B.SS * B.SS:
+                    if over > 2 * B.SS * B.SS:          # any touch: a shoe on a head reads as a kick
                         self.clips.append(f'{t:.2f}s man {m + 1}\'s foot over man {i + 1}\'s head ({over} px)')
         return fr, js, info
 

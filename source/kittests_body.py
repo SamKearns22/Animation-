@@ -971,3 +971,35 @@ def plan_places_apart_and_flat_floors():
     ok = ok and not any('p stands inside' in x for x in f) and any('q stands inside the desk' in x for x in f)
     ok = ok and not any('looks at nothing' in x or 'no SHOT_MARKS' in x for x in f)
     return ok, f'overlaps {over}; inside {[x for x in f if "inside" in x]}'
+
+
+@test
+def bent_neck_joined():
+    """Sam, 27 Nov (The Patriot 5, shoulder tower practice; saved example notes/learn/shoulder-tower/
+    note-neck-separated-27nov.png): "the neck is separated from the head". A head tipped about the neck (head_lean)
+    left the neck upright behind the jaw. views.bent_neck_fault must flag the old drawing and pass the bent neck."""
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); import people as PK, people_parts as PP; V = PP.V; "
+            "PK.install(PK.load('brexit-is-done')); m = [x for x in (PK.pooled(i, 'london') for i in range(12)) "
+            "if not x.get('hat_c') and x.get('figure') not in V.WOMAN_LEGS][0]; "
+            "print(bool(V.bent_neck_fault(m, 25, bent=False)), bool(V.bent_neck_fault(m, 25)))") % HERE
+    r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE)
+    got = (r.stdout.strip().split('\n') or [''])[-1]
+    return got == 'True False', f'old drawing flagged, bent neck clean -> {got!r} {r.stderr[-200:] if got != "True False" else ""}'
+
+
+@test
+def tower_clipping():
+    """Sam, 27 Nov (shoulder tower practice; saved example notes/learn/shoulder-tower/note-clipping-27nov.png): "there
+    are clipping errors": each man's head was drawn inside the body of the man sitting on him. shoulder_tower's
+    clipping check must flag that first seat (just behind the neck, upright men) and pass the seat it learned."""
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); import shoulder_tower as T; B = T.B; men = T.practice_men(3)\n"
+            "def run():\n"
+            "    tw = T.Tower(men, (440, 1800.0), 0.5); B.SS = 2; img = B.canvas(T.NIGHT)\n"
+            "    tw.draw(img, B.Cam(1.0, 540, 960), 0.5); return len(tw.clips)\n"
+            "now = run(); T.column_seat = lambda: (-47.0, -26.0); T.LEAN = 6.0; T.HEAD_TIP = 7.0\n"
+            "print(run() > 0, now == 0)") % HERE
+    r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE)
+    got = (r.stdout.strip().split('\n') or [''])[-1]
+    return got == 'True True', f'first seat flagged, learned seat clean -> {got!r} {r.stderr[-300:] if got != "True True" else ""}'

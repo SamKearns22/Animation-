@@ -271,6 +271,74 @@ def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None)
         _E[0] = old
 
 
+# A head tipped about the neck base (j['head_lean']: a man bowed under a load) takes its neck with it. Sam, 27 Nov (The
+# Patriot 5, the shoulder tower: "the neck is separated from the head"): the torso drew the neck upright while the
+# head turned, so a strip of neck stood alone behind the jaw. The neck now runs from the collar (the body's frame) to
+# the head's own frame, bending through the middle. Kittest bent_neck_joined; notes/learn/shoulder-tower/.
+# Switched on per pose (j['bent_neck'] = True): posted films (Ad-Vanced Notice's beaten man, the sitting kit's slump)
+# keep their frames until a before/after shows them unchanged or Sam says.
+BENT_NECK = {'side': ([(-26, -80), (24, -80), (34, 8), (-30, 8)]),
+             'three': ([(-26.2, -130), (36.7, -130), (46, 10), (-20, 10)])}
+
+
+class _Px:
+    """A pen frame for points already on the canvas."""
+    def __init__(self, s):
+        self.s = s
+
+    def P(self, x, y):
+        return x, y
+
+    def S(self, v):
+        return v
+
+
+def _bent_neck(img, up, up_head, head_lean, view_deg, view, sp):
+    (tlx, tly), (trx, try_), (brx, bry), (blx, bly) = BENT_NECK[view]
+    mid = Lean(up, head_lean / 2.0, view_deg, pivot=0.0)
+    m = lambda a, b: (a + b) / 2.0
+
+    def edge(xt, yt, xb, yb):                      # top (head's frame), middle (half the tip), bottom (body's frame)
+        return [up_head.P(xt, yt), mid.P(m(xt, xb), m(yt, yb)), up.P(xb, yb)]
+    back, front = edge(tlx, tly, blx, bly), edge(trx, try_, brx, bry)
+    pts = back[::-1] + front                       # bottom-back up to top-back, across, top-front down to bottom-front
+    B.Pen(img, _Px(up.s)).poly(pts, sp.get('neck_c', sp['skin']), INK, 2.6)
+
+
+def bent_neck_fault(sp, lean=25.0, bent=True):
+    """The check for Sam's 27 Nov note ("the neck is separated from the head"): one person side-on with the head tipped
+    `lean` degrees; the neck's back edge, read from the picture, must move forward going up from the collar as the head
+    does (a neck left upright stays put: the separated strip). bent=False draws it the old way (the saved example).
+    Returns a fault line or None. Kittest bent_neck_joined."""
+    import numpy as np
+    old = dict(BENT_NECK)
+    if not bent:
+        BENT_NECK.clear()
+    try:
+        img = B.canvas((0, 0, 0))
+        img.putalpha(0)
+        j = standing(sp)
+        j['head_lean'], j['bent_neck'] = lean, True
+        person(img, B.Cam(1.0, 540, 960), 540, 960, 1.0, sp, 0.0, 90, j)
+    finally:
+        BENT_NECK.clear()
+        BENT_NECK.update(old)
+    a = np.asarray(img)
+    skin = np.all(a[..., :3] == sp.get('neck_c', sp['skin']), axis=2) & (a[..., 3] > 0)
+
+    def back(yu):                                  # the leftmost skin at that height (he faces right: the back)
+        r = int(round((960 + yu) * B.SS))
+        xs = np.nonzero(skin[r])[0]
+        return None if not len(xs) else xs[0] / B.SS - 540
+    lo, hi = back(-12.0), back(-70.0)
+    if lo is None or hi is None:
+        return 'bent neck: no neck found at the collar or under the head'
+    need = 0.4 * 70 * math.sin(math.radians(lean))
+    if hi - lo < need:
+        return f'bent neck: the neck stays upright under a head tipped {lean:.0f} deg (moved {hi - lo:.0f}, needs {need:.0f})'
+    return None
+
+
 def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     import limbs
     limbs.NEXT[0] += 1                            # a new drawing: his arms join only the body drawn now (rule 81)
@@ -406,6 +474,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         hem = sp_draw.get('bottom', JACKET)       # bending: the hem rises to the hips, never a long tail (Sam); eased
         u = min(1.0, max(0.0, (lean - 12) / 8))   # over leans 12 to 20, never a jump (Sam, 20 Oct: his torso popped
         bent = dict(sp_draw, bottom=hem + (min(hem, 470) - hem) * u) if u > 0 else sp_draw   # shorter after the lunge)
+        if j.get('head_lean') and j.get('bent_neck') and view in BENT_NECK and not sp_draw.get('neck_off'):
+            _bent_neck(img, up, up_head, j['head_lean'], view_deg, view, sp_draw)
+            bent = dict(bent, neck_off=True)
         torso_view(img, B.Pen(img, up), bent, view, seated)
     for draw in ([] if solid_whole else j.get('body_props', [])):   # clothing over the torso (a vest, hi-vis): drawn in the torso's own
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
