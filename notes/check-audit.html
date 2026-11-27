@@ -39,8 +39,36 @@ section{display:grid;gap:12px}
 <main>
 <header style="display:grid;gap:8px">
   <h1>Check audit (R8)</h1>
-  <p class="lead">Every check in the project, what it actually caught in the last three films (Milburn, Grand Theft Autism, Open Wounds), and what I suggest for each one. 26 Nov.</p>
+  <p class="lead">Every check in the project, what it actually caught in the last three films (Milburn, Grand Theft Autism, Open Wounds), and what I suggest for each one. 26 Nov; finished 27 Nov (top section).</p>
 </header>
+
+<section>
+  <h2>What changed (finished 27 Nov)</h2>
+  <p>You said yes to every group. Here is what is now true, in the order it was done.</p>
+  <ul class="facts">
+    <li><b>The budget alarms are gone</b> (your pick 2). Costs are still written down quietly, never shown unless something is wrong.</li>
+    <li><b>The repeated reminders were merged</b>: four after-the-fact double-checks deleted, one of each kept.</li>
+    <li><b>Fewer stops at a handover</b>: the cast sheet is only redrawn when a person in it changed, and the drawing helpers no longer crash when they all download the body model at once.</li>
+    <li><b>Checks now know what a scene means</b>: a scene can mark something as on purpose (a runner's far hand hidden behind his body, a crowd squeezing through a door). The check prints one "meant" line instead of a fault. Hands in sleeves or through things can never be marked as meant.</li>
+    <li><b>Each fault is said once</b>: a fault that was already shown last time and hasn't changed becomes one count line. On Open Wounds that turns 33 lines into 1.</li>
+    <li><b>The paperwork questions</b> (no plan, no reference sheet and so on) are asked once, as rows in the film's checklist, then never again.</li>
+    <li><b>The bookcases</b>: a wall of shelves is now judged one bookcase at a time.</li>
+    <li><b>"Edge with no line" on May and Blair</b> was the test cutting their heads off the top of the picture, not a drawing fault. Fixed in the test.</li>
+    <li><b>Captions</b> split themselves until each piece can be read, and never come up more than half a second after the word.</li>
+    <li><b>One line weight for everything</b>: animals and props draw their outline as thick as the people's. The whale's heavy outline is gone in new films.</li>
+    <li><b>No spikes in outlines</b>: the curve tool every outline uses can no longer double back on itself, so the two checks that hunted for those spikes were deleted.</li>
+    <li><b>The line where the legs part</b> is already limited inside the body tool (Open Wounds fixed it from your note 8). Now a test keeps it that way.</li>
+    <li><b>Head nods are sized from the camera's distance</b>: a move can be written "small nod" and the tool works out how far the head moves so it reads on a phone.</li>
+    <li><b>Videos are always joined at 24 pictures a second</b>, including the CranbriJoos sign-off.</li>
+    <li><b>Not built yet: a limit on hands going into sleeves.</b> To build it properly the arm tool first needs to know where the camera is, and I need the frames you passed as the example of the fixed look. Until then the hand check keeps catching it.</li>
+  </ul>
+  <p>At the end I ran all 208 small automatic tests that make sure an old mistake you once spotted hasn't come back. 13 failed. I went through each one:</p>
+  <ul class="facts">
+    <li><b>7 tests were out of date</b>: they still expected how things worked before your 26 Nov changes (for example, they expected checks to be automatic, or the "no bum" check you deleted). Each now tests what is true today.</li>
+    <li><b>2 were real mistakes in the shared tools</b>, both fixed. One was mine: the caption change above pushed some captions up to 0.8 seconds after the word was said. The other was a test that should have drawn May's old round knees but drew nothing.</li>
+    <li><b>4 are Open Wounds' own drawing faults</b>, which the tests caught correctly: Kemi's and Blair's nods too small to see on a phone, and two places in the chase where runners overlap. I left them for the Open Wounds chat, which is working on that film now.</li>
+  </ul>
+</section>
 
 <section>
   <h2>What I found</h2>
@@ -174,7 +202,7 @@ section{display:grid;gap:12px}
 </section>
 
 <section>
-  <h2>Questions (your pick first)</h2>
+  <h2>Questions (answered 26 Nov: yes to 1-4; 5: delete)</h2>
   <ol class="qs">
     <li>Do group A (move into the kit) in a tool chat, one item at a time, each with its kit test? <b>Y</b> / N</li>
     <li>"Say it once" (B1): each fault shown once; after a change the check rechecks itself and stays quiet if it's still fine? <b>Y</b> / N</li>
