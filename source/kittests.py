@@ -1233,24 +1233,27 @@ def subtitles_readable():
 
 @test
 def render_leaves_no_old_file():
-    """Rule 66 (Terfwarts, 3 Nov): a refused, stopped or failed render leaves no file at its output path. (Run in
-    this process with no pass stamp, so the render is always refused and never starts.)"""
+    """Rule 66 (Terfwarts, 3 Nov): a refused, stopped or failed render leaves no file at its output path. R8 chat 5:
+    since Sam's 26 Nov change (checks advised, not automatic) a render with no pass stamp is no longer refused, so the
+    test makes the render fail instead (its sound breaks), with an old file and an old held copy standing by."""
     import film_engine as E
     import tempfile
-    real = E.PASSES
-    E.PASSES = tempfile.mkdtemp()
     out = os.path.join(tempfile.mkdtemp(), 'old.mp4')
-    with open(out, 'w') as fh:
-        fh.write('an old render')
-    refused = False
+    held = os.path.splitext(out)[0] + '.held.mp4'
+    for f in (out, held):
+        with open(f, 'w') as fh:
+            fh.write('an old render')
+
+    def broken():
+        raise RuntimeError('the sound failed')
+    failed = False
     try:
-        E.render('kittest', out, size=(10, 10), ss=1, fps=1, dur=1, picture=None, overlay=None, shot_of=None,
-                 sound=None, write_wav=None, set_ss=None)
-    except SystemExit:
-        refused = True
-    finally:
-        E.PASSES = real
-    return refused and not os.path.exists(out), f'refused: {refused}; old file gone: {not os.path.exists(out)}'
+        E.render('kittest', out, size=(10, 10), ss=1, fps=1, dur=1, picture=None, overlay=None,
+                 shot_of=lambda t: 'a', sound=broken, write_wav=None, set_ss=None, lock=False, look=False, span=(0, 1))
+    except (SystemExit, RuntimeError):
+        failed = True
+    gone = not os.path.exists(out) and not os.path.exists(held)
+    return failed and gone, f'failed: {failed}; old file and held copy gone: {gone}'
 
 
 @test
@@ -3001,6 +3004,8 @@ def people_from_a_description():
     drift = max(K.FROZEN_DRIFT.values() or [0.0])           # live code vs the posted film (its bookmark): may not rise
     # line moved 1.92 -> 2.06 on 22 Nov (check repairs 2): all of the rise is aa09376a, Sam's one smooth shoulder line
     # (20 Nov), per frame against 413beb3e; nothing since. The posted film redraws from its bookmark (freeze.py).
+    # R8 chat 5: 2.06 -> 2.12 (gates2) is e1c403b9, Open Wounds chat 39's shared 'a nod is a turn' (views.Pitched,
+    # Sam's note 26): Brand's head pitched as a turn; looked at side by side, reads well (bisected, nothing else).
     base = FZ.drift_baseline('blessed', drift)
     if drift > base + 0.05:
         bad.append(f'the live film now differs from the posted Blessed by {drift:.2f}% (was {base:.2f}%)')
@@ -3139,6 +3144,22 @@ def moves_from_the_acting_list():
             pass
     # Sam approved the kit for films (14 Nov, notes/morning-report.md): the old 'no film uses the kit yet' clause is gone
     bad += A.check('blessed')
+    # R8 chat 5: since Open Wounds chat 38 (Sam's note 24.1, for every film) a head move can't snap (acting.HEAD_MIN);
+    # Blessed's posted nods were faster, so the kit is compared with that floor off, and must differ with it on
+    head_min, A.HEAD_MIN = A.HEAD_MIN, {}
+    try:
+        bad += _moves_same_as_blessed(A)
+    finally:
+        A.HEAD_MIN = head_min
+    if not _moves_same_as_blessed(A):
+        bad.append('with the head floor on, nothing differs: the test no longer proves the floor')
+    return not bad, '; '.join(bad) or ('six showman shots and 10 more people, every drawing the same as the film '
+                                       '(head floor off); with it on, the slower heads show')
+
+
+def _moves_same_as_blessed(A):
+    """moves_from_the_acting_list's comparison: the faults (empty = the kit redraws Blessed exactly)."""
+    bad = []
     desc, film = A.load('blessed'), A.film_side('blessed')
     BL = film['module']
     A.install_gaits(desc)
@@ -3219,8 +3240,7 @@ def moves_from_the_acting_list():
         desc['shots']['phone'] = keep
         import importlib
         importlib.reload(A)
-    return not bad, '; '.join(bad) or (f'six showman shots and {people} more people, every drawing the same as the '
-                                       f'film; head and eye hooks the same; every block lands; the list check works')
+    return bad
 
 
 @test
@@ -6386,7 +6406,7 @@ def kit_tests_rerun_only_what_changed():
     re-runs that test and no other; (2) unchanged files skip; (3) a change that arrives by merging another chain's
     branch re-runs its test; (4) the notes-archive red (23 Nov, move_to_shared_catches_film_fixes went red when a film's
     notes were archived: a notes-only change) is caught: the film list's own code records notes/archive as read;
-    (5) a Python program a test starts reports its own reads; any other use of the project's git counts as reading ALL; (6) finish.py refuses an animatic or final without fresh passes."""
+    (5) a Python program a test starts reports its own reads; any other use of the project's git counts as reading ALL; (6) with ANIMATIC_GATE on, finish.py refuses an animatic without fresh passes; a final never waits for them (Sam, 26 Nov; R8 chat 5: the test still expected the final to be refused)."""
     import shutil
     import subprocess
     import tempfile
@@ -6443,31 +6463,34 @@ def kit_tests_rerun_only_what_changed():
     _, r_prog = K.traced(lambda: K.tracer()._program(['git', '-C', root, 'push'], None))   # is no read is ALL
     import handover as H                                                   # (4) the notes-archive red
     _, r_arch = K.traced(H._film_prefixes)
-    import finish                                                          # (6) finish refuses without fresh passes
-    import override
+    import finish                                                          # (6) R8 chat 5: Sam, 26 Nov (rule 90):
+    import kitfilm                                                         # a final never waits for kit tests; an
+    import override                                                        # animatic only while ANIMATIC_GATE is on
     import propose
     real = (K.finish_gate, override.refuse, propose.open_letthroughs, finish.load_film, sys.argv,
-            os.environ.pop('KITTESTS_RUNNING', None))
+            kitfilm.ANIMATIC_GATE, os.environ.pop('KITTESTS_RUNNING', None))
     said, loaded = [], []
     try:
         K.finish_gate = lambda: 'zz_test without a pass on the current files'
         propose.open_letthroughs = lambda: []
         override.refuse = lambda msg, path=None: (_ for _ in ()).throw(SystemExit(msg))
-        finish.load_film = lambda n: loaded.append(n)
-        sys.argv = ['finish.py', 'clean.mp4', 'out.mp4', '--film', 'zz']
-        try:
-            finish.main()
-        except SystemExit as e:
-            said.append(str(e))
-        except Exception as e:
-            said.append(f'ran on: {e}')
+        finish.load_film = lambda n: loaded.append(n) or (_ for _ in ()).throw(SystemExit('loaded'))
+        kitfilm.ANIMATIC_GATE = True
+        for dst in ('zz-animatic.mp4', 'out.mp4'):
+            sys.argv = ['finish.py', 'clean.mp4', dst, '--film', 'zz']
+            try:
+                finish.main()
+            except SystemExit as e:
+                said.append(str(e))
+            except Exception as e:
+                said.append(f'ran on: {e}')
     finally:
-        K.finish_gate, override.refuse, propose.open_letthroughs, finish.load_film, sys.argv, ke = real
+        K.finish_gate, override.refuse, propose.open_letthroughs, finish.load_film, sys.argv, kitfilm.ANIMATIC_GATE, ke = real
         if ke:
             os.environ['KITTESTS_RUNNING'] = ke
     gate_none = K.finish_gate(stale_fn=lambda: ([], {}))
     gate_left = K.finish_gate(stale_fn=lambda: (['zz_red'], {'zz_red': 3.0}), run_fn=lambda: None)
-    refused = bool(said) and 'kit tests' in said[0] and not loaded
+    refused = len(said) == 2 and 'kit tests' in said[0] and said[1] == 'loaded' and loaded == ['zz']
     ok = (unchanged == [] and film_change == ['t_film'] and before_merge == [] and after_merge == ['t_tool']
           and K.ALL in (r_prog or set()) and 'CLAUDE.md' in (r_child or set()) and K.ALL not in (r_child or set())
           and 'notes/archive' in (r_arch or set())
@@ -6475,7 +6498,7 @@ def kit_tests_rerun_only_what_changed():
     return ok, (f'unchanged: {unchanged or "none"} re-run; film-only change: {film_change}; merged branch: '
                 f'{before_merge or "none"} then {after_merge}; child read: {"CLAUDE.md" in (r_child or ())}; '
                 f'git push: {"ALL" if K.ALL in (r_prog or ()) else "missed"}; '
-                f'notes/archive read: {"notes/archive" in (r_arch or set())}; finish: {said[:1] or "ran"}; '
+                f'notes/archive read: {"notes/archive" in (r_arch or set())}; finish (animatic, then final): {said or "ran"}; '
                 f'gate fresh: {gate_none!r}, stale: {gate_left[:40]!r}')
 
 
@@ -6584,9 +6607,21 @@ def ledger_rebook():
     saved = json.load(open(os.path.join(HERE, '..', 'notes', 'learn', 'pose-kit', 'examples',
                                         'ledger-misfiled-26nov.json')))['ledgers']
     then = sorted(r['chat'] for _, r in L.misfiled('r7', saved))
-    now = L.misfiled('r7')
     want = sorted(['1f655db8', '39bef7c8', 'dcc49037', '8fb22562', 'b2f8e1d1'])
-    return then == want and not now, f'saved copy: {then}; now: {[r["chat"] for _, r in now] or "none"}'
+    # R8 chat 5: the live ledgers are tidied at each R7 chat's start (handover.py start runs rebook), so a chat that
+    # ended since may sit misfiled until then; the test now moves the saved copy's rows as rebook does and finds none
+    import copy
+    moved = copy.deepcopy(saved)
+    moved.setdefault('r7', {'chats': []}).setdefault('chats', [])
+    for other, row in L.misfiled('r7', moved):
+        L._cut(moved[other], row)
+        moved['r7']['chats'].append(row)
+    after = L.misfiled('r7', moved)
+    at_start = 'ledger.rebook(' in open(os.path.join(HERE, 'handover.py'), encoding='utf-8').read()
+    now = [r['chat'] for _, r in L.misfiled('r7')]
+    return then == want and not after and at_start, (
+        f'saved copy: {then}; after moving: {[r["chat"] for _, r in after] or "none"}; rebook at the start: '
+        f'{at_start}; live, waiting for the next R7 start: {now or "none"}')
 
 
 
