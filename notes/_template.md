@@ -66,10 +66,13 @@ a new line's id, or an old one and why it missed (line unclear, sheet didn't sho
 "Should have caught": the check that should have caught the note before Sam saw it (its name as pre-flight prints
 it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover check refuses a blank one
 (check-catches change 2, Sam's Y 20 Nov), so misses are counted without guessing.
+"Critique saw it?": yes if the fresh-eye critique of that round had already flagged it, no if it looked and missed
+it, "no critique" if none ran (Sam's Y, 26 Nov): after a few films it shows whether the critique sees what Sam sees;
+the handover check refuses a blank one.
 
-| # | shot | time | note | line | should have caught | status |
-|---|------|------|------|------|--------------------|--------|
-| 1 |      |      |      |      |                    | open   |
+| # | shot | time | note | line | should have caught | critique saw it? | status |
+|---|------|------|------|------|--------------------|------------------|--------|
+| 1 |      |      |      |      |                    |                  | open   |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - 

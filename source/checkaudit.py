@@ -161,6 +161,32 @@ def should_have_caught(root=ROOT):
     return c
 
 
+def critique_saw(root=ROOT):
+    """Counter of the 'critique saw it?' column (Sam's Y, 26 Nov): yes / no / no critique, across the films' notes."""
+    c = collections.Counter()
+    notes = os.path.join(root, 'notes')
+    paths = [os.path.join(notes, f) for f in os.listdir(notes) if f.endswith('.md')]
+    arch = os.path.join(notes, 'archive')
+    paths += [os.path.join(arch, f) for f in os.listdir(arch) if f.endswith('.md')] if os.path.isdir(arch) else []
+    for p in paths:
+        hdr = None
+        for line in open(p, encoding='utf-8', errors='replace'):
+            if line.startswith('|') and 'critique saw' in line.lower():
+                hdr = [x.strip().lower() for x in line.strip().strip('|').split('|')]
+                continue
+            if hdr and line.startswith('|') and not line.startswith('|-'):
+                cells = [x.strip() for x in line.strip().strip('|').split('|')]
+                i = next(k for k, h in enumerate(hdr) if 'critique saw' in h)
+                ni = next((k for k, h in enumerate(hdr) if h.startswith('note')), 3)
+                if i < len(cells) and ni < len(cells) and cells[ni]:
+                    v = cells[i].lower()
+                    c['yes' if v.startswith('yes') else 'no' if v.startswith('no') and 'critique' not in v
+                      else 'no critique' if 'critique' in v else 'blank'] += 1
+            elif not line.startswith('|'):
+                hdr = None
+    return c
+
+
 def main(argv):
     if '--repeats' in argv:
         film = argv[argv.index('--repeats') + 1]
@@ -186,6 +212,7 @@ def main(argv):
     print('recorded by name (checks.jsonl):', ', '.join('%s %d runs, %d repeat(s)' % (k, e['runs'], len(e['repeats']))
                                                          for k, e in sorted(ev.items()) if e['faults']))
     print('should have caught (Sam\'s notes):', dict(should_have_caught()))
+    print('critique saw it too (Sam\'s notes):', dict(critique_saw()))
     print('table:', os.path.relpath(out, ROOT))
     return 0
 

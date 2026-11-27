@@ -21,7 +21,9 @@ MAP
                      the chat reads in place of the notes file
   branches ......... in end (startup-fixes 2, 16 Nov): every branch source/branches.py lists (work never on the main
                      line, last 7 days) must be merged or named in the notes
-  finder ........... in end (finder-use, 17 Nov): this chat edited the film's code with no page.py show call
+  reach ............ in end (R12, 26 Nov): a chat that used the code finder edited a file the finder does not search
+                     for that film (a blind spot), or one no show call pointed to (reach_faults); a chat with no
+                     show call is the live reminder's (.claude/hooks/finderwarn.py)
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
                      sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
   watcher .......... in start: the watcher's standing BROKEN list and any system with no promise (source/watcher.py)
@@ -466,24 +468,6 @@ def end_stamp(rec, stops=()):
         f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{mark}{sid}\n')
 
 
-def finder_faults(film, rec=None):
-    """finder-use change 1 (Sam's 1, 17 Nov), replacing the per-day flag (one show call anywhere that day silenced it
-    for every chat; it never fired on 16 Nov): THIS chat edited the film's code with no `page.py show` call: say so,
-    with its count of hand searches of the film's code (stepcost.search_record, from the chat's own record)."""
-    if not film or not rec:
-        return []
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    import stepcost
-    try:
-        r = stepcost.search_record(rec, film)
-    except Exception:
-        return []
-    if not r['edited film code'] or r['show']:
-        return []
-    return [f'FINDER: this chat edited the film\'s code with no `page.py {film} show` call ({r["film"].get("no show", 0)} '
-            'hand searches of its code): each note looks first with show --shot --at --who (or say in the notes why not)']
-
-
 def unrouted_faults(rec):
     """The proposal route (Sam, 15 Nov): a change put to Sam that the Stop hook blocked once and then let through
     (stop_hook_active) is logged by propose.py; the handover names each one so it is routed, not forgotten."""
@@ -596,6 +580,86 @@ def shared_faults(since=None, diff=None):
     return out
 
 
+def _since_last_end():
+    """The time of the last handover end by another chat (shared_faults' window), else '1 day ago'."""
+    ends = os.path.join(ROOT, 'notes', 'logs', 'handover-end.log')
+    me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1]
+    prev = [ln.split('\t')[0] for ln in (open(ends, encoding='utf-8') if os.path.exists(ends) else [])
+            if ln.strip() and ln.split('\t')[-1].strip() != me]
+    return prev[-1] if prev else '1 day ago'
+
+
+def _edited_source(since):
+    """source/*.py files THIS chat changed since then: its own commits (the Claude-Session line names the chat; work
+    merged in from other chats is theirs) and what is not yet committed."""
+    me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1]
+    git = lambda *a: subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True).stdout
+    names_ = git('diff', '--name-only', 'HEAD', '--', 'source/').split()
+    names_ += git('ls-files', '--others', '--exclude-standard', '--', 'source/').split()
+    if me:
+        for blk in git('log', f'--since={since}', '--no-merges', '--name-only',
+                       '--format=@@%(trailers:key=Claude-Session,valueonly,separator=)').split('@@')[1:]:
+            head, _, body = blk.partition('\n')
+            if head.strip().endswith(me):
+                names_ += body.split()
+    return sorted({os.path.basename(f) for f in names_ if re.fullmatch(r'source/[^/]+\.py', f)})
+
+
+REACH_FREE = {'kittests.py'}                      # a notes round adds its test here; never a finder gap
+
+
+def reach_faults(edited=None, shows=None, files_fn=None, notes_fn=None):
+    """R12 (Sam, 26 Nov, Open Wounds chat 39: "It should cover everything in the project that we use!!"): in a chat
+    that used the code finder (page.py FILM show), every code file it then edited must be (1) one the finder searches
+    for that film (page.files: its own code plus the shared kit and checks it imports), else the finder has a blind
+    spot; and (2) one a show call pointed to, else the finder missed the note's code and the chat found it by hand.
+    edited: [file names]; shows: {film: {files the show calls pointed to}} for THIS chat; a chat with no show call is
+    the live reminder's (finderwarn), not this check's. Settled by a notes line `finder reach: FILE (why)`."""
+    since = None
+    if edited is None or shows is None:
+        since = _since_last_end()
+    if edited is None:
+        edited = _edited_source(since)
+    if shows is None:
+        me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', 'local').split('_')[-1][-8:]
+        from datetime import datetime as _dt
+        try:
+            t0 = _dt.fromisoformat(since).replace(tzinfo=None).isoformat(timespec='seconds')
+        except ValueError:
+            t0 = ''
+        shows = {}
+        for lg in glob.glob(os.path.join(ROOT, 'notes', 'logs', '*-show.log')):
+            for ln in open(lg, encoding='utf-8'):
+                p = ln.rstrip('\n').split('\t')
+                if len(p) >= 6 and p[5] == me and p[0] >= t0:
+                    pts = shows.setdefault(os.path.basename(lg)[:-len('-show.log')], set())
+                    pts.add(p[3].split(':')[0])
+                    pts |= set(p[6].split(',')) if len(p) > 6 else set()
+    if not shows:
+        return []
+    if files_fn is None:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import page
+        files_fn = lambda film: [os.path.basename(f) for f in page.files(film)]
+    notes_fn = notes_fn or (lambda film: open(_keep_notes(film), encoding='utf-8').read() if _keep_notes(film) else '')
+    covered = {film: set(files_fn(film)) for film in shows}
+    pointed = set().union(*shows.values())
+    said = ' '.join(notes_fn(film) for film in shows).lower()
+    out = []
+    for f in edited:
+        if f in REACH_FREE or re.search(rf'finder reach:[^\n]*\b{re.escape(f.lower())}', said):   # one line may name several
+            continue
+        if not any(f in c for c in covered.values()):
+            out.append(f'FINDER REACH: this chat used the code finder ({", ".join(sorted(shows))}) and then edited {f}, '
+                       f'which the finder does not search for that film: a blind spot. Make page.files reach it (the '
+                       f'film imports it?), or write `finder reach: {f} (why)` in the notes')
+        elif f not in pointed:
+            out.append(f'FINDER MISSED: this chat edited {f}, but none of its show calls pointed there: the finder '
+                       f'missed the note\'s code and it was found by hand. Add the note to the finder replay, or write '
+                       f'`finder reach: {f} (why)` in the notes')
+    return out
+
+
 def _kit_stale():
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import kitstamps
@@ -692,6 +756,9 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None
     return out
 
 
+CASTSTAMPS = os.path.join(ROOT, 'notes', 'logs', 'castsheet-stamps.tsv')   # B5: a clean cast's files, stamped
+
+
 def castsheet_faults(film):
     """Open Wounds chat 6 (Sam's notes 5 and 7): every woman in a new film's cast reads as a woman in every turned
     view, every man as a man, and each woman is on HER OWN build (measured from her photos, or Sam's words approving
@@ -701,12 +768,21 @@ def castsheet_faults(film):
     if not film or film in people.BEFORE_SEX or not os.path.exists(os.path.join(ROOT, 'story', f'{film}-people.txt')):
         return []
     import castsheet
-    return [f'STOP: CAST SHEET: {x}' for x in castsheet.build_faults(film) + castsheet.crotch_faults(film)
-                                                     + castsheet.teeth_faults(film)
-                                                     + castsheet.mouth_spike_faults(film)
-                                                     + castsheet.hair_spike_faults(film)
-                                                     + castsheet.seated_faults(film)
-                                                     + castsheet.judge_faults(film)]
+    import kitstamps
+    # check audit B5 (Sam's Y, 26 Nov): only a new or changed cast is checked again. A clean run leaves a stamp of
+    # every file it read (the kit tests' own record, kitstamps); while none of them has changed, the cast is not
+    # re-drawn at every handover (24 of 65 refused handovers were this check repeating the same unchanged faults).
+    name = f'castsheet:{film}'
+    if not kitstamps.stale([name], CASTSTAMPS)[0]:
+        return []
+    t0 = datetime.now(timezone.utc)
+    run = lambda: (castsheet.build_faults(film) + castsheet.crotch_faults(film) + castsheet.teeth_faults(film)
+                   + castsheet.mouth_spike_faults(film) + castsheet.hair_spike_faults(film)
+                   + castsheet.seated_faults(film) + castsheet.judge_faults(film))
+    faults, reads = kitstamps.traced(run)
+    if not faults and reads is not None:
+        kitstamps.write_green([(name, reads, (datetime.now(timezone.utc) - t0).total_seconds())], CASTSTAMPS)
+    return [f'STOP: CAST SHEET: {x}' for x in faults]
 
 
 def _safe(name, fn):
@@ -734,9 +810,10 @@ def branch_faults(film, notes=None):
 
 
 TAG = re.compile(r'(?i)should\s+have\s+caught')
+SAW = re.compile(r'(?i)critique\s+saw')       # check audit (Sam's "1. Y", 26 Nov): did the fresh-eye critique see it too?
 
 
-def note_tags(notes_path):
+def note_tags(notes_path, col=None):
     """check-catches change 2 (Sam's Y, 20 Nov): Sam's numbered notes (the "## Notes" table) as {number: tag}, the
     tag being the "should have caught" cell (a check's name, or "none"); None when the table has no such column.
     Only rows with words in their note cell count (the template's empty row 1 does not)."""
@@ -758,9 +835,15 @@ def note_tags(notes_path):
         ni = next((i for i, h in enumerate(head) if h.startswith('note')), 3)
         if ni >= len(cells) or not cells[ni]:
             continue
-        ti = next((i for i, h in enumerate(head) if TAG.search(h)), None)
+        ti = next((i for i, h in enumerate(head) if (col or TAG).search(h)), None)
+        if col is not None and ti is None:
+            return {}                               # an older table without the column: nothing asked
         tags[cells[0]] = cells[ti] if ti is not None and ti < len(cells) else None
     return tags
+
+
+class _NoFilm(Exception):
+    pass
 
 
 def tag_faults(film, notes=None):
@@ -771,16 +854,24 @@ def tag_faults(film, notes=None):
     if not tags:
         return []
     try:
+        if not film:
+            raise _NoFilm()
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import ledger
         d = ledger.load(film)
         if d.get('notes_tags') != tags:
             d['notes_tags'] = tags
             ledger.store(d)
+    except _NoFilm:
+        pass                                        # a notes file with no film (a test): nothing to record
     except Exception as e:
         return [f'TAG: the notes\' tags could not be saved to the record ({e})']
-    return [f'TAG: note {n} has no "should have caught" (a check\'s name, or none): add it to the notes table'
-            for n, t in tags.items() if not t]
+    out = [f'TAG: note {n} has no "should have caught" (a check\'s name, or none): add it to the notes table'
+           for n, t in tags.items() if not t]
+    saw = note_tags(p, SAW)                         # the critique column, on tables that have it (template, 27 Nov)
+    out += [f'TAG: note {n} has no "critique saw it?" (yes, no, or no critique: did the fresh-eye critique flag '
+            'this before Sam did?)' for n, t in saw.items() if not t]
+    return out
 
 
 def record_faults(rec):
@@ -807,7 +898,7 @@ def record_faults(rec):
 
 
 def cost_faults(film, notes=None):
-    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem (costline.py)."""
+    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover, quietly (costline.py; never shown, Sam 26 Nov)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import costline
     try:
@@ -869,21 +960,10 @@ def push_faults(rec):
             'and when a render or long job finishes or fails (CLAUDE.md, Models and chats)']
 
 
-def dearest_faults():
-    """Cost audit (Sam, 21 Nov): the weekly ranking of the dearest things (source/dearest.py week --open) is due."""
-    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    try:
-        import dearest
-        return dearest.due()
-    except Exception as e:
-        return [f'DEAREST: the ranking could not run ({e})']
-
-
 def ledger_faults(film, rec=None):
     """Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand
     Theft Autism every chat's row read 'auto, 0 notes, 0 repeats' (nobody ran `ledger.py log`), and none of the 11
-    stages was marked done, so the forecast assumed the whole plan was still ahead and the stage stop could not mean
-    anything. This chat must log its row; a stage long past its planned end must be marked."""
+    stages was marked done. This chat must log its row (the forecast and stage stop were deleted, Sam 26 Nov)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ledger
     try:
@@ -903,14 +983,6 @@ def ledger_faults(film, rec=None):
             out.append(f'REPEAT?: Sam\'s note "{n}" matches one in the film\'s notes from before (rule 30): if it is a '
                        f'repeat, find why the first fix failed and log it (ledger.py log {film} --repeat "note | what would '
                        'have caught it"); if not, say so in the notes')
-    o = ledger.open_stage(d)
-    if o:
-        i, s, share, spent = o
-        planned_end = sum(x['pct'] for x in d['stages'][:i + 1])
-        if spent > 1.5 * planned_end and spent - planned_end > 2:
-            out.append(f"STAGES: the first unfinished stage is '{s['name']}' (planned to end by {planned_end:g}% of a "
-                       f"week) but the film has spent {spent:g}%: mark each finished stage with python3 source/ledger.py "
-                       f"stage {film} NAME, or the forecast is guesswork")
     return out
 
 
@@ -1125,12 +1197,12 @@ def main(argv):
         nf = opt('--notes')
         checks = [('quick', quick_faults), ('notes', lambda: _run(turns(rec), film, nf)),
                   ('model', lambda: model_faults(film, nf)), ('draft', lambda: draft_faults(film, nf)), ('report', lambda: kept_report_faults(film)),
-                  ('finder', lambda: finder_faults(film, rec)), ('unrouted', lambda: unrouted_faults(rec)),
+                  ('unrouted', lambda: unrouted_faults(rec)),
                   ('branch', lambda: branch_faults(film, nf)), ('sentence', sentence_faults), ('freeze', freeze_faults),
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
-                  ('dearest', dearest_faults), ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
-                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
+                  ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
+                  ('rule', rule_faults), ('shared', shared_faults), ('reach', reach_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
                   ('castsheet', lambda: castsheet_faults(film))]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])

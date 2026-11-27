@@ -33,20 +33,57 @@ D dead: D2 handover.dearest_faults, cost_faults (alarms paused; Q5); D3 kittests
 E keep: kittests; critique and judges (+ column "Sam noted it too?"); R7 seated checks until R7; loss-guards
 (sentence, saver, draft, kept_report, tag); old films' own checks.
 
+## Sam's answers (26 Nov)
+Q1 Y (group A into the kit); Q2/Q3 merged: option 1 of check-knows-intent (includes say-once B1 and doors B2);
+resting-hand faults discarded; Q4 Y (B3-B8, C1-C5); Q5 2: DELETE the paused budget alarms (forecast, stage stop,
+dearest weekly list, cost warnings, their kittests; rulebook row 24 reworded to "tracked quietly"); keep the quiet
+tracking (costwatch, ledger auto, the cost line recorded).
+Work order (each item with its kittest and a Lost/Added line here): Q5 deletions; C1-C5; B6, B5, B7;
+check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), then steps 2-3 with
+say-once; B4; B3; B8; A2, A6, A4, A5 (Kemi front first), A3, A7 (confirm first), A8. Kit tests at the job's end only.
+Plain words (Sam 26 Nov, Y): CLAUDE.md rule rewritten ("checked on every message"); FIRST job of chat 2: build the every-message checker (a Stop hook like propose.py hook: blocks once, never loops, logs a let-through), with a kittest that catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1; Sam's "I don't understand"/"explain" saves the message he replied to as an example (handover.py log sees his words) and adds its words to the list; rule_proofs N8 status owed until then. Still to ask Sam: one question at a time as the normal way (1, my pick) or all in one message (2); the critique column Y/N.
+Plain-words checker BUILT (chat 2, 26 Nov): source/plainwords.py, a Stop hook on every reply plus a learn hook on Sam's messages; kittest plain_words_every_message passed once (0 s); rule_proofs N8 now proven. Catches bad-1 (R8, kit, pop-in) and bad-2 (kit tests, R7, critique), passes good-1. On the 19 Nov cases: catches 5 of the 8 Sam was confused by; misses S-cold-start, S-cost-other, S-finder-learn-finish (no code or listed word; dense ideas: only a reader that retells the message can catch those, plain-check Change 3).
+Lost: a reply with a code name, label or unexplained project word costs one rewrite before Sam sees it; code names only on a "For Claude:" line.
+Added: every reply checked; a log of let-throughs (notes/logs/plainwords.log); Sam's confusion grows the word list itself.
+Q5 DONE (chat 2, 26 Nov): deleted the forecast, the budget stop and the stage stop (ledger.py), the cost warnings and the no-estimate nag (costline.py: the line is still recorded, never shown), the weekly dearest list and its handover nag (dearest.py due/week, handover DEAREST; the film-end ranking stays), the STAGES nag; kittests estimate_forecast_and_alarm and stage_share_stop deleted, quiet_cost_line rewritten (recorded, nothing shown), handover_status_checks now expects no stage nag; rulebook row 24 and CLAUDE.md's chain line reworded (no budget stop). Tests passed: quiet_cost_line, dearest_things_named, cost_rows_reach_the_main_line, handover_status_checks, rule_proofs_gate, check_audit.
+Lost: any cost reading or stop in chats, and the weekly ranking of the dearest things (Sam can still ask for it).
+Added: nothing; the ledger and cost line keep recording quietly.
+C1-C5 DONE (chat 2, 26 Nov): C1 the finder's two after-the-fact checks deleted (watcher and handover; the live reminder finderwarn stays); C2 the watcher's model-guard re-check deleted (modelguard stays); C3 the watcher's saver re-check deleted (the saver and its kit test stay); C4 the watcher's reading of the background kit-test log deleted (kitfilm.py answers 'did the kit tests run?' through the handover gate; B6 next); C5 the two wiring checks are one (watcher.wiring_faults). Kittests trimmed to what stays: watcher_catches_last_weeks_four (kit list + no-promise), finder_reminder_per_chat (the live reminder); passed with tools_switched_on, handover_status_checks, kit_tests_per_film.
+Lost: four after-the-fact re-checks (a silent failure of the saver, guard or finder itself is no longer re-checked by the watcher).
+Added: nothing.
+B6 ALREADY SO (chat 2): since rule 90 (25 Nov) the handover's kit-test gate runs the tests only at a film's first chat (kitfilm.started_here) and the final; other chats run only a never-passed new test (CLAUDE.md 'Always test anything we build'). Nothing changed. Lost: nothing. Added: nothing.
+B5 DONE (chat 2, 26 Nov): the handover's cast check runs only for a new or changed cast: a clean run stamps every file it read (kitstamps' own record, notes/logs/castsheet-stamps.tsv) and is skipped while they are unchanged; a cast with faults is never stamped, so it still stops every handover until fixed. Kittest castsheet_only_when_cast_changed passed; the real Open Wounds run still finds its 4 judge faults (1 min 50 s).
+Lost: nothing a changed cast needs; an unchanged clean cast is not re-drawn at each handover.
+Added: one stamp file.
+B7 DONE (chat 3, 26 Nov): the kit-inputs crash (41 and 52 frames 'could not be drawn' on Open Wounds) was every drawing worker downloading the body model (mhuman.data_dir) into one folder at once; now one worker takes a lock, downloads to a scratch folder and moves it in whole, the rest wait and use it. Kittest body_model_downloads_once passed (fails on the old code: 7 of 8 workers crashed). A real clone works here (checked).
+Lost: nothing. Added: one lock file beside the download.
+CHECK-KNOWS-INTENT step 1 DONE (chat 3): sorted Open Wounds' 9 flags from tonight's held render (notes/learn/check-intent/sort-1.md, stills beside it): meant 4 (+12 like them: the scaffold crew's tight queue, the doorway crush), real 1 (29.33 s: a guest's arm out beside Blair's ear reads as his third arm), unclear 1 (17.42 s Kemi's raised hand: the small render cannot settle it), discarded by Sam 3 (resting hands). Chat 17's 16 and chat 20's 3 cannot be looked at again (those drawings were redrawn). NB Open Wounds chat 40 rebuilt shot 2 since; the shot-2 flags must be re-checked on its next render.
+Steps 2-3 DONE (chat 3): figure.meant(kinds, why) says, where the scene is drawn, what it hides or overlaps on purpose; a side-on gait (moves.gait) carries its own mark (the far hand behind the body, honoured only when drawn side on); the hand check reads both and prints a fitting flag as one 'meant: ...' line (handcheck.meant_lines, printed by preflight.picture_faults), never a fault, never hidden. Only 'no hand' and 'over' can be meant; in a sleeve, sinking, hovering, through: never (figure.NEVER_MEANT). Kittest checks_read_what_is_meant passed (quiet on meant, the unmarked reach still a fault); hands_round_the_head, hands_in_sleeves, dark_sleeve_reads, point_hand_shows_a_finger still pass.
+For the Open Wounds chat (its code is live; not touched here): wrap the scaffold crew's tube jab (shot 2 'bars', W3-W5) and the guests' doorway pass (shot 3) in figure.meant('over *' / 'no hand', why); then its HANDS_OK rows for the runners and guests can go (the gait mark covers the side-on runners). The 29.33 s arm is a drawing fault to fix.
+Lost: the hand-typed 'this is fine' rows for side-on runners (once that chat removes them). Added: a meaning mark on the gait and a shared way to mark a scene; one 'meant' line per person in the check output.
+SAY ONCE (B1) DONE (chat 3): report.shown_before: a fault the last run of the same check already showed, unchanged but for its times and numbers, prints as one count line ('+ N shown on the last run, unchanged, still faults'); new ones in full; all still count. In the pre-flight summary and the quick check. On Open Wounds' record: 33 of the last quick check's 33 lines would have been one line. Kittest faults_said_once passed. Not done: a still per fault (the hand check's own contact sheet already gives one for hand faults).
+Lost: repeated fault lines printed in full on every run (the full list stays in the file). Added: one count line.
+B4 DONE (chat 3): source/planning.py: the paperwork asks (no PLAN, no BENCHMARK, no audits, no acting list, no "Rehearsal clips sent" line, no MAP) become 'Planning: ...' rows of the brief checklist the first time a check prints them; pre-flight and the quick check then print ONE planning line (how many unanswered) instead of each ask; a row answered ("done" or "none: why") is never asked again; on films from the 10 Nov template an unanswered acting-list or rehearsal row still stops pre-flight, as one line. The brief checklist's own blank-row stop skips planning rows (they are said by the planning line). Kittest planning_asks_once passed. NB the first run on Open Wounds writes its 3 rows (plan, benchmark, audits) into its brief checklist: that chat answers them once.
+Lost: five separate repeated asks. Added: one planning line and up to six rows in the brief checklist.
+B3 DONE (chat 3): kitinputs.prop_sizes reads 'bays N' from the places file: a wall of shelves written 'bays 4' is four bookcases side by side, each judged alone (Open Wounds' two rows now 1.0 m a bay: within size). One bookcase 4 m wide is still a fault. Kittest row_of_bookcases_sized_per_bay passed.
+Lost: nothing. Added: nothing new; the check reads what the set already says.
+CRITIQUE COLUMN: Sam "1. Y" (26 Nov 23:02, relayed by R8 chat 1): each of Sam's notes says whether the fresh-eye critique had already flagged it. DONE (chat 3): the template's notes table has a 'critique saw it?' column (yes / no / no critique); the handover check refuses a blank cell on tables that have it (older films' tables are not asked); checkaudit counts the answers. Kittest critique_saw_it_column passed; handover_status_checks still passes.
+Lost: nothing. Added: one column per note, filled when the note is written.
+Sam's words carried (handover start, chat 2): 22:19 "Let's move through these one at a time in simple language" is his reply to bad-1 (saved there) (asked formally by the parent chat: Sam answered N, every open decision stays in one message); 22:21 "We have discussed reopened as a concept before in another chat": carried as B1 above (no 'Reopened' list; he declined it 26 Nov 20:19).
+Extra (Sam 26 Nov): E1 Y: find why body_check_back_view and finished_films_keep_their_bookmark keep going red; fix the test or the kit.
+Lesson (Sam 26 Nov): "This is the way you should be explaining things in all messages to me": what a thing is in everyday words, one question at a time, no item codes. My first Q1-Q5 and E1/E2 asks used report labels and jargon; CLAUDE.md names plain-check option 1 as the next step when this slips.
+Named branches (not this job, not merged): claude/seeing-test-chat1 (another chat's live seeing-tools test); claude/brexit-chat39 (Open Wounds chat 39, live),
+claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+
 ## Where things stand
-- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), 85.
-- Done: listing tool + kittest + catalogue row; evidence gathered; report sent to Sam.
-- Next: on Sam's answers, a tool chat (Opus medium) does the Y'd items one at a time, A first, each with its
-  kittest and a "Lost:" line; nothing is deleted without his Y.
-- Sam's answers: Q1 Y (26 Nov: move group A into the kit, one at a time, each with its kittest).
-- Missed (26 Nov): Q2 first offered a 'Reopened' list Sam had already declined; I read only the top of answered-faults-return.md (the decline is its last line) and searched no saved messages. Before any proposal: grep notes/ledger/sam/ and the proposal's last lines.
-- Q2 and Q3 merged (26 Nov): Sam asked whether Q2 already had a proposal and whether Q3 was agreed. Chat 36 record (session_01J1JB7YNoonB7shJ4bXB2Vq, read 20:29-22:18): check-knows-intent asked 20:30, re-asked 4 times, never picked (21:00 Sam asked only whether option 1 applies to all films); his 22:14 '1. Y' answered the seeing-tools re-run. Say-once (B1) is part of check-knows-intent option 1 (recheck and recognise meant as fine), so one question.
-- Sam's answers: Q2/Q3 option 1 (check-knows-intent, includes say-once B1 and doors B2); resting-hand faults discarded ("I don't see anything wrong their resting hands, discard.").
-- Needs Sam: Q4, Q5; seeing-five-candidates 1 or 2 (chat 36) in the report (going one at a time, in simple words, Sam 26 Nov).
-- Read: guides/job-packs.md "A tool job"; this file; the report.
+- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), N8 (plain words, now checked on every reply).
+- Done (chat 2): the plain-words checker (every reply, learns from Sam's "I don't understand"); Q5 budget alarms deleted; C1-C5 duplicates merged; B5 cast check only on change; B6 already so.
+- Next: R8 chat 3 (Opus, medium): B7, then check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), steps 2-3 with say-once, then B4, B3, B8, A2, A6, A4, A5 (Kemi front first), A3, A7, A8.
+- Needs Sam: the critique column (Y/N), asked by the parent chat in plain words (one at a time: Sam said N, 26 Nov: every open decision stays in one message).
+- Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
 - Open rule requests: none.
-- COST: a tool job, no film estimate.
-- Named: branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31
-  not merged (outside this job, as named before). Open Wounds chain (chat 39) untouched.
-- For Claude: kittest name check_audit_lists_and_flags_repeats; evidence() keys picture-layer faults as
-  'layers (drawn over, rule 17)'.
+- COST: a tool job, no film estimate (tracked quietly).
+- Named branches: claude/seeing-test-chat1 (live, not this job; not merged).
+- For Claude: source/plainwords.py (check/score; list notes/learn/plain-words/words.json; let-throughs notes/logs/plainwords.log); kittests plain_words_every_message, quiet_cost_line, castsheet_only_when_cast_changed; watcher.wiring_faults.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.3% of a week (2026-11-26)

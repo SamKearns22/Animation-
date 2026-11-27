@@ -418,6 +418,9 @@ def _tube(P, j, ks, pts):
     return best
 
 
+STAND_LEG_GAP = 14.0   # standing, the even gap between the thighs up to the crotch (body units; seated: R7_APART_GAP)
+
+
 def _press_legs(P, R, j):
     """Legs never pass through each other: where they meet, the soft side gives (as the seat presses the bottom
     flat). Side by side: each leg's points stop at the plane between the knees. Crossed: the top leg's points that
@@ -428,8 +431,10 @@ def _press_legs(P, R, j):
     top = j.get('cross')
     if not top:
         xm = (kL[0] + kR[0]) / 2
-        g = 0.5 * (j.get('spec') or {}).get('leg_gap', 0.0)   # R7 chat 11 ('upright, apart'; Sam, 26 Nov: "a small
-        #   gap that runs all the way down"): relaxed legs apart stop short of each other by this much, crotch to knee
+        g = 0.5 * (j.get('spec') or {}).get('leg_gap', 0.0 if j.get('seat') is not None else STAND_LEG_GAP)
+        #   R7 chat 11 ('upright, apart'; Sam, 26 Nov: "a small gap that runs all the way down"): relaxed legs apart
+        #   stop short of each other by this much, crotch to knee. Standing too (Open Wounds chat 39: Kemi's thighs
+        #   met from the knee up, the line between them running up into the seat: Sam's note 8, "camel toe")
         l, r = side > 0.5, side < -0.5
         P[l & (P[:, 0] > xm - g), 0] = xm - g
         P[r & (P[:, 0] < xm + g), 0] = xm + g

@@ -18777,7 +18777,152 @@
    "round": null,
    "cost": 5.13,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 93,
+   "hist_k": 240,
+   "kinds": {
+    "tool search": 20.7,
+    "renders": 1.0,
+    "pictures": 1.0,
+    "other": 77.3
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 60,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 4,
+    "other": 25
+   },
+   "split": {
+    "usd": 7.2808,
+    "total": 7.2808,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 34.6,
+     "Claude's words": 25.4,
+     "carried history": 22.0,
+     "start-up floor": 18.0
+    },
+    "origins": {
+     "Claude's words": 37.1,
+     "messages and reminders": 29.1,
+     "start-up floor": 18.2,
+     "result: tool search": 11.0,
+     "result: other": 2.1,
+     "Claude's edits": 1.7,
+     "result: pictures": 0.8,
+     "result: renders": 0.1
+    },
+    "named": {
+     "messages and reminders": 29.1,
+     "start-up reading (rules, tools, first files)": 18.2,
+     "thinking": 16.4,
+     "writing code": 10.2,
+     "commands": 6.7,
+     "reading notes": 5.7,
+     "reading kit code": 3.3,
+     "helper and chat prompts": 2.1,
+     "messages to Sam": 1.9,
+     "other commands": 1.6,
+     "writing notes": 1.4,
+     "looking at pictures": 0.8,
+     "git and saving": 0.7,
+     "start-up and handover tools": 0.6,
+     "running checks and tools": 0.3,
+     "reading guides": 0.3,
+     "app tools (chats, files sent)": 0.2,
+     "helper results": 0.2,
+     "renders": 0.1,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 46,
+    "work_pct": 0.84,
+    "reads": [
+     [
+      "notes/proposals/seeing-five-candidates.md",
+      3.1,
+      0.0634
+     ],
+     [
+      "source/cover.py",
+      3.5,
+      0.0611
+     ],
+     [
+      "notes/bench/learn-step.md",
+      2.3,
+      0.0448
+     ],
+     [
+      "notes/proposals/better-seeing-tools.md",
+      1.4,
+      0.0276
+     ],
+     [
+      "notes/archive/grand-theft-autism-notes.md",
+      1.7,
+      0.0262
+     ],
+     [
+      "source/branches.py",
+      1.2,
+      0.0238
+     ],
+     [
+      "notes/sam-notes/gta-v5/notes.md",
+      1.2,
+      0.0235
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scratchpad/g238.jpg",
+      1.6,
+      0.0229
+     ],
+     [
+      "notes/ledger/sam/bd92qp7f.md",
+      1.2,
+      0.0214
+     ],
+     [
+      "source/handcheck.py",
+      1.0,
+      0.0176
+     ],
+     [
+      "source/brexit_is_done.py",
+      0.7,
+      0.012
+     ],
+     [
+      "source/likeness.py",
+      0.5,
+      0.007
+     ],
+     [
+      "notes/critic-bench.tsv",
+      0.2,
+      0.0031
+     ],
+     [
+      "source/kittests.py",
+      0.2,
+      0.0028
+     ],
+     [
+      "/home/user/Animation-/source/likeness.py",
+      0.0,
+      0.0005
+     ]
+    ],
+    "base_pct": 19.3
+   }
   }
  ],
  "checks": {},

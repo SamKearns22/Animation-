@@ -1980,68 +1980,31 @@ def sounds_and_references_kept():
 
 @test
 def quiet_cost_line():
-    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem, once, never for
-    a forecast over 15% alone, and never with a cut to the content."""
+    """Job 2 (Sam, 19 Nov) and the check audit (Sam, 26 Nov, his answer 2: the paused budget alarms deleted, "tracked
+    quietly"): the cost line is recorded in the ledger and the notes at a handover and nothing is shown: no forecast,
+    no warning, no stop, also for a stage far over its share and a film over its estimate."""
+    import shutil
+    import tempfile
     import costline, ledger
-    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 5')}
-    d['chats'][0]['cost'] = 3.0; ledger.mark_stage(d, 'cast')
-    calm = costline.problems(d)                                    # on plan: nothing to show
-    d['chats'][0]['cost'] = 9.0; ledger.mark_stage(d, 'sets')      # sets cost 6 against 2 planned
-    first = costline.problems(d); again = costline.problems(d)
-    ok = calm == [] and len(first) >= 1 and 'sets' in first[0] and again == [] and 'cut' not in costline.SAVE.lower()
-    return ok, f'quiet on plan {calm == []}, overrun shown {bool(first)}, once only {again == []}'
-
-
-@test
-def estimate_forecast_and_alarm():
-    """Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned
-    round pushes it up; the budget stop fires at the budget and at every 10% over it, once each, and cannot be
-    switched off (an old alarms_off does nothing)."""
-    import ledger
-    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5'),
-         'alarms_off': 'old switch'}
-    spend = lambda x: d['chats'][0].update(cost=x)
-    spend(3.0); ledger.mark_stage(d, 'cast')
-    on_plan = ledger.forecast(d)                                   # 3 of 3 planned: lands at 10
-    spend(7.0)
-    mid = ledger.forecast(d)[2]                                    # 7 + (2 + 1 + 1.5 + .5) x 1 = 12
-    ledger.mark_stage(d, 'sets')
-    over = ledger.forecast(d)[2]                                   # 7 of 5 planned: lands at 14
-    under = ledger.budget_stop(d) is None                          # 7 of 10: quiet
-    spend(10.0); at = ledger.budget_stop(d); again = ledger.budget_stop(d)
-    spend(10.9); quiet = ledger.budget_stop(d) is None             # 109%: not yet the next step
-    spend(11.0); five = ledger.budget_stop(d)                      # 110%: stops again
-    spend(13.0); jump = ledger.budget_stop(d); step = d['budget_stop']   # 130%: one stop, at step 4
-    ledger.mark_stage(d, 'moves'); ledger.mark_stage(d, 'animatic1'); ledger.mark_stage(d, 'round')
-    extra = ledger.mark_stage(d, 'round')                          # a second round, not in the plan: no share
-    ok = (on_plan == (3.0, 3.0, 10.0) and mid == 12.0 and over == 14.0 and under and at and 'Stop' in at
-          and again is None and quiet and five and jump and step == 4 and extra.get('unplanned') and extra['pct'] == 0)
-    return ok, f'on plan {on_plan}, mid-stage {mid}, after sets {over}, stops at 100% {bool(at)}, once {again is None}, ' \
-               f'110% {bool(five)}, 130% step {step}, alarms_off ignored {bool(at)}'
-
-
-@test
-def stage_share_stop():
-    """Rule 24 (Sam, 11 Nov): the chat is stopped when a stage reaches its share (before: only a quarter over the film's
-    whole estimate), once, and again half a share on; a stage under its share, or already marked done, is quiet."""
-    import ledger
-    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5')}
-    spend = lambda x: d['chats'][0].update(cost=x)
-    spend(2.9); under = ledger.stage_alarm(d)                      # cast at 2.9 of 3
-    spend(3.1); first, again = ledger.stage_alarm(d), ledger.stage_alarm(d)
-    old_way = 3.1 >= d['estimate']                                 # the only spend stop before: the whole estimate
-    spend(4.7); half_on = ledger.stage_alarm(d)                    # 1.5 shares
-    ledger.mark_stage(d, 'cast')
-    spend(6.0); sets_under = ledger.stage_alarm(d)                 # sets at 1.3 of 2
-    spend(6.8); sets_stop = ledger.stage_alarm(d)                  # sets at 2.1 of 2, the film at 68% of its estimate
-    ok = (under is None and first and "'cast'" in first and 'stop this work' in first and again is None and not old_way
-          and half_on and sets_under is None and sets_stop and "'sets'" in sets_stop and 'moves 2' in sets_stop)
-    return ok, (f"cast at 2.9 of 3: quiet {under is None}; at 3.1: stopped {bool(first)}, once {again is None}; half a "
-                f"share on: {bool(half_on)}; sets at 2.1 of 2 with the film at 68% of its estimate: stopped "
-                f"{bool(sets_stop)} (before: nothing until 100%)")
+    tmp = tempfile.mkdtemp()
+    keep = ledger.DIR
+    try:
+        ledger.DIR = tmp
+        d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 30.0, 'round': None, 'notes': 0, 'repeats': [],
+             'date': '2026-11-26', 'chat': 'aaaaaaaa', 'model': 'opus', 'stage': 'x'}], 'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2')}
+        ledger.mark_stage(d, 'cast')
+        ledger.store(d)
+        notes = os.path.join(tmp, 'zz.md')
+        open(notes, 'w').write('# zz\n')
+        shown = costline.faults('zz', notes)
+        logged = ledger.load('zz').get('cost_log') or []
+        in_notes = costline.MARK in open(notes).read()
+        gone = [n for n in ('forecast', 'budget_stop', 'stage_alarm', 'problems') if hasattr(ledger, n) or hasattr(costline, n)]
+    finally:
+        ledger.DIR = keep
+        shutil.rmtree(tmp, ignore_errors=True)
+    ok = shown == [] and len(logged) == 1 and logged[0]['spent'] == 30.0 and in_notes and not gone
+    return ok, f'shown {shown}, recorded {logged}, in the notes {in_notes}, alarms left {gone}'
 
 
 @test
@@ -3923,6 +3886,77 @@ def plain_check_fields():
     return not bad, '; '.join(bad) or f'10/10 Milburn lessons fail A (and plain), the field-shaped ask passes, {n} saved reader answers parse'
 
 
+@test
+def never_blame_long_chats():
+    """Sam, 26 Nov (Open Wounds chat 39): "Stop telling me chats are long unless you are admitting that your own tool
+    is broken." Saved example: chat 39's own reply. The plain-words check stops it; a sentence that owns the handover
+    tool's failure passes."""
+    import plainwords as PW
+    bad = ("Long chats and heavy reading look like a big cause, and that can be checked for about 1-2% of a week. "
+           "This chat shows it: each step now costs over three times what it did at the start, because the history is long.")
+    ok = "My own handover tool failed here: it should have opened the next chat at 100 steps and didn't."
+    plain = ("The nod now turns the head; Kemi's legs part up to the crotch. I've recorded it: \"Stop telling me chats "
+             "are long unless you are admitting that your own tool is broken.\"")
+    got = [k for k, _, _ in PW.faults(bad, [])]
+    return (got.count('chatlong') >= 2 and not PW.faults(ok, []) and not PW.faults(plain, []),
+            f'example: {got.count("chatlong")} stopped; owned failure passes; plain passes')
+
+
+@test
+def plain_words_every_message():
+    """CLAUDE.md "Checked on every message" (Sam, 26 Nov; R8 chat 2): the every-message plain-words check sends back
+    the two replies Sam could not follow (bad-1: "Let's move through these one at a time in simple language"; bad-2:
+    "I don't understand") and passes the one he called the model (good-1); the Stop hook blocks once and lets the
+    second try through with a log line (never loops); Sam's "I don't understand" saves the reply as a new example and
+    puts its project words on the list."""
+    import io
+    import contextlib
+    import shutil
+    import tempfile
+    import plainwords as PW
+    bad = []
+    for b, (want, fs) in PW.score().items():
+        if b.split('-')[1] in ('1', '2') and b.startswith(('bad-1-', 'bad-2-', 'good-1-')) and bool(fs) != (want == 'fail'):
+            bad.append(f'{b} did not {want}')
+    msg = PW.example_text(os.path.join(PW.EX, 'bad-2-two-small-items.md'))
+    tmp = tempfile.mkdtemp()
+    keep = PW.EX, PW.WORDS, PW.LET_LOG
+    try:
+        PW.LET_LOG = os.path.join(tmp, 'log')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            PW.hook(json.dumps({'last_assistant_message': msg, 'stop_hook_active': False}))
+        if '"block"' not in out.getvalue():
+            bad.append('the hook did not send bad-2 back')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            PW.hook(json.dumps({'last_assistant_message': msg, 'stop_hook_active': True}))
+        if out.getvalue().strip() or 'let-through' not in open(PW.LET_LOG).read():
+            bad.append('the second try was blocked again or not logged')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            PW.hook(json.dumps({'last_assistant_message': PW.example_text(
+                os.path.join(PW.EX, 'good-1-failing-tests.md')), 'stop_hook_active': False}))
+        if out.getvalue().strip():
+            bad.append('the hook sent good-1 back')
+        PW.EX = tmp
+        PW.WORDS = os.path.join(tmp, 'words.json')
+        shutil.copy(keep[1], PW.WORDS)
+        confusing = 'The **bay splitter** now runs on every take, and the "wobble pass" is next.'
+        with contextlib.redirect_stdout(io.StringIO()):
+            PW.learn(sam_text="I don't understand", reply=confusing)
+            PW.learn(sam_text='Y, go', reply='Done.')
+        saved = [f for f in os.listdir(tmp) if f.startswith('bad-')]
+        if len(saved) != 1:
+            bad.append(f'{len(saved)} examples saved (want 1: only the reply Sam did not follow)')
+        if not PW.faults('The bay splitter is next.'):
+            bad.append('a learned word ("bay splitter") is not caught next time')
+    finally:
+        PW.EX, PW.WORDS, PW.LET_LOG = keep
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not bad, '; '.join(bad) or 'bad-1 and bad-2 sent back, good-1 passes; one block then a logged let-through; a confused reply saved and its words learned'
+
+
 # ------------------------------------------------------------------------------------------------ code finder (Sam's 1, 16 Nov)
 @test
 def code_finder_replay():
@@ -3934,6 +3968,45 @@ def code_finder_replay():
     r = u.module_from_spec(sp); sp.loader.exec_module(r)
     lo, st, mx, _ = r.run()
     return lo >= 25 and st >= 14 and mx < 45, f'loose {lo}/26, strict {st}/14, longest {mx} lines (bar 25, 14, <45)'
+
+
+@test
+def finder_reaches_shared_nod():
+    """R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the code finder searches the shared
+    kit a film imports, not only the film's own files: chat 39's note 26, "It's not a nod, it's a head-bob", must show
+    views.py's nod drawing (Pitched / NOD_DEG) with its lines; other films' code stays out of the reach."""
+    import page
+    reach = {os.path.basename(f) for f in page.files('brexit-is-done')}
+    out = page.show('brexit-is-done', "It's not a nod, it's a head-bob.", 40)
+    nod = [h for h, rows in out if rows and h.startswith('views.py') and re.search(r'Pitched|Rolled|NOD_', h + ' '.join(t for _, t in rows))]
+    bad = (['views.py not in the reach'] if 'views.py' not in reach else []) + \
+          (['another film (blessed.py) in the reach'] if 'blessed.py' in reach else []) + \
+          ([] if nod else ['note 26 shows no views.py nod drawing: ' + ', '.join(h.split()[0] for h, _ in out)])
+    return not bad, '; '.join(bad) or f'{len(reach)} files searched; note 26 -> {nod[0].split("  ")[0]}'
+
+
+@test
+def finder_reach_end_check():
+    """R12 part 2: handover end flags a chat that used the finder and then edited code it cannot see or never pointed
+    to. Saved example: chat 39 (show log, 26 Nov 22:11, zkJd6kM8) asked show about note 26, was pointed only at
+    brexit_is_done.py, then edited views.py, solid_seat.py and facehouse.py by hand; with the old own-files-only finder
+    each is a blind spot, with today's each is a miss; a chat pointed at the file, or with no show call, is clean."""
+    import handover, page
+    shows = {'brexit-is-done': {'brexit_is_done.py'}}
+    chat39 = ['views.py', 'solid_seat.py', 'facehouse.py']
+    old = lambda film: [os.path.basename(f) for f in page.own_files(film)]
+    new = lambda film: [os.path.basename(f) for f in page.files(film)]
+    blank = lambda film: ''
+    a = handover.reach_faults(chat39, shows, old, blank)
+    b = handover.reach_faults(chat39, shows, new, blank)
+    c = handover.reach_faults(['views.py'], {'brexit-is-done': {'views.py'}}, new, blank)
+    d = handover.reach_faults(chat39, {}, new, blank)
+    e = handover.reach_faults(['views.py', 'body.py'], shows, new, lambda film: 'finder reach: views.py, body.py (a new tool)')
+    bad = ([f'old finder: {len(a)} of 3 blind spots'] if sum(x.startswith('FINDER REACH') for x in a) != 3 else []) + \
+          ([f'new finder: {len(b)} of 3 misses'] if sum(x.startswith('FINDER MISSED') for x in b) != 3 else []) + \
+          (['a pointed-to edit flagged'] if c else []) + (['a chat with no show call flagged'] if d else []) + \
+          (['a notes line did not settle it'] if e else [])
+    return not bad, '; '.join(bad) or 'chat 39: 3 blind spots under the old finder, 3 misses under the new; clean cases clean'
 
 
 
@@ -4711,37 +4784,22 @@ def finder_reminder_per_chat():
     """finder-use (Sam's 1, 17 Nov): the per-day flag went silent for every chat once any chat called show (16 Nov:
     6 of 19 chats never did). Now: one line at a chat's first film-code search with no show; the end check names
     THIS chat when it edited the film's code with no show."""
-    import io, contextlib, tempfile
-    import handover as H
+    import io, contextlib
     W = _hook('finderwarn')
     out = io.StringIO()
     with contextlib.redirect_stdout(out):
         ok = W.test() == 0
     bad = [] if ok else [out.getvalue().strip()]
-    tmp = tempfile.mkdtemp()
-
-    def rec(tag, cmds):
-        p = os.path.join(tmp, tag + '.jsonl')
-        with open(p, 'w') as f:
-            for c in cmds:
-                f.write(json.dumps({'type': 'assistant', 'message': {'content': [
-                    {'type': 'tool_use', 'name': 'Bash', 'input': {'command': c}}]}}) + '\n')
-        return p
-    grep, edit = 'grep -n "def flag" source/protest_tiers.py', "sed -i 's/a/b/' source/protest_tiers.py"
-    show = 'python3 source/page.py protest-tiers show "the flag" --shot 3'
-    if not H.finder_faults('protest-tiers', rec('noshow', [grep, grep, edit])):
-        bad.append('a chat that edited film code with no show was not named')
-    if H.finder_faults('protest-tiers', rec('show', [show, grep, edit])):
-        bad.append('a chat that used show was named')
-    return not bad, '; '.join(bad) or 'one line at the first film search with no show; end names only the chat that skipped it'
+    return not bad, '; '.join(bad) or 'one line at the first film search with no show (the after-the-fact end check was dropped: check audit C1, Sam 26 Nov)'
 
 
 @test
 def watcher_catches_last_weeks_four():
     """early-warning (Sam's 1, 17 Nov): the number to beat. Last week's four silent failures, each from its own kind
-    of record: the message saver (chat C, 17 Nov), routine work on Opus (16 Nov splice), the finder skipped (16 Nov),
-    the kit list behind Sam's Y (people kit, before 16 Nov). Quiet on a clean record; a new system with no promise
-    is flagged (Sam: "it needs to adapt to new systems we build too")."""
+    of record. Since the check audit (Sam's Y, 26 Nov, C1-C3) the saver, the model guard and the finder reminder are
+    each their own live check (their own kit tests), so the watcher keeps one: the kit list behind Sam's Y (people kit,
+    before 16 Nov), quiet on today's list; and a new system with no promise is flagged (Sam: "it needs to adapt to new
+    systems we build too")."""
     import tempfile, shutil, subprocess
     from datetime import datetime, timezone, timedelta
     import watcher as W
@@ -4759,31 +4817,12 @@ def watcher_catches_last_weeks_four():
     res = lambda i, text: {'type': 'user', 'message': {'content': [{'type': 'tool_result', 'tool_use_id': f't{i}',
                                                                       'content': text}]}}
     try:
-        then = (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
-        typed = {'type': 'user', 'timestamp': then, 'origin': {'kind': 'human'},
-                 'message': {'role': 'user', 'content': '1. This guard should already exist in the code somewhere'}}
-        os.makedirs(os.path.join(tmp, 'sam'))
-        if not W.saver_faults(rec('saver', [typed]), sid='session_01TESTCHATC', logdir=os.path.join(tmp, 'sam')):
-            bad.append('saver: a typed message missing from the log was not flagged')
-        splice = 'ffmpeg -i a.mp4 -i b.mp4 -filter_complex concat=n=2 animations/drafts/protest-tiers-animatic.mp4'
-        if not W.guard_faults(rec('guard', [use(1, splice), res(1, 'done')])):
-            bad.append('guard: a 16 Nov splice on Opus was not flagged')
-        if W.guard_faults(rec('guard2', [use(1, splice), res(1, 'MODEL GUARD: this chat runs on Opus')])):
-            bad.append('guard: a refused splice was flagged')
-        grep, edit = 'grep -n "def flag" source/protest_tiers.py', "sed -i 's/a/b/' source/protest_tiers.py"
-        if not W.finder_faults(rec('finder', [use(1, grep), use(2, grep), use(3, edit)]), 'protest-tiers'):
-            bad.append('finder: a chat that skipped the finder was not flagged')
         old = subprocess.run(['git', 'show', '2362763f:guides/kit-catalogue.md'], cwd=W.ROOT, capture_output=True,
                              text=True).stdout
         if not any('people kit' in f for f in W.kit_faults(text=old)):
             bad.append('kits: the 14-16 Nov people kit line was not flagged')
         if W.kit_faults():
             bad.append(f'kits: false alarm on today\'s list: {W.kit_faults()}')
-        clean = rec('clean', [use(1, 'python3 source/page.py protest-tiers show "flag"'), res(1, 'ok'),
-                              use(2, 'python3 source/protest_tiers.py final /tmp/c.mp4 --small --span 3 5'), res(2, 'ok')])
-        if W.saver_faults(clean, sid='session_01CLEAN', logdir=os.path.join(tmp, 'sam')) + W.guard_faults(clean) \
-                + W.finder_faults(clean, 'protest-tiers'):
-            bad.append('false alarm on a clean record')
         root = os.path.join(tmp, 'root')            # a system built tomorrow, with no promise
         for d in ('.claude', 'source', 'guides'):
             os.makedirs(os.path.join(root, d))
@@ -4803,8 +4842,7 @@ def watcher_catches_last_weeks_four():
             bad.append(f'a system today has no promise: {W.unlisted()}')
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
-    return not bad, '; '.join(bad) or ('all four caught (saver, guard, finder, kit list); quiet on a clean record and '
-                                       'today\'s kit list; a new hook, check and tool with no promise flagged')
+    return not bad, '; '.join(bad) or ('the people-kit line caught, quiet on today\'s kit list; a new hook, check and tool with no promise flagged')
 
 
 @test
@@ -4972,6 +5010,49 @@ def tools_switched_on():
 
 
 @test
+def castsheet_only_when_cast_changed():
+    """Check audit B5 (Sam's Y, 26 Nov): the cast check at handover runs only for a new or changed cast. 24 of 65
+    refused handovers were the cast check repeating unchanged faults. A clean run stamps the files it read; the next
+    handover skips it while they are unchanged and runs it again once one changes; a cast with faults is never stamped."""
+    import tempfile
+    import shutil
+    import castsheet as C
+    import handover as H
+    tmp = tempfile.mkdtemp()
+    src = os.path.join(os.path.dirname(HERE), 'notes', 'logs', '_kittest-cast.txt')   # inside the project: stamped
+    open(src, 'w').write('kemi: front\n')
+    calls, result = [], [[]]
+
+    def fake(film, *a, **k):
+        calls.append(open(src).read())
+        return list(result[0])
+    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'mouth_spike_faults', 'hair_spike_faults',
+             'seated_faults', 'judge_faults')
+    keep = {n: getattr(C, n) for n in names}
+    keep_stamps = H.CASTSTAMPS
+    try:
+        for n in names:
+            setattr(C, n, fake)
+        H.CASTSTAMPS = os.path.join(tmp, 'stamps.tsv')
+        first = H.castsheet_faults('brexit-is-done'); n1 = len(calls)
+        second = H.castsheet_faults('brexit-is-done'); n2 = len(calls)
+        open(src, 'w').write('kemi: front, new hair\n')
+        third = H.castsheet_faults('brexit-is-done'); n3 = len(calls)
+        result[0] = ['kemi front: crotch line']
+        open(src, 'w').write('kemi: changed again\n')
+        bad1 = H.castsheet_faults('brexit-is-done'); bad2 = H.castsheet_faults('brexit-is-done')
+    finally:
+        for n, f in keep.items():
+            setattr(C, n, f)
+        H.CASTSTAMPS = keep_stamps
+        shutil.rmtree(tmp, ignore_errors=True)
+        os.remove(src)
+    ok = first == [] and n1 == 7 and n2 == n1 and n3 == 14 and third == [] and bad1 and bad2
+    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 14}; '
+                f'faults stop it both times {bool(bad1) and bool(bad2)}')
+
+
+@test
 def handover_status_checks():
     """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
     catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never
@@ -5013,9 +5094,9 @@ def handover_status_checks():
     finally:
         ledger.load = real_load
     ok = (len(sz_big) == 3 and not sz_small and not_sent and not sent_ok
-          and no_push and not push and st)
+          and no_push and not push and not st)          # stages: no nag (Sam 26 Nov: the stage stop deleted)
     return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
-                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
+                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages not nagged {not st}')
 
 
 @test
@@ -6214,6 +6295,73 @@ def head_moves_never_snap():
 
 
 @test
+def nod_is_a_turn():
+    """A nod turns the head, never slides it (saved example: Sam's note 26, Open Wounds chat 39, on Kemi's nod at
+    17.6 s: "It's not a nod, it's a head-bob"; the kit's nod moved every mark of the head down by the same amount).
+    Every cast head drawn nodding goes through views.Pitched about its own face (views.face_box); at 3 units, front-on
+    the crown moves under half as far as the middle of the face, side-on the chin goes in toward the neck and the
+    forehead forward. The old bob (every mark down alike) fails the same measure."""
+    import castsheet as CS
+    import numpy as np
+    from PIL import Image
+    cast, PP = CS._setup('brexit-is-done', None)
+    B, V = PP.B, PP.V
+    made, real = [], V.Pitched
+
+    class Spy(real):
+        def __init__(self, *a):
+            made.append(a)
+            real.__init__(self, *a)
+
+    class Life:
+        def at_time(self, t):
+            return 0.0, 3.0
+
+    class Flat:
+        cam, s = None, 1.0
+
+        def P(self, x, y):
+            return (x, y)
+
+        def S(self, v):
+            return v
+
+    def measure(pv):
+        (_, deg, c, fw, fh, view) = pv
+        q = real(Flat(), deg, c, fw, fh, view)
+        mv = lambda x, y: np.subtract(q.P(x, y), (x, y))   # noqa: E731
+        if view == 'front':
+            return abs(mv(c[0], c[1] - 1.1 * fh)[1]) / max(1e-6, abs(mv(c[0], c[1])[1]))
+        return mv(c[0] + 0.7 * fw, c[1] + 1.05 * fh)[0], mv(c[0] + 0.8 * fw, c[1] - 0.8 * fh)[0]
+    out, bad = [], []
+    try:
+        V.Pitched = Spy
+        for who, sp in cast.items():
+            for yaw in (0, 90):
+                made.clear()
+                d = dict(sp, head_life=Life())
+                tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+                s = 0.5 * d['height'] / 1.75
+                V.person(tile, B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, d, 0.0, yaw, None)
+                if not made:
+                    bad.append(f'{who} {yaw}: no turn drawn')
+                    continue
+                m = measure(made[-1])
+                if yaw == 0:
+                    out.append(f'{who} front crown/face {m:.2f}')
+                    if m > 0.5:
+                        bad.append(out[-1])
+                else:
+                    out.append(f'{who} side chin {m[0]:+.0f} forehead {m[1]:+.0f}')
+                    if not (m[0] < -3 and m[1] > 3):
+                        bad.append(out[-1])
+    finally:
+        V.Pitched = real
+    old_ratio = 1.0                                     # the bob: crown and face moved alike (dy for every mark)
+    return not bad and old_ratio > 0.5, '; '.join(out) + (f'; FAULTS: {bad}' if bad else '') + '; old bob crown/face 1.00 (fails)'
+
+
+@test
 def suit_one_cloth():
     """A suit with a tie is one cloth (Sam's note 24.3, Open Wounds chat 38: "Tony's suit sleeves are a different
     colour to the jacket"): Blair's sleeves and trousers are his jacket's colour, and the dark sleeve is never
@@ -6306,6 +6454,259 @@ def seeing_views_see_a_vanish():
     ok = bool(wev) and bool(at3) and len(sheets) == 3
     return ok, (f'who-is-where: {wev[:1] or "no vanish"}; movement at the vanish: {at3[:1] or "nothing"}; '
                 f'sheets {sheets}')
+
+
+@test
+def body_model_downloads_once():
+    """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
+    not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight
+    workers ask at the same moment: one download, all eight get the finished copy, no worker fails."""
+    import tempfile
+    import time
+    import mhuman as M
+    from multiprocessing import get_context
+    tmp = tempfile.mkdtemp()
+    log = os.path.join(tmp, 'clones.txt')
+    keep = (M.MH_DIR, M.subprocess.run)
+
+    def fake(cmd, check=False, **k):
+        if cmd[1] == 'clone':
+            dest = cmd[-1]
+            if os.path.exists(dest):                      # what git does when two clones meet
+                raise M.subprocess.CalledProcessError(128, cmd)
+            open(log, 'a').write(dest + '\n')
+            time.sleep(0.3)
+            os.makedirs(os.path.join(dest, 'makehuman', 'data', '3dobjs'))
+            open(os.path.join(dest, 'makehuman', 'data', '3dobjs', 'base.obj'), 'w').write('v 0 0 0\n')
+    out = []
+    try:
+        M.MH_DIR = os.path.join(tmp, 'makehuman')
+        M.subprocess.run = fake
+        with get_context('fork').Pool(8) as p:
+            res = p.map(_mh_one, range(8))
+        bad = [r for r in res if not r.startswith(M.MH_DIR)]
+        if bad:
+            out.append(f'{len(bad)} of 8 workers failed: {bad[0][:120]}')
+        n = len(open(log).read().split()) if os.path.exists(log) else 0
+        if n != 1:
+            out.append(f'{n} downloads for 8 workers (want 1)')
+        if any('.part' in f for f in os.listdir(tmp)):
+            out.append('a half-made copy was left behind')
+    finally:
+        M.MH_DIR, M.subprocess.run = keep
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
+    return (not out), ('; '.join(out) or 'one download, all 8 workers got the copy')
+
+
+def _mh_one(_):
+    import mhuman as M
+    try:
+        return M.data_dir()
+    except Exception as e:
+        return f'{type(e).__name__}: {e}'
+
+
+@test
+def checks_read_what_is_meant():
+    """Check-knows-intent change 1 (Sam's "1", 26 Nov): what a scene means to hide or overlap travels with the drawing
+    (figure.meant, and a side-on gait's own mark) and the hand check reads it: a meant flag is one 'meant: ...' line,
+    never a fault and never hidden; a real flag still shows; a hand in its sleeve, sinking, hovering or passing
+    through can never be marked meant. Examples: notes/learn/check-intent/sort-1.md (Open Wounds, 26 Nov)."""
+    import body as B
+    import figure as F
+    import handcheck as H
+    import kitchecks
+    import limbs
+    import moves as MV
+    import posegallery as G
+    import views as V
+    from PIL import Image
+    from satire_style import install_circle_hands
+    B.SS = 1
+    F.guard(B)
+    F._ALLOW.append('kittests')
+    install_circle_hands(B)
+    limbs.install(B)
+    kitchecks.install()
+    H.install()
+    cam = B.Cam(1.0, 540, 960)
+
+    def frame(draws, t=0.0):
+        im = Image.new('RGBA', (1400, 1100), G.BG)
+        H.begin()
+        for d in draws:
+            d(im)
+        return H.end(t)
+
+    def p(x, yaw, pose):
+        return lambda im: V.person(im, cam, x, 330, 0.62, G.MODEL, 0.0, yaw, pose)
+    pair = [p(500, 0, G.pose('pointing', G.MODEL)), p(650, -90, G.pose('pointing', G.MODEL))]
+    out = []
+    real = frame(pair)                                        # a crowding reach nobody marked: a fault
+    if not any(f['kind'].startswith('over') and not f.get('meant') for f in real):
+        out.append('an unmarked hand over another body was not flagged')
+    with F.meant('over *', 'a crush through a doorway'):
+        marked = frame(pair, 0.1)
+    ov = [f for f in marked if f['kind'].startswith('over')]
+    if not ov or not all(f.get('meant') for f in ov):
+        out.append('a hand over a body inside figure.meant was still a fault')
+    with F.meant('over *', 'a crush through a doorway'):    # the mark covers its kind only
+        if F.meant_for('no hand', F.MEANT):
+            out.append("an 'over' mark excused a hidden hand")
+    run = frame([p(600, 90, MV.gait(G.MODEL, 0.2, 'sprint'))], 0.2)
+    if not run or not all(f.get('meant') for f in run if f['kind'] == 'no hand'):
+        out.append("a side-on sprint's far hand behind the body was still a fault")
+    front = [m for m in MV.gait(G.MODEL, 0.2, 'sprint')['meant'] if len(m) < 3 or m[2] == 'front']
+    if front:
+        out.append("a gait's side-on mark also counted seen front on")
+    for k in ('in sleeve', 'sink', 'hover', 'through'):       # never meant
+        try:
+            with F.meant(k, 'x'):
+                pass
+            out.append(f'"{k}" was accepted as meant')
+        except F.FigureError:
+            pass
+    if F.meant_for('in sleeve', [(('*',), 'everything')]):
+        out.append('a hand in its sleeve was excused by a catch-all mark')
+    rows = H.summary(None, real + marked + run, 12)
+    lines = H.meant_lines(real + marked + run)
+    if any('crush' in r[1] or 'sprint' in r[1] for r in rows) or len(lines) < 2:
+        out.append(f'meant flags not kept apart: {len(rows)} fault rows, {len(lines)} meant lines')
+    return (not out), ('; '.join(out) or f'{len(rows)} fault row(s) (the unmarked reach), meant lines: ' +
+                       ' | '.join(lines))
+
+
+@test
+def faults_said_once():
+    """Check audit B1, say once (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, where 361
+    of 372 fault lines were the same fault back unchanged): a fault the last run of the same check already showed,
+    unchanged but for its times and numbers, is one count line, not printed again; a new fault prints in full; both
+    still count as faults. The real Open Wounds record: its last quick check's faults against the run before."""
+    import io
+    import contextlib
+    import ledger
+    import report as R
+    runs = [{'t': '1', 'of': {'quick check': 'quick check', 'pop-in': 'quick check'},
+             'faults': {'pop-in': ['pop-in: guest 2 appears at 17.55 s mid-frame']}},
+            {'t': '2', 'of': {'pre-flight': 'pre-flight'}, 'faults': {'pre-flight': ['CAPTION: x']}}]
+    now = ['pop-in: guest 2 appears at 17.80 s mid-frame', 'caption "wolves": shown 0.30 s']
+    before = R.shown_before('quick check', now, runs)
+    out = []
+    if before != {now[0]}:
+        out.append(f'repeat not recognised (or the new one taken as old): {before}')
+    keep = (R.shown_before, ledger.record)
+    try:
+        R.shown_before = lambda title, faults, runs_=None: R.__dict__['_kt_before']
+        R._kt_before = before
+        ledger.record = lambda *a, **k: None
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            R.summarise('quick check', now)
+        text = buf.getvalue()
+    finally:
+        R.shown_before, ledger.record = keep
+        R.__dict__.pop('_kt_before', None)
+    if '2 fault(s)' not in text or 'caption' not in text or '17.80' in text or '1 shown on the last run' not in text:
+        out.append('summary wrong: ' + text.replace(chr(10), ' / ')[:200])
+    real = [r for r in ledger.checkruns('brexit-is-done')['runs'] if 'quick check' in r['of'].values()]
+    if len(real) >= 2:
+        last = [x for k, v in real[-1]['faults'].items() for x in v]
+        same = R.shown_before('quick check', last, [real[-2]])
+        out_n = f'Open Wounds: {len(same)} of {len(last)} said once'
+    else:
+        out_n = 'Open Wounds: fewer than 2 quick checks'
+    return (not out), ('; '.join(out) or 'one count line for the repeat, the new fault in full; ' + out_n)
+
+
+@test
+def planning_asks_once():
+    """Check audit B4 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, where 'the film has
+    no PLAN', 'no BENCHMARK' and 'no audits' printed on 4 runs each, never answered): the paperwork asks become rows of
+    the brief checklist the first time; a run prints one planning line instead of each ask; an answered row ("none:
+    why") is never asked again; a real drawing fault passes through untouched; rows 74 and 8 still stop new films."""
+    import shutil
+    import tempfile
+    import planning as P
+    tmp = tempfile.mkdtemp()
+    path = os.path.join(tmp, 'kt.md')
+    shutil.copy(os.path.join(HERE, '..', 'notes', '_template.md'), path)
+    asks = ['plan (rule 1): the film has no PLAN (rooms...)', 'benchmark (rule 3): the film has no BENCHMARK (8-10)',
+            'house style: the film has no audits: the general audit', 'HANDS: 2 11.08s: a hand over a body']
+    out = []
+    kept, line, stops = P.route(asks, path)
+    if kept != [asks[-1]] or not line or '3 unanswered' not in line or stops:
+        out.append(f'first run wrong: kept {kept}, line {line}, stops {stops}')
+    again = P.route(asks, path)
+    if open(path).read().count('Planning: ') != 3:
+        out.append('rows written more than once')
+    text = open(path).read().replace('(rule 1) |  |', '(rule 1) | none: a one-room film, the set is a drawing |')
+    open(path, 'w').write(text)
+    kept3, line3, _ = P.route(asks, path)
+    if not line3 or '2 unanswered' not in line3 or 'plan' in line3.split('(')[1]:
+        out.append(f'an answered row was asked again: {line3}')
+    _, _, st = P.route(['no "Rehearsal clips sent: DATE" line in the notes (rule 8)'], path, ('rehearsal',))
+    if not st:
+        out.append('an unanswered rule-8 row did not stop a new-template film')
+    shutil.rmtree(tmp, ignore_errors=True)
+    return (not out), ('; '.join(out) or f'first run: one line ({line[:60]}...); answered row dropped; rule 8 stops')
+
+
+@test
+def row_of_bookcases_sized_per_bay():
+    """Check audit B3 (Sam's Y, 26 Nov; saved example: Open Wounds' 'the bookcases, right: 4.00 m wide; a real bookcase
+    is about 0.8 m (500%)', on 10 runs): the size check reads the set's own description, so a wall of shelves written
+    'bays 4' is four bookcases side by side, each judged alone; one bookcase 4 m wide is still a fault."""
+    import types
+    import kitinputs as K
+    import sizes
+    keep = K._places
+    item = lambda raw: dict(name='shelves', kind='bookcase', raw=raw)
+    try:
+        K._places = lambda film: {'views': {'v': {'items': [item({'x': '0.3 to 4.3', 'z': '0 to 3.7', 'bays': '4'})]}}}
+        row = [sizes.check(*r) for r in K.prop_sizes(types.SimpleNamespace())]
+        K._places = lambda film: {'views': {'v': {'items': [item({'x': '0.3 to 4.3', 'z': '0 to 3.7'})]}}}
+        one = [sizes.check(*r) for r in K.prop_sizes(types.SimpleNamespace())]
+    finally:
+        K._places = keep
+    ok = row == [None] and one and one[0]
+    return ok, f'a row of 4: {row}; one 4 m bookcase: {one}'
+
+
+@test
+def critique_saw_it_column():
+    """Check audit, the critique column (Sam's "1. Y", 26 Nov): each of Sam's notes says whether the fresh-eye critique
+    had already flagged it (yes, no, no critique). The handover refuses a blank cell on a table that has the column
+    (the template has it); an older table without it is not asked; the audit counts the answers."""
+    import tempfile
+    import checkaudit as CA
+    import handover as H
+    tmp = tempfile.mkdtemp()
+    os.makedirs(os.path.join(tmp, 'notes'))
+    p = os.path.join(tmp, 'notes', 'kt.md')
+    head = '## Notes\n| # | shot | time | note | line | should have caught | critique saw it? | status |\n|---|---|---|---|---|---|---|---|\n'
+    open(p, 'w').write(head + '| 1 | 2 | 3.0 | the hand floats | 12 | AUDIT | yes | fixed |\n'
+                              '| 2 | 3 | 9.0 | the door pops | 30 | pop-in | | open |\n'
+                              '| 3 | 1 | 1.0 | too dark | 2 | none | no critique | open |\n')
+    keep = H.ROOT
+    out = []
+    try:
+        H.ROOT = tmp
+        f = H.tag_faults(None, p)
+    finally:
+        H.ROOT = keep
+    saw = [x for x in f if 'critique saw' in x]
+    if len(saw) != 1 or 'note 2' not in saw[0]:
+        out.append(f'blank cell not refused once: {f}')
+    old = os.path.join(tmp, 'notes', 'old.md')
+    open(old, 'w').write('## Notes\n| # | shot | time | note | line | should have caught | status |\n|---|---|---|---|---|---|---|\n'
+                         '| 1 | 2 | 3.0 | a note | 1 | none | open |\n')
+    if H.note_tags(old, H.SAW):
+        out.append('an older table without the column was asked')
+    c = CA.critique_saw(tmp)
+    if c.get('yes') != 1 or c.get('no critique') != 1 or c.get('blank') != 1:
+        out.append(f'counted wrong: {dict(c)}')
+    return (not out), ('; '.join(out) or f'blank refused (note 2); old table not asked; counted {dict(c)}')
 
 
 def main():

@@ -839,3 +839,5 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 172: row: (behind him) Walliams | scared, double-take, pleading, desperate | dragged i
 ### gates walliams
 - 173: code: wal_pose wal_face draw_walliams one-off: a comic struggle; the beats are in blessed.py'
+
+(The shared code this film uses, 116 files, is mapped in story/blessed-page-shared.md: show and find search it too; do not read it whole.)

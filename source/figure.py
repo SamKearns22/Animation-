@@ -70,6 +70,38 @@ def allow(reason):
         _ALLOW.pop()
 
 
+MEANT = []               # check-knows-intent change 1 (Sam's "1", 26 Nov): what the drawing means to hide or overlap
+MEANT_KINDS = ('no hand', 'over *')   # the only hand-check kinds a scene may mark as meant
+NEVER_MEANT = ('in sleeve', 'sink', 'hover', 'through', 'below the surface')   # never excused by a mark
+
+
+@contextlib.contextmanager
+def meant(kinds, why):
+    """Say what the scene draws on purpose, where it is drawn: the hand check reads it and prints a fitting flag as
+    one 'meant: ...' line, never as a fault and never hidden. kinds: hand-check kinds from MEANT_KINDS ('no hand',
+    'over *' or 'over NAME'). A hand pushed into a sleeve, sinking, hovering or passing through can never be meant."""
+    kinds = (kinds,) if isinstance(kinds, str) else tuple(kinds)
+    for k in kinds:
+        if any(n in k for n in NEVER_MEANT) or not (k == 'no hand' or k.startswith('over ')):
+            raise FigureError(f'meant(): "{k}" can never be marked as meant (only {MEANT_KINDS})')
+    MEANT.append((kinds, why))
+    try:
+        yield
+    finally:
+        MEANT.pop()
+
+
+def meant_for(kind, marks):
+    """The reason a fault of this kind is meant, from marks [(kinds, why)], or None."""
+    import fnmatch
+    if any(n in kind for n in NEVER_MEANT):
+        return None
+    for kinds, why in reversed(list(marks)):
+        if any(fnmatch.fnmatchcase(kind, k) for k in kinds):
+            return why
+    return None
+
+
 SIDE_ON = [False]   # views.person sets it for a side view (Open Wounds, 24 Nov: a side-on run's back arm, the elbow behind
                     # and the forearm swinging forward, was read as 'across the body'; side on there is no across)
 NEVER_ALLOWED = ('folded back across the body',)   # Job C 1 (Sam, 13 Nov): caught faults no allow() may wave through

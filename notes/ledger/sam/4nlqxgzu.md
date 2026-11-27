@@ -27,3 +27,46 @@ Next
 ### 2026-11-26T22:30:21
 Is bookcases its own check?
 
+### 2026-11-26T22:39:01
+Y
+
+### 2026-11-26T22:39:28
+2
+
+### 2026-11-26T22:40:52
+Hold on. Was that everything in the report?
+
+### 2026-11-26T22:41:38
+I don't understand
+
+### 2026-11-26T22:42:38
+1. Y
+
+This is the way you should be explaining things in all messages to me according to our communication rules
+
+### 2026-11-26T22:43:46
+I want the communication rule improved so that it doesn't ever slip back which you currently do all the time
+
+### 2026-11-26T22:44:46
+Y
+
+### 2026-11-26T22:47:14
+1. Y
+
+2. N
+
+### 2026-11-26T22:58:18
+Incorrect.
+
+
+You asked:
+
+1.	Write the plain-words rule and build the checker that reads every message before you see it? Y (my pick) or N
+	2.	Make one question at a time the normal way? 1 one at a time (my pick), 2 keep all in one message.
+
+1. Y
+2. N
+
+### 2026-11-26T23:02:17
+1. Y
+

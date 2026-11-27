@@ -63,13 +63,13 @@
    "kind_before": "code"
   },
   "24": {
-   "rule": "The cost estimate and forecast (paused by you on 18 Nov).",
+   "rule": "The estimate, tracked quietly (the budget alarms deleted on your word, 26 Nov).",
    "status": "proven",
    "tests": [
-    "estimate_forecast_and_alarm",
-    "stage_share_stop"
+    "quiet_cost_line",
+    "cost_rows_reach_the_main_line"
    ],
-   "example": "kittest estimate_forecast_and_alarm: Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned",
+   "example": "kittest quiet_cost_line: the cost line is recorded at a handover and nothing is shown (no forecast, no warning, no stop: Sam 26 Nov, his answer 2)",
    "notes": "CR1 (stages never marked, notes never logged)",
    "kind_before": "code"
   },
@@ -914,18 +914,20 @@
    "kind_before": "none"
   },
   "N8": {
-   "rule": "Plain words, always.",
-   "status": "partly",
+   "rule": "Plain words, always; checked on every message.",
+   "status": "proven",
    "tests": [
     "plain_check_fields",
-    "proposal_route_hook"
+    "proposal_route_hook",
+    "plain_words_every_message"
    ],
-   "example": "kittest plain_check_fields: the 10 Milburn lessons as sent (Sam 19 Nov: \"Explain\" on 2 and 6, \"don't know what you mean by brow cap\" on 9) fail the fixed fields; the same lesson in the fields passes; proposal_route_hook: a judge's For Sam missing a field or holding a file name is refused (proposals packed from 23 Nov)",
+   "example": "notes/learn/plain-words/bad-1-first-report-reply.md, bad-2-two-small-items.md (Sam: \"Let's move through these one at a time in simple language\", \"I don't understand\"); good-1-failing-tests.md passes",
    "notes": "CR (plain words failed in the 19 Nov review chat)",
    "kind_before": "none",
-   "miss": "every other message to Sam (status, notes rounds, handovers): no check reads them; and the fields do not prove the words are plain (Step 0: coined phrases pass A; the blind reader is advice only, Sam's answer 2)",
+   "miss": "code-free but dense messages (19 Nov S-cold-start, S-cost-other, S-finder-learn-finish: Sam asked to explain, no file, label or listed word in them) pass the word check; only a reader that retells the message (plain-check Change 3) can catch those",
    "plan": "plain-check Change 2 (the hook asks for the shown option text) and Change 3 (status explanations through the reader), each its own yes",
-   "done": "23 Nov (chain A chat 6): system asks and end-of-film lessons proven (plain-check Change 1)"
+   "done": "23 Nov (chain A chat 6): system asks and end-of-film lessons proven (plain-check Change 1); 26 Nov (R8 chat 2): every message to Sam read by the Stop hook source/plainwords.py (files, labels, code, listed project words unexplained); kittest plain_words_every_message catches bad-1 and bad-2, passes good-1",
+   "anchor": "Checked on every message (Sam, 26 Nov)."
   },
   "N9": {
    "rule": "Files under 50 MB, MP4 by default; only the finished film and the latest animatic on GitHub.",
@@ -1394,7 +1396,7 @@
    "The 3 lines at the bottom",
    "The Animation- project is always attached",
    "The brief is a checklist:",
-   "The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
+   "The chain stops only at a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
    "The channel is topical, absurdist news-of-the-week satire; every film is new.",
    "The cost watch (rule 85):",
    "The handover",
