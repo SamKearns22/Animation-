@@ -369,7 +369,9 @@ def finder_use(R, show_fn=None):
     """Last week's real notes, asked again of the finder as it is NOW: does it point to a drawing file that chat then
     changed? (A chat that changed only tools, or nothing, is not counted.)"""
     import page
-    show_fn = show_fn or (lambda film, note: [h.split()[0].split(':')[0] for h, _ in page.show(film, note, 40)
+    import parts                     # a hit in a part (views_c.py) is its module's (views.py), as last week's edits were
+    mod = lambda f: os.path.basename(parts.family(os.path.join(os.path.dirname(os.path.abspath(__file__)), f))[0])
+    show_fn = show_fn or (lambda film, note: [mod(h.split()[0].split(':')[0]) for h, _ in page.show(film, note, 40)
                                               if not h.startswith('also')])
     edits, tools, cases = _edits_by_session(R), _tools(), []
     for sid, calls in R.shows.items():

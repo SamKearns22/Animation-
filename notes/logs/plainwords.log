@@ -23,4 +23,4 @@
 {"chat": "8b239ec0", "event": "block", "faults": [["word", "handover"], ["word", "finder"]], "t": "2026-11-27 13:29"}
 {"chat": "8b239ec0", "event": "block", "faults": [["word", "hook"], ["word", "finder"]], "t": "2026-11-27 13:31"}
 {"chat": "8b239ec0", "event": "block", "faults": [["word", "guard"]], "t": "2026-11-27 13:34"}
-{"chat": "2ba38a1f", "event": "block", "faults": [["word", "kit"]], "t": "2026-11-27 16:15"}
+{"chat": "7f671c35", "event": "block", "faults": [["word", "watcher"]], "t": "2026-11-27 15:51"}

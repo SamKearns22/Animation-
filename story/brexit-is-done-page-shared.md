@@ -119,7 +119,7 @@
 - 235: `_poses` 
 - 242: `sheet` 
 
-## audiokit.py (236 lines)
+## audiokit.py (244 lines)
 - 25: SR (data)
 - 26: MAX_CUT_DB (data)
 - 29: `lufs` Integrated loudness (ITU-R BS.1770-4, mono), in LUFS.
@@ -342,100 +342,104 @@
 - 109: `unsettled` Listed branches (fresh scan) neither merged here nor named in the notes: the handover's refusal.
 - 115: `main` 
 
-## burnham.py (1526 lines)
-- 92: HERE (data)
-- 94: HEM (data)
-- 95: SANS (data)
-- 96: ANTON (data)
-- 97: CRANBERRY (data)
-- 98: OFFWHITE (data)
-- 101: PALE (data)
-- 102: PINK (data)
-- 103: OLIVE (data)
-- 104: BROWN (data)
-- 105: DEEP (data)
-- 106: NAVY (data)
-- 107: CHARCOAL (data)
-- 108: FUR (data)
-- 109: FUR_D (data)
-- 110: FUR_L (data)
-- 111: STEEL (data)
-- 112: STEEL_D (data)
-- 113: LEATHER (data)
-- 114: CLOAK (data)
-- 115: GOLD (data)
-- 120: `class Cam` World units are output pixels (1080 x 1920) at zoom 1; (cx, cy) is the world point at frame centre.
-- 132: `class Local` A person's own coordinates (neck base at 0, 0; head width about 150) placed into the world.
-- 145: `class Pen` Flat fills with clean black outlines. Line widths grow more slowly than the drawing, so small
-- 172: `canvas` 
-- 176: `gradient` A radial wash (the conference backdrop's magenta glow into deep red), filling a world box.
-- 195: `shade` 
-- 199: `text` Lettering in world units (backdrop slogans, banners).
-- 217: `bee` Manchester's worker bee, as a brooch: a gold disc with a striped bee on it.
-- 228: `dk` 
-- 232: `lt` 
-- 236: `armour` One knight's kit. Pieces: helmet (bascinet, sallet or kettle hat, visor raised so the face shows),
-- 246: `helmet` 
-- 278: `crown` Our own crown: a bronze-gold circlet with upright points and a garnet at the front.
-- 302: `gorget` A steel collar of three overlapping lames round the neck.
-- 309: `pauldrons` Curved plates capping each shoulder: one dome with its lames scored across it (big pauldrons reach
-- 327: `steel_arm` A plate arm: rerebrace, a couter at the elbow (with a fan-shaped wing), a vambrace.
-- 343: `head_outline` 
-- 352: `hair_back` 
-- 368: `hair_front` 
-- 434: `beard` 
-- 469: `mouth_by_level` Pick a mouth shape from how loud the voice is right now: shut, then opening, then the full shout.
-- 480: `mouth` 
-- 513: `face` 
-- 597: `head` 
-- 617: `hand` 
-- 621: `arm` A sleeve from shoulder to elbow to wrist, drawn as two tapered pieces and a round elbow.
-- 637: `sword` A plain longsword held upright: steel blade, dark cross-guard, leather grip.
-- 652: `fur_mantle` A heavy fur collar over the shoulders, its lower edge in soft tufts.
-- 673: `torso` 
-- 778: `arms` Arm poses. front=False draws what sits behind the body, front=True what sits in front.
-- 807: `finger` One finger from point a in direction d.
-- 817: `gesture_hand` Hands that talk: a fist, an open palm, an accusing finger, a raised finger, air quotes, or a sword.
-- 852: `pose_arms` 
-- 895: `legs` 
-- 907: `person` Draw one person with the neck base at world (x, y) and scale s.
-- 921: BURNHAM (data)
-- 924: MINISTERS (data)
-- 937: KNIGHTS (data)
-- 950: MINISTER_ARMOUR (data)
-- 960: `armoured` 
-- 968: KING (data)
-- 971: `attendee` A random conference-goer, suited or casual (or, later, in furs).
-- 994: `backdrop` The stage wall: a magenta glow into deep red, HOPE AGAIN in big off-white capitals.
-- 1003: `heraldic_bee` Manchester's worker bee, as a banner charge: gold and black, wings spread.
-- 1024: `great_banner` A long cloth banner on a pole: deep crimson, a gold border, a swallowtail end, the bee in the middle.
-- 1044: `lectern` 
-- 1054: `rise` 0 while seated, 1 once on their feet (half a second to get up).
-- 1059: `heads_from_behind` The audience seen from behind: rows of heads and shoulders, some hands up clapping (or swords).
-- 1111: `clip` Paste a layer onto the picture, but only inside a world box (a screen, a window).
-- 1122: `hall` The conference arena from the back: roof rigging, the big screen, banners, the far stage.
-- 1183: `wrap` 
-- 1196: `caption` Speech: bold white letters with a black outline, wrapped to 800 px, centred on x = 480.
-- 1206: `shout` A shout: big Anton capitals, white, heavy outline, inside the safe area.
-- 1222: `title_lines` The title at the account's standard size: each line's capitals `cap` px tall (Listening & Learning's
-- 1245: `title` The cranberry-red title card, drawn fresh at full size, centred, top edge at 330 px, 720 px wide at most.
-- 1267: LINE (data)
-- 1271: `shot_stage` 
-- 1299: WAVES_HALL (data)
-- 1300: STAND_ROW (data)
-- 1303: `shot_hall` 
-- 1311: `shot_front_row` 
-- 1342: `front_row_bg` The hall behind the front row, softly out of focus: suits clapping, or later furs and swords.
-- 1356: `stage_lip` 
-- 1364: `shot_miliband` The front row again: Miliband, in plate, gets to his feet and bellows. His neighbours clap on in suits.
-- 1388: `shot_front_swords` From the stage: the whole hall in furs and plate, swords up, the front row in their own armour.
-- 1410: `shot_knight` 
-- 1437: `shot_king` Burnham in furs on the stage, lit from one side; zoom 0 = chest up, 1 = the final close-up.
-- 1457: `sp_turn` A slow look to his left, a hold, then a slow look to his right.
-- 1465: BOARD (data)
-- 1480: `finish` 
-- 1484: `main` 
-- 1511: `_house_limbs` The house style is always on (Sam, 21 Oct: 'no future boxy arms in our videos'): the smooth arms and legs
+## burnham.py (165 lines)
+- 39: HERE (data)
+- 41: HEM (data)
+- 42: SANS (data)
+- 43: ANTON (data)
+- 44: CRANBERRY (data)
+- 45: OFFWHITE (data)
+- 48: PALE (data)
+- 49: PINK (data)
+- 50: OLIVE (data)
+- 51: BROWN (data)
+- 52: DEEP (data)
+- 53: NAVY (data)
+- 54: CHARCOAL (data)
+- 55: FUR (data)
+- 56: FUR_D (data)
+- 57: FUR_L (data)
+- 58: STEEL (data)
+- 59: STEEL_D (data)
+- 60: LEATHER (data)
+- 61: CLOAK (data)
+- 62: GOLD (data)
+- 67: `class Cam` World units are output pixels (1080 x 1920) at zoom 1; (cx, cy) is the world point at frame centre.
+- 79: `class Local` A person's own coordinates (neck base at 0, 0; head width about 150) placed into the world.
+- 92: `class Pen` Flat fills with clean black outlines. Line widths grow more slowly than the drawing, so small
+- 119: `canvas` 
+- 123: `gradient` A radial wash (the conference backdrop's magenta glow into deep red), filling a world box.
+- 142: `shade` 
+- 146: `text` Lettering in world units (backdrop slogans, banners).
+
+## burnham_b.py (814 lines)
+- 40: `bee` Manchester's worker bee, as a brooch: a gold disc with a striped bee on it.
+- 51: `dk` 
+- 55: `lt` 
+- 59: `armour` One knight's kit. Pieces: helmet (bascinet, sallet or kettle hat, visor raised so the face shows),
+- 69: `helmet` 
+- 101: `crown` Our own crown: a bronze-gold circlet with upright points and a garnet at the front.
+- 125: `gorget` A steel collar of three overlapping lames round the neck.
+- 132: `pauldrons` Curved plates capping each shoulder: one dome with its lames scored across it (big pauldrons reach
+- 150: `steel_arm` A plate arm: rerebrace, a couter at the elbow (with a fan-shaped wing), a vambrace.
+- 166: `head_outline` 
+- 175: `hair_back` 
+- 191: `hair_front` 
+- 257: `beard` 
+- 292: `mouth_by_level` Pick a mouth shape from how loud the voice is right now: shut, then opening, then the full shout.
+- 303: `mouth` 
+- 336: `face` 
+- 420: `head` 
+- 440: `hand` 
+- 444: `arm` A sleeve from shoulder to elbow to wrist, drawn as two tapered pieces and a round elbow.
+- 460: `sword` A plain longsword held upright: steel blade, dark cross-guard, leather grip.
+- 475: `fur_mantle` A heavy fur collar over the shoulders, its lower edge in soft tufts.
+- 496: `torso` 
+- 601: `arms` Arm poses. front=False draws what sits behind the body, front=True what sits in front.
+- 630: `finger` One finger from point a in direction d.
+- 640: `gesture_hand` Hands that talk: a fist, an open palm, an accusing finger, a raised finger, air quotes, or a sword.
+- 675: `pose_arms` 
+- 718: `legs` 
+- 730: `person` Draw one person with the neck base at world (x, y) and scale s.
+- 744: BURNHAM (data)
+- 747: MINISTERS (data)
+- 760: KNIGHTS (data)
+- 773: MINISTER_ARMOUR (data)
+- 783: `armoured` 
+- 791: KING (data)
+- 794: `attendee` A random conference-goer, suited or casual (or, later, in furs).
+
+## burnham_c.py (565 lines)
+- 36: `backdrop` The stage wall: a magenta glow into deep red, HOPE AGAIN in big off-white capitals.
+- 45: `heraldic_bee` Manchester's worker bee, as a banner charge: gold and black, wings spread.
+- 66: `great_banner` A long cloth banner on a pole: deep crimson, a gold border, a swallowtail end, the bee in the middle.
+- 86: `lectern` 
+- 96: `rise` 0 while seated, 1 once on their feet (half a second to get up).
+- 101: `heads_from_behind` The audience seen from behind: rows of heads and shoulders, some hands up clapping (or swords).
+- 153: `clip` Paste a layer onto the picture, but only inside a world box (a screen, a window).
+- 164: `hall` The conference arena from the back: roof rigging, the big screen, banners, the far stage.
+- 225: `wrap` 
+- 238: `caption` Speech: bold white letters with a black outline, wrapped to 800 px, centred on x = 480.
+- 248: `shout` A shout: big Anton capitals, white, heavy outline, inside the safe area.
+- 264: `title_lines` The title at the account's standard size: each line's capitals `cap` px tall (Listening & Learning's
+- 287: `title` The cranberry-red title card, drawn fresh at full size, centred, top edge at 330 px, 720 px wide at most.
+- 309: LINE (data)
+- 313: `shot_stage` 
+- 341: WAVES_HALL (data)
+- 342: STAND_ROW (data)
+- 345: `shot_hall` 
+- 353: `shot_front_row` 
+- 384: `front_row_bg` The hall behind the front row, softly out of focus: suits clapping, or later furs and swords.
+- 398: `stage_lip` 
+- 406: `shot_miliband` The front row again: Miliband, in plate, gets to his feet and bellows. His neighbours clap on in suits.
+- 430: `shot_front_swords` From the stage: the whole hall in furs and plate, swords up, the front row in their own armour.
+- 452: `shot_knight` 
+- 479: `shot_king` Burnham in furs on the stage, lit from one side; zoom 0 = chest up, 1 = the final close-up.
+- 499: `sp_turn` A slow look to his left, a hold, then a slow look to his right.
+- 507: BOARD (data)
+- 522: `finish` 
+- 526: `main` 
+- 553: `_house_limbs` The house style is always on (Sam, 21 Oct: 'no future boxy arms in our videos'): the smooth arms and legs
 
 ## burnham_film.py (541 lines)
 - 59: HERE (data)
@@ -513,7 +517,7 @@
 - 167: `_faults` 
 - 201: `main` 
 
-## castsheet.py (1035 lines)
+## castsheet.py (1038 lines)
 - 32: HERE (data)
 - 34: ROOT (data)
 - 35: BG (data)
@@ -574,8 +578,8 @@
 - 866: JUDGE_FILES (data)
 - 870: `_same_outlines` Redraw the judge's outline sheet from the current drawing code (notes/learn/kemi-build/judge.py, its fixed
 - 894: `judge_faults` 
-- 933: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
-- 949: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
+- 936: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
+- 952: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
 
 ## checkreplay.py (315 lines)
 - 27: ROOT (data)
@@ -808,122 +812,127 @@
 - 44: `spill` The share of `shape` that lies outside `outline`: 0 when it is all inside.
 - 50: `iris_and_pupil` Iris, pupil and one shine, each cut to the outline. shine = (dx, dy, r) as shares of iris_r, or None.
 
-## facehouse.py (2141 lines)
-- 89: HERE (data)
-- 91: ROOT (data)
-- 97: `curve` The closed curve, through each point once: ink.curve drops repeats itself now (R8 A4, 27 Nov).
-- 106: `pick_dir` Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
-- 112: `pick_file` 
-- 116: `load` Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
-- 128: TV (data)
-- 131: `_skin_rows` One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
-- 153: `trace` The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
-- 171: `overlay` Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over.
-- 199: HOUSE_SKIN (data)
-- 210: HV (data)
-- 211: OVAL (data)
-- 215: `_poly_halfw` A closed outline's half width at each row (nan where it does not reach).
-- 228: `_head_rows` One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
-- 279: EAR (data)
-- 282: `_canon_oval` The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units.
-- 291: `measure_head` The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
-- 318: `head_overlay` Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan).
-- 352: `_photo_brows` One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
-- 399: SHARP (data)
-- 402: `browcheck` The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
-- 466: `house_tone` The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
-- 481: LOOKS (data)
-- 486: EYE_OPEN_MIN (data)
-- 488: LID0 (data)
-- 491: `face_layout` The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
-- 513: `_cheek` The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows.
-- 518: `feature_scale` Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
-- 536: SHAPE_PUSH (data)
-- 540: PROP_ROWS (data)
-- 541: SQUARE (data)
-- 544: `proportions` The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
-- 558: `_smooth` 
-- 563: `drawn_head` The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
-- 590: SKIN_BIAS (data)
-- 596: HEAD_EYES (data)
-- 597: EYE_OPEN_HEAD (data)
-- 600: `_sil` The head's measured silhouette (hair and skin) half width at row v.
-- 606: `_brow_gap` The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths.
-- 616: `_peak` Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured.
-- 622: `house_head` The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece.
-- 631: `_head` 
-- 695: `_focus_room` How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
-- 708: `ears` The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
-- 721: `_ear_L` The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
-- 727: `_eye` The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's.
-- 734: `stubble` A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
-- 769: `lashes` Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
-- 785: `sockets` The socket shade (the test's, kept for the 'detail' look): one flat crescent of darker skin under the brow,
-- 798: `_swept_shapes` The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light.
-- 825: `_swept_measured` Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
-- 866: `class _Squeeze` A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
-- 885: `_swept_strokes` The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail').
-- 907: `swept` Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
-- 918: `bald_shapes` Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
-- 932: `bald` The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left.
-- 945: `bob_shapes` Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
-- 975: `_bob_strokes` The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark
-- 997: `bob` 
-- 1003: `earrings` Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
-- 1015: `hard_hat` Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
-- 1033: `_hard_hat_parts` 
-- 1044: `turned_hat` The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
-- 1100: `back_shapes` Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
-- 1122: `_round_strokes` The hair's strokes on the side and back of a turned head, drawn on the hair's own surface (turnhead.hair_point
-- 1163: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
-- 1176: `back` 
-- 1183: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
-- 1217: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
-- 1261: `_face_u` The face outline's half width at row v (our right side).
-- 1268: VJ (data)
-- 1269: VS (data)
-- 1272: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
-- 1293: `_out` 
-- 1297: `_resample` A path resampled to n points evenly along its length.
-- 1305: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
-- 1318: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
-- 1329: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
-- 1354: `_looks` 
-- 1360: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
-- 1384: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
-- 1415: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
-- 1451: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
-- 1503: HAIR (data)
-- 1504: TURN_PROF (data)
-- 1511: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
-- 1517: `_turn_key` 
-- 1523: `_turn_mood` 
-- 1531: `_turn_mouth` 
-- 1541: `_turn_face` 
-- 1548: `_turn_over` 
-- 1554: `_turn_hair` 
-- 1561: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
-- 1580: `_turn_hair0` 
-- 1617: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
-- 1690: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
-- 1704: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
-- 1711: `_turn_person` 
-- 1729: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
-- 1750: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
-- 1758: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
-- 1797: CAST (data)
-- 1820: `install` 
-- 1828: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
-- 1859: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
-- 1886: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
-- 1926: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
-- 1950: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
-- 1983: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
-- 2048: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
-- 2094: KEPT (data)
-- 2104: `_fit` 
+## facehouse.py (375 lines)
+- 93: HERE (data)
+- 95: ROOT (data)
+- 101: `curve` The closed curve, through each point once: ink.curve drops repeats itself now (R8 A4, 27 Nov).
+- 111: `pick_dir` Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
+- 117: `pick_file` 
+- 121: `load` Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
+- 133: TV (data)
+- 136: `_skin_rows` One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
+- 158: `trace` The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
+- 176: `overlay` Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over.
+- 204: HOUSE_SKIN (data)
+- 215: HV (data)
+- 216: OVAL (data)
+- 220: `_poly_halfw` A closed outline's half width at each row (nan where it does not reach).
+- 233: `_head_rows` One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
+- 284: EAR (data)
+- 287: `_canon_oval` The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units.
+- 296: `measure_head` The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
+- 323: `head_overlay` Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan).
 
-## facepick.py (1004 lines)
+## facehouse_b.py (877 lines)
+- 48: `_photo_brows` One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
+- 95: SHARP (data)
+- 98: `browcheck` The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
+- 162: `house_tone` The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
+- 177: LOOKS (data)
+- 182: EYE_OPEN_MIN (data)
+- 184: LID0 (data)
+- 187: `face_layout` The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
+- 209: `_cheek` The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows.
+- 214: `feature_scale` Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
+- 232: SHAPE_PUSH (data)
+- 236: PROP_ROWS (data)
+- 237: SQUARE (data)
+- 240: `proportions` The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
+- 254: `_smooth` 
+- 259: `drawn_head` The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
+- 286: SKIN_BIAS (data)
+- 292: HEAD_EYES (data)
+- 293: EYE_OPEN_HEAD (data)
+- 296: `_sil` The head's measured silhouette (hair and skin) half width at row v.
+- 302: `_brow_gap` The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths.
+- 312: `_peak` Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured.
+- 318: `house_head` The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece.
+- 327: `_head` 
+- 391: `_focus_room` How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
+- 404: `ears` The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
+- 417: `_ear_L` The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
+- 423: `_eye` The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's.
+- 430: `stubble` A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
+- 465: `lashes` Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
+- 481: `sockets` The socket shade (the test's, kept for the 'detail' look): one flat crescent of darker skin under the brow,
+- 494: `_swept_shapes` The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light.
+- 521: `_swept_measured` Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
+- 562: `class _Squeeze` A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
+- 581: `_swept_strokes` The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail').
+- 603: `swept` Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
+- 614: `bald_shapes` Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
+- 628: `bald` The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left.
+- 641: `bob_shapes` Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
+- 671: `_bob_strokes` The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark
+- 693: `bob` 
+- 699: `earrings` Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
+- 711: `hard_hat` Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
+- 729: `_hard_hat_parts` 
+- 740: `turned_hat` The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
+- 796: `back_shapes` Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
+- 818: `_round_strokes` The hair's strokes on the side and back of a turned head, drawn on the hair's own surface (turnhead.hair_point
+- 859: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
+- 872: `back` 
+
+## facehouse_c.py (1004 lines)
+- 49: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
+- 83: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
+- 127: `_face_u` The face outline's half width at row v (our right side).
+- 134: VJ (data)
+- 135: VS (data)
+- 138: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
+- 159: `_out` 
+- 163: `_resample` A path resampled to n points evenly along its length.
+- 171: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
+- 184: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
+- 195: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
+- 220: `_looks` 
+- 226: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
+- 250: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
+- 281: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
+- 317: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
+- 369: HAIR (data)
+- 372: `hair_fit` Replay test 2 (Sam's Y, 27 Nov): Ocasio-Cortez's long straight hair has no piece, and the plan only found out 
+- 386: TURN_PROF (data)
+- 393: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
+- 399: `_turn_key` 
+- 405: `_turn_mood` 
+- 413: `_turn_mouth` 
+- 423: `_turn_face` 
+- 430: `_turn_over` 
+- 436: `_turn_hair` 
+- 443: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
+- 462: `_turn_hair0` 
+- 499: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
+- 572: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
+- 586: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
+- 593: `_turn_person` 
+- 611: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
+- 632: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
+- 640: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
+- 679: CAST (data)
+- 702: `install` 
+- 710: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
+- 741: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
+- 768: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
+- 808: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
+- 832: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
+- 865: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
+- 930: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
+- 976: KEPT (data)
+- 986: `_fit` 
+
+## facepick.py (1009 lines)
 - 58: HERE (data)
 - 64: FONT (data)
 - 65: KEYS (data)
@@ -970,15 +979,15 @@
 - 771: `_who` Who a reference photo shows: a faces pack's folder name, a likeness folder's letter, else the first name in
 - 787: `_others` Other people's front photos from EVERY film's references (any '*front*' photo: the faces packs, the
 - 803: `make` 
-- 892: ROOT (data)
-- 895: `_rel` A photo argument stored from the project's top folder, so redraw works from any folder (Burnham's pick held
-- 903: `_find` 
-- 910: BEARD_MIN (data)
-- 913: `_beard_word` What the pick keeps of the beard for the house head (facehouse.stubble): its colour, how much of the lower
-- 923: `_beard` The beard from every front photo. beardkit keeps what matches its FIRST photo, so a shaven first photo drops
-- 937: `redraw` The picked heads drawn again from NAME-pick.json's measures with today's extras (glasses, beard, age lines,
-- 961: `_check` likeness.check's own verdict on the clean head (as rule 49 runs it), read back from its printout.
-- 983: `_says` 
+- 897: ROOT (data)
+- 900: `_rel` A photo argument stored from the project's top folder, so redraw works from any folder (Burnham's pick held
+- 908: `_find` 
+- 915: BEARD_MIN (data)
+- 918: `_beard_word` What the pick keeps of the beard for the house head (facehouse.stubble): its colour, how much of the lower
+- 928: `_beard` The beard from every front photo. beardkit keeps what matches its FIRST photo, so a shaven first photo drops
+- 942: `redraw` The picked heads drawn again from NAME-pick.json's measures with today's extras (glasses, beard, age lines,
+- 966: `_check` likeness.check's own verdict on the clean head (as rule 49 runs it), read back from its printout.
+- 988: `_says` 
 
 ## faces.py (374 lines)
 - 20: `blend` 
@@ -1367,7 +1376,7 @@
 - 719: `run` Every Nth frame of the film (or of span), on all processor cores; returns the summary rows.
 - 740: `main` 
 
-## handover.py (1370 lines)
+## handover.py (1387 lines)
 - 49: ROOT (data)
 - 50: LOGDIR (data)
 - 51: NOT_SAM (data)
@@ -1450,8 +1459,9 @@
 - 1213: FIXING (data)
 - 1216: `fixpack_faults` Cost-spike fix 4 (Sam's Y, 27 Nov): a handover whose Next is a fixing chat names the one-page fix pack
 - 1233: `nocheck_faults` Fix pack step 4 (Sam's Y, 27 Nov: "find why nobody saw it, and fix or add the test", on every note): a row of
-- 1252: `touch_faults` Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read ever
-- 1260: `main` 
+- 1252: `estimate_faults` Sam (27 Nov): "The next time I say a film is posted and closed (not Open Wounds) check back in on what you jus
+- 1269: `touch_faults` Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read ever
+- 1277: `main` 
 
 ## hands3d.py (563 lines)
 - 55: INK (data)
@@ -1731,54 +1741,55 @@
 - 489: `main` 
 - 501: `_test` 
 
-## kitstamps.py (827 lines)
-- 74: HERE (data)
-- 75: ROOT (data)
-- 76: RECORD (data)
-- 77: KITTESTS (data)
-- 80: `kit_files` kittests.py and its topic files (kittests_*.py, split out 27 Nov): one set, as if one file.
-- 83: ALL (data)
-- 84: ALL_DIRS (data)
-- 85: KEEP (data)
-- 86: SKIP_PARTS (data)
-- 87: HARNESS (data)
-- 94: `_is_harness` 
-- 99: `setup_tag` Python and the drawing libraries' versions: a green on another setup is not a green here (verdict F4).
-- 112: `_rel` 
-- 124: `_file_hash` 
-- 139: _FN_SRC (data)
-- 142: `_fn_sources` The kit test files' top-level functions (kittests.py and its topic files), each with its own lines (decorator
-- 164: `_all_hash` 
-- 178: GIT_READS (data)
-- 182: `git_item` A git command a test ran on the project, as one record item; its stamp is what the command shows now.
-- 189: `_git_hash` 
-- 200: `item_hash` 
-- 216: `stamp` 
-- 224: `_from_importer` A folder listed by Python's own package finder (importlib.metadata looking for installed libraries), not by
-- 231: `class Tracer` Watches one test at a time. start(); run the test; reads = stop().
-- 435: _REAL_LISTDIR (data)
-- 436: _SELF (data)
-- 441: CHILD_SITE (data)
-- 465: _ONE (data)
-- 468: `tracer` The one tracer of this process (it patches open/import/listing once; a second would wrap them twice).
-- 475: `traced` Run fn inside the running test, traced on its own: (fn's result, its reads). The outer test's record is
-- 495: `_one_step_out` The project modules and functions each read file holds by name (a constant, a compiled function).
-- 524: `_rows` 
-- 536: `write_green` results: [(name, reads, secs)] for tests that passed. Appends, then keeps the newest KEEP lines per test.
-- 565: `stale` (stale names in the order given, {name: last known seconds}). A test is fresh when one of its green lines,
-- 584: `test_names` 
-- 588: `estimate` 
-- 595: `say_minutes` 
-- 600: `run_stale` Run the stale kit tests now (kittests.py --stale), the result to notes/logs/kittests-last.log.
-- 609: `finish_gate` Change 2 (Sam's pick 1, 25 Nov): no animatic or final on files a kit test has not passed on. The stale tests
-- 638: `_chats` The last DAYS of commits, grouped by the chat that made them (its Claude-Session line): files changed, and
-- 679: `_shared` The path rule's idea of shared: under source/ (not a film's own code), .claude/hooks/, guides/kit-*.md.
-- 689: `_film_prefixes` 
-- 699: `replay` 
-- 763: `_hits` What in a test's reads a set of changed files (and changed kittests.py functions) touches. A folder read
-- 779: `_git_args` 
-- 785: `_minus` 
-- 791: `main` 
+## kitstamps.py (846 lines)
+- 75: HERE (data)
+- 76: ROOT (data)
+- 77: RECORD (data)
+- 78: KITTESTS (data)
+- 81: `kit_files` kittests.py and its topic files (kittests_*.py, split out 27 Nov): one set, as if one file.
+- 84: ALL (data)
+- 85: ALL_DIRS (data)
+- 86: KEEP (data)
+- 87: SKIP_PARTS (data)
+- 88: HARNESS (data)
+- 95: `_is_harness` 
+- 100: `setup_tag` Python and the drawing libraries' versions: a green on another setup is not a green here (verdict F4).
+- 113: `_rel` 
+- 125: `_file_hash` 
+- 140: _FN_SRC (data)
+- 143: `_fn_sources` The kit test files' top-level functions (kittests.py and its topic files), each with its own lines (decorator
+- 165: `_all_hash` 
+- 179: GIT_READS (data)
+- 183: `git_item` A git command a test ran on the project, as one record item; its stamp is what the command shows now.
+- 190: `_git_hash` 
+- 201: `item_hash` 
+- 217: `stamp` 
+- 225: `_from_importer` A folder listed by Python's own package finder (importlib.metadata looking for installed libraries), not by
+- 232: `class Tracer` Watches one test at a time. start(); run the test; reads = stop().
+- 437: _REAL_LISTDIR (data)
+- 438: _SELF (data)
+- 443: CHILD_SITE (data)
+- 467: _ONE (data)
+- 470: `tracer` The one tracer of this process (it patches open/import/listing once; a second would wrap them twice).
+- 477: `traced` Run fn inside the running test, traced on its own: (fn's result, its reads). The outer test's record is
+- 497: `_families` A module kept in parts (parts.py, cost-spike fix 5c) is one module: reading any of its files reads them all, s
+- 514: `_one_step_out` The project modules and functions each read file holds by name (a constant, a compiled function).
+- 543: `_rows` 
+- 555: `write_green` results: [(name, reads, secs)] for tests that passed. Appends, then keeps the newest KEEP lines per test.
+- 584: `stale` (stale names in the order given, {name: last known seconds}). A test is fresh when one of its green lines,
+- 603: `test_names` 
+- 607: `estimate` 
+- 614: `say_minutes` 
+- 619: `run_stale` Run the stale kit tests now (kittests.py --stale), the result to notes/logs/kittests-last.log.
+- 628: `finish_gate` Change 2 (Sam's pick 1, 25 Nov): no animatic or final on files a kit test has not passed on. The stale tests
+- 657: `_chats` The last DAYS of commits, grouped by the chat that made them (its Claude-Session line): files changed, and
+- 698: `_shared` The path rule's idea of shared: under source/ (not a film's own code), .claude/hooks/, guides/kit-*.md.
+- 708: `_film_prefixes` 
+- 718: `replay` 
+- 782: `_hits` What in a test's reads a set of changed files (and changed kittests.py functions) touches. A folder read
+- 798: `_git_args` 
+- 804: `_minus` 
+- 810: `main` 
 
 ## landmarks.py (47 lines)
 - 12: LANDMARKS (data)
@@ -1851,7 +1862,7 @@
 - 769: `sheet` 
 - 810: `strip` The move as a strip: a frame every `step` seconds from each view in `views` (the shot's camera sides), and eve
 
-## ledger.py (1180 lines)
+## ledger.py (1188 lines)
 - 55: ROOT (data)
 - 56: DIR (data)
 - 57: CURRENT (data)
@@ -1908,20 +1919,20 @@
 - 773: `appcost_test` The fault, saved as an example: chat 36 (Brexit, 26 Nov) was estimated at $4.71 and the app said $12.50.
 - 797: `parse_stages` 'cast 2, sets 2.5, round 1.5' -> [{'name': 'cast', 'pct': 2.0, 'done': None}, ...]
 - 808: `mark_stage` The first open planned stage of that name is done, at today's spend; a stage not in the plan is added, done,
-- 822: `compare_line` Rule 24 (Sam, 13 Nov): after the film, one line: its real cost against the last three films' (ledgers with an
-- 845: `totals` 
-- 853: `coldstart` cold-start change (Sam's Y, 19 Nov): the film-end line. Each chat's start (its cost up to the first real work)
-- 887: `render` 
-- 942: KEEP_DIRS (data)
-- 943: BIG_MB (data)
-- 946: `kept` Rule 37 (Job L; was by hand): every sound and reference file goes on GitHub; one over about BIG_MB stays off
-- 968: `kept_lines` 
-- 975: SESS (data)
-- 978: `film_sessions` The chats a film's own handovers name as its chats: every "where things stand (chat N, ..., session_X)" line i
-- 991: `misfiled` [(other ledger, row)] for the film's own chats (film_sessions) whose estimate row sits under another ledger
-- 1011: `rebook` Move every misfiled row to the film's own ledger (taken out of the other, on the main line too); a row already
-- 1034: `_cut` 
-- 1040: `main` 
+- 829: `compare_line` Rule 24 (Sam, 13 Nov): after the film, one line: its real cost against the last three films' (ledgers with an
+- 852: `totals` 
+- 860: `coldstart` cold-start change (Sam's Y, 19 Nov): the film-end line. Each chat's start (its cost up to the first real work)
+- 894: `render` 
+- 950: KEEP_DIRS (data)
+- 951: BIG_MB (data)
+- 954: `kept` Rule 37 (Job L; was by hand): every sound and reference file goes on GitHub; one over about BIG_MB stays off
+- 976: `kept_lines` 
+- 983: SESS (data)
+- 986: `film_sessions` The chats a film's own handovers name as its chats: every "where things stand (chat N, ..., session_X)" line i
+- 999: `misfiled` [(other ledger, row)] for the film's own chats (film_sessions) whose estimate row sits under another ledger
+- 1019: `rebook` Move every misfiled row to the film's own ledger (taken out of the other, on the main line too); a row already
+- 1042: `_cut` 
+- 1048: `main` 
 
 ## likeness.py (1014 lines)
 - 83: HERE (data)
@@ -2017,104 +2028,108 @@
 - 30: `analyse` (faults as (kind, x, y, detail), a mask of the faulty pixels) for one subject on a clear layer.
 - 91: `faults` 
 
-## lying.py (1590 lines)
-- 121: HERE (data)
-- 132: M (data)
-- 135: NECK_HEAD (data)
-- 136: SOLE_C (data)
-- 139: `_v` 
-- 143: `_unit` 
-- 148: `ease` 
-- 154: POINTS (data)
-- 156: DIRS (data)
-- 159: `class Body` One person's 3D skeleton in metres (world: y up). Points: POINTS; unit directions: DIRS (hup / hfwd the
-- 167: `limb` Two bones (metres) from root towards target, the middle joint bending towards `pole`: (middle, end).
-- 173: `_thigh_r` The thigh's radius at the hip and the knee (fuller under a gown).
-- 178: `_limb_clear` limb(), but a joint never in the floor: the elbow or knee is turned up off it (its bend lifted) until it
-- 192: `_build` A Body from its spine, its right-hand direction X, the head's directions and the limbs: arms = {side:
-- 227: `_head_down` The head let down onto the floor (or up off it): turned about the neck until it just rests on it.
-- 245: `face_down` Flat on their face: the cheek on the floor (head turned to one side), one arm flung past the head, the
-- 259: `on_back` Flat on the back, looking up a little to one side: arms flung out bent at the elbow, one knee up with the
-- 273: `curled` On the side, curled up: knees drawn up towards the chest, the lower arm out under the head, the upper arm
-- 288: `slump` Collapsed sitting against a wall (the wall behind, at x = -0.17): the back on it, the head dropped forward
-- 302: `ball` Curled into a ball on the right side, guarding the head (Ad-Vanced Notice, the man on the ground, Sam's note
-- 317: POSES (data)
-- 318: RESTS (data)
-- 323: WALL_RESTS (data)
-- 324: SLUMP_WALL (data)
-- 327: `mirror` The same pose the other way round (left and right swapped, z negated): lying on the other side.
-- 337: `place_body` A pose's frame put into the room: turned `yaw` degrees about the vertical (0: its head towards +x... as
-- 350: `blend` In between two skeletons (u 0..1): points slide, directions turn; the elbows and knees are solved again, so
-- 384: `from_views` A views.py pose (person units, the torso frame, lean about the hips) as a 3D Body standing at floor point
-- 421: NC (data)
-- 424: `class Part` 
-- 450: `_frame` 
-- 455: `parts` The body's volumes: [Part] (a 'group' melts its parts into one smooth shape: the torso).
-- 520: `split_part` A round cone cut across at u (0 at a .. 1 at b): two parts (base names, the side kept), the cut end of each
-- 533: `moved` Copies of parts turned by rotation matrix R about `centre`, then moved by `shift` (metres): a rigid piece.
-- 546: `lowest` How far the lowest part of these sits above the floor (metres; < 0: through it).
-- 552: `rot` Rotation matrix about a unit axis (Rodrigues).
-- 560: ADJ (data)
-- 567: `_adjacent` Two parts joined on the body (no line where they meet): the same side's arm and forearm, etc.
-- 581: `_pd` 
-- 621: `_sd` 
-- 640: `_march` 
-- 662: `_under` For points on a surface (floor, wall): 1 where the body is within `reach` metres over it along its normal.
-- 676: `_pd_v` 
-- 711: `_sd_v` 
-- 733: `_march_v` 
-- 759: `_under_v` 
-- 776: `class _TexCam` 
-- 787: TEX_PPU (data)
-- 788: _TEX (data)
-- 791: `_head_tex` The library's head drawing (front: burnham.head; back: views' back of the head) on a texture, line weights
-- 816: `_sample` Texture colours (RGBA float) at person-unit points (u across, v down) from the head's centre.
-- 824: `_colours` 
-- 833: `_ray_dirs` 
-- 844: `_bbox` 
-- 862: `_lw` The house line weight (Pen.w for lw 2.6) for a body this many frame pixels per metre.
-- 868: `shadow` The flat contact shadow on each surface [(point, normal, (lo, hi) bounds in x/z or None)] where the body
-- 903: `draw` Draw the Body k through cam (sets.Cam) in the house style (Job I, Sam 10 Nov: the flat rig's own torso,
-- 914: `draw_volumes` Draw the Body k through cam (sets.Cam) as one body: traced volumes, one outline, flat fills, the
-- 982: `_disk` 
-- 989: `_paint` Each traced point's colour and colour region (r, g, b, region): the part's material, its clothes details,
-- 1078: `surfaces_of` The surfaces a placed pose rests on: [(name, point, normal)] (the floor; the wall behind a slump).
-- 1088: `settle` Rest the body on its surfaces: moved along each surface's normal (floor first) so its lowest part just
-- 1099: `_rests` What a pose rests on the floor with (left and right swapped when it lies the other way round).
-- 1105: SOFT (data)
-- 1108: ENDS (data)
-- 1112: `rest` Rest a placed pose on its surfaces: the trunk (every resting part but the hands and feet) moved along the
-- 1142: `lie` A lying pose ready to draw: built, placed at floor point (x, z) turned `yaw`, settled onto the floor (and a
-- 1153: `contact_faults` What rests where it should (within 1.5 cm) and nothing through a surface (more than 0.5 cm), in words.
-- 1177: NECK_MIN (data)
-- 1178: HANG (data)
-- 1179: PROP (data)
-- 1180: CROSS (data)
-- 1181: HELD_ARMS (data)
-- 1184: `_out` How far point p lies outside part q (metres, near enough; < 0: inside).
-- 1195: `body_faults` Sam's lying notes as checks, in words: (1) a neck shows (at least NECK_MIN of it outside the head, chest
-- 1246: `solids` The body for the collision audit (clipcheck capsules; the torso as 'body', so audit's position tracks it).
-- 1262: `fall` Falling backwards, in stages: moves.fall's knees buckling and drop onto the hips (the flat drawing, best
-- 1279: `_brace` Going over backwards, the arms reach the floor before the back does (Open Wounds chat 16: the fallen worker's
-- 1315: `place` Where a flat person standing at floor point (x, z) goes on screen through a 3D camera: (Xf, Yf) the floor poin
-- 1334: `stand` Someone standing (or sitting: any views pose) at floor point (x, z), seen through a 3D camera at its real
-- 1356: ROWS (data)
-- 1358: COLS (data)
-- 1360: CAST (data)
-- 1361: SPOTS (data)
-- 1362: SLUMP_SPOTS (data)
-- 1363: STAND_SPOTS (data)
-- 1366: `_cam_for` 
-- 1377: `_fit` The camera slid (never turned) and zoomed so the points fill the middle square of the frame.
-- 1391: `_room` 
-- 1404: `_cast` 
-- 1413: `panel` One test picture: the three people in one pose, from one camera height (1080 x 1080 crop of the frame).
-- 1465: `old_frame` Poker Mon's finished film at 20.0 s: the two players face down on the table (note 89's version, the one
-- 1477: `sheet` 
-- 1521: LVIEWS (data)
-- 1524: GALLERY_AVOID (data)
-- 1527: `gallery` Every lying pose from every view (LVIEWS: three camera heights, the head four ways), each person, both
-- 1543: `check` Every pose for every test person: contacts; and the fall's hand-over: the body's centre and every joint
+## lying.py (381 lines)
+- 72: HERE (data)
+- 84: M (data)
+- 87: NECK_HEAD (data)
+- 88: SOLE_C (data)
+- 91: `_v` 
+- 95: `_unit` 
+- 100: `ease` 
+- 106: POINTS (data)
+- 108: DIRS (data)
+- 111: `class Body` One person's 3D skeleton in metres (world: y up). Points: POINTS; unit directions: DIRS (hup / hfwd the
+- 119: `limb` Two bones (metres) from root towards target, the middle joint bending towards `pole`: (middle, end).
+- 125: `_thigh_r` The thigh's radius at the hip and the knee (fuller under a gown).
+- 130: `_limb_clear` limb(), but a joint never in the floor: the elbow or knee is turned up off it (its bend lifted) until it
+- 144: `_build` A Body from its spine, its right-hand direction X, the head's directions and the limbs: arms = {side:
+- 179: `_head_down` The head let down onto the floor (or up off it): turned about the neck until it just rests on it.
+- 197: `face_down` Flat on their face: the cheek on the floor (head turned to one side), one arm flung past the head, the
+- 211: `on_back` Flat on the back, looking up a little to one side: arms flung out bent at the elbow, one knee up with the
+- 225: `curled` On the side, curled up: knees drawn up towards the chest, the lower arm out under the head, the upper arm
+- 240: `slump` Collapsed sitting against a wall (the wall behind, at x = -0.17): the back on it, the head dropped forward
+- 254: `ball` Curled into a ball on the right side, guarding the head (Ad-Vanced Notice, the man on the ground, Sam's note
+- 269: POSES (data)
+- 270: RESTS (data)
+- 275: WALL_RESTS (data)
+- 276: SLUMP_WALL (data)
+- 279: `mirror` The same pose the other way round (left and right swapped, z negated): lying on the other side.
+- 289: `place_body` A pose's frame put into the room: turned `yaw` degrees about the vertical (0: its head towards +x... as
+- 302: `blend` In between two skeletons (u 0..1): points slide, directions turn; the elbows and knees are solved again, so
+- 336: `from_views` A views.py pose (person units, the torso frame, lean about the hips) as a 3D Body standing at floor point
+
+## lying_b.py (886 lines)
+- 47: NC (data)
+- 50: `class Part` 
+- 76: `_frame` 
+- 81: `parts` The body's volumes: [Part] (a 'group' melts its parts into one smooth shape: the torso).
+- 146: `split_part` A round cone cut across at u (0 at a .. 1 at b): two parts (base names, the side kept), the cut end of each
+- 159: `moved` Copies of parts turned by rotation matrix R about `centre`, then moved by `shift` (metres): a rigid piece.
+- 172: `lowest` How far the lowest part of these sits above the floor (metres; < 0: through it).
+- 178: `rot` Rotation matrix about a unit axis (Rodrigues).
+- 186: ADJ (data)
+- 193: `_adjacent` Two parts joined on the body (no line where they meet): the same side's arm and forearm, etc.
+- 207: `_pd` 
+- 247: `_sd` 
+- 266: `_march` 
+- 288: `_under` For points on a surface (floor, wall): 1 where the body is within `reach` metres over it along its normal.
+- 302: `_pd_v` 
+- 337: `_sd_v` 
+- 359: `_march_v` 
+- 385: `_under_v` 
+- 402: `class _TexCam` 
+- 413: TEX_PPU (data)
+- 414: _TEX (data)
+- 417: `_head_tex` The library's head drawing (front: burnham.head; back: views' back of the head) on a texture, line weights
+- 442: `_sample` Texture colours (RGBA float) at person-unit points (u across, v down) from the head's centre.
+- 450: `_colours` 
+- 459: `_ray_dirs` 
+- 470: `_bbox` 
+- 488: `_lw` The house line weight (Pen.w for lw 2.6) for a body this many frame pixels per metre.
+- 494: `shadow` The flat contact shadow on each surface [(point, normal, (lo, hi) bounds in x/z or None)] where the body
+- 529: `draw` Draw the Body k through cam (sets.Cam) in the house style (Job I, Sam 10 Nov: the flat rig's own torso,
+- 540: `draw_volumes` Draw the Body k through cam (sets.Cam) as one body: traced volumes, one outline, flat fills, the
+- 608: `_disk` 
+- 615: `_paint` Each traced point's colour and colour region (r, g, b, region): the part's material, its clothes details,
+- 704: `surfaces_of` The surfaces a placed pose rests on: [(name, point, normal)] (the floor; the wall behind a slump).
+- 714: `settle` Rest the body on its surfaces: moved along each surface's normal (floor first) so its lowest part just
+- 725: `_rests` What a pose rests on the floor with (left and right swapped when it lies the other way round).
+- 731: SOFT (data)
+- 734: ENDS (data)
+- 738: `rest` Rest a placed pose on its surfaces: the trunk (every resting part but the hands and feet) moved along the
+- 768: `lie` A lying pose ready to draw: built, placed at floor point (x, z) turned `yaw`, settled onto the floor (and a
+- 779: `contact_faults` What rests where it should (within 1.5 cm) and nothing through a surface (more than 0.5 cm), in words.
+- 803: NECK_MIN (data)
+- 804: HANG (data)
+- 805: PROP (data)
+- 806: CROSS (data)
+- 807: HELD_ARMS (data)
+- 810: `_out` How far point p lies outside part q (metres, near enough; < 0: inside).
+- 821: `body_faults` Sam's lying notes as checks, in words: (1) a neck shows (at least NECK_MIN of it outside the head, chest
+- 872: `solids` The body for the collision audit (clipcheck capsules; the torso as 'body', so audit's position tracks it).
+
+## lying_c.py (340 lines)
+- 22: `fall` Falling backwards, in stages: moves.fall's knees buckling and drop onto the hips (the flat drawing, best
+- 39: `_brace` Going over backwards, the arms reach the floor before the back does (Open Wounds chat 16: the fallen worker's
+- 75: `place` Where a flat person standing at floor point (x, z) goes on screen through a 3D camera: (Xf, Yf) the floor poin
+- 94: `stand` Someone standing (or sitting: any views pose) at floor point (x, z), seen through a 3D camera at its real
+- 116: ROWS (data)
+- 118: COLS (data)
+- 120: CAST (data)
+- 121: SPOTS (data)
+- 122: SLUMP_SPOTS (data)
+- 123: STAND_SPOTS (data)
+- 126: `_cam_for` 
+- 137: `_fit` The camera slid (never turned) and zoomed so the points fill the middle square of the frame.
+- 151: `_room` 
+- 164: `_cast` 
+- 173: `panel` One test picture: the three people in one pose, from one camera height (1080 x 1080 crop of the frame).
+- 225: `old_frame` Poker Mon's finished film at 20.0 s: the two players face down on the table (note 89's version, the one
+- 237: `sheet` 
+- 281: LVIEWS (data)
+- 284: GALLERY_AVOID (data)
+- 287: `gallery` Every lying pose from every view (LVIEWS: three camera heights, the head four ways), each person, both
+- 303: `check` Every pose for every test person: contacts; and the fall's hand-over: the body's centre and every joint
 
 ## lying_flat.py (632 lines)
 - 27: HERE (data)
@@ -2416,39 +2431,37 @@
 - 43: `pack` 
 - 78: `score` 
 
-## page.py (484 lines)
-- 46: HERE (data)
-- 47: ROOT (data)
-- 50: `names` (code name, story name): code files are protest_tiers*.py, story files protest-tiers-*.txt; either works.
-- 55: `own_files` The film's own files (source/FILM*.py): what the page opens with and what a tie goes to.
-- 61: `_film_mods` Every film's own modules (source/NAME*.py for each notes/NAME.md, as finderwarn.film_re): another film's code 
-- 74: `_imports` The source/ modules one file imports, at the top or inside a def (the kit imports lazily: `import people`).
-- 89: `files` R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the film's own files, then every
-- 103: `tokens` 
-- 107: `build` 
-- 143: `_codemap` codemap.py's lines, made here (one process for ~110 files): every top-level def and class with its line and
-- 157: `_group` Rows (line, text) as '### head' once, then '- line: rest' under it: the shared start of neighbouring lines is
-- 169: `_bare` A person's line without its numbers (sizes, colours, seeds): the words a note would name stay.
-- 176: SAME (data)
-- 185: `_note_words` A note's words plus the code's words for the same things (SAME).
-- 191: `_words` 
-- 195: STOP (data)
-- 201: `page_path` 
-- 205: `shared_path` R12: the shared code's map, kept apart so a round that reads the page pays only for the film's own code.
-- 210: `stale` True when the page is missing or older than any film file or story list it is made from.
-- 219: `find` 
-- 238: _CACHE (data)
-- 241: `_parsed` (lines, defs, blocks, line words) for a file, kept until it changes. blocks: the module-level statements outsi
-- 261: `_defs` {start line: (end line, name)} for the file's top-level defs and classes (and methods inside classes); with
-- 269: SIZE (data)
-- 273: `_deep` Change 2: every def and table, scored by its best single line (the note's words met on one line: a comment
-- 293: `_line_score` The best single line's count of the note's words (change 2), and its line number.
-- 299: `shots` [(name, start, end)] from the film's SHOTS list, cached in story/FILM-shots.json until a code file is newer.
-- 327: `_shot_of` The code's shot names the notes table's shot text means: ([names], message or '').
-- 345: `_at` The notes table's time column ('49.45-53.6', '36.8', 'all', '-') -> one second or None.
-- 351: `_log` 
-- 363: `show` A note's words -> the code to read: [(header, [(line number, text)])], at most ~budget code lines in all.
-- 450: `main` 
+## notesteps.py (194 lines)
+- 27: HERE (data)
+- 28: ROOT (data)
+- 29: STATE (data)
+- 30: LOG (data)
+- 32: MARK (data)
+- 33: DONE (data)
+- 34: SHOW (data)
+- 36: SAY_ASK (data)
+- 38: SAY_STOP (data)
+- 43: `_load` 
+- 52: `_close` 
+- 65: `step` One tool call -> the message to show the chat, or None.
+- 95: `stage_steps` Replay test 2 (Sam's Y, 27 Nov: "steps counted per stage and saved for good"): this chat's steps since its
+- 114: `report` 
+- 130: `test` The fault, saved as an example: a round like chat 30's (four notes, ~35 steps each, nobody told). Replayed
+- 170: `main` 
+
+## parts.py (245 lines)
+- 33: HERE (data)
+- 34: PART_RE (data)
+- 35: INCL_RE (data)
+- 38: `include` Run each part (source/NAME.py, beside the calling module) inside g, the calling module's globals.
+- 50: `parent` 'views' for a part of views.py, else None.
+- 61: `_names` 
+- 65: `family` [module file, part files in order] for a split module (from the module or any of its parts); else [path].
+- 79: `joined` The split module's text as one file again: each include line replaced by its parts' text (each part's own
+- 96: SECTION (data)
+- 97: LIMIT (data)
+- 100: `split` Cut source/MOD.py into parts at its own top-level section lines. The module keeps its opening (docstring,
+- 186: `test` kittest parts_one_namespace. The fault it guards: a plain split (`from views_arms import *`) gives moved code 
 
 ## peepee.py (813 lines)
 - 67: HERE (data)
@@ -2523,103 +2536,105 @@
 - 778: `render` 
 - 799: `main` 
 
-## people.py (1333 lines)
-- 71: HERE (data)
-- 73: ROOT (data)
-- 76: COLOURS (data)
-- 81: HAIR_STYLES (data)
-- 83: FAMOUS_HAIR (data)
-- 84: BEHIND (data)
-- 87: OUTFITS (data)
-- 88: DEFAULTS (data)
-- 93: STEPS (data)
-- 95: STEP (data)
-- 98: `class DescriptionError` 
-- 103: `colour` 
-- 113: `_num` 
-- 120: `parse` The film's people file -> {who: description dict} in the order written.
-- 150: CYCLE (data)
-- 151: WHEN (data)
-- 154: `_formula` '3i+s' -> (3, 1): member i of a crowd takes item (3i + s) of a list (s: the shot's seed).
-- 166: `_crowd_line` A crowd's own lines, kept to apply per member: 'FACT (3i+s): item; item; ...' (member i takes one item) and
-- 196: KIT_HATS_ALL (data)
-- 198: SKIN_TONES (data)
-- 201: MIXES (data)
-- 208: TOPS (data)
-- 211: LEGS (data)
-- 212: SHOES (data)
-- 213: HATS (data)
-- 215: FACES (data)
-- 217: MEN_HAIR (data)
-- 218: WOMEN_HAIR (data)
-- 219: WOMEN (data)
-- 220: SAID (data)
-- 223: BEFORE_DEFAULTS (data)
-- 230: BEFORE_SEX (data)
-- 236: BEFORE_SEATED (data)
-- 240: `seat_r7` Does this film draw seated people with R7's lower body? (every film not in BEFORE_SEATED)
-- 250: SEAT_BODY (data)
-- 251: BODY_SPEC (data)
-- 252: STAND_BODY (data)
-- 256: `seat_body` Put one person on the seated body tool, with the spec Sam passed (R7 chat 10/15: the turned torso hangs
-- 265: SEXED (data)
-- 267: BODY_KEYS (data)
-- 270: `_sexed` The woman's body for a person marked `woman`: what the body line leaves unsaid comes from SEXED.
-- 280: `_said` The facts a crowd's own lines give (plain, cycled or per 'when'): the defaults leave these alone.
-- 292: `_pick` 
-- 297: `varied` Member i's defaults for what the crowd's lines leave unsaid (EPR's mix; the same member in every shot).
-- 373: BEFORE_POOL (data)
-- 376: POOL_SKINS (data)
-- 379: POOL_HAIR (data)
-- 385: POOL_HAIR_C (data)
-- 392: POOL_GREYS (data)
-- 393: POOL_FACES (data)
-- 395: POOL_TOPS (data)
-- 407: POOL_LEGS (data)
-- 410: POOL_SHOES (data)
-- 412: POOL_LIPS (data)
-- 413: POOL_PLACES (data)
-- 417: POOL_DRESS (data)
-- 421: `pool_varied` Member i's look from the pooled pack (what the crowd's lines leave unsaid), the same member in every shot.
-- 505: `pooled` One person from the pooled pack with no people file: member i of a bare pooled crowd at this place (a test
-- 513: `member` Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description.
-- 537: `_fact` 
-- 797: TAILORING (data)
-- 801: `person` One description -> the engine's person dict (views.person), with its face card in 'kit_face'.
-- 860: `_house` A face tool pick on the house head (facehouse.person): the pick's face, colours and age lines; the hair piece,
-- 892: `_famous` A measured head (people_famous): the likeness card, the beard, the curls, the moods, from the lines.
-- 908: `people_file` 
-- 912: `load` The film's people file -> {who: engine person} (crowds apart: crowds()).
-- 936: `crowds` The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i. A film built before the
-- 949: `crowd_person` Crowd member i as the engine's person (their own look; the film adds what they are doing).
-- 964: `_extras` 
-- 978: `turned` Each torso piece in the turned views (chat 15: one outfit in every view): 'back', its drawing seen from behind
-- 994: `pieces` The torso pieces this look wears, in the order drawn: the open collar (the outfit's), then the extras.
-- 1002: WORN_OVER (data)
-- 1005: TURNED_ON (data)
-- 1006: FILM_TURNED (data)
-- 1007: DREW (data)
-- 1010: `kit_torso_view` views.TORSO_EXTRAS: this look's torso pieces in a turned view.
-- 1028: `_head_parts` 
-- 1038: EXTRAS (data)
-- 1040: HEAD_PARTS (data)
-- 1043: `head_faults` Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"):
-- 1056: `install` Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person).
-- 1084: `kit_head` The look's own head: a head extra (the wig), a measured or named part, or the invented front face.
-- 1093: `kit_torso` The look's torso pieces, in the order written (open collar, open shirt, crucifix, scarf...); none: the plain
-- 1103: `faults` Blessed's notes 5, 13, 15, 45 (a repeated note): a face on the house head draws no mouth at rest. Everyone the
-- 1114: YAWS (data)
-- 1117: `sheet` Every person in the people file at five turns (front, three-quarter, side, three-quarter behind, behind) at
-- 1154: `cast_sheet` The catalogue's tile: the kit's test cast (Blessed's invented people).
-- 1164: FRAMES (data)
-- 1167: KEEP (data)
-- 1170: `_film_people` The film's own dicts for each person in its people file, found by name (film-specific: a small table).
-- 1200: `_differ` 
-- 1206: FROZEN_DRIFT (data)
-- 1207: FROZEN_FILMS (data)
-- 1210: `replicate` Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
-- 1301: `PT_WHO` Who the new turned-head route draws that the film drew plain (invented faces; crowds were already turned).
-- 1307: `lines` Each person's description, one page line each, for page.py (a note on a person changes these lines, not
+## people.py (1379 lines)
+- 72: HERE (data)
+- 74: ROOT (data)
+- 77: COLOURS (data)
+- 82: HAIR_STYLES (data)
+- 84: FAMOUS_HAIR (data)
+- 85: BEHIND (data)
+- 88: OUTFITS (data)
+- 89: DEFAULTS (data)
+- 94: STEPS (data)
+- 96: STEP (data)
+- 99: `class DescriptionError` 
+- 104: `colour` 
+- 114: `_num` 
+- 121: `parse` The film's people file -> {who: description dict} in the order written.
+- 151: CYCLE (data)
+- 152: WHEN (data)
+- 155: `_formula` '3i+s' -> (3, 1): member i of a crowd takes item (3i + s) of a list (s: the shot's seed).
+- 167: `_crowd_line` A crowd's own lines, kept to apply per member: 'FACT (3i+s): item; item; ...' (member i takes one item) and
+- 197: KIT_HATS_ALL (data)
+- 199: SKIN_TONES (data)
+- 202: MIXES (data)
+- 209: TOPS (data)
+- 212: LEGS (data)
+- 213: SHOES (data)
+- 214: HATS (data)
+- 216: FACES (data)
+- 218: MEN_HAIR (data)
+- 219: WOMEN_HAIR (data)
+- 220: WOMEN (data)
+- 221: SAID (data)
+- 224: BEFORE_DEFAULTS (data)
+- 231: BEFORE_SEX (data)
+- 237: BEFORE_SEATED (data)
+- 241: `seat_r7` Does this film draw seated people with R7's lower body? (every film not in BEFORE_SEATED)
+- 251: SEAT_BODY (data)
+- 252: BODY_SPEC (data)
+- 253: STAND_BODY (data)
+- 257: `seat_body` Put one person on the seated body tool, with the spec Sam passed (R7 chat 10/15: the turned torso hangs
+- 266: SEXED (data)
+- 268: BODY_KEYS (data)
+- 271: `_sexed` The woman's body for a person marked `woman`: what the body line leaves unsaid comes from SEXED.
+- 281: `_said` The facts a crowd's own lines give (plain, cycled or per 'when'): the defaults leave these alone.
+- 293: `_pick` 
+- 298: `varied` Member i's defaults for what the crowd's lines leave unsaid (EPR's mix; the same member in every shot).
+- 374: BEFORE_POOL (data)
+- 377: POOL_SKINS (data)
+- 380: POOL_HAIR (data)
+- 386: POOL_HAIR_C (data)
+- 393: POOL_GREYS (data)
+- 394: POOL_FACES (data)
+- 396: POOL_TOPS (data)
+- 408: POOL_LEGS (data)
+- 411: POOL_SHOES (data)
+- 413: POOL_LIPS (data)
+- 414: POOL_PLACES (data)
+- 418: POOL_DRESS (data)
+- 422: `pool_varied` Member i's look from the pooled pack (what the crowd's lines leave unsaid), the same member in every shot.
+- 506: `pooled` One person from the pooled pack with no people file: member i of a bare pooled crowd at this place (a test
+- 514: `member` Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description.
+- 538: `_fact` 
+- 798: TAILORING (data)
+- 802: `person` One description -> the engine's person dict (views.person), with its face card in 'kit_face'.
+- 861: `_house` A face tool pick on the house head (facehouse.person): the pick's face, colours and age lines; the hair piece,
+- 900: `colour_faults` Replay test 2 (Sam's Y, 27 Nov): El-Sayed came out pale-skinned with a grey beard (the face tool read a lit
+- 921: `_colour_lines` 
+- 936: `_famous` A measured head (people_famous): the likeness card, the beard, the curls, the moods, from the lines.
+- 952: `people_file` 
+- 956: `load` The film's people file -> {who: engine person} (crowds apart: crowds()).
+- 980: `crowds` The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i. A film built before the
+- 993: `crowd_person` Crowd member i as the engine's person (their own look; the film adds what they are doing).
+- 1008: `_extras` 
+- 1022: `turned` Each torso piece in the turned views (chat 15: one outfit in every view): 'back', its drawing seen from behind
+- 1038: `pieces` The torso pieces this look wears, in the order drawn: the open collar (the outfit's), then the extras.
+- 1046: WORN_OVER (data)
+- 1049: TURNED_ON (data)
+- 1050: FILM_TURNED (data)
+- 1051: DREW (data)
+- 1054: `kit_torso_view` views.TORSO_EXTRAS: this look's torso pieces in a turned view.
+- 1072: `_head_parts` 
+- 1082: EXTRAS (data)
+- 1084: HEAD_PARTS (data)
+- 1087: `head_faults` Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"):
+- 1100: `install` Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person).
+- 1128: `kit_head` The look's own head: a head extra (the wig), a measured or named part, or the invented front face.
+- 1137: `kit_torso` The look's torso pieces, in the order written (open collar, open shirt, crucifix, scarf...); none: the plain
+- 1147: `faults` Blessed's notes 5, 13, 15, 45 (a repeated note): a face on the house head draws no mouth at rest. Everyone the
+- 1158: YAWS (data)
+- 1161: `sheet` Every person in the people file at five turns (front, three-quarter, side, three-quarter behind, behind) at
+- 1200: `cast_sheet` The catalogue's tile: the kit's test cast (Blessed's invented people).
+- 1210: FRAMES (data)
+- 1213: KEEP (data)
+- 1216: `_film_people` The film's own dicts for each person in its people file, found by name (film-specific: a small table).
+- 1246: `_differ` 
+- 1252: FROZEN_DRIFT (data)
+- 1253: FROZEN_FILMS (data)
+- 1256: `replicate` Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
+- 1347: `PT_WHO` Who the new turned-head route draws that the film drew plain (invented faces; crowds were already turned).
+- 1353: `lines` Each person's description, one page line each, for page.py (a note on a person changes these lines, not
 
 ## people_famous.py (552 lines)
 - 22: ROOT (data)
@@ -3413,111 +3428,115 @@
 - 674: `solids_faults` What rule 5 needs and a film lacks, said out loud (never skipped in silence).
 - 689: `sketch` Each shot's camera on the plain set (plain_room), the portals at work, on one sheet.
 
-## sitting.py (1683 lines)
-- 33: HERE (data)
-- 40: FPS (data)
-- 41: SIT (data)
-- 42: FLOOR (data)
-- 43: ANKLE_UP (data)
-- 44: PERCH_SIT (data)
-- 45: ARMREST_DROP (data)
-- 46: SLEEVE (data)
-- 47: DUR (data)
-- 51: `ease` 
-- 56: `lerp` 
-- 60: `seg` 0 before a, 1 after b, eased between.
-- 65: `vlerp` 
-- 69: `rot` A direction tipped forward by `lean` degrees (as views.leaned, without the pivot).
-- 77: `_box` A box in the body's frame (x across, y down, z forward), tipped back `tilt` degrees about the hips (a
-- 93: `_depth` 
-- 97: `class Seat` A seat, measured: `h` its top above the floor, `front` its front edge and `rear` its back edge (z from the
-- 213: `class Desk` A plain desk in front of a seated person: top `h` above the floor (0.71 m), its near edge `front` units in
-- 274: `recline_of` How far the chair back is reclined: the lean back times `give` (1: the back follows the trunk; a slump's
-- 282: `j2yaw` 
-- 287: `_spec` 
-- 296: SIDED (data)
-- 297: SIDED_FLAGS (data)
-- 300: `_default_sided` 
-- 311: `mix` A spec part-way between two (numbers and hand targets eased; a hand's shape from the nearer one).
-- 355: `keyed` A spec from timed keys [(u, spec)], eased between neighbours.
-- 365: `_elbow_on_plane` An elbow lying on the plane y = yp, `U` from the shoulder S and `Fo` from the hand H: the outer of the two
-- 385: `arm_free` A hand at a point in the body's frame (after the lean), the elbow towards `pole` (x as for the right arm).
-- 390: `arm_rest` A forearm lying on a surface (desk, armrest): the hand and the elbow both on it (rule 78).
-- 396: `armrest_faults` Open Wounds note 19 (Sam, 26 Nov: Tony's "hands hover rather than resting on the chair arms"). Why nobody saw
-- 410: `realize` The joints for views.person: hips on the seat (or rising off it), feet on the floor, arms solved.
-- 485: `_thigh_rest` A hand resting on the top of the thigh, `u` of the way to the knee (body frame, seated).
-- 492: `spec_upright` 
-- 543: R7_APART_GAP (data)
-- 544: R7_APART_SHIN (data)
-- 546: R7_APART_OUT (data)
-- 548: R7_STAGGER (data)
-- 549: WOMAN_FEET (data)
-- 550: R7_WOMAN (data)
-- 553: `spec_hands_folded` Forearms on the desk, hands meeting in front (Ad-Vanced Notice line 1: seated upright, hands folded).
-- 561: `spec_lean_in` Elbows on the desk, forearms up, hands together in front of the chin: interested, or scheming.
-- 572: `spec_lean_back` Leaning back, the chair reclined with him: hands cupping the back of the head, elbows wide (smug, in charge),
-- 589: `spec_armrests` Back in an armchair, forearms along the armrests, hands over their ends.
-- 601: POSES (data)
-- 613: `seat_for` 
-- 618: `pose` 
-- 626: R7_CROSS (data)
-- 631: `knees` Where the knees land for a spec (body frame), worked out by drawing nothing.
-- 637: `_chair` A body-frame point in the chair's frame (heights above the floor; z from the seat's hip mark).
-- 642: `_leg_by_knee` A leg placed by where the knee goes (a direction from the hip) and where the shin hangs (a direction from
-- 651: `_ankle_spec` A body-frame ankle as the spec's (x, height above the floor, chair z).
-- 657: `spec_cross_knee` Knee over knee (prim, closed, careful: Pease): the thighs together, the top thigh lying on the lower one
-- 686: `spec_figure_four` Ankle on knee, the "figure four" (cocky, dominant, at ease: Pease): the top ankle on the lower knee, the top
-- 711: `spec_feet_up` Feet up on the desk (ownership, contempt: Pease): the chair pushed back a little and reclined, hands behind
-- 735: `spec_perch` Perched on the chair's front edge (eager, nervous, about to go: Navarro): the hips on the front third of the
-- 753: `spec_perch_desk` Perched on a desk's corner (the casual boss, "let's chat"): standing beside the desk's front end, the left
-- 770: `spec_slump` Slumped (defeated, bored, sulking): the hips slid forward to the seat's front, the back rounded against the
-- 783: `_rise_above` Where along a leg (0-1 the thigh, 1-2 the shin) it rises above a surface at body height `top`.
-- 794: `_shoe_low` How far the shoe's lowest point is below the ankle (views' shoe, toes lifted `toe` degrees).
-- 801: PART1 (data)
-- 813: `_standing_spec` 
-- 819: `stand_up` Rising from the seat, u 0-1 over DUR['stand_up'] (1.1 s; 'quick' 0.7 s, 'weary' 1.8 s). The feet step back
-- 842: `_no_sink` Lift the hips just enough that the head stays at or above its seated height front on (rule 80): the body
-- 855: `sit_down` Sitting down, u 0-1 over DUR['sit_down'] (1.3 s; 'plonk' 0.55 s, tired; 'careful' 2 s). The bottom leads back
-- 885: `lean_back_move` Upright to leaning back (0.6 s): the shoulders go first, the chair gives, a small rock as it settles; the hand
-- 900: `idle` The moving hold (figure-rig s.6): breathing as a lean (rule 64), a small shift of weight every 4-8 s, hands
-- 923: `gesture` A talking gesture from the seat: any moves.pose gesture's raised arms on top of a seated pose; a hand the
-- 962: `acting_demo` A run of seated gestures [(start, name, length)] over the moving hold (for the test clip and as a pattern).
-- 977: `_path` A point along a few waypoints [(u, point)], eased between each pair.
-- 987: `cross_legs` Crossing the legs (0.7 s; uncross: the same played back over 0.5 s): the weight shifts and the lower foot
-- 1012: `feet_up_move` Feet up on the desk (1.5 s): a push back from the desk (the chair rolls), the lean back with the hands going
-- 1035: `feet_down_move` Feet down off the desk (0.8 s; 'snap', caught out: 0.4 s): the legs first (the top one, then the other; both
-- 1069: `scoot_to_perch` Two small hip shuffles forward to the seat's front edge (0.4 s), leaning in, the hands going to the knees.
-- 1083: `slump_move` Slumping (1.5 s slow deflate; 'collapse' 0.4 s, comic): a breath out, the shoulders drop first, the hips
-- 1108: `spec_steeple` Upright, fingertips together in front of the chest (the villain's steeple).
-- 1115: `swivel` The swivel-chair turn (0.8 s; the villain's reveal): he and the chair turn together, the head a beat ahead
-- 1134: `head_y` Where the head's centre lands on screen, front on (person units, the whole body's drop included).
-- 1140: `check_frame` Faults in one drawing, in plain words.
-- 1201: `shoe_points` The shoe's corners (body frame), as views draws it.
-- 1207: `leg_gap` How far a point is from the surface of a leg (or one part of it: 'thigh', 'shin'); - = inside it.
-- 1220: `leg_samples` Points along a leg with the leg's half-width there (body frame): the thigh then the shin.
-- 1231: `_into_box` How far a ball (centre q, radius r) sinks into a box (x0, x1, y0, y1, z0, z1): > 0 = into it.
-- 1240: `_solids` Every solid set piece near the legs, each as (name, box in its own frame, body-to-own-frame, allowance).
-- 1258: `check_legs` Part 2's leg checks, in plain words: each foot on what it rests on (floor, desk top, the other knee or leg;
-- 1317: `back_gap` The gap between his back and the chair back's face at body height `hb` (before the lean): + = a gap, - =
-- 1341: `check_back` Back on the chair back (lean back, feet up, slump: the shoulders touch it), clear of it (a perch), never
-- 1361: `check_no_sink` Rule 80: front on, the head never drops below its seated height.
-- 1368: `check_balance` The hips are a third of the way up only once the neck is over the feet (side on: no rising on air).
-- 1379: `check_feet_planted` A foot on the floor stays put (no sliding) unless it is stepping (lifted).
-- 1394: `frames_of` 
-- 1399: `audit` Every pose and move in the kit, checked. Returns the faults (empty = clean).
-- 1427: `part2_moves` Part 2's moves: (name, seat, u -> spec, length).
-- 1445: `check_desk_still` The chair follows the turn, the desk doesn't: a desk corner stays on the same spot on screen while he
-- 1463: `audit_part2` 
-- 1475: `_setup` 
-- 1491: `draw_one` 
-- 1501: AVOID (data)
-- 1510: REFS (data)
-- 1520: REF_VIEW (data)
-- 1524: `refsheet` Each pose from its photo's angle (REF_VIEW; else front on) beside its reference photos (rule 76).
-- 1552: `sheet` Every pose from the five views, the hand check (rule 41) and the kit's checks under each.
-- 1588: `clip` A short clip of one move, front and side by side (12 drawings a second), held a moment at each end.
-- 1617: `clips2` Part 2's moves in one small video (front and side; the swivel from the front, the desk staying put),
-- 1646: `clips` 
+## sitting.py (310 lines)
+- 36: HERE (data)
+- 44: FPS (data)
+- 45: SIT (data)
+- 46: FLOOR (data)
+- 47: ANKLE_UP (data)
+- 48: PERCH_SIT (data)
+- 49: ARMREST_DROP (data)
+- 50: SLEEVE (data)
+- 51: DUR (data)
+- 55: `ease` 
+- 60: `lerp` 
+- 64: `seg` 0 before a, 1 after b, eased between.
+- 69: `vlerp` 
+- 73: `rot` A direction tipped forward by `lean` degrees (as views.leaned, without the pivot).
+- 81: `_box` A box in the body's frame (x across, y down, z forward), tipped back `tilt` degrees about the hips (a
+- 97: `_depth` 
+- 101: `class Seat` A seat, measured: `h` its top above the floor, `front` its front edge and `rear` its back edge (z from the
+- 217: `class Desk` A plain desk in front of a seated person: top `h` above the floor (0.71 m), its near edge `front` units in
+- 278: `recline_of` How far the chair back is reclined: the lean back times `give` (1: the back follows the trunk; a slump's
+- 286: `j2yaw` 
+
+## sitting_b.py (900 lines)
+- 55: `_spec` 
+- 64: SIDED (data)
+- 65: SIDED_FLAGS (data)
+- 68: `_default_sided` 
+- 79: `mix` A spec part-way between two (numbers and hand targets eased; a hand's shape from the nearer one).
+- 123: `keyed` A spec from timed keys [(u, spec)], eased between neighbours.
+- 133: `_elbow_on_plane` An elbow lying on the plane y = yp, `U` from the shoulder S and `Fo` from the hand H: the outer of the two
+- 153: `arm_free` A hand at a point in the body's frame (after the lean), the elbow towards `pole` (x as for the right arm).
+- 158: `arm_rest` A forearm lying on a surface (desk, armrest): the hand and the elbow both on it (rule 78).
+- 164: `armrest_faults` Open Wounds note 19 (Sam, 26 Nov: Tony's "hands hover rather than resting on the chair arms"). Why nobody saw
+- 178: `realize` The joints for views.person: hips on the seat (or rising off it), feet on the floor, arms solved.
+- 253: `_thigh_rest` A hand resting on the top of the thigh, `u` of the way to the knee (body frame, seated).
+- 260: `spec_upright` 
+- 311: R7_APART_GAP (data)
+- 312: R7_APART_SHIN (data)
+- 314: R7_APART_OUT (data)
+- 316: R7_STAGGER (data)
+- 317: WOMAN_FEET (data)
+- 318: R7_WOMAN (data)
+- 321: `spec_hands_folded` Forearms on the desk, hands meeting in front (Ad-Vanced Notice line 1: seated upright, hands folded).
+- 329: `spec_lean_in` Elbows on the desk, forearms up, hands together in front of the chin: interested, or scheming.
+- 340: `spec_lean_back` Leaning back, the chair reclined with him: hands cupping the back of the head, elbows wide (smug, in charge),
+- 357: `spec_armrests` Back in an armchair, forearms along the armrests, hands over their ends.
+- 369: POSES (data)
+- 381: `seat_for` 
+- 386: `pose` 
+- 394: R7_CROSS (data)
+- 399: `knees` Where the knees land for a spec (body frame), worked out by drawing nothing.
+- 405: `_chair` A body-frame point in the chair's frame (heights above the floor; z from the seat's hip mark).
+- 410: `_leg_by_knee` A leg placed by where the knee goes (a direction from the hip) and where the shin hangs (a direction from
+- 419: `_ankle_spec` A body-frame ankle as the spec's (x, height above the floor, chair z).
+- 425: `spec_cross_knee` Knee over knee (prim, closed, careful: Pease): the thighs together, the top thigh lying on the lower one
+- 454: `spec_figure_four` Ankle on knee, the "figure four" (cocky, dominant, at ease: Pease): the top ankle on the lower knee, the top
+- 479: `spec_feet_up` Feet up on the desk (ownership, contempt: Pease): the chair pushed back a little and reclined, hands behind
+- 503: `spec_perch` Perched on the chair's front edge (eager, nervous, about to go: Navarro): the hips on the front third of the
+- 521: `spec_perch_desk` Perched on a desk's corner (the casual boss, "let's chat"): standing beside the desk's front end, the left
+- 538: `spec_slump` Slumped (defeated, bored, sulking): the hips slid forward to the seat's front, the back rounded against the
+- 551: `_rise_above` Where along a leg (0-1 the thigh, 1-2 the shin) it rises above a surface at body height `top`.
+- 562: `_shoe_low` How far the shoe's lowest point is below the ankle (views' shoe, toes lifted `toe` degrees).
+- 569: PART1 (data)
+- 581: `_standing_spec` 
+- 587: `stand_up` Rising from the seat, u 0-1 over DUR['stand_up'] (1.1 s; 'quick' 0.7 s, 'weary' 1.8 s). The feet step back
+- 610: `_no_sink` Lift the hips just enough that the head stays at or above its seated height front on (rule 80): the body
+- 623: `sit_down` Sitting down, u 0-1 over DUR['sit_down'] (1.3 s; 'plonk' 0.55 s, tired; 'careful' 2 s). The bottom leads back
+- 653: `lean_back_move` Upright to leaning back (0.6 s): the shoulders go first, the chair gives, a small rock as it settles; the hand
+- 668: `idle` The moving hold (figure-rig s.6): breathing as a lean (rule 64), a small shift of weight every 4-8 s, hands
+- 691: `gesture` A talking gesture from the seat: any moves.pose gesture's raised arms on top of a seated pose; a hand the
+- 730: `acting_demo` A run of seated gestures [(start, name, length)] over the moving hold (for the test clip and as a pattern).
+- 745: `_path` A point along a few waypoints [(u, point)], eased between each pair.
+- 755: `cross_legs` Crossing the legs (0.7 s; uncross: the same played back over 0.5 s): the weight shifts and the lower foot
+- 780: `feet_up_move` Feet up on the desk (1.5 s): a push back from the desk (the chair rolls), the lean back with the hands going
+- 803: `feet_down_move` Feet down off the desk (0.8 s; 'snap', caught out: 0.4 s): the legs first (the top one, then the other; both
+- 837: `scoot_to_perch` Two small hip shuffles forward to the seat's front edge (0.4 s), leaning in, the hands going to the knees.
+- 851: `slump_move` Slumping (1.5 s slow deflate; 'collapse' 0.4 s, comic): a breath out, the shoulders drop first, the hips
+- 876: `spec_steeple` Upright, fingertips together in front of the chest (the villain's steeple).
+- 883: `swivel` The swivel-chair turn (0.8 s; the villain's reveal): he and the chair turn together, the head a beat ahead
+
+## sitting_c.py (563 lines)
+- 34: `head_y` Where the head's centre lands on screen, front on (person units, the whole body's drop included).
+- 40: `check_frame` Faults in one drawing, in plain words.
+- 101: `shoe_points` The shoe's corners (body frame), as views draws it.
+- 107: `leg_gap` How far a point is from the surface of a leg (or one part of it: 'thigh', 'shin'); - = inside it.
+- 120: `leg_samples` Points along a leg with the leg's half-width there (body frame): the thigh then the shin.
+- 131: `_into_box` How far a ball (centre q, radius r) sinks into a box (x0, x1, y0, y1, z0, z1): > 0 = into it.
+- 140: `_solids` Every solid set piece near the legs, each as (name, box in its own frame, body-to-own-frame, allowance).
+- 158: `check_legs` Part 2's leg checks, in plain words: each foot on what it rests on (floor, desk top, the other knee or leg;
+- 217: `back_gap` The gap between his back and the chair back's face at body height `hb` (before the lean): + = a gap, - =
+- 241: `check_back` Back on the chair back (lean back, feet up, slump: the shoulders touch it), clear of it (a perch), never
+- 261: `check_no_sink` Rule 80: front on, the head never drops below its seated height.
+- 268: `check_balance` The hips are a third of the way up only once the neck is over the feet (side on: no rising on air).
+- 279: `check_feet_planted` A foot on the floor stays put (no sliding) unless it is stepping (lifted).
+- 294: `frames_of` 
+- 299: `audit` Every pose and move in the kit, checked. Returns the faults (empty = clean).
+- 327: `part2_moves` Part 2's moves: (name, seat, u -> spec, length).
+- 345: `check_desk_still` The chair follows the turn, the desk doesn't: a desk corner stays on the same spot on screen while he
+- 363: `audit_part2` 
+- 375: `_setup` 
+- 391: `draw_one` 
+- 401: AVOID (data)
+- 410: REFS (data)
+- 420: REF_VIEW (data)
+- 424: `refsheet` Each pose from its photo's angle (REF_VIEW; else front on) beside its reference photos (rule 76).
+- 452: `sheet` Every pose from the five views, the hand check (rule 41) and the kit's checks under each.
+- 488: `clip` A short clip of one move, front and side by side (12 drawings a second), held a moment at each end.
+- 517: `clips2` Part 2's moves in one small video (front and side; the swivel from the front, the desk staying put),
+- 546: `clips` 
 
 ## sizes.py (106 lines)
 - 17: TOL (data)
@@ -3711,7 +3730,7 @@
 - 119: `plays_shared_loader` Does the film's code play its recordings through mossad_audio.line (the shared loader the voice check reads)?
 - 133: `_test` 
 
-## toolhealth.py (701 lines)
+## toolhealth.py (703 lines)
 - 30: HERE (data)
 - 31: ROOT (data)
 - 34: MAIN (data)
@@ -3738,35 +3757,35 @@
 - 355: `_edits_by_session` {session tail: [(iso time, file)]}: code files each chat changed this week (source/*.py).
 - 365: REPLAY_MAX (data)
 - 368: `finder_use` Last week's real notes, asked again of the finder as it is NOW: does it point to a drawing file that chat then
-- 393: `finderwarn_reach` 
-- 403: `finderwarn_use` 
-- 412: `page_reach` 
-- 420: `page_use` 
-- 429: `packs_reach` 
-- 438: `packs_use` 
-- 452: `kittests_reach` 
-- 467: `kittests_use` 
-- 481: `ledger_reach` 
-- 496: `ledger_use` 
-- 504: CHANNELS (data)
-- 509: `plain_reach` 
-- 520: `plain_use` 
-- 538: `save_reach` 
-- 552: `save_use` 
-- 568: `body_reach` 
-- 582: `body_use` 
-- 592: `cast_reach` 
-- 611: `cast_use` 
-- 624: `missing` 
-- 628: TOOLS (data)
-- 645: RANK (data)
-- 648: `_run` 
-- 655: `check` 
-- 666: `line` 
-- 676: `report` 
-- 685: `at_start` A film's start (kitfilm.at_start / begin): the report beside the kit tests, saved for handover start.
+- 395: `finderwarn_reach` 
+- 405: `finderwarn_use` 
+- 414: `page_reach` 
+- 422: `page_use` 
+- 431: `packs_reach` 
+- 440: `packs_use` 
+- 454: `kittests_reach` 
+- 469: `kittests_use` 
+- 483: `ledger_reach` 
+- 498: `ledger_use` 
+- 506: CHANNELS (data)
+- 511: `plain_reach` 
+- 522: `plain_use` 
+- 540: `save_reach` 
+- 554: `save_use` 
+- 570: `body_reach` 
+- 584: `body_use` 
+- 594: `cast_reach` 
+- 613: `cast_use` 
+- 626: `missing` 
+- 630: TOOLS (data)
+- 647: RANK (data)
+- 650: `_run` 
+- 657: `check` 
+- 668: `line` 
+- 678: `report` 
+- 687: `at_start` A film's start (kitfilm.at_start / begin): the report beside the kit tests, saved for handover start.
 
-## touch.py (723 lines)
+## touch.py (759 lines)
 - 40: HERE (data)
 - 41: ROOT (data)
 - 42: CACHE (data)
@@ -3780,25 +3799,27 @@
 - 125: `_locals` Parameters and names assigned inside a def (they shadow module names).
 - 140: `_imports` `import x as y` -> {y: x}; `from x import a as b` -> {b: (x, a)}; only modules in the index.
 - 160: `parse_file` One file -> its defs, its uses and its name-only maybes (plain data, kept in the cache).
-- 233: `film_modules` A film's own code: a module with a top-level SHOTS (or its stem's sibling), as checkaudit counts it.
-- 245: `build` Every file parsed (or taken from the cache when unchanged) and joined into one index; written to the cache.
-- 338: `load` The index, rebuilt first for any file changed since (only those are parsed again).
-- 349: `_changed` 
-- 357: `stale_faults` For handover.py end: the index is missing or older than the code, or a file cannot be parsed.
-- 377: `lookup` NAME -> (exact defs, near defs). Exact: the whole id, its tail (`head_faults`, `Class.m`) or `mod.name`.
-- 390: HUBS (data)
-- 393: `reach` Every def whose calls lead to target, nearest first: {caller: (depth, via)}. A command's main() (a dispatcher:
-- 413: `tests_for` The kit tests whose calls reach any of targets (a target that is a kit test is its own).
-- 426: `_secs` 
-- 434: `rerun_line` One line: how many kit tests, about how long, and the command (long lists by --touching / --changed).
-- 448: `_where` 
-- 453: `report` The ~20-line answer for one NAME.
-- 518: `module_report` A whole file: its size, which files use it (film and shared apart), its most-used defs, the kit tests reaching
-- 546: `changed_defs` The defs whose lines a diff touched (working tree against `since`), from the diff's own line numbers.
-- 574: `rerun` 
-- 587: `test` The fault it catches, saved as an example: a hand trace of `people.head_faults` (the crowd-head check, Sam
-- 664: `hook` PostToolUse on Edit/Write: after an edit to code, the one RERUN line for everything changed since HEAD, said
-- 686: `main` 
+- 251: `_family` [the module's file, its parts] for a module kept in parts (parts.py, cost-spike fix 5c), else [path].
+- 263: `film_modules` A film's own code: a module with a top-level SHOTS (or its stem's sibling), as checkaudit counts it.
+- 275: `build` Every file parsed (or taken from the cache when unchanged) and joined into one index; written to the cache.
+- 368: `load` The index, rebuilt first for any file changed since (only those are parsed again).
+- 379: `_stamp` A file's stamp: its time and size, and for a module kept in parts its family's times too (a part is parsed
+- 386: `_changed` 
+- 393: `stale_faults` For handover.py end: the index is missing or older than the code, or a file cannot be parsed.
+- 413: `lookup` NAME -> (exact defs, near defs). Exact: the whole id, its tail (`head_faults`, `Class.m`) or `mod.name`.
+- 426: HUBS (data)
+- 429: `reach` Every def whose calls lead to target, nearest first: {caller: (depth, via)}. A command's main() (a dispatcher:
+- 449: `tests_for` The kit tests whose calls reach any of targets (a target that is a kit test is its own).
+- 462: `_secs` 
+- 470: `rerun_line` One line: how many kit tests, about how long, and the command (long lists by --touching / --changed).
+- 484: `_where` 
+- 489: `report` The ~20-line answer for one NAME.
+- 554: `module_report` A whole file: its size, which files use it (film and shared apart), its most-used defs, the kit tests reaching
+- 582: `changed_defs` The defs whose lines a diff touched (working tree against `since`), from the diff's own line numbers.
+- 610: `rerun` 
+- 623: `test` The fault it catches, saved as an example: a hand trace of `people.head_faults` (the crowd-head check, Sam
+- 700: `hook` PostToolUse on Edit/Write: after an edit to code, the one RERUN line for everything changed since HEAD, said
+- 722: `main` 
 
 ## turnhead.py (739 lines)
 - 35: H (data)
@@ -3871,149 +3892,155 @@
 - 769: `faults` Everything here but the prop test (that runs on pre-flight's drawing pass).
 - 774: `main` 
 
-## views.py (2401 lines)
-- 119: HERE (data)
-- 126: VIEWS (data)
-- 128: M_PER_UNIT (data)
-- 129: ELEV (data)
-- 130: _E (data)
-- 131: HIGH (data)
-- 132: HIP_Y (data)
-- 133: HC_HOOK (data)
-- 134: JACKET (data)
-- 135: SHORT_TOP_RISE (data)
-- 137: SEAT_DROP (data)
-- 138: LONG_HAIR (data)
-- 139: BALD (data)
-- 142: `blend` 
-- 146: `snap` Nearest drawn view (degrees 0-180) for an angle (0 = facing us, 90 = facing right, -90 = left, 180 = away),
-- 154: RAISED_OVER (data)
-- 157: `project` A body point seen from the camera, the body facing `yaw` degrees: (screen x, y) and depth (+ = nearer).
-- 165: `leaned` An upper-body point tipped forward by `lean` degrees about the hips (head goes forward and down).
-- 176: `_sub` 
-- 180: `_add` 
-- 184: `_mul` 
-- 188: `_dot` 
-- 192: `_unit` 
-- 197: `ik3` Two bones from `root` towards `target` (lengths l1, l2): the middle joint bends towards `pole` (a direction).
-- 212: POLES (data)
-- 216: `reach_ok` Can the hand reach `target` without stretching? (for the checks)
-- 222: `arm_to` Put a hand's contact point (fist, palm, point...: figure.HAND) on `target` (torso frame, before any lean).
-- 236: `aim` Point at `target` (torso frame): the arm nearly straight along the line from the shoulder, so the finger aims
-- 244: `standing` Standing relaxed: feet a little apart, arms hanging just in front of the body, hands loose fists.
-- 276: `set_arm` Arm joints from angles (both bones keep the rig's lengths): swing brings the upper arm forward (+) or back.
-- 290: `tube` One smooth limb through the points (rounded at each joint), tapering through `widths`.
-- 308: `_hull` 
-- 327: `knee_of` 
-- 350: WOMAN_LEGS (data)
-- 351: WOMAN_LEG (data)
-- 352: WOMAN_THIGH_IN (data)
-- 353: WOMAN_HIP_OUT (data)
-- 356: WOMAN_STANCE (data)
-- 357: WOMAN_SHOE (data)
-- 360: WOMAN_LEG_TURNED (data)
-- 363: `_woman_leg` 
-- 368: `_woman_knee` A bent leg's knee and ankle widths over a man's (seated, kneeling): a woman's slimmer, as WOMAN_LEG.
-- 373: `_hip_out` How far out (screen x, body units) a woman's thigh top is drawn from its joint: WOMAN_HIP_OUT, less as the
-- 381: `_thigh_edges` The standing legs' outer edges (left, right) at height y on screen (body.trouser_seat), or None. gap: also
-- 404: `knee_cap` A bent knee seen end-on (seated, the thigh at the lens): the thigh's rounded end, not a ball. Filled with no
-- 419: `seat_bottom` A seated person's bottom: the trousers' seat resting on the chair, rounded at the back, flat where it sits.
-- 449: SEATED_R7_VIEWS (data)
-- 450: R7 (data)
-- 452: R7_CAP (data)
-- 454: R7_SPREAD (data)
-- 455: R7_END_ON (data)
-- 459: `r7_on` The new seated lower body for this drawing? (seated on a lap, a new film, a drawn view, trousers). Or the body
-- 468: R7_CLOTH (data)
-- 475: R7_HIPS (data)
-- 478: `_r7_sizes` 
-- 486: `_frame` Two unit vectors across a limb running along u: `side` (nearest the body's x) and `vert` (u x side).
-- 495: `_limb3` Sample points of a tapered limb from a to b (elliptical rings: radii ra -> rb, each (across, up-down)), with
-- 534: `_r7_hull` The projected outline of a set of tagged 3D points: [(x, y)], [tag] (convex, counter-clockwise).
-- 554: `_r7_outline` The projected outline of one limb's samples (22 to a ring, as _limb3 lays them): seen along its side (its axis
-- 577: R7_ARCH (data)
-- 578: R7_CALF (data)
-- 579: R7_FAR (data)
-- 581: R7_LAP (data)
-- 585: `_r7_arch` 
-- 589: `_r7_calf` 
-- 593: `_r7_parts` One leg's 3D samples: the thigh (hip to knee; from t0 along it, its cut end open) and the shin (knee to
-- 607: `_r7_bottom` The bottom: a rounded mass about the hip joints, flat where it sits on the seat, spreading over it.
-- 626: `_r7_seat` The seat's top in the body frame: the sitting kit's own seat (its surface), else 40 under the hip joints.
-- 634: `_r7_union` Several projected parts drawn as ONE shape: every outline first (twice as wide), then every fill over them,
-- 643: `_r7_leg_over` One leg's own edges over the shape: its shin outlined, then the front of its thigh (from t0 to the knee)
-- 695: `_r7_off_shin` The stretches of a knee's edge not lying over its own shin (the convex outline hs): where the thigh's end lies
-- 722: `seated_lower` R7: everything of a seated person below the waist (the bottom, thighs, knees, shins, shoes) as one shape,
-- 744: R7_TURNED (data)
-- 747: BACK_INK (data)
-- 750: `r7_back_face` R7 chat 14 (Sam, 26 Nov, Kemi side: "Back of bum clips slightly into chair in side-on pose";
-- 766: `_r7_col` One leg's cloth colour: in shadow, a crossed leg's under leg (from any side), or the far leg of a turned view.
-- 777: `seated_knee_over` R7, after the jacket: a knee (or a crossed top leg from t0) nearer than the jacket's hem, drawn over it.
-- 784: `leg` One leg, hip to shoe. `from_u` > 0 starts the thigh that far along it (a crossed leg's top thigh drawn again
-- 833: KIT_LEG (data)
-- 837: `shoe` One shoe at the ankle (the end of leg(); R7 draws the seated legs itself and calls this).
-- 860: R7_SHOE (data)
-- 866: `_r7_frame` The shoe's frame with the toe angle turning the WHOLE shoe (sole and all) about the ankle: the old frame moved
-- 880: `_r7_shoe` A leather shoe from any angle (new films): the upper's hull (low at the toe, high at the heel, widest at the
-- 897: `_covered` A tube drawer for a leg in shorts: the leg drawn bare (skin), then the cloth over it from the hip down to
-- 965: `_trainer` A trainer from any angle: a hull through the shoe's points (low at the toe, high at the ankle, widest at the
-- 981: `shoe_frame` The shoe's own frame at the ankle: (dx across, dy down to the sole at 36, dz along to the toe at 92) to the bo
-- 1000: `check_arm3` The arm checker for skeleton arms, in 3D (on screen an arm pointing at the camera is rightly short): both bone
-- 1021: PROBE (data)
-- 1024: `hand` The hand at the end of an arm ('glove': gloved hands, a colour); while handcheck probes, in its key colour, an
-- 1033: `_no_arm` solid_seat mode 'whole': the arms and hands are in the solid body.
-- 1037: `arm` An arm and its hand; a short-sleeved top (sp['short_sleeve']): the bare arm, then the sleeve over the top of
-- 1057: `sleeve_colour` The sleeve's fill. A dark sleeve of the jacket's own cloth is lifted a little (Open Wounds chat 14, critique r
-- 1073: `sleeved_arm` 
-- 1088: BANGLES (data)
-- 1092: `bangles` Bangles and bracelets round the wrist (her, GTA chat 9; Sam: "both arms"): thin gold and silver bands, a
-- 1117: `_ring` 
-- 1122: `chair` A plain office chair at knee height for anyone seated: `under` = the parts behind and below the person (drawn
-- 1143: `class Tilted` A person's frame seen from a camera tilted down (Build list item 12, 25 Oct): heights squash by `c` towards
-- 1160: `class Mirrored` A head's frame flipped about its own centre line (x = cx): the head faces its own way, whichever way the body'
-- 1173: `class Rolled` A head's frame tipped `deg` degrees about the top of the neck (pivot) and dropped `dy` units (a nod): the
-- 1197: NOD_DEG (data)
-- 1200: NOD_PIVOT (data)
-- 1201: NOD_DEPTH (data)
-- 1202: NOD_FACING (data)
-- 1207: _FACE_BOX (data)
-- 1210: `face_box` The face's own shape in head units (its largest skin-coloured mark, as the head draws it: hair, hats, braids
-- 1233: NOD_SOLID (data)
-- 1236: `class Pitched` A head's frame nodded `deg` degrees (chin down: +) about the top of the neck, in 3D (NOD_* above): a nod as
-- 1274: WHITE (data)
-- 1277: `_split_long` A closed outline with every edge longer than `most` head units cut into equal pieces (never shorter than
-- 1287: `class Eyes` A head's pen that notes each eye as it is drawn (the white, then the pupil inside it), in screen pixels, so th
-- 1366: `class Lean` The drawing frame of the upper body, tipped by the pose's lean: a side view rotates about the hips; a front
-- 1386: `torso_view` The torso for each non-front view, facing right, in the person's own clothes.
-- 1515: `_bare_neck` A bare top (vest, tank; people.py sets vest_c): one neck and body, no line across the neck's foot (Sam, GTA
-- 1534: HEAD_WEAR (data)
-- 1535: TORSO_EXTRAS (data)
-- 1538: `torso_outline` The turned torso's outline (torso_view's body), facing right, in the body's units (o: the outline's
-- 1561: `_built_outline` A build's turned outline (GTA cast chat, 20 Nov): each side of the house outline below the shoulder scaled by
-- 1632: LAST_TURNED (data)
-- 1633: CURVE_BUMP (data)
-- 1634: CURVE_HIP (data)
-- 1639: `turned_curves_fault` R7 chat 10 (Sam, 25 Nov: "Way too curvaceous from this angle. She's Theresa May not a swimsuit model",
-- 1667: SEAT_ROUND (data)
-- 1670: `_seat_into_thighs` A short jacket's seat (body.trouser_seat), turned: each side's last SEAT_ROUND of the body eased (a quarter
-- 1689: TURNED_SIDE (data)
-- 1695: TURNED_BUST (data)
-- 1696: TURNED_BUST_Y (data)
-- 1697: TURNED_BUST_SD (data)
-- 1703: `_side_depths` The side view's front and back depth at each height (the turned outline borrows them).
-- 1716: `_fig_k` The build's width over the house body's at height y (1 over the shoulders, so the arms still hang there).
-- 1722: `_span` The outline's left and right edges at height y (None above or below it).
-- 1731: `class WrapPen` A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
-- 1833: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.
-- 1842: `_beard_col` 
-- 1848: `_sits` Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in fron
-- 1856: TURNED_HEADS (data)
-- 1857: NOT_MINE (data)
-- 1860: `head_view` The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head.
-- 1871: `plain_head_view` The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
-- 2071: TAP (data)
-- 2074: `person` Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
-- 2091: `_person` 
+## views.py (384 lines)
+- 60: HERE (data)
+- 68: VIEWS (data)
+- 70: M_PER_UNIT (data)
+- 71: ELEV (data)
+- 72: _E (data)
+- 73: HIGH (data)
+- 74: HIP_Y (data)
+- 75: HC_HOOK (data)
+- 76: JACKET (data)
+- 77: SHORT_TOP_RISE (data)
+- 79: SEAT_DROP (data)
+- 80: LONG_HAIR (data)
+- 81: BALD (data)
+- 84: `blend` 
+- 88: `snap` Nearest drawn view (degrees 0-180) for an angle (0 = facing us, 90 = facing right, -90 = left, 180 = away),
+- 96: RAISED_OVER (data)
+- 99: `project` A body point seen from the camera, the body facing `yaw` degrees: (screen x, y) and depth (+ = nearer).
+- 107: `leaned` An upper-body point tipped forward by `lean` degrees about the hips (head goes forward and down).
+- 118: `_sub` 
+- 122: `_add` 
+- 126: `_mul` 
+- 130: `_dot` 
+- 134: `_unit` 
+- 139: `ik3` Two bones from `root` towards `target` (lengths l1, l2): the middle joint bends towards `pole` (a direction).
+- 154: POLES (data)
+- 158: `reach_ok` Can the hand reach `target` without stretching? (for the checks)
+- 164: `arm_to` Put a hand's contact point (fist, palm, point...: figure.HAND) on `target` (torso frame, before any lean).
+- 178: `aim` Point at `target` (torso frame): the arm nearly straight along the line from the shoulder, so the finger aims
+- 186: `standing` Standing relaxed: feet a little apart, arms hanging just in front of the body, hands loose fists.
+- 218: `set_arm` Arm joints from angles (both bones keep the rig's lengths): swing brings the upper arm forward (+) or back.
+- 232: `tube` One smooth limb through the points (rounded at each joint), tapering through `widths`.
+- 250: `_hull` 
+- 269: `knee_of` 
+- 292: WOMAN_LEGS (data)
+- 293: WOMAN_LEG (data)
+- 294: WOMAN_THIGH_IN (data)
+- 295: WOMAN_HIP_OUT (data)
+- 298: WOMAN_STANCE (data)
+- 299: WOMAN_SHOE (data)
+- 302: WOMAN_LEG_TURNED (data)
+- 305: `_woman_leg` 
+- 310: `_woman_knee` A bent leg's knee and ankle widths over a man's (seated, kneeling): a woman's slimmer, as WOMAN_LEG.
+- 315: `_hip_out` How far out (screen x, body units) a woman's thigh top is drawn from its joint: WOMAN_HIP_OUT, less as the
+- 323: `_thigh_edges` The standing legs' outer edges (left, right) at height y on screen (body.trouser_seat), or None. gap: also
+- 346: `knee_cap` A bent knee seen end-on (seated, the thigh at the lens): the thigh's rounded end, not a ball. Filled with no
+- 361: `seat_bottom` A seated person's bottom: the trousers' seat resting on the chair, rounded at the back, flat where it sits.
+
+## views_b.py (746 lines)
+- 54: SEATED_R7_VIEWS (data)
+- 55: R7 (data)
+- 57: R7_CAP (data)
+- 59: R7_SPREAD (data)
+- 60: R7_END_ON (data)
+- 64: `r7_on` The new seated lower body for this drawing? (seated on a lap, a new film, a drawn view, trousers). Or the body
+- 73: R7_CLOTH (data)
+- 80: R7_HIPS (data)
+- 83: `_r7_sizes` 
+- 91: `_frame` Two unit vectors across a limb running along u: `side` (nearest the body's x) and `vert` (u x side).
+- 100: `_limb3` Sample points of a tapered limb from a to b (elliptical rings: radii ra -> rb, each (across, up-down)), with
+- 139: `_r7_hull` The projected outline of a set of tagged 3D points: [(x, y)], [tag] (convex, counter-clockwise).
+- 159: `_r7_outline` The projected outline of one limb's samples (22 to a ring, as _limb3 lays them): seen along its side (its axis
+- 182: R7_ARCH (data)
+- 183: R7_CALF (data)
+- 184: R7_FAR (data)
+- 186: R7_LAP (data)
+- 190: `_r7_arch` 
+- 194: `_r7_calf` 
+- 198: `_r7_parts` One leg's 3D samples: the thigh (hip to knee; from t0 along it, its cut end open) and the shin (knee to
+- 212: `_r7_bottom` The bottom: a rounded mass about the hip joints, flat where it sits on the seat, spreading over it.
+- 231: `_r7_seat` The seat's top in the body frame: the sitting kit's own seat (its surface), else 40 under the hip joints.
+- 239: `_r7_union` Several projected parts drawn as ONE shape: every outline first (twice as wide), then every fill over them,
+- 248: `_r7_leg_over` One leg's own edges over the shape: its shin outlined, then the front of its thigh (from t0 to the knee)
+- 300: `_r7_off_shin` The stretches of a knee's edge not lying over its own shin (the convex outline hs): where the thigh's end lies
+- 327: `seated_lower` R7: everything of a seated person below the waist (the bottom, thighs, knees, shins, shoes) as one shape,
+- 349: R7_TURNED (data)
+- 352: BACK_INK (data)
+- 355: `r7_back_face` R7 chat 14 (Sam, 26 Nov, Kemi side: "Back of bum clips slightly into chair in side-on pose";
+- 371: `_r7_col` One leg's cloth colour: in shadow, a crossed leg's under leg (from any side), or the far leg of a turned view.
+- 382: `seated_knee_over` R7, after the jacket: a knee (or a crossed top leg from t0) nearer than the jacket's hem, drawn over it.
+- 389: `leg` One leg, hip to shoe. `from_u` > 0 starts the thigh that far along it (a crossed leg's top thigh drawn again
+- 438: KIT_LEG (data)
+- 442: `shoe` One shoe at the ankle (the end of leg(); R7 draws the seated legs itself and calls this).
+- 465: R7_SHOE (data)
+- 471: `_r7_frame` The shoe's frame with the toe angle turning the WHOLE shoe (sole and all) about the ankle: the old frame moved
+- 485: `_r7_shoe` A leather shoe from any angle (new films): the upper's hull (low at the toe, high at the heel, widest at the
+- 502: `_covered` A tube drawer for a leg in shorts: the leg drawn bare (skin), then the cloth over it from the hip down to
+- 570: `_trainer` A trainer from any angle: a hull through the shoe's points (low at the toe, high at the ankle, widest at the
+- 586: `shoe_frame` The shoe's own frame at the ankle: (dx across, dy down to the sole at 36, dz along to the toe at 92) to the bo
+- 605: `check_arm3` The arm checker for skeleton arms, in 3D (on screen an arm pointing at the camera is rightly short): both bone
+- 626: PROBE (data)
+- 629: `hand` The hand at the end of an arm ('glove': gloved hands, a colour); while handcheck probes, in its key colour, an
+- 638: `_no_arm` solid_seat mode 'whole': the arms and hands are in the solid body.
+- 642: `arm` An arm and its hand; a short-sleeved top (sp['short_sleeve']): the bare arm, then the sleeve over the top of
+- 662: `sleeve_colour` The sleeve's fill. A dark sleeve of the jacket's own cloth is lifted a little (Open Wounds chat 14, critique r
+- 678: `sleeved_arm` 
+- 693: BANGLES (data)
+- 697: `bangles` Bangles and bracelets round the wrist (her, GTA chat 9; Sam: "both arms"): thin gold and silver bands, a
+- 722: `_ring` 
+- 727: `chair` A plain office chair at knee height for anyone seated: `under` = the parts behind and below the person (drawn
+
+## views_c.py (716 lines)
+- 28: `class Tilted` A person's frame seen from a camera tilted down (Build list item 12, 25 Oct): heights squash by `c` towards
+- 45: `class Mirrored` A head's frame flipped about its own centre line (x = cx): the head faces its own way, whichever way the body'
+- 58: `class Rolled` A head's frame tipped `deg` degrees about the top of the neck (pivot) and dropped `dy` units (a nod): the
+- 82: NOD_DEG (data)
+- 85: NOD_PIVOT (data)
+- 86: NOD_DEPTH (data)
+- 87: NOD_FACING (data)
+- 92: _FACE_BOX (data)
+- 95: `face_box` The face's own shape in head units (its largest skin-coloured mark, as the head draws it: hair, hats, braids
+- 118: NOD_SOLID (data)
+- 121: `class Pitched` A head's frame nodded `deg` degrees (chin down: +) about the top of the neck, in 3D (NOD_* above): a nod as
+- 159: WHITE (data)
+- 162: `_split_long` A closed outline with every edge longer than `most` head units cut into equal pieces (never shorter than
+- 172: `class Eyes` A head's pen that notes each eye as it is drawn (the white, then the pupil inside it), in screen pixels, so th
+- 251: `class Lean` The drawing frame of the upper body, tipped by the pose's lean: a side view rotates about the hips; a front
+- 271: `torso_view` The torso for each non-front view, facing right, in the person's own clothes.
+- 400: `_bare_neck` A bare top (vest, tank; people.py sets vest_c): one neck and body, no line across the neck's foot (Sam, GTA
+- 419: HEAD_WEAR (data)
+- 420: TORSO_EXTRAS (data)
+- 423: `torso_outline` The turned torso's outline (torso_view's body), facing right, in the body's units (o: the outline's
+- 446: `_built_outline` A build's turned outline (GTA cast chat, 20 Nov): each side of the house outline below the shoulder scaled by
+- 517: LAST_TURNED (data)
+- 518: CURVE_BUMP (data)
+- 519: CURVE_HIP (data)
+- 524: `turned_curves_fault` R7 chat 10 (Sam, 25 Nov: "Way too curvaceous from this angle. She's Theresa May not a swimsuit model",
+- 552: SEAT_ROUND (data)
+- 555: `_seat_into_thighs` A short jacket's seat (body.trouser_seat), turned: each side's last SEAT_ROUND of the body eased (a quarter
+- 574: TURNED_SIDE (data)
+- 580: TURNED_BUST (data)
+- 581: TURNED_BUST_Y (data)
+- 582: TURNED_BUST_SD (data)
+- 588: `_side_depths` The side view's front and back depth at each height (the turned outline borrows them).
+- 601: `_fig_k` The build's width over the house body's at height y (1 over the shoulders, so the arms still hang there).
+- 607: `_span` The outline's left and right edges at height y (None above or below it).
+- 616: `class WrapPen` A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
+
+## views_d.py (580 lines)
+- 16: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.
+- 25: `_beard_col` 
+- 31: `_sits` Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in fron
+- 39: TURNED_HEADS (data)
+- 40: NOT_MINE (data)
+- 43: `head_view` The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head.
+- 54: `plain_head_view` The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
+- 254: TAP (data)
+- 257: `person` Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
+- 274: `_person` 
 
 ## voices.py (709 lines)
 - 97: `syllables_in` A rough count of spoken syllables (vowel groups per word, silent final e, numbers as words).
@@ -4083,7 +4110,7 @@
 - 289: `release` A render held for its picture checks (film_engine) goes under its own name once every line saved beside it
 - 308: `main` 
 
-## watcher.py (494 lines)
+## watcher.py (498 lines)
 - 38: ROOT (data)
 - 41: LOGS (data)
 - 42: BROKEN (data)
@@ -4091,26 +4118,26 @@
 - 44: KITLOG (data)
 - 45: STATE (data)
 - 47: PROMISES (data)
-- 119: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
-- 145: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
-- 159: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
-- 176: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
-- 182: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
-- 211: OFF (data)
-- 215: SWITCHES (data)
-- 218: `_read` 
-- 227: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
-- 246: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
-- 273: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
-- 326: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
-- 332: `check` 
-- 347: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
-- 366: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
-- 376: `standing` The open faults on the standing list (main line).
-- 381: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
-- 392: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
-- 439: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
-- 453: `main` 
+- 123: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
+- 149: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
+- 163: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
+- 180: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
+- 186: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
+- 215: OFF (data)
+- 219: SWITCHES (data)
+- 222: `_read` 
+- 231: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
+- 250: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
+- 277: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
+- 330: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
+- 336: `check` 
+- 351: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
+- 370: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
+- 380: `standing` The open faults on the standing list (main line).
+- 385: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
+- 396: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
+- 443: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
+- 457: `main` 
 
 ## wolf.py (1294 lines)
 - 71: PALS (data)

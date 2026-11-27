@@ -20,7 +20,14 @@ Kind: tool job (shared, every film). No film, shot, camera or beat touched.
 - [x] 5b. kittests.py (7,341 lines) split by topic into 9 files (452-1,024 lines each) + the runner (about 800 lines):
   217 tests in the same order, every function's text identical (checked), stamps still valid (same keys);
   kitstamps, checkaudit, ruleproofs, toolhealth, watcher, handover and touch read all parts.
-- [ ] 5c. The other 27 files over 1,500 lines: NOT split (see Open).
+- [x] 5c. Big files split (chat 2, 27 Nov): the six big SHARED kit files fixing chats open (views, sitting, lying,
+  facehouse, bench_move, burnham: 1,526-2,442 lines) are kept in parts of 220-945 lines by `source/parts.py`: the
+  module runs its parts inside its own namespace, so every setter from outside (views: 46, burnham: 247) still reaches
+  every function. Proved on each: the parts joined give the old text exactly; every global's bytecode and value the
+  same (only `_PARTS` added); touch.py's index loses no use of any def. touch, page.py's reach, castsheet's judge files
+  and kitstamps take a module's parts with it. Kit test `parts_one_namespace` (example: a plain split misses
+  `V.person = patched`, as kitchecks.install does). The 23 other files over 1,500 lines are finished films' own code
+  (rule 61: not retrofitted; nobody fixes them) and are left whole: splitting them is risk with no reader.
 - [x] 6. Chain guard `.claude/hooks/chainguard.py`: create_session without `model` refused; `handover.py start`
   says STOP when this chat runs on another model than the notes' Next line names, and the hook says it again if
   the model switches partway. Kit test `chain_model_lock` (example: the 27 Nov Brexit animatic chat, Sonnet->Opus).
@@ -39,9 +46,10 @@ Kind: tool job (shared, every film). No film, shot, camera or beat touched.
 The "before" trace count is a floor (one search per function on the path, none wasted); real chats did worse.
 
 ## Open
-- 5c: splitting the other 27 big files is not behaviour-safe by moving text alone: other code sets their module
-  values from outside (e.g. `PT.FAITHFUL = False`), which a moved function would no longer see. touch.py now lists
-  those setters ("sets"), so the next tool chat can split each file with its setters found first. Not started.
+- 5c is worth little on the record: the ledgers count 120 whole-file code reads in 16,847 steps (under 1%), so the
+  split is a guard, not a saving; the estimate never counted it. protest_tiers._cast_hash hashes views.py alone for
+  its sprite cache (a finished film; a re-render after a views part changes would reuse old sprites): left, rule 61.
+- A new big shared file: `python3 source/parts.py split MODULE`, then `python3 source/maps.py add` its parts.
 - Steps per note (aim 10-18) is unverified until the next notes round: `notesteps.py report` measures it.
 - move to shared: nothing (all of this is shared).
 
@@ -55,6 +63,13 @@ The "before" trace count is a floor (one search per function on the path, none w
   check_audit_lists_and_flags_repeats and critique_saw_it_column (touch.py's own test left a stand-in loaded).
 - App figure for this chat: $7.86; the estimate $8.81 (12% over, so not flagged). One chat proves nothing yet.
 
+- 5c (chat 2), the whole suite on both copies: old copy 218 passed, 6 failed; split copy 217 passed, 8 failed at
+  first. Both: the four Open Wounds film checks above (not this job's). Old only, fixed here: watcher (three tools had
+  no promise line) and maps (a stale MAP). Split copy only, all four the code finder, all fixed and passing:
+  page.files followed a module's imports but not its parts' (solid_seat fell out of reach), a page built before that
+  fix (the finder now rebuilds its page when it changes itself), and the tool-health replay compared a part's name
+  with last week's edit to the whole module.
+
 ## Handover check settled (end of chat)
 - 95 QUICK CHECK lines on 20 finished films: their code only gained a MAP at the top (no code changed, ast-proved);
   the faults are theirs from before (rule 61: finished films are not retrofitted). Not fixed, on purpose.
@@ -66,8 +81,8 @@ The "before" trace count is a floor (one search per function on the path, none w
 
 ## Where things stand
 - Rules that bite next: 30 (a repeat note: find why first), 89 (new drawing: drawn alone and critiqued), 85 (cost watch).
-- Done: replay test 2 and its savings S1-S4 built, kit-tested, verified end to end (sections below). 5c (splitting big
-  files) is with another chat on branch claude/cost-5c-split.
+- Done: steps 1-7 and 5c (six shared kit files kept in parts; kit test parts_one_namespace); replay test 2 and its
+  savings S1-S4 built, kit-tested, verified end to end (sections below). Estimate check runs when the next film posts.
 - Next (Opus, high: building new things), Sam's Y to all four, 27 Nov: B1 a solid short full beard on the house head
   (El-Sayed's read as stubble even black); B2 a long straight hair piece (middle parting, past the shoulders; the
   replay's Ocasio-Cortez photos in references/islamocommunism) so hair_fit stops saying NEW for it; B3 at a film's
@@ -75,7 +90,7 @@ The "before" trace count is a floor (one search per function on the path, none w
   film's notes; B4 facepick measures skin over the whole face (likeness card's way), not the lit cheek. Each with a
   kit test from the replay's saved numbers; existing films' faces unchanged (new picks only).
 - Needs Sam: nothing until the builds are shown (a cast sheet of El-Sayed and Ocasio-Cortez before and after).
-- Read: Plan pack in guides/job-packs.md; this file's "Replay test 2" and "Replay 2 savings" sections.
+- Read: Plan pack (a split module: its PARTS line, then `touch.py NAME`) in guides/job-packs.md; this file's "Replay test 2" and "Replay 2 savings" sections.
 - Open rule requests: none.
 - Locked by Sam: no film, shot, camera, framing or beat is touched by this job.
 - For Claude: facehouse.hair_fit/stubble/HAIR/TURN_PROF, facepick.make/colours, people._house/colour_faults,
@@ -139,6 +154,16 @@ that it is true." What was said, with all of 27 Nov's work in (savings 1-8, fix 
 - the other stages 10-20% off; still about 3x the 15%-of-a-week target (~$16).
 Check: the next posted film's ledger total and its steps per note (`notesteps.py report`, the notes rounds), against
 these; say plainly which held. Call films by their title (Sam, 27 Nov: "Open Wounds", not "Brexit").
+
+Rows looked at again (chat 2, 27 Nov), before any film is posted:
+- No real notes round has run on the new tools yet (Open Wounds chat 42 ended at 07:20, the tools came at 11:02). The
+  only step counts are the replay's (notes at 14, 16 and 19 steps; notes under 12 are not logged), the same data
+  the ~16-18 came from: consistent, not yet independent. Holds as an estimate, unproven.
+- "Notes rounds about half a film's cost" cannot be checked from the ledgers: 63% (Open Wounds) and 73% (Grand
+  Theft Autism) of the cost sits in chats tagged only "auto"; the chats tagged as notes are 6% each. So the film
+  totals and steps per note are the test; the "half" is a judgement, and the check must say so.
+- The one app figure (proposal-route chat 1): the estimate 12% over the app's bill, so the dollar rows are not
+  inflated by the price table. One chat; this chat gave no app figure (get_session shows none).
 
 ## Replay test 2: a film's opening (27 Nov)
 Kind: tool test. Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy
@@ -218,4 +243,8 @@ code) are where the original spent most (three of four chats).
   belongs to Open Wounds' chain, not this tool job.
 - Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy.
 
+Handover check answered (chat 2): KIT CHANGE: the whole kit suite ran this chat on both copies (above), and every test
+the changed tools touch was run again after the last fix; no question for Sam. COST: get_session gives this chat no
+cost figure (only "weekly limit: warning"); nothing recorded by guess. PUSH: sent at the handover. Branches the
+start listed: the same six as chat 1 (logs and one-off files), named in chat 1's lines above, not merged.
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.8% of a week (2026-11-27)

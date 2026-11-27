@@ -900,6 +900,9 @@ def judge_faults(film, who=None):
                 'makes the outlines)']
     rec = json.load(open(p))
     files = [f.format(film=film) for f in JUDGE_FILES]
+    import parts                                 # a module kept in parts (cost-spike fix 5c): its parts count too
+    files = [os.path.relpath(x, ROOT) for f in files for x in (parts.family(os.path.join(ROOT, f))
+                                                              if f.endswith('.py') else [os.path.join(ROOT, f)])]
     git = lambda *a: subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True).stdout.strip()
     t_rec = git('log', '-1', '--format=%ct', '--', os.path.relpath(p, ROOT))
     t_draw = git('log', '-1', '--format=%ct', '--', *files)

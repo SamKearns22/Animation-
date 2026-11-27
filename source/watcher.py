@@ -105,6 +105,11 @@ PROMISES = {
     'staging.py': ('no shot reaches Sam as a clip or animatic before he has seen its framing (rule 11, lesson staging-stills)', 'kittest staging_stills_milburn_replay'),
     'satire_template.py': ('a new satire film starts from the house template', 'named: used by hand'),
     # cost-spike fix (Sam's Y, 27 Nov)
+    'nocheck_faults': ('a note marked fixed names the check that now catches it, or says why none can (fix pack step 4)', 'kittest fix_names_its_check'),
+    'estimate_faults': ("the 27 Nov savings estimate is checked against the next posted film (Sam's ask)", 'kittest estimate_checked_after_next_film'),
+    'seeing.py': ('the four extra ways of watching a moving span are advice only and see a vanish', 'kittest seeing_views_see_a_vanish'),
+    'facepick.py': ("a real person's head is picked from their photos and drawn on the house head, naming the hair piece that fits or NEW", 'kittest facepick_beard_from_any_front'),
+    'parts.py': ('a big shared file kept in parts is still one module: setters from outside reach every part, and the finder, lookup and stamps see all of it', 'kittest parts_one_namespace'),
     'touch.py': ('"what uses this, which checks rerun" is answered exactly in one step', 'kittest touch_index'),
     'touch.py hook': ('after an edit to code the chat is told the one line of kit tests to rerun', 'kittest touch_index'),
     'touch_faults': ('the who-uses-this index is fresh and every big file opens with a matching MAP', 'kittest maps_on_big_files'),

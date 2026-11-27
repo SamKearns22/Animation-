@@ -93,14 +93,16 @@ def files(film):
     """R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the film's own files, then every
     shared file they reach by import, followed through (the drawing kit: views, body, limbs, people, solid_seat...;
     the checks), other films' own code left out. Own files first; the shared ones by name."""
+    import parts                                 # a module kept in parts (cost-spike fix 5c): its parts are searched too
     mine = own_files(film)
     others = _film_mods() - {os.path.basename(f)[:-3] for f in mine}
     seen, todo = {os.path.basename(f)[:-3] for f in mine} | {'page'}, list(mine)   # never itself (its SAME table)
     while todo:
         for m in _imports(todo.pop()):
             if m not in seen and m not in others:
-                seen.add(m); todo.append(os.path.join(HERE, m + '.py'))
-    return mine + sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine} - {'page'})
+                seen.add(m); todo += parts.family(os.path.join(HERE, m + '.py'))   # its parts' imports are followed too
+    shared = sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine} - {'page'})
+    return mine + [x for f in shared for x in parts.family(f)]
 
 
 def tokens(text):
@@ -215,7 +217,8 @@ def stale(film):
     p = page_path(film)
     if not os.path.exists(p) or not os.path.exists(shared_path(film)):
         return True
-    src = files(film) + glob.glob(os.path.join(ROOT, 'story', f'{names(film)[1]}-*.txt'))
+    src = files(film) + glob.glob(os.path.join(ROOT, 'story', f'{names(film)[1]}-*.txt')) + [os.path.abspath(__file__)]
+    # (the finder itself too: 27 Nov, a page built before page.files learnt to follow a module's parts missed a file)
     return any(os.path.getmtime(f) > os.path.getmtime(p) for f in src)
 
 

@@ -433,7 +433,7 @@ def finder_reaches_shared_nod():
     import page
     reach = {os.path.basename(f) for f in page.files('brexit-is-done')}
     out = page.show('brexit-is-done', "It's not a nod, it's a head-bob.", 40)
-    nod = [h for h, rows in out if rows and h.startswith('views.py') and re.search(r'Pitched|Rolled|NOD_', h + ' '.join(t for _, t in rows))]
+    nod = [h for h, rows in out if rows and re.match(r'views(_[a-z])?\.py', h) and re.search(r'Pitched|Rolled|NOD_', h + ' '.join(t for _, t in rows))]
     bad = (['views.py not in the reach'] if 'views.py' not in reach else []) + \
           (['another film (blessed.py) in the reach'] if 'blessed.py' in reach else []) + \
           ([] if nod else ['note 26 shows no views.py nod drawing: ' + ', '.join(h.split()[0] for h, _ in out)])
