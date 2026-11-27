@@ -75,3 +75,33 @@ The "before" trace count is a floor (one search per function on the path, none w
 - Open rule requests: none.
 - Locked by Sam: no film, shot, camera, framing or beat is touched by this job.
 - For Claude: touch.py, notesteps.py, maps.py, chainguard.py, ledger.appcost, handover touch/fixpack/appcost_faults.
+
+## Replay test (27 Nov)
+Kind: tool test. Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy (worktrees
+at each fix's parent in the scratchpad; none of their code pushed). Widened from 2 to 5 notes by Sam's change (via
+the parent chat, 27 Nov).
+
+| note | kind | steps (aim 10-18; chat 30 ~35) | stuck on | vs the original fix |
+|---|---|---|---|---|
+| 19 Tony's hands hover | touch (hand on armrest) | 19 | 3 steps finding how to draw the shot (frame_image is the action layer; ALONE/blair_shot) | same cure (hand 24 below the forearm line vs 22, onto the front end); chat 30 ALSO added the check `sitting.armrest_faults`: theirs better |
+| 21 Kemi's face lines | face / likeness | 16 (incl. ~4 on the test runner) | page.py found the shot but not the face code (`touch "find age"` did) | same look (lines off; mine an `off` list in her pick record, theirs age_boost 0); chat 30 ALSO added `facehouse.line_faults` for any darker skin ranked top: theirs better |
+| 24.1 May's sharp head dip | movement / timing | 14 | finished films' moves changed (kit test caught it); copied the posted-films switch pattern | same cure (minimum rise/settle for head moves: mine 0.25 s on nod/roll/lean, chat 38 0.2 s per move); about equal |
+| 23.4 wolves/guests clip | meeting / order | 10 | nothing; measured order flips instead of eyeballing | same core (corridor drawn far to near); chat 37 ALSO a guest-before-wolf tie-break and repaired the overlap check (guests merged under one name, wolves unrecorded) as Sam asked: theirs better |
+| 28 leap lost off-frame | set / prop | ~8 | nothing; found and fixed a new fault my change made (he vanished mid-air at +0.6 s) | identical numbers (scaffold -5, frame -4, leap 3.88 s); chat 42 ALSO a check that the leap stays in frame |
+`notesteps.py report`: 7 marked items, 12 steps each on average; the five notes 19, 16, 14, 10, ~8 (mean ~13). Admin
+(choosing notes, comparing): 3 + the write-up. Tool fix: 12.
+
+- Cost: get_session gives no money figure for this chat (only "weekly limit: warning"), so `ledger.py appcost` was
+  not run: nothing to record honestly. Steps are the measure here.
+- Tools as meant: notesteps (yes; the 12-step nudge fired 4 times, twice on a note that was not stuck), page.py
+  (found the film call for 4 of 5; missed the shared face code), touch.py (used before every shared edit; its
+  tests list was right; once said 28 tests where the run picked 40), RERUN line after an edit (never appeared: my
+  edits were scripted inside the throwaway copies, which the hook does not watch; I used touch.py's line instead).
+- Misled: `kittests.py --touching` on an older copy ran 0 tests and printed "all passed"; a word filter did the same.
+  Fixed in the shared runner: a filter that picks nothing fails, a missing name is named (kit test `kittests_zero_run`).
+- What the test cannot show: the replays knew the notes' history (I saw one-line summaries of chat 30's and the
+  others' fixes in the notes archive and commit subjects while finding them); no Sam review; one chat; the main
+  quality gap is the same in all five: I fixed the picture but added no check, which the fix pack's step list does
+  not ask for (rule 30 / "Seeing like Sam" 3 do). Next: add "name and add the check" as a step in guides/fix-pack.md.
+- Kit tests: note 19's 7 (2 failed before the change too); 24.1's 2 and 28's 1 pass; note 21's 40-test run
+  incomplete at write-up: 15 pass, 5 fail (2 failed before, 1 a side-copy git name, 2 hold Kemi's old face on purpose).
