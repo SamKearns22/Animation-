@@ -12,3 +12,6 @@ To reply, call the send_message tool of the Claude Code Remote MCP server with s
 </cross-session-message>
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-27T21:40:53
+The new film has begun. Keep an eye on the ledger as the work proceeds. Please make sure anything usually labelled 'other' gets an appropriate category. Make sure that all the cost saving fixes you've implemented last night/today are working.
+
