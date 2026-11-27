@@ -212,3 +212,6 @@ Done's (a live chain; this tool job has no film line there).
 Kit tests (chat 3): `--changed` 59 run, 56 passed; head_moves_not_comic, early_move_size: the same two chat 2 named
 (Brexit's live nod sizes); places_from_a_description failed in the run (sets ~1% pixels) but passes alone on both old
 and new code: the main line was merged into this copy mid-run. The 4 new tests pass.
+Sam, 27 Nov, on the sheet: "Y. The main problem with the beard is that it's a big black shape on his face. The final
+beard in the real Islamocommunism film looked better but yours was way better for a first try." Y = gather more
+braided and long-hair photos for the braids check. Both passed to chat 4 (session_01J1JB7Y1BHkjtYN6FKWQLTr).
