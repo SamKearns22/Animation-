@@ -70,6 +70,7 @@ Open rule requests: none. Notes file over 4,000 words: trim at the animatic.
 Branches: claude/seeing-test-chat1 (the seeing test, its own job), claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: not this film's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2, built). No change to timing, lines, mouths, soundtrack.
 For Claude: main line claude/create-claude-md-oe8z4g; chat 40 branch claude/open-wounds-shot-2-a7cfu2; places view site; brexit_is_done_action LIFT_END, BAR_X.
+Chat R14 (27 Nov, reserve job, between chats 40 and 41): built the tool health check (source/toolhealth.py: one plain line per tool, now printed with the kit tests at a film's start and end); six fixes put to Sam as numbered questions; his answers come back to chat R14 (session_01U3pKQzaocG2uiCXBaMGZfc), not this film. Its end check's stops (cast-sheet judge, the rule-proof entry) are the film's, left for chat 41 as R12 left them. Branch claude/upbeat-dirac-w16tn9 (another chat's waiting-list notes, 0 h old): not this job's, left.
 Chat R12 (26 Nov, reserve job, between chats 40 and 41): `page.py show` now searches the shared kit and checks too (views, people, solid_seat...): a note on a nod lands on views.py's nod; handover end flags edits it can't see. finder reach: page.py, handover.py (R12 built them; its show calls were tests). Its end check's other stops (the cast-sheet judge, waiting on Sam's pick on note 5; the rule-proof entry for 'never tell me my chats are long') were there before it: left for chat 41.
 
 ## Open from chat 36 (Sam's picks pending)
@@ -191,3 +192,4 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - The 4 blind-judge refusals (May three-quarter woman 2/5; Kemi three-quarter woman 2/5, back man 2/5, seated man 3/5) wait on the women's build (note 5, Sam's pick); not redrawn.
 - Critique round 27 pass 2: 8 faults open, not fixed (animatic was asked for first).
 - Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2). No change to timing, lines, mouths, soundtrack.
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 70.21% of a week (2026-11-27)

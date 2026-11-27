@@ -1,0 +1,55 @@
+15.18 s  a wrist jumped 112 px at (169,505)
+15.27 s  a wrist jumped 90 px at (238,434)
+15.35 s  bodies found: 1 -> 0
+15.52 s  bodies found: 0 -> 1
+15.60 s  bodies found: 1 -> 2
+15.60 s  a wrist jumped 112 px at (249,481)
+15.60 s  a wrist jumped 152 px at (227,517)
+15.68 s  bodies found: 2 -> 1
+15.68 s  a wrist jumped 65 px at (403,428)
+15.68 s  a wrist jumped 56 px at (357,427)
+15.77 s  bodies found: 1 -> 2
+15.77 s  a wrist jumped 46 px at (320,399)
+15.85 s  bodies found: 2 -> 1
+15.85 s  a wrist jumped 91 px at (490,475)
+15.85 s  a wrist jumped 62 px at (325,461)
+15.93 s  a wrist jumped 53 px at (275,442)
+16.02 s  bodies found: 1 -> 2
+16.02 s  a wrist jumped 76 px at (468,559)
+16.02 s  a wrist jumped 112 px at (353,522)
+16.10 s  bodies found: 2 -> 1
+16.10 s  a wrist jumped 80 px at (548,552)
+16.18 s  a wrist jumped 115 px at (436,527)
+16.27 s  bodies found: 1 -> 3
+16.27 s  a wrist jumped 96 px at (464,435)
+16.27 s  a wrist jumped 88 px at (453,441)
+16.27 s  a wrist jumped 74 px at (487,473)
+16.27 s  a wrist jumped 87 px at (454,441)
+16.27 s  a wrist jumped 75 px at (416,454)
+16.35 s  bodies found: 3 -> 1
+16.35 s  a wrist jumped 67 px at (526,527)
+16.35 s  a wrist jumped 130 px at (290,421)
+16.43 s  bodies found: 1 -> 2
+16.43 s  a wrist jumped 117 px at (407,428)
+16.43 s  a wrist jumped 75 px at (462,489)
+16.52 s  a wrist jumped 48 px at (559,534)
+16.52 s  a wrist jumped 65 px at (423,541)
+16.60 s  a wrist jumped 95 px at (520,447)
+16.60 s  a wrist jumped 65 px at (518,483)
+16.68 s  bodies found: 2 -> 1
+16.68 s  a wrist jumped 47 px at (506,530)
+16.77 s  a wrist jumped 78 px at (456,470)
+16.77 s  a wrist jumped 100 px at (430,465)
+16.85 s  bodies found: 1 -> 0
+17.02 s  bodies found: 0 -> 1
+17.10 s  a wrist jumped 53 px at (205,531)
+17.18 s  bodies found: 1 -> 2
+17.27 s  bodies found: 2 -> 3
+17.27 s  a wrist jumped 50 px at (148,511)
+17.27 s  a wrist jumped 49 px at (191,483)
+17.35 s  bodies found: 3 -> 2
+17.35 s  a wrist jumped 146 px at (360,549)
+17.35 s  a wrist jumped 164 px at (376,568)
+17.43 s  a wrist jumped 94 px at (280,483)
+17.52 s  a wrist jumped 91 px at (358,530)
+17.52 s  a wrist jumped 111 px at (375,541)

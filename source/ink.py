@@ -77,11 +77,25 @@ def bent_check(pen, poly, step, col, width, y0, y1, a=1.1, sag=8.0, split=None, 
         pen.line([(float(x), y + float(d)) for x, d in zip(xx, yy)], col, width)
 
 
+def once(pts):
+    """The points of a closed outline with no point twice in a row, the last not the first again (see curve)."""
+    q = []
+    for x, y in pts:
+        if not q or abs(x - q[-1][0]) > 1e-6 or abs(y - q[-1][1]) > 1e-6:
+            q.append((x, y))
+    while len(q) > 3 and abs(q[0][0] - q[-1][0]) < 1e-6 and abs(q[0][1] - q[-1][1]) < 1e-6:
+        q.pop()
+    return q
+
+
 def curve(pts, n=6):
     """Catmull-Rom through the points, CLOSED (the end joins back to the start): for shapes with an outline (a face,
     a belly, a puddle). For anything that simply ends (an arm, an antenna, a tail, a wire, a line) use open_curve:
-    a tube or line drawn on this one doubles back from its end to its start (Poker Mon's wing, 19 Oct)."""
-    p = np.asarray(pts, float)
+    a tube or line drawn on this one doubles back from its end to its start (Poker Mon's wing, 19 Oct).
+    Each point once (R8 A4, 27 Nov; Sam's note 11 on Blair's grin, Kemi's hat nub, Open Wounds chat 9): a point given
+    twice in a row (or the last the same as the first) loops the curve out into a spike, so repeats are dropped here,
+    in the one curve every outline uses, and no hair, hat or mouth can spike."""
+    p = np.asarray(once(pts), float)
     out = []
     for i in range(len(p)):
         p0, p1, p2, p3 = p[i - 1], p[i], p[(i + 1) % len(p)], p[(i + 2) % len(p)]

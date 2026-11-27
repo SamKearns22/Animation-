@@ -18770,73 +18770,72 @@
    "notes_auto": 0
   },
   {
-   "date": "2026-11-26",
+   "date": "2026-11-27",
    "chat": "5449ea5f",
-   "stage": "auto",
+   "model": "opus",
+   "stage": "seeing test: build + blind judges",
    "round": null,
+   "cost": 5.13,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 2.22,
-   "src": "estimate",
-   "sid": "session_01J1JB7Vrny18WkjhSqkatGT",
-   "steps": 74,
-   "hist_k": 221,
+   "steps": 93,
+   "hist_k": 240,
    "kinds": {
-    "tool search": 29.1,
-    "renders": 1.4,
-    "pictures": 1.5,
-    "other": 68.0
+    "tool search": 20.7,
+    "renders": 1.0,
+    "pictures": 1.0,
+    "other": 77.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 55,
+    "tool search": 60,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 2,
     "pictures": 4,
-    "other": 16
+    "other": 25
    },
    "split": {
-    "usd": 5.0607,
-    "total": 5.0607,
+    "usd": 7.2808,
+    "total": 7.2808,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 34.4,
-     "start-up floor": 25.9,
-     "new writes": 21.5,
-     "carried history": 18.2
+     "new writes": 34.6,
+     "Claude's words": 25.4,
+     "carried history": 22.0,
+     "start-up floor": 18.0
     },
     "origins": {
-     "Claude's words": 50.4,
-     "start-up floor": 25.9,
-     "result: tool search": 15.8,
-     "result: other": 2.6,
-     "Claude's edits": 2.4,
-     "messages and reminders": 1.5,
-     "result: pictures": 1.2,
-     "result: renders": 0.2
+     "Claude's words": 37.1,
+     "messages and reminders": 29.1,
+     "start-up floor": 18.2,
+     "result: tool search": 11.0,
+     "result: other": 2.1,
+     "Claude's edits": 1.7,
+     "result: pictures": 0.8,
+     "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 25.9,
-     "thinking": 23.4,
-     "writing code": 13.3,
-     "commands": 8.6,
-     "reading notes": 8.3,
-     "reading kit code": 4.8,
-     "helper and chat prompts": 3.0,
-     "messages to Sam": 2.5,
-     "other commands": 2.2,
-     "writing notes": 2.1,
-     "messages and reminders": 1.5,
-     "looking at pictures": 1.2,
-     "git and saving": 1.0,
-     "start-up and handover tools": 0.9,
-     "running checks and tools": 0.5,
-     "reading guides": 0.4,
-     "helper results": 0.3,
-     "renders": 0.2,
+     "messages and reminders": 29.1,
+     "start-up reading (rules, tools, first files)": 18.2,
+     "thinking": 16.4,
+     "writing code": 10.2,
+     "commands": 6.7,
+     "reading notes": 5.7,
+     "reading kit code": 3.3,
+     "helper and chat prompts": 2.1,
+     "messages to Sam": 1.9,
+     "other commands": 1.6,
+     "writing notes": 1.4,
+     "looking at pictures": 0.8,
+     "git and saving": 0.7,
+     "start-up and handover tools": 0.6,
+     "running checks and tools": 0.3,
+     "reading guides": 0.3,
+     "app tools (chats, files sent)": 0.2,
+     "helper results": 0.2,
+     "renders": 0.1,
      "edit results": 0.1
     },
     "leftover": 0.0
@@ -18922,530 +18921,8 @@
       0.0005
      ]
     ],
-    "base_pct": 22.0
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 0
-    },
-    "other": {
-     "other": 23,
-     "shared:handover.py": 1,
-     "shared:branches.py": 1,
-     "film notes": 6,
-     "shared:brexit_is_done.py": 3,
-     "shared:handcheck.py": 1,
-     "shared:cover.py": 2,
-     "shared:grand_theft_autism.py": 1,
-     "shared:gta_film.py": 3,
-     "shared:film_engine.py": 1,
-     "shared:gta_rehearse.py": 1,
-     "shared:kittests.py": 6,
-     "shared:likeness.py": 2,
-     "shared:seeing.py": 4
-    },
-    "ticked": 5,
-    "edited film code": false,
-    "list": [
-     [
-      0,
-      "other",
-      "other",
-      "",
-      "git status | head -5 && git branch -a | head -30 && git log --oneline -3 && git ",
-      "",
-      1717
-     ],
-     [
-      1,
-      "other",
-      "shared:handover.py",
-      "source/handover.py",
-      "git checkout -b claude/seeing-test-chat1 && git push -u origin claude/seeing-tes",
-      "",
-      663
-     ],
-     [
-      3,
-      "other",
-      "other",
-      "",
-      "for b in claude/brexit-chat39 claude/gta-v5-sound-draft claude/gta-chat46-build ",
-      "",
-      2979
-     ],
-     [
-      4,
-      "other",
-      "shared:branches.py",
-      "notes/*.md story/status.md source/branches.py",
-      "gta-chat31\\|gta-v5-sound-draft\\|dreamy-fermi\\|gta-chat46-build\\|brexit-chat39",
-      "",
-      4701
-     ],
-     [
-      5,
-      "other",
-      "film notes",
-      "notes/proposals/better-seeing-tools.md",
-      "bench\\|13\\|14\\|GTA\\|note\\|path picture",
-      "",
-      5502
-     ],
-     [
-      6,
-      "other",
-      "other",
-      "notes/archive source/*.py",
-      "critic bench\\|bench",
-      "",
-      2044
-     ],
-     [
-      7,
-      "other",
-      "other",
-      "notes/critic-bench.tsv notes/bench source/*.py notes/sam-notes",
-      "critic-bench",
-      "",
-      624
-     ],
-     [
-      8,
-      "other",
-      "film notes",
-      "notes/bench/learn-step.md notes/sam-notes/gta-v5 notes/sam-notes/brexit-cast-v3",
-      "cat notes/bench/learn-step.md | head -80; ls notes/sam-notes/gta-v5 notes/sam-no",
-      "",
-      9171
-     ],
-     [
-      9,
-      "other",
-      "film notes",
-      "notes/sam-notes/gta-v5/notes.md notes/brexit-is-done.md notes/archive/brexit-is-",
-      "^\\s*[-|*]*\\s*\\**\\(13\\|14\\|15\\|19\\|22\\|23\\)[\\.:)]",
-      "",
-      4865
-     ],
-     [
-      10,
-      "other",
-      "film notes",
-      "notes/archive/brexit-is-done-notes.md",
-      "^| \\(13\\|14\\|15\\|19\\|22\\) |",
-      "",
-      3826
-     ],
-     [
-      11,
-      "other",
-      "other",
-      "",
-      "python3 -c \" import cv2; print('cv2', cv2.__version__) import mediapipe as mp; p",
-      "",
-      487
-     ],
-     [
-      12,
-      "other",
-      "other",
-      "",
-      "mkdir -p /tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c",
-      "",
-      425
-     ],
-     [
-      14,
-      "other",
-      "other",
-      "",
-      "git log --format=\"%h %ad %s\" --date=format:\"%d %H:%M\" -- animations/drafts/brexi",
-      "",
-      1287
-     ],
-     [
-      15,
-      "other",
-      "film notes",
-      "notes/archive/brexit-is-done-notes.md",
-      "^#\\|animatic v\\|chat 2[0-9] animatic\\|chat 3[0-9] animatic",
-      "",
-      2707
-     ],
-     [
-      16,
-      "other",
-      "other",
-      "notes/ledger/sam/*.md",
-      "hover rather than resting\\|barely registered\\|comically large\\|clipping over eac",
-      "",
-      634
-     ],
-     [
-      17,
-      "other",
-      "shared:brexit_is_done.py",
-      "notes/ledger/sam/bd92qp7f.md source/brexit_is_done.py",
-      "sed -n 1,40p notes/ledger/sam/bd92qp7f.md | cut -c1-400; git log --format=\"%h %a",
-      "",
-      4789
-     ],
-     [
-      18,
-      "other",
-      "shared:handcheck.py",
-      "source/handcheck.py",
-      "sed -n 1,60p source/handcheck.py",
-      "",
-      3977
-     ],
-     [
-      19,
-      "other",
-      "shared:cover.py",
-      "source/cover*.py source/cover.py",
-      "ls source/cover*.py; sed -n 1,70p source/cover.py",
-      "",
-      4122
-     ],
-     [
-      20,
-      "other",
-      "shared:cover.py",
-      "source/cover.py",
-      "sed -n 70,300p source/cover.py",
-      "",
-      9925
-     ],
-     [
-      21,
-      "other",
-      "shared:brexit_is_done.py",
-      "guides/job-packs.md source/brexit_is_done.py",
-      "span\\|--small",
-      "",
-      2793
-     ],
-     [
-      22,
-      "other",
-      "other",
-      "",
-      "time python3 -c \" import sys,time; sys.path.insert(0,'source') import cover, bre",
-      "",
-      348
-     ],
-     [
-      23,
-      "other",
-      "other",
-      "",
-      "ls -la animations/*.mp4 | awk '{print $5, $9}'; git log --format=\"%h %ad %s\" --d",
-      "",
-      3243
-     ],
-     [
-      24,
-      "other",
-      "shared:grand_theft_autism.py",
-      "source/grand_theft_autism.py source/cover.py source/brexit_is_done.py",
-      "^def \\|owner=",
-      "",
-      3565
-     ],
-     [
-      25,
-      "other",
-      "shared:gta_film.py",
-      "source/gta_film.py notes/archive notes/archive/grand-theft-autism-notes.md",
-      "cover\\.",
-      "",
-      2371
-     ],
-     [
-      26,
-      "other",
-      "shared:film_engine.py",
-      "source/film_engine.py source/gta_film.py",
-      "cover\\.",
-      "",
-      701
-     ],
-     [
-      27,
-      "other",
-      "shared:gta_film.py",
-      "source/gta_film.py source/gta_rehearse.py",
-      "import\\|as R\\|as M",
-      "",
-      1715
-     ],
-     [
-      28,
-      "other",
-      "shared:gta_rehearse.py",
-      "source/gta_rehearse.py",
-      "git show 0945cc85:source/gta_rehearse.py | sed -n 1766,1860p",
-      "",
-      4765
-     ],
-     [
-      29,
-      "other",
-      "film notes",
-      "notes/archive/grand-theft-autism-notes.md",
-      "49\\|test",
-      "",
-      6667
-     ],
-     [
-      30,
-      "other",
-      "shared:gta_film.py",
-      "notes/archive/grand-theft-autism-notes.md source/gta_film.py",
-      "eyser\\|door top seen\\|rear view\\|2a-door\\|lower body is clipping",
-      "",
-      31
-     ],
-     [
-      31,
-      "other",
-      "other",
-      "",
-      "cd /tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scra",
-      "",
-      465
-     ],
-     [
-      32,
-      "other",
-      "other",
-      "",
-      "git worktree add -f --detach /tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-5",
-      "",
-      1987
-     ],
-     [
-      33,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      229
-     ],
-     [
-      34,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      660
-     ],
-     [
-      38,
-      "other",
-      "shared:brexit_is_done.py",
-      "S/wt-57462c5e/source/brexit_is_done.py",
-      "remember\\|lean",
-      "",
-      954
-     ],
-     [
-      40,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "def kt_\\|^def test_\\|^TESTS\\|register",
-      "",
-      518
-     ],
-     [
-      41,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "cover_sees_each_runner",
-      "",
-      814
-     ],
-     [
-      42,
-      "other",
-      "other",
-      "source/models source/*.py",
-      "selfie_multiclass",
-      "",
-      544
-     ],
-     [
-      43,
-      "other",
-      "shared:likeness.py",
-      "source/likeness.py .claude/hooks/setup.sh",
-      "models",
-      "",
-      2108
-     ],
-     [
-      44,
-      "other",
-      "shared:likeness.py",
-      "/home/user/Animation-/source/models/ /home/user/Animation-/source/models/hand.ta",
-      "def _model",
-      "",
-      140
-     ],
-     [
-      47,
-      "other",
-      "shared:seeing.py",
-      "source/seeing.py",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      121
-     ],
-     [
-      48,
-      "other",
-      "shared:seeing.py",
-      "source/seeing.py",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      1341
-     ],
-     [
-      51,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      3828
-     ],
-     [
-      52,
-      "other",
-      "shared:seeing.py",
-      "source/seeing.py",
-      "python3 - <<'EOF' p='source/seeing.py'; s=open(p).read() s=s.replace(\" return r.",
-      "",
-      1198
-     ],
-     [
-      55,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      398
-     ],
-     [
-      56,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "^@test",
-      "",
-      1070
-     ],
-     [
-      57,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "sed -n 6229,6260p source/kittests.py",
-      "",
-      1652
-     ],
-     [
-      59,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "^W0000\\|^INFO\\|^I0000",
-      "",
-      311
-     ],
-     [
-      60,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "^W0000\\|^INFO\\|^I0000\\|layers$",
-      "",
-      458
-     ],
-     [
-      64,
-      "other",
-      "shared:seeing.py",
-      "source/seeing.py source/kittests.py notes/seeing-test.md notes/seeing-test/key.m",
-      "git add source/seeing.py source/kittests.py notes/seeing-test.md notes/seeing-te",
-      "",
-      153
-     ],
-     [
-      65,
-      "other",
-      "other",
-      "",
-      "git status --short | head",
-      "",
-      107
-     ],
-     [
-      66,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv",
-      "for c in 0945cc85 57462c5e 70845df6 801f074a e3b779ae; do git worktree remove --",
-      "",
-      742
-     ],
-     [
-      67,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      2126
-     ],
-     [
-      69,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      464
-     ],
-     [
-      75,
-      "other",
-      "other",
-      "",
-      "nothing printed\\|  cut$",
-      "",
-      1061
-     ],
-     [
-      76,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/5449ea5f-f50b-54db-95ac-4e16182011c3/scrat",
-      "",
-      1598
-     ]
-    ]
-   },
-   "notes_auto": 0
+    "base_pct": 19.3
+   }
   }
  ],
  "checks": {},
@@ -19455,6 +18932,23 @@
    "date": "2026-11-25",
    "spent": 147.54,
    "forecast": null
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 149.31,
+   "forecast": null
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 149.56
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 149.56
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 149.56
   }
  ]
 }

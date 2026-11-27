@@ -1,0 +1,7 @@
+2.50 s  bodies found: 0 -> 1
+2.58 s  bodies found: 1 -> 0
+2.67 s  bodies found: 0 -> 1
+3.75 s  bodies found: 1 -> 0
+3.83 s  bodies found: 0 -> 1
+3.92 s  bodies found: 1 -> 0
+4.00 s  bodies found: 0 -> 1

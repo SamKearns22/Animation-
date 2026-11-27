@@ -469,17 +469,15 @@ def house_ol(ppm):
     """Open Wounds note 16 (Sam, 26 Nov: "the line work on the wolves is very thick in comparison to our house style"):
     a kit wolf's outline is the house line of a person standing at the same depth (lying._lw, the people's own weight
     for a body this many frame pixels a metre), never the old 5 wolf units, which drew about twice the people's."""
-    import lying
-    return float(lying._lw(ppm))
+    import houseline
+    return houseline.weight(ppm)
 
 
 def house_ctx(X, s, ppm):
     """Set a drawing context for a kit wolf of scale s at ppm frame pixels a metre to the house line weight: the
     outline (X.ol) and every crease and brow line in proportion (X.line_k). Every film's wolves go through this."""
-    ol = house_ol(ppm)
-    X.line_k = min(1.0, ol / max(1e-6, 5.0 * s))
-    X.ol = min(5.0 * s, ol) if 5.0 * s > 1.0 else ol
-    return X
+    import houseline
+    return houseline.ctx(X, s, ppm, native=5.0)
 
 
 # ------------------------------------------------------------------------------------------------ poses

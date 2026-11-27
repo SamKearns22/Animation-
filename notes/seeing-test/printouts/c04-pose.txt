@@ -1,0 +1,15 @@
+13.87 s  bodies found: 0 -> 1
+14.03 s  bodies found: 1 -> 0
+14.12 s  bodies found: 0 -> 1
+14.20 s  bodies found: 1 -> 0
+14.28 s  bodies found: 0 -> 1
+14.45 s  bodies found: 1 -> 0
+14.62 s  bodies found: 0 -> 1
+14.87 s  bodies found: 1 -> 0
+14.95 s  bodies found: 0 -> 1
+15.03 s  bodies found: 1 -> 0
+15.28 s  bodies found: 0 -> 1
+15.37 s  a wrist jumped 89 px at (321,592)
+15.45 s  a wrist jumped 69 px at (320,661)
+15.45 s  a wrist jumped 110 px at (383,683)
+15.53 s  a wrist jumped 63 px at (269,698)

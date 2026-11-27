@@ -1246,6 +1246,17 @@
    "notes": "entry added chat 38 (the handover stop: rule 93 had no entry)",
    "plan": "a kittest runs pre-flight and the body check on a frame with a known fault through brexit_is_done.py final --span: the clip is written and override.advise prints the concern (the old stop refused it)",
    "kind_before": "code (override.advise)"
+  },
+  "N36": {
+   "rule": "Never tell Sam his chats are long unless admitting the handover tool is broken.",
+   "anchor": "Never tell me my chats are long (Sam, 26 Nov, permanent):",
+   "status": "proven",
+   "tests": [
+    "never_blame_long_chats"
+   ],
+   "example": "Sam, 26 Nov (Open Wounds chat 39): \"Stop telling me chats are long unless you are admitting that your own tool is broken.\" kittest never_blame_long_chats: chat 39's own reply (long chats as a cause of cost) is stopped by the plain-words check; a sentence owning the handover tool's failure passes.",
+   "notes": "Entry written by R8 chat 3 (the handover check found the rule with none; the rule, check and test came from Open Wounds chat 39).",
+   "kind_before": "new"
   }
  },
  "_baseline": {

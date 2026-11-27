@@ -1,0 +1,24 @@
+23.68 s  people found: 0 -> 1
+23.68 s  main object cut-out size 1454 -> 7532 px
+23.77 s  people found: 1 -> 0
+23.77 s  main object cut-out size 7532 -> 38057 px
+23.85 s  people found: 0 -> 2
+23.85 s  main object cut-out size 38057 -> 13721 px
+23.93 s  people found: 2 -> 0
+24.02 s  people found: 0 -> 2
+24.02 s  main object cut-out size 16286 -> 36032 px
+24.10 s  main object cut-out size 36032 -> 6437 px
+24.18 s  people found: 2 -> 3
+24.18 s  main object cut-out size 6437 -> 33481 px
+24.27 s  people found: 3 -> 2
+24.27 s  main object cut-out size 33481 -> 3740 px
+24.35 s  people found: 2 -> 1
+24.35 s  main object cut-out size 3740 -> 11012 px
+24.43 s  people found: 1 -> 2
+24.43 s  main object cut-out size 11012 -> 5629 px
+24.52 s  people found: 2 -> 1
+24.52 s  main object cut-out size 5629 -> 11379 px
+24.60 s  main object cut-out size 11379 -> 28016 px
+24.68 s  people found: 1 -> 0
+24.68 s  main object cut-out size 28016 -> 15379 px
+24.77 s  main object cut-out size 15379 -> 32527 px

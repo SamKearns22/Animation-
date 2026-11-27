@@ -1770,6 +1770,1192 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "3940790c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.44,
+   "src": "estimate",
+   "sid": "session_01J1JB7XUfViKYhjGFpQDLw5",
+   "steps": 153,
+   "hist_k": 260,
+   "kinds": {
+    "tool search": 22.2,
+    "renders": 1.2,
+    "pictures": 1.6,
+    "other": 75.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 117,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 5,
+    "other": 23
+   },
+   "split": {
+    "usd": 8.945,
+    "total": 8.945,
+    "floor_k": 85,
+    "blocks": {
+     "carried history": 33.9,
+     "new writes": 27.7,
+     "Claude's words": 20.7,
+     "start-up floor": 17.7
+    },
+    "origins": {
+     "messages and reminders": 34.7,
+     "Claude's words": 32.2,
+     "start-up floor": 17.8,
+     "result: tool search": 12.8,
+     "result: pictures": 1.6,
+     "result: other": 0.7,
+     "Claude's edits": 0.1
+    },
+    "named": {
+     "messages and reminders": 34.7,
+     "start-up reading (rules, tools, first files)": 17.8,
+     "writing code": 13.2,
+     "thinking": 8.1,
+     "reading kit code": 6.9,
+     "commands": 5.1,
+     "writing notes": 4.4,
+     "reading notes": 3.9,
+     "looking at pictures": 1.6,
+     "messages to Sam": 1.2,
+     "reading chat records": 0.8,
+     "start-up and handover tools": 0.8,
+     "running checks and tools": 0.5,
+     "app tools (chats, files sent)": 0.4,
+     "helper and chat prompts": 0.3,
+     "other commands": 0.2,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 11,
+    "work_pct": 0.14,
+    "reads": [
+     [
+      "source/kitinputs.py",
+      1.6,
+      0.0375
+     ],
+     [
+      "notes/check-audit.md",
+      1.2,
+      0.028
+     ],
+     [
+      "guides/job-packs.md",
+      1.2,
+      0.028
+     ],
+     [
+      "source/mhuman.py",
+      0.9,
+      0.0207
+     ]
+    ],
+    "base_pct": 26.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 25,
+     "shared:handover.py": 8,
+     "film notes": 10,
+     "shared:kitinputs.py": 5,
+     "shared:mhuman.py": 2,
+     "shared:kittests.py": 24,
+     "shared:preflight.py": 9,
+     "shared:sizes.py": 3,
+     "shared:brexit_is_done_action.py": 3,
+     "shared:figure.py": 1,
+     "shared:handcheck.py": 7,
+     "shared:brexit_is_done.py": 1,
+     "shared:views.py": 3,
+     "shared:moves.py": 1,
+     "shared:report.py": 2,
+     "shared:ledger.py": 1,
+     "shared:planning.py": 1,
+     "shared:checkaudit.py": 1,
+     "shared:linecheck.py": 2,
+     "shared:subtitles.py": 6,
+     "shared:wolf.py": 1,
+     "guides": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch -q origin cl",
+      "",
+      87
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git push origi",
+      "",
+      2156
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/check-audit.md",
+      "^#\\|B7\\|B4\\|B3\\|B8\\|A2\\|A6\\|A4\\|A5\\|A3\\|A7\\|A8",
+      "",
+      1701
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/check-audit.md guides/job-packs.md",
+      "sed -n 1,63p notes/check-audit.md; sed -n '/^## A tool job/,/^## /p' guides/job-",
+      "",
+      9385
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "source/kitinputs*.py notes/ledger/brexit-is-done/checks.jsonl",
+      "git clone\\|clone",
+      "",
+      12
+     ],
+     [
+      5,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py notes/ledger/brexit-is-done/checks.jsonl",
+      "def \\|subprocess\\|git",
+      "",
+      4616
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "makehuman.git",
+      "",
+      83
+     ],
+     [
+      7,
+      "other",
+      "shared:mhuman.py",
+      "source/mhuman.py",
+      "^$",
+      "",
+      3585
+     ],
+     [
+      8,
+      "other",
+      "shared:kitinputs.py",
+      ".claude/hooks/setup.sh source/kitinputs.py",
+      "makehuman\\|mhuman",
+      "",
+      1812
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "",
+      "cd /tmp && timeout 300 git clone -q --depth 1 --filter=blob:none --sparse https:",
+      "",
+      133
+     ],
+     [
+      10,
+      "other",
+      "shared:mhuman.py",
+      "source/mhuman.py source/kittests.py",
+      "def kt_\\|^def \\|TESTS\\s*=",
+      "",
+      133
+     ],
+     [
+      11,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def castsheet_only_when_cast_changed",
+      "",
+      2640
+     ],
+     [
+      12,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "argv\\|run\\b",
+      "",
+      149
+     ],
+     [
+      13,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/mhuman.py",
+      "timeout 120 python3 source/kittests.py body_model_downloads_once 2>&1 | tail -4;",
+      "",
+      738
+     ],
+     [
+      14,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "ok, \\|= fn()\\|fn()",
+      "",
+      285
+     ],
+     [
+      15,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/mhuman.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() a=s.index('def body_mo",
+      "",
+      335
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/check-audit.md notes/proposals/check-knows-intent.md",
+      "python3 - <<'EOF' p='notes/check-audit.md' s=open(p).read() anchor='Sam\\'s words",
+      "",
+      10262
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..or",
+      "",
+      122
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "",
+      "git status | head -5; git log --oneline -3; git push origin HEAD:claude/create-c",
+      "",
+      651
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "^+",
+      "",
+      178
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done/checks.jsonl notes/learn",
+      "python3 -c \" import json,collections c=collections.Counter() rows=[json.loads(l)",
+      "",
+      745
+     ],
+     [
+      22,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "hand over another body\\|RESTS",
+      "",
+      2958
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/*.md notes/archive/*.md notes/logs/* notes/brexit-is-done.md",
+      "over another body\\|over another\\|hand.*over.*body",
+      "",
+      352
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md notes/archive/",
+      "over another\\|RESTS\\|picture-check\\|picture check",
+      "",
+      2135
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "notes/logs notes/ledger/brexit-is-done/",
+      "ls notes/logs | head -50; ls notes/ledger/brexit-is-done/ | head",
+      "",
+      465
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "notes/logs/brexit-is-done-chats.log",
+      "over\\b\\|HANDS\\|RESTS\\|hand ",
+      "",
+      37
+     ],
+     [
+      27,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "pictures\\|span\\|python3",
+      "",
+      1663
+     ],
+     [
+      29,
+      "other",
+      "shared:sizes.py",
+      "story/brexit-is-done-places.txt source/sizes.py source/kitinputs.py notes/ledger",
+      "bookcase",
+      "",
+      937
+     ],
+     [
+      30,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py source/sizes.py",
+      "def .*fault\\|tol\\|1.25\\|1.5\\b",
+      "",
+      1884
+     ],
+     [
+      31,
+      "other",
+      "shared:sizes.py",
+      "source/sizes.py",
+      "sed -n 77,130p source/sizes.py",
+      "",
+      1320
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "tail -15 /tmp/claude-0/-home-user-Animation-/3940790c-440d-55ba-a9f0-9ecb94ed5dd",
+      "",
+      747
+     ],
+     [
+      34,
+      "other",
+      "shared:sizes.py",
+      "source/sizes.py",
+      "^def check",
+      "",
+      1081
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/archive/brexit-is-done-handovers.md",
+      "preflight.py",
+      "",
+      1222
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "notes/archive",
+      "find . -name \"*faults.json\" -newer notes/archive -o -name \"*brexit*faults*\" 2>/d",
+      "",
+      408
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "source/data/brexit-is-done-clean.held.mp4.faults.json",
+      "ls -la source/data/brexit-is-done-clean.held.mp4.faults.json animations/drafts/b",
+      "",
+      2849
+     ],
+     [
+      46,
+      "other",
+      "shared:brexit_is_done_action.py",
+      "source/brexit_is_done_action.py source/handcheck.py",
+      "allow",
+      "",
+      2987
+     ],
+     [
+      47,
+      "other",
+      "shared:brexit_is_done_action.py",
+      "source/brexit_is_done_action.py source/*.py",
+      "^import\\|as FG",
+      "",
+      416
+     ],
+     [
+      48,
+      "other",
+      "shared:figure.py",
+      "source/figure.py source/handcheck.py",
+      "ALLOWED\\|_ALLOW\\|allowed_now\\|FG\\.\\|figure\\.",
+      "",
+      3341
+     ],
+     [
+      49,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py",
+      "FOUND.append\\|FOUND\\b.*=\\|def probe\\|def _check_person\\|dict(t=",
+      "",
+      2246
+     ],
+     [
+      50,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py",
+      "kind=\\|'kind'",
+      "",
+      2812
+     ],
+     [
+      51,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py",
+      "pp\\[.name.\\] =\\|people.append\\|'name':",
+      "",
+      2658
+     ],
+     [
+      52,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py",
+      "^def \\|^    def ",
+      "",
+      3053
+     ],
+     [
+      53,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py",
+      "sed -n 531,572p source/handcheck.py; sed -n 249,300p source/handcheck.py",
+      "",
+      5008
+     ],
+     [
+      54,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py source/brexit_is_done_action.py",
+      "^import\\|^from",
+      "",
+      2744
+     ],
+     [
+      55,
+      "other",
+      "film notes",
+      "source/*.py story/brexit-is-done*",
+      "fleeing staff\\|site's workers",
+      "",
+      1484
+     ],
+     [
+      56,
+      "other",
+      "shared:brexit_is_done.py",
+      "source/brexit_is_done.py source/brexit_is_done_action.py",
+      "scaffold tube\\|tubes\\|def _worker\\|W3\\|'carry'",
+      "",
+      3171
+     ],
+     [
+      57,
+      "other",
+      "shared:brexit_is_done_action.py",
+      "source/brexit_is_done_action.py source/brexit_is_done.py story/status.md",
+      "git fetch -q origin 2>/dev/null; git log -1 --format='%cr %s' origin/claude/brex",
+      "",
+      940
+     ],
+     [
+      58,
+      "other",
+      "shared:views.py",
+      "source/views.py source/moves.py",
+      "^VIEWS\\|^def snap",
+      "",
+      1907
+     ],
+     [
+      59,
+      "other",
+      "shared:moves.py",
+      "source/moves.py",
+      "sed -n 200,216p source/moves.py",
+      "",
+      878
+     ],
+     [
+      62,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "handcheck\\|HC\\.\\(begin\\|end\\|install\\)",
+      "",
+      368
+     ],
+     [
+      63,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 30,50p source/kittests.py; sed -n 1395,1460p source/kittests.py",
+      "",
+      3582
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/3940790c-440d-55ba-a9f0-9ecb94ed5dd1/s",
+      "",
+      722
+     ],
+     [
+      65,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/learn/check-intent/sort-1.md",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      444
+     ],
+     [
+      66,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py source/kittests.py",
+      "def meant_lines",
+      "",
+      500
+     ],
+     [
+      68,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "no hand\\|'gait'\\|MV.gait\\|side-on\\|side on",
+      "",
+      1582
+     ],
+     [
+      69,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)|kittests:",
+      "",
+      1267
+     ],
+     [
+      70,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      "",
+      239
+     ],
+     [
+      71,
+      "other",
+      "shared:report.py",
+      "notes/check-audit.html notes/check-audit.md notes/proposals/*.md guides/film-qua",
+      "B1[^<]*",
+      "",
+      2469
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "source/*.py",
+      "checks.jsonl",
+      "",
+      1260
+     ],
+     [
+      74,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 6190,6240p source/kittests.py",
+      "",
+      3005
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "source/*.py",
+      "'checks.jsonl'\\|\\",
+      "",
+      436
+     ],
+     [
+      76,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/preflight.py",
+      "ledger\\.\\(record_checks\\|checks\\|faults\\)\\|record_check",
+      "",
+      3463
+     ],
+     [
+      77,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/ledger.py",
+      "report.group\\|ledger.record\\|def record\\b\\|ledger\\.check",
+      "",
+      534
+     ],
+     [
+      78,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "sed -n 430,450p source/preflight.py; sed -n 705,760p source/preflight.py",
+      "",
+      3100
+     ],
+     [
+      79,
+      "other",
+      "shared:report.py",
+      "source/report.py",
+      "^def summarise",
+      "",
+      1939
+     ],
+     [
+      81,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/ledger/brexit-is-done/checks.jsonl",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      225
+     ],
+     [
+      83,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "def gates\\|def gate_warnings",
+      "",
+      5577
+     ],
+     [
+      84,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done/checks.jsonl",
+      "python3 -c \" import json for l in open('notes/ledger/brexit-is-done/checks.jsonl",
+      "",
+      478
+     ],
+     [
+      85,
+      "other",
+      "other",
+      "source/*.py",
+      "gate_warnings(\\|gates(",
+      "",
+      209
+     ],
+     [
+      86,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/*.py",
+      "has no BENCHMARK\\|has no PLAN\\|has no audits",
+      "",
+      4956
+     ],
+     [
+      87,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py notes/_template.md",
+      "notes_path",
+      "",
+      3446
+     ],
+     [
+      88,
+      "other",
+      "film notes",
+      "notes/_template.md notes/brexit-is-done.md",
+      "## The brief as a checklist",
+      "",
+      1133
+     ],
+     [
+      90,
+      "other",
+      "shared:planning.py",
+      "source/planning.py",
+      "rest = ",
+      "",
+      27
+     ],
+     [
+      91,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "def _text_only",
+      "",
+      458
+     ],
+     [
+      92,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "kept, pline",
+      "",
+      728
+     ],
+     [
+      93,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/ledger/brexit-is-done/checks.jsonl",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      146
+     ],
+     [
+      94,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "PF.gates\\|preflight.gates\\|gate_warnings\\|_text_only",
+      "",
+      31
+     ],
+     [
+      96,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      144
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git log --oneline -1",
+      "",
+      205
+     ],
+     [
+      100,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/_template.md source/*.py",
+      "should have caught",
+      "",
+      1124
+     ],
+     [
+      101,
+      "other",
+      "shared:checkaudit.py",
+      "notes/_template.md source/checkaudit.py source/critique.py",
+      "def .*critique\\|result.md",
+      "",
+      2957
+     ],
+     [
+      102,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "should have caught",
+      "",
+      353
+     ],
+     [
+      103,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py",
+      "tag_faults\\|note_tags",
+      "",
+      2426
+     ],
+     [
+      104,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/_template.md source/checkaudit.py",
+      "critique_saw",
+      "",
+      107
+     ],
+     [
+      105,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      329
+     ],
+     [
+      106,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py",
+      "python3 - <<'EOF' p='source/handover.py'; s=open(p).read() old=\"\"\" try: sys.path",
+      "",
+      122
+     ],
+     [
+      107,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py /home/user/Animation-/notes/check-audit.md",
+      "python3 - <<'EOF' p='source/handover.py'; s=open(p).read() s=s.replace(\"\"\" try: ",
+      "",
+      87
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done/checks.jsonl",
+      "python3 -c \" import json for l in open('notes/ledger/brexit-is-done/checks.jsonl",
+      "",
+      445
+     ],
+     [
+      109,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py source/linecheck.py",
+      "^def \\|no outline\\|edge with no line",
+      "",
+      1495
+     ],
+     [
+      110,
+      "other",
+      "shared:linecheck.py",
+      "source/linecheck.py",
+      "sed -n 91,130p source/linecheck.py",
+      "",
+      1541
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/3940790c-440d-55ba-a9f0-9ecb94ed5dd1/s",
+      "",
+      458
+     ],
+     [
+      112,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py",
+      "python3 - <<'EOF' p='source/kitinputs.py'; s=open(p).read() old=\"\"\" def draw(img",
+      "",
+      847
+     ],
+     [
+      113,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/3940790c-440d-55ba-a9f0-9ecb94ed5dd1/s",
+      "",
+      31
+     ],
+     [
+      115,
+      "other",
+      "shared:views.py",
+      "source/views.py source/linecheck.py",
+      "head_at",
+      "",
+      2536
+     ],
+     [
+      116,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "def person",
+      "",
+      946
+     ],
+     [
+      118,
+      "other",
+      "shared:linecheck.py",
+      "source/linecheck.py",
+      "python3 - <<'EOF' p='source/linecheck.py'; s=open(p).read() old=\"\"\" if face and ",
+      "",
+      10
+     ],
+     [
+      119,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "linecheck",
+      "",
+      404
+     ],
+     [
+      120,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      169
+     ],
+     [
+      121,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/3940790c-440d-55ba-a9f0-9ecb94ed5dd1/s",
+      "",
+      228
+     ],
+     [
+      122,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py source/kittests.py",
+      ")\nseg=seg.replace(",
+      "",
+      140
+     ],
+     [
+      124,
+      "other",
+      "shared:subtitles.py",
+      "notes/ledger/brexit-is-done/checks.jsonl source/subtitles.py",
+      "^def ",
+      "",
+      1229
+     ],
+     [
+      125,
+      "other",
+      "shared:subtitles.py",
+      "source/subtitles.py",
+      "^$",
+      "",
+      10862
+     ],
+     [
+      126,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/3940790c-440d-55ba-a9f0-9ecb94ed5dd1/s",
+      "",
+      345
+     ],
+     [
+      127,
+      "other",
+      "shared:subtitles.py",
+      "source/subtitles.py",
+      "python3 - <<'EOF' p='source/subtitles.py'; s=open(p).read() old=\"\"\" for i, at in",
+      "",
+      176
+     ],
+     [
+      128,
+      "other",
+      "shared:subtitles.py",
+      "source/subtitles.py",
+      "python3 - <<'EOF' p='source/subtitles.py'; s=open(p).read() a=s.index('def need(",
+      "",
+      519
+     ],
+     [
+      129,
+      "other",
+      "shared:subtitles.py",
+      "source/subtitles.py",
+      "^def ",
+      "",
+      725
+     ],
+     [
+      130,
+      "other",
+      "shared:subtitles.py",
+      "source/subtitles.py",
+      "git checkout source/subtitles.py && python3 - <<'EOF' p='source/subtitles.py'; s",
+      "",
+      29
+     ],
+     [
+      132,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      "",
+      412
+     ],
+     [
+      133,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\ndef main(",
+      "",
+      159
+     ],
+     [
+      135,
+      "other",
+      "other",
+      "source/*.py",
+      "def house_ctx",
+      "",
+      682
+     ],
+     [
+      136,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py source/brexit_is_done_action.py source/body.py",
+      "def house_ink\\|HOUSE_W\\|LINE_W\\b\\|def w(",
+      "",
+      2111
+     ],
+     [
+      137,
+      "other",
+      "film notes",
+      "notes/check-audit.md",
+      "sed -n '/^## Where things stand/,$p' notes/check-audit.md",
+      "",
+      1341
+     ],
+     [
+      138,
+      "other",
+      "shared:handover.py",
+      "notes/check-audit.md guides/job-packs.md notes/archive/check-audit-handovers.md ",
+      "python3 - <<'EOF' p='notes/check-audit.md'; s=open(p).read() a=s.index('## Where",
+      "",
+      1249
+     ],
+     [
+      139,
+      "other",
+      "guides",
+      "source/*.py source/rule_proofs.json",
+      "never_blame_long_chats",
+      "",
+      1170
+     ],
+     [
+      140,
+      "other",
+      "shared:kittests.py",
+      "source/rule_proofs.json source/kittests.py notes/learn/plain-words/",
+      "python3 -c \" import json;d=json.load(open('source/rule_proofs.json')) ks=[k for ",
+      "",
+      1030
+     ],
+     [
+      142,
+      "other",
+      "shared:handover.py",
+      "source/rule_proofs.json source/handover.py",
+      "anchor",
+      "",
+      816
+     ],
+     [
+      143,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/rule_proofs.json",
+      "timeout 120 python3 source/kittests.py never_blame_long_chats 2>&1 | head -1 | c",
+      "",
+      117
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
@@ -1781,6 +2967,14 @@
   {
    "date": "2026-11-26",
    "spent": 2.3
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 3.98
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 3.98
   }
  ]
 }

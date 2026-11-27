@@ -1,0 +1,14 @@
+15.18 s  people found: 1 -> 0
+15.27 s  main object cut-out size 240772 -> 142323 px
+15.52 s  main object cut-out size 144224 -> 211876 px
+15.68 s  people found: 0 -> 2
+15.68 s  main object cut-out size 217176 -> 333048 px
+15.77 s  main object cut-out size 333048 -> 186537 px
+15.85 s  people found: 2 -> 1
+16.02 s  people found: 1 -> 0
+16.85 s  main object cut-out size 94629 -> 219734 px
+16.93 s  people found: 0 -> 2
+17.02 s  people found: 2 -> 1
+17.18 s  people found: 1 -> 0
+17.27 s  people found: 0 -> 2
+17.35 s  people found: 2 -> 0

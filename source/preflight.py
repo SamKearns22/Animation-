@@ -270,6 +270,8 @@ def gates(film, name):
             cells = [c.strip() for c in ln.strip().strip('|').split('|')]
             if len(cells) < 3 or not cells[1]:
                 continue
+            if cells[1].startswith('Planning: '):           # check audit B4: planning.route says these, once
+                continue
             filled += 1
             if not cells[-1]:
                 blank.append(f'{cells[0]} ({cells[1][:50]})')
@@ -436,7 +438,11 @@ def _text_only(film, problems, end, fps):
         for w in movesize.wording(film.NAME):   # each 'small'/'curt' row gets its own line (Sam's Y)
             print('info: ' + w)
     import report
-    problems[:] = report.group(problems, getattr(film, 'SHOTS', []))
+    import planning                             # check audit B4: the paperwork asks, once, in the brief checklist
+    kept, pline, _ = planning.route(problems, notes_path(film, getattr(film, 'NAME', film.__name__)))
+    problems[:] = report.group(kept, getattr(film, 'SHOTS', []))
+    if pline:
+        print('info: ' + pline)
     import ledger                               # check-catches change 1: the quick check is recorded too (it never was)
     before = report.shown_before('quick check', problems)   # say once (check audit B1): read before recording
     ledger.record('quick check', problems)
@@ -519,6 +525,11 @@ def main():
     warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
+    import planning                             # check audit B4: the paperwork asks, one list in the brief checklist
+    warn, pline, pstop = planning.route(warn, path, ('acting', 'rehearsal') if new_template else ())
+    stop += pstop
+    if pline:
+        print('WARNING:', pline)
     for x in warn:
         if (new_template and ('rule 74' in x or 'rule 8:' in x)) or 'COULD NOT TEST' in x.upper():   # rule 19
             stop.append(x)                                           # Sam, 10 Nov (Job J Q4): refuse on new films
@@ -713,6 +724,10 @@ def main():
         print('Checks: ' + ' | '.join(checks) + '   <- put this line in Sam\'s message')
     notes = (['The figure guard (allowed drawings, how often):'] + log) if log else []
     notes += (['The film\'s exceptions (rule 13; reasons in the notes\' "## Exceptions"):'] + wlist) if wlist else []
+    import planning                             # check audit B4: 'the film has no PLAN/BENCHMARK/audits' asked once
+    problems, pline, _ = planning.route(problems, notes_path(film, name))
+    if pline:
+        print('WARNING:', pline)
     problems = report.group(problems, getattr(film, 'SHOTS', []))   # rule 19 (13 Nov): one line per fault
     done, left = [], problems
     if not audit:                               # named-lines change 2 (Sam's Y, 23 Nov; rule 59): each warning left

@@ -807,6 +807,105 @@ def wolf_house_line():
 
 
 @test
+def one_line_weight_every_kit():
+    """R8 A6 (27 Nov): one line weight for every kit. Open Wounds note 16 (Sam, 26 Nov: "the line work on the wolves
+    is very thick in comparison to our house style") was one kit drawing its own outline; houseline.py now gives every
+    kit the people's weight (wolf via houseline.ctx, whale via houseline.px; the horse already draws with the people's
+    pen). houseline.survey measures each kit beside a person: red with the old wolf and whale lines, green now."""
+    import sys
+    sys.path.insert(0, 'source')
+    import houseline as H
+    import whale as W
+    import brexit_is_done as F
+    WF = F.ACT.WF
+    keep_ctx, keep_line = WF.house_ctx, W.HOUSE_LINE
+    try:
+        WF.house_ctx, W.HOUSE_LINE = (lambda X, s, ppm: X), False
+        old = H.faults(H.survey())
+    finally:
+        WF.house_ctx, W.HOUSE_LINE = keep_ctx, keep_line
+    rows = H.survey()
+    now = H.faults(rows)
+    caught = {f.split(' ')[0] for f in old}
+    return {'wolf', 'whale'} <= caught and not now, (
+        f'old lines caught: {sorted(caught)}; now: ' + ('; '.join(now) if now else
+                                                      ', '.join(f'{n} {lab} {r:.2f}' for n, lab, r in rows)))
+
+
+@test
+def closed_curves_never_spike():
+    """R8 A4 (27 Nov): no hair, hat or mouth outline can spike. Sam's note 11 (Blair's grin: "a stray line comes off
+    the top of his smile on the right") and Open Wounds chat 9 (a nub on Kemi's turned hard hat) were closed outlines
+    given one point twice in a row. ink.curve, the one closed curve every outline uses, now drops the repeat itself
+    (ink.once), so castsheet's two after-the-fact spike checks were deleted. Red with ink.once switched off (the old
+    grin spikes; the Open Wounds cast hands the curve doubled points), green now (none reach the drawn outline)."""
+    import sys
+    sys.path.insert(0, 'source')
+    import ink
+    import castsheet as C
+    from PIL import Image
+    import sitting as S
+    hw, l13, l17 = 0.15, 0.712, 0.756                      # the grin's outline as Sam saw it (note 11)
+    grin = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03),
+            (hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+    keep = ink.once
+    given, drawn = [0], [0]
+
+    def poke(pts):                                         # how far the outline loops past its own points' box
+        import numpy as np
+        P, Q = np.asarray(pts, float), np.asarray(ink.curve(pts), float)
+        over = np.maximum(P.min(0) - Q.min(0), Q.max(0) - P.max(0)).max()
+        return float(max(0.0, over) / np.ptp(P[:, 0]))
+
+    def spy(pts):
+        q = keep(pts)
+        given[0] += len(pts) != len(q)
+        return q
+
+    def draw_cast():
+        cast, PP = C._setup('brexit-is-done', None)
+        for name, sp0 in cast.items():
+            for yaw, seated in ((0, False), (45, False), (180, False), (45, True)):
+                sp = dict(sp0)
+                s = 0.5 * sp['height'] / 1.75
+                j = S.pose(sp, 'upright') if seated else None
+                PP.V.person(Image.new('RGBA', (1080, 1920)), PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0,
+                            yaw, j)
+    try:
+        ink.once = lambda pts: list(pts)
+        old_grin = poke(grin)
+        ink.once = spy
+        draw_cast()
+        drawn[0] = poke(grin)
+    finally:
+        ink.once = keep
+    ok = old_grin > 0.025 and given[0] > 0 and drawn[0] < 0.015
+    return ok, (f'old curve: the grin pokes out {old_grin:.0%} of its width; Open Wounds cast handed the curve {given[0]} '
+                f'outlines with a point twice, all dropped; the grin now pokes {drawn[0]:.0%}')
+
+
+@test
+def standing_legs_part_in_the_kit():
+    """R8 A5 (27 Nov): the crotch limit lives in the body kit. Sam's note 8 ("camel toe"; refused 24 of 65 handovers'
+    cast checks, last 'CROTCH kemi front 0.96', 26 Nov): Kemi's thighs met from the knee up and the line between them
+    ran up into the seat. Open Wounds chat 39 put the fix in the shared body tool (solid_seat.STAND_LEG_GAP: standing
+    legs keep an even gap up to the crotch); nothing guarded it. Red with the gap 0 (Kemi front caught again), green
+    now (no standing person in the Open Wounds cast has a line up from the crotch)."""
+    import sys
+    sys.path.insert(0, 'source')
+    import solid_seat as SS
+    import castsheet as C
+    keep = SS.STAND_LEG_GAP
+    try:
+        SS.STAND_LEG_GAP = 0.0
+        old = C.crotch_faults('brexit-is-done', ['kemi'])
+    finally:
+        SS.STAND_LEG_GAP = keep
+    now = C.crotch_faults('brexit-is-done')
+    return bool(old) and not now, f'gap 0: {(old or ["nothing caught"])[0][:70]}; now: {"; ".join(now) or "clean"}'
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
     seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These
@@ -4010,6 +4109,133 @@ def finder_reach_end_check():
 
 
 
+# ---------------------------------------------------------------------------------------- R14: the tool health check
+def _health_rec(**given):
+    import toolhealth
+    from datetime import datetime, timezone
+    return toolhealth, toolhealth.Rec(now=datetime(2026, 11, 27, tzinfo=timezone.utc), **given)
+
+
+@test
+def tool_health_report():
+    """R14 (Sam, 26 Nov: "how can I know if all essential tools are working?"): every essential tool is listed with a
+    plain promise, a reach test and a real-use test; the report is one plain line per tool; the printout and picture
+    limits (R13, not built) are listed as not built; a test that cannot run reads as broken, never as working; every
+    reach test runs on the project as it is now without failing to run."""
+    T, R = _health_rec()
+    ids = [t[0] for t in T.TOOLS]
+    want = {'handover', 'costwatch', 'modelguard', 'finder', 'finderwarn', 'page', 'packs', 'kittests', 'ledger',
+            'plainwords', 'save', 'body', 'cast', 'limits'}
+    bad = [f'missing tool {x}' for x in sorted(want - set(ids))]
+    bad += [f'{t[0]}: no plain promise' for t in T.TOOLS if len(t[2].split()) < 6 or re.search(r'\w+\.py|_\w+_', t[2])]
+    lim = [x for x in T.check(R, only=['limits'])]
+    if not lim or not lim[0][-1].endswith('not built yet.'):
+        bad.append('R13 not listed as not built')
+    boom = T._run(lambda R: 1 / 0, R)
+    if boom[0] != 'broken':
+        bad.append('a test that cannot run did not read as broken')
+    for tid, _, _, reach, _ in T.TOOLS:
+        v = T._run(reach, R)
+        if 'could not run' in v[1]:
+            bad.append(f'{tid} reach could not run: {v[1]}')
+    rows = [(t[0], t[1], t[2], ('ok', ''), ('partly', 'it misses x'), T.line(t[1], ('ok', ''), ('partly', 'it misses x')))
+            for t in T.TOOLS[:2]]
+    rep = T.report(rows).splitlines()
+    if len(rep) != 3 or 'partly working – it misses x.' not in rep[1]:
+        bad.append('report is not one plain line per tool')
+    return not bad, '; '.join(bad) or f'{len(ids)} tools listed; R13 not built; reach runs on the project now'
+
+
+@test
+def tool_health_finder_head_bob():
+    """R14 part on R12's note: chat 39 (26 Nov 22:11, zkJd6kM8) asked the finder about note 26, "It's not a nod, it's
+    a head-bob", was pointed only at brexit_is_done.py, then fixed views.py, solid_seat.py and facehouse.py by hand.
+    The real-use replay must call the old finder (own files only) partly working and today's working; the reach test,
+    worked out on its own, must find the shared kit missing from an own-files-only finder list."""
+    import page
+    T, _ = _health_rec()
+    t = '2026-11-26T22:11:03'
+    commits = [('c39', '2026-11-26T22:40:00+00:00', 'zkjd6km8', [f'source/{f}' for f in ('views.py', 'solid_seat.py', 'facehouse.py', 'kittests.py')])]
+    shows = {'zkjd6km8': [(t, 'brexit-is-done', ['brexit_is_done.py'], "It's not a nod, it's a head-bob")]}
+    now_files = [os.path.basename(f) for f in page.files('brexit-is-done')]
+    own = [os.path.basename(f) for f in page.own_files('brexit-is-done')]
+    old_show = lambda film, note: own
+    R1 = T.Rec(commits=commits, shows=shows, page_files={'brexit-is-done': now_files})
+    a = T.finder_use(R1, show_fn=old_show)
+    R2 = T.Rec(commits=commits, shows=shows, page_files={'brexit-is-done': now_files})
+    b = T.finder_use(R2)
+    c = T.finder_reach(T.Rec(page_files={'brexit-is-done': own}))
+    d = T.finder_reach(T.Rec(page_files={'brexit-is-done': now_files}))
+    bad = ([f'old finder replay: {a}'] if a[0] != 'partly' else []) + ([f'today\'s finder replay: {b}'] if b[0] != 'ok' else []) + \
+          ([f'own-files reach: {c}'] if c[0] != 'partly' or 'views.py' not in str(T.closure('brexit-is-done')) else []) + \
+          ([f'today\'s reach: {d}'] if d[0] != 'ok' else [])
+    return not bad, '; '.join(bad) or 'note 26: old finder partly, today\'s working; own-files-only reach caught'
+
+
+@test
+def tool_health_plain_words_misses():
+    """R14 part on the plain-words misses: (1) the 26 Nov 23:09 reply let through still holding "drawing tools"
+    (notes/logs/plainwords.log) makes the real-use test partly; (2) Sam asking for an explanation after the checker
+    went in is a miss; (3) the checker reads only the replies, so file captions, push notices and question boxes are
+    a reach gap; with a hook on each, the reach is whole; with none on replies, broken."""
+    T, _ = _health_rec()
+    let = {"chat": "2fda13cc", "event": "let-through", "faults": [["word", "drawing tools"]],
+           "reply": "For example, the results of the tests that prove the drawing tools still work", "t": "2026-11-26 23:09"}
+    blk = {"chat": "2fda13cc", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-26 23:10"}
+    a = T.plain_use(T.Rec(plainlog=[blk, let], sam=[]))
+    b = T.plain_use(T.Rec(plainlog=[blk], sam=[('2026-11-26T23:20:00', 'I don\'t understand what the finder is', 'x.md')]))
+    c = T.plain_use(T.Rec(plainlog=[blk], sam=[('2026-11-26T23:20:00', 'Y', 'x.md')]))
+    stop = [('Stop', '', 'python3 source/plainwords.py hook')]
+    d = T.plain_reach(T.Rec(hooks=stop))
+    e = T.plain_reach(T.Rec(hooks=stop + [('PreToolUse', m, 'python3 source/plainwords.py pre') for m in
+                                          ('SendUserFile', 'PushNotification', 'AskUserQuestion')]))
+    f = T.plain_reach(T.Rec(hooks=[]))
+    bad = ([f'let-through: {a}'] if a[0] != 'partly' else []) + ([f'Sam confused: {b}'] if b[0] != 'partly' else []) + \
+          ([f'clean: {c}'] if c[0] != 'ok' else []) + ([f'replies only: {d}'] if d[0] != 'partly' or 'captions' not in d[1] else []) + \
+          ([f'all ways: {e}'] if e[0] != 'ok' else []) + ([f'none: {f}'] if f[0] != 'broken' else [])
+    return not bad, '; '.join(bad) or 'let-through and confusion caught; captions, pushes and questions named as gaps'
+
+
+@test
+def tool_health_handover_records():
+    """R14 part on the handover: (1) the chain's opening message for R12 (26 Nov 23:15, saved to Sam's messages:
+    "Animation project, the job that makes the code search reach every file ... First check you can save to GitHub")
+    is not Sam's, and saving it as his is a reach gap; (2) Sam's 21 Nov 11:46 ask ("Please reword your rule so it could
+    apply to any film in any situation."), carried by no notes line, made again on 23 Nov, is a real-use miss; a
+    chat quoting him is not him asking again."""
+    T, _ = _health_rec()
+    chain = ('2026-11-26T23:15:05', 'Animation project, the job that makes the code search reach every file we use '
+             '(first job in the reserve list). Opus medium. First check you can save to GitHub; if not, stop.', 'k.md')
+    a = T.handover_reach(T.Rec(sam=[chain], hooks=[('UserPromptSubmit', '', 'python3 source/handover.py log')]))
+    b = T.handover_reach(T.Rec(sam=[('2026-11-26T22:00:00', 'Y', 'k.md')], hooks=[('UserPromptSubmit', '', 'python3 source/handover.py log')]))
+    ask = ('2026-11-21T11:46:00', 'Please reword your rule so it could apply to any film in any situation.', 'a.md')
+    again = ('2026-11-23T05:49:00', 'I would have expected the change on Blessed to apply to all films in the future. '
+             'Reword the rule so it could apply to any film in any situation.', 'b.md')
+    quote = ('2026-11-23T05:49:00', 'Sam said: "Please reword your rule so it could apply to any film in any situation."', 'b.md')
+    lines = ['A notes line about the courtroom set and its panelled walls, nothing more.']
+    c = T.handover_use(T.Rec(sam=[ask, again], notes_lines=lines))
+    d = T.handover_use(T.Rec(sam=[ask, quote], notes_lines=lines))
+    bad = ([f'chain saved as Sam: {a}'] if a[0] != 'partly' else []) + ([f'clean saver: {b}'] if b[0] != 'ok' else []) + \
+          ([f'asked twice: {c}'] if c[0] != 'partly' else []) + ([f'a quote: {d}'] if d[0] != 'ok' else [])
+    return not bad, '; '.join(bad) or 'chain message and the twice-made rule ask caught; a quote is not a repeat'
+
+
+@test
+def tool_health_guard_and_saving():
+    """R14 parts on the model guard and saving: a routine command the guides give that the guard misreads is a reach
+    gap, a short clip (--span) let through is right; an Opus chat that ran routine work with no refusal logged is a
+    miss; a chat whose work is on no main-line commit and on no branch named in the notes is a saving miss."""
+    T, _ = _health_rec()
+    a = T.modelguard_reach(T.Rec(routine_cmds=[('python3 source/x.py final OUT.mp4 --small', True),
+                                                ('python3 source/x.py final OUT.mp4 --small --span 1 2', False)]))
+    b = T.modelguard_reach(T.Rec(routine_cmds=[('cd source && python3 x.py final OUT.mp4', True)]))
+    c = T.save_use(T.Rec(commits=[('feedbeef' * 5, '2026-11-26T10:00:00', 'zzzz9999', ['source/a.py'])], on_main=set()))
+    d = T.save_use(T.Rec(commits=[('feedbeef' * 5, '2026-11-26T10:00:00', 'zzzz9999', ['source/a.py'])], on_main={'feedbeef' * 5}))
+    bad = ([f'guides read right: {a}'] if a[0] != 'ok' else []) + ([f'cd form: {b}'] if b[0] != 'partly' else []) + \
+          ([f'off main: {c}'] if c[0] != 'partly' else []) + ([f'on main: {d}'] if d[0] != 'ok' else [])
+    return not bad, '; '.join(bad) or 'guard reach and saving caught on their examples'
+
+
 def _repo_pair():
     """A pretend GitHub (a bare repo) with the main line holding one ledger row, and a chat's copy of it on its own
     branch: (bare, copy, git)."""
@@ -5026,8 +5252,7 @@ def castsheet_only_when_cast_changed():
     def fake(film, *a, **k):
         calls.append(open(src).read())
         return list(result[0])
-    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'mouth_spike_faults', 'hair_spike_faults',
-             'seated_faults', 'judge_faults')
+    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'seated_faults', 'judge_faults')
     keep = {n: getattr(C, n) for n in names}
     keep_stamps = H.CASTSTAMPS
     try:
@@ -5047,8 +5272,8 @@ def castsheet_only_when_cast_changed():
         H.CASTSTAMPS = keep_stamps
         shutil.rmtree(tmp, ignore_errors=True)
         os.remove(src)
-    ok = first == [] and n1 == 7 and n2 == n1 and n3 == 14 and third == [] and bad1 and bad2
-    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 14}; '
+    ok = first == [] and n1 == len(names) and n2 == n1 and n3 == 2 * len(names) and third == [] and bad1 and bad2
+    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 2 * len(names)}; '
                 f'faults stop it both times {bool(bad1) and bool(bad2)}')
 
 
@@ -6405,6 +6630,58 @@ def smirk_one_corner():
 
 
 @test
+def seeing_views_see_a_vanish():
+    """seeing.py (seeing-five-candidates option 1, Sam's Y 26 Nov): a made-up film paints a sorted item list (as Grand
+    Theft Autism's street does): a 'person' square walks right and vanishes mid-frame at frame 3 (GTA v5 note 5's
+    kind), a 'wall' stays. The item wrapper must record both as layers, the who-is-where events must name the
+    vanish, the movement measure must print an unexplained change at that frame, and every sheet must be saved."""
+    import tempfile
+    import types
+    import seeing as SE
+    from PIL import Image, ImageDraw
+    mod = types.ModuleType('seeing_kit_film')
+    mod.__file__ = os.path.join(HERE, 'seeing_kit_film.py')     # counts as the film's own code
+    mod.FPS = 12
+
+    def world4(t):
+        img = Image.new('RGB', (1080, 1920), (200, 220, 240))
+        i = int(round(t * 12))
+        items = [('wall', 30.0, lambda im: ImageDraw.Draw(im).rectangle((700, 600, 1000, 1400), fill=(120, 90, 70)))]
+        if i < 3:
+            x = 200 + 40 * i
+            items.append(('person 1', 10.0, lambda im, x=x: ImageDraw.Draw(im).rectangle(
+                (x, 800, x + 160, 1300), fill=(30, 30, 160))))
+        for e in mod.sorted(items, key=lambda e: -e[1]):
+            e[2](img)
+        return img
+    mod.world4 = world4
+    mod.sorted = sorted
+    mod.picture = world4
+    sys.modules['seeing_kit_film'] = mod
+    out = tempfile.mkdtemp()
+    here = os.getcwd()
+    path = list(sys.path)
+    try:
+        SE.frames(HERE, 'seeing_kit_film', 0.0, 6 / 12, out)
+    finally:
+        os.chdir(here)
+        sys.path[:] = path
+        sys.modules.pop('seeing_kit_film', None)
+    _, painted, meta = SE.load_layers(os.path.join(out, 'layers', '001.npz'))
+    names = [L['name'] for L in meta]
+    if names != ['wall', 'person 1']:
+        return False, f'layers recorded: {names} (want wall, person 1)'
+    wev = [m for t, m in SE.whereis_events(out) if 'vanished' in m]
+    mev, F = SE.motion_events(out)
+    at3 = [m for t, m in mev if abs(t - 3 / 12) < 1e-3 and 'unexplained' in m]
+    SE.views(out, ('plain', 'whereis', 'motion'))
+    sheets = [v for v in ('plain', 'whereis', 'motion') if os.path.exists(os.path.join(out, v + '.jpg'))]
+    ok = bool(wev) and bool(at3) and len(sheets) == 3
+    return ok, (f'who-is-where: {wev[:1] or "no vanish"}; movement at the vanish: {at3[:1] or "nothing"}; '
+                f'sheets {sheets}')
+
+
+@test
 def body_model_downloads_once():
     """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
     not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight
@@ -6565,6 +6842,153 @@ def faults_said_once():
     else:
         out_n = 'Open Wounds: fewer than 2 quick checks'
     return (not out), ('; '.join(out) or 'one count line for the repeat, the new fault in full; ' + out_n)
+
+
+@test
+def planning_asks_once():
+    """Check audit B4 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, where 'the film has
+    no PLAN', 'no BENCHMARK' and 'no audits' printed on 4 runs each, never answered): the paperwork asks become rows of
+    the brief checklist the first time; a run prints one planning line instead of each ask; an answered row ("none:
+    why") is never asked again; a real drawing fault passes through untouched; rows 74 and 8 still stop new films."""
+    import shutil
+    import tempfile
+    import planning as P
+    tmp = tempfile.mkdtemp()
+    path = os.path.join(tmp, 'kt.md')
+    shutil.copy(os.path.join(HERE, '..', 'notes', '_template.md'), path)
+    asks = ['plan (rule 1): the film has no PLAN (rooms...)', 'benchmark (rule 3): the film has no BENCHMARK (8-10)',
+            'house style: the film has no audits: the general audit', 'HANDS: 2 11.08s: a hand over a body']
+    out = []
+    kept, line, stops = P.route(asks, path)
+    if kept != [asks[-1]] or not line or '3 unanswered' not in line or stops:
+        out.append(f'first run wrong: kept {kept}, line {line}, stops {stops}')
+    again = P.route(asks, path)
+    if open(path).read().count('Planning: ') != 3:
+        out.append('rows written more than once')
+    text = open(path).read().replace('(rule 1) |  |', '(rule 1) | none: a one-room film, the set is a drawing |')
+    open(path, 'w').write(text)
+    kept3, line3, _ = P.route(asks, path)
+    if not line3 or '2 unanswered' not in line3 or 'plan' in line3.split('(')[1]:
+        out.append(f'an answered row was asked again: {line3}')
+    _, _, st = P.route(['no "Rehearsal clips sent: DATE" line in the notes (rule 8)'], path, ('rehearsal',))
+    if not st:
+        out.append('an unanswered rule-8 row did not stop a new-template film')
+    shutil.rmtree(tmp, ignore_errors=True)
+    return (not out), ('; '.join(out) or f'first run: one line ({line[:60]}...); answered row dropped; rule 8 stops')
+
+
+@test
+def row_of_bookcases_sized_per_bay():
+    """Check audit B3 (Sam's Y, 26 Nov; saved example: Open Wounds' 'the bookcases, right: 4.00 m wide; a real bookcase
+    is about 0.8 m (500%)', on 10 runs): the size check reads the set's own description, so a wall of shelves written
+    'bays 4' is four bookcases side by side, each judged alone; one bookcase 4 m wide is still a fault."""
+    import types
+    import kitinputs as K
+    import sizes
+    keep = K._places
+    item = lambda raw: dict(name='shelves', kind='bookcase', raw=raw)
+    try:
+        K._places = lambda film: {'views': {'v': {'items': [item({'x': '0.3 to 4.3', 'z': '0 to 3.7', 'bays': '4'})]}}}
+        row = [sizes.check(*r) for r in K.prop_sizes(types.SimpleNamespace())]
+        K._places = lambda film: {'views': {'v': {'items': [item({'x': '0.3 to 4.3', 'z': '0 to 3.7'})]}}}
+        one = [sizes.check(*r) for r in K.prop_sizes(types.SimpleNamespace())]
+    finally:
+        K._places = keep
+    ok = row == [None] and one and one[0]
+    return ok, f'a row of 4: {row}; one 4 m bookcase: {one}'
+
+
+@test
+def critique_saw_it_column():
+    """Check audit, the critique column (Sam's "1. Y", 26 Nov): each of Sam's notes says whether the fresh-eye critique
+    had already flagged it (yes, no, no critique). The handover refuses a blank cell on a table that has the column
+    (the template has it); an older table without it is not asked; the audit counts the answers."""
+    import tempfile
+    import checkaudit as CA
+    import handover as H
+    tmp = tempfile.mkdtemp()
+    os.makedirs(os.path.join(tmp, 'notes'))
+    p = os.path.join(tmp, 'notes', 'kt.md')
+    head = '## Notes\n| # | shot | time | note | line | should have caught | critique saw it? | status |\n|---|---|---|---|---|---|---|---|\n'
+    open(p, 'w').write(head + '| 1 | 2 | 3.0 | the hand floats | 12 | AUDIT | yes | fixed |\n'
+                              '| 2 | 3 | 9.0 | the door pops | 30 | pop-in | | open |\n'
+                              '| 3 | 1 | 1.0 | too dark | 2 | none | no critique | open |\n')
+    keep = H.ROOT
+    out = []
+    try:
+        H.ROOT = tmp
+        f = H.tag_faults(None, p)
+    finally:
+        H.ROOT = keep
+    saw = [x for x in f if 'critique saw' in x]
+    if len(saw) != 1 or 'note 2' not in saw[0]:
+        out.append(f'blank cell not refused once: {f}')
+    old = os.path.join(tmp, 'notes', 'old.md')
+    open(old, 'w').write('## Notes\n| # | shot | time | note | line | should have caught | status |\n|---|---|---|---|---|---|---|\n'
+                         '| 1 | 2 | 3.0 | a note | 1 | none | open |\n')
+    if H.note_tags(old, H.SAW):
+        out.append('an older table without the column was asked')
+    c = CA.critique_saw(tmp)
+    if c.get('yes') != 1 or c.get('no critique') != 1 or c.get('blank') != 1:
+        out.append(f'counted wrong: {dict(c)}')
+    return (not out), ('; '.join(out) or f'blank refused (note 2); old table not asked; counted {dict(c)}')
+
+
+@test
+def line_check_whole_person():
+    """Check audit B8 (26 Nov; saved example: Open Wounds' checks.jsonl, 'may: no outline at (674, 14)' and 'blair: edge
+    with no line at (502, 14)' on 6 runs): the line check drew each person alone with the head off the top of the
+    picture, so the cut read as a missing outline. Now the whole person fits (nothing touches the picture's edge),
+    May and Blair are clean (their brows and open mouth are flat on purpose; the face has its own checks), and a
+    flat patch painted on Blair's jacket with no line round it is still caught."""
+    import importlib
+    import body as B
+    import kitinputs as K
+    import linecheck as LC
+    from PIL import Image, ImageDraw
+    f = importlib.import_module('brexit_is_done')
+    B.SS = 1
+    subs = dict(K.line_subjects(f, {w: 1.6 for w in f.CAST})())
+    out = []
+    for who in ('may', 'blair'):
+        lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+        subs[who](lay)
+        x0, y0, x1, y1 = lay.getbbox()
+        if y0 <= 2 or y1 >= 1918 or x0 <= 2 or x1 >= 1078:
+            out.append(f'{who} touches the picture edge {lay.getbbox()}')
+    film = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [(w, subs[w]) for w in ('may', 'blair')])})
+    clean = LC.faults(film)
+    if clean:
+        out.append(f'faults on May and Blair: {clean}')
+
+    def patched(img):
+        got = subs['may'](img)                         # May's plum jacket (Blair's suit is near-black: read as ink)
+        ImageDraw.Draw(img).rectangle([470, 900, 610, 1040], fill=(230, 200, 60, 255))   # on the jacket, no line
+        return got
+    film2 = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [('may', patched)])})
+    caught = LC.faults(film2)
+    if not any('edge with no line' in x for x in caught):
+        out.append(f'an unlined patch on the jacket was missed: {caught}')
+    return (not out), ('; '.join(out) or f'whole people fit; May and Blair clean; the painted patch caught ({caught[0][:60]})')
+
+
+@test
+def subtitles_fit_where_made():
+    """Check audit A2 (Sam's Y, 26 Nov; saved example: Open Wounds' checks.jsonl, 'caption "The Prime Minister": 0.76 s
+    on screen at 1.1x for 3 words (too fast to read)' and three more, on 9 runs): the subtitle kit makes each piece
+    readable when it is made (moves its neighbours a little, or joins two short ones up to 5 words), so the check
+    agrees. Open Wounds' captions now pass at the delivered speed; a line spoken too fast for any timing is still
+    flagged; pieces with room stay where they were."""
+    import importlib
+    import subtitles as SUB
+    f = importlib.import_module('brexit_is_done')
+    ow = SUB.readable_faults(f.caption_at, getattr(f, 'BLACK_AT', getattr(f, 'DUR', 60)), getattr(f, 'FPS', 12))
+    roomy = SUB.fit([['one two three', 0.0], ['four five six', 2.0]], 4.5)
+    cram = [dict(n=1, text='one two three four. five six seven eight. nine ten eleven twelve.', start=0.0, end=1.5,
+                 _dur=1.5)]
+    bad = SUB.readable_faults(lambda t: SUB.caption_at(cram, t), 3.0, 12)
+    ok = not ow and roomy == [['one two three', 0.0], ['four five six', 2.0]] and bad
+    return ok, f'Open Wounds: {len(ow)} caption fault(s) {ow[:1]}; roomy pieces kept: {roomy}; crammed line flagged: {len(bad)}'
 
 
 def main():

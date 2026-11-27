@@ -9,6 +9,8 @@ notes/proposals/kit-tests-per-film.md, the judged pick V2).
   started_here() .... handover end: this chat wrote a start row (it is a film's first chat)
   first_chat() ...... True when this chat is the film's first (no start row yet, or the start row is this chat's)
   begun(), begin(), lessons(): where a film starts and ends (Sam, 26 Nov): the screenplay and title; the lessons.
+  _health() ......... R14: the tool health report (source/toolhealth.py), one plain line per tool, printed with the
+                      kit tests at a film's start (at_start's first chat, begin) and end (lessons)
   at_start() ........ handover.py start --film NAME: once the film has begun (its notes say so), in its first chat, writes the start row and starts the
                       stale kit tests in the background (watcher.py kittests-bg); in every chat, saves which tests are
                       stale now (local file), so the end can tell what THIS chat's changes made stale. Tool jobs (no
@@ -85,7 +87,17 @@ def _stale_names():
     return st
 
 
-def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_fn=None, notes_dir=None):
+def _health(film):
+    """R14 (Sam, 26 Nov): the tool health report runs beside the kit tests, one plain line per tool for Sam."""
+    try:
+        import toolhealth
+        return ['TOOL HEALTH (tell Sam these lines in plain words; a "partly" goes to him as a numbered question with '
+                'its fix, never fixed unasked):'] + ['  ' + x for x in toolhealth.at_start(film).splitlines()]
+    except Exception as e:                      # a report that cannot run is said, never skipped
+        return [f'TOOL HEALTH: could not run ({type(e).__name__}: {e})']
+
+
+def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_fn=None, notes_dir=None, health_fn=None):
     """handover.py start. Returns the lines to print. In the film's first chat: the start row and the background run."""
     sid = sid or sid_now()
     out = []
@@ -110,6 +122,8 @@ def at_start(film, sid=None, path=None, start_path=None, stale_fn=None, launch_f
         (launch_fn or _launch)()
         out.append(f'kit tests: {film}\'s first chat: the start-of-film kit check runs in the background '
                    f'({len(st or [])} tests to run); `handover.py end` waits for it (rule 90)')
+        health = health_fn or (None if launch_fn else _health)    # a kittest passes its own launcher: no report
+        out += health(film) if health else []
     elif film:
         out.append('kit tests: not this chat (rule 90: only a film\'s first chat and its final run them)')
     return out
@@ -143,6 +157,8 @@ def begin(film, notes_dir=None, sid=None, path=None, launch_fn=None):
     if not any(_norm(r[0]) == _norm(film) and r[1] == 'start' for r in rows(path)):
         _add(_norm(film), 'start', sid, path)
         (launch_fn or _launch)()
+        if not launch_fn:
+            print('\n'.join(_health(film)))
         return f'kit tests: {film} starts (screenplay and title given): the kit check runs in the background; `handover.py end` waits for it'
     return f'kit tests: {film} already started (its start row is on record)'
 
@@ -157,6 +173,8 @@ def lessons(film, sid=None, path=None, run_fn=None):
     elif st:
         ok = subprocess.run([sys.executable, os.path.join(HERE, 'kittests.py'), '--stale'], cwd=ROOT).returncode == 0
     _add(_norm(film), 'end', sid or sid_now(), path)
+    if run_fn is None:
+        print('\n'.join(_health(film)))          # R14: the tool report at the film's end too, with its kit tests
     return ok
 
 

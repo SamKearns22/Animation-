@@ -36,7 +36,9 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import houseline                                     # noqa: E402  (R8 A6: one line weight for every kit)
 
+HOUSE_LINE = True    # False: the old 5 px default (Flying Whales, posted, keeps its frames)
 INK = (20, 16, 16)                                  # the house outline colour (satire_style.OUT)
 LENGTH = 14.0                                       # m, snout to fluke tips
 BODY_L = 12.8                                       # m, snout to the fluke root
@@ -398,7 +400,7 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
     """Draw one whale. pattern 0-4 (PATTERNS) sets the markings and size. t seconds (drives the wave and beat);
     flap 0..1 how much the flippers wave; beat 0..1 how much the tail beats; arch -1..1 (+ nose and tail down: a
     hump, - a dip). blow: seconds since the last blow (None = no spray). ol: outline width in px (default: the house
-    5 px at a 1080-wide frame). tint: (r, g, b, k) mixes the dusk light into every colour. brow: the heavy, low, cross
+    line, houseline.px, about a person's; HOUSE_LINE False: the old 5 px at a 1080-wide frame). tint: (r, g, b, k) mixes the dusk light into every colour. brow: the heavy, low, cross
     brow over each eye (Sam's yes, 1 Nov: they are angry about climate change). cut_z: hide every part of the whale
     below this height (m; the sea surface, 0): a whale bursting out of the sea or diving in is cut off at the waterline
     with no outline along the cut (the splash covers the seam). hide_boxes: [(origin, axes 3x3 (rows: unit directions),
@@ -409,7 +411,8 @@ def draw(cam, pose, pattern=0, t=0.0, flap=1.0, beat=1.0, arch=0.0, mouth=0.0, l
     L = (np.asarray(light, float) if light is not None else LIGHT)
     L = L / np.linalg.norm(L)
     W, H = cam.size
-    ol = ol if ol is not None else max(2.0, 5.0 * W / 1080)
+    if ol is None:                                  # R8 A6: the house line (houseline.px), like a person's
+        ol = houseline.px(W) if HOUSE_LINE else max(2.0, 5.0 * W / 1080)
 
     Vb, Fb, spine = _body(sz, t, beat, arch, pat)
     parts = []                                         # (name, grid, pale field, uv flip)
@@ -819,7 +822,7 @@ def _tile(label, img, w, h, bg):
 
 def _render_view(eye, pattern, size=(900, 600), **kw):
     cam = view_cam(eye, size)
-    spr = draw(cam, Pose(), pattern=pattern, ol=5, **kw)
+    spr = draw(cam, Pose(), pattern=pattern, **kw)
     frame = Image.new('RGBA', size, (0, 0, 0, 0))
     if spr:
         spr.paste(frame)
@@ -840,7 +843,7 @@ def sheet(out):
     pt = []
     for k, p in enumerate(PATTERNS):
         cam = view_cam((0.0, 0.0, -34.0), (540, 900), fit=17, right=(-1, 0, 0))   # nose up the tile
-        spr = draw(cam, Pose(), pattern=k, ol=5, flap=0.0, beat=0.0)
+        spr = draw(cam, Pose(), pattern=k, flap=0.0, beat=0.0)
         fr = Image.new('RGBA', (540, 900), (0, 0, 0, 0))
         spr.paste(fr)
         pt.append(_tile(f"{k + 1}. {p['name']} (x{p['size']:.2f})", fr, 540, 960, BG))
@@ -853,7 +856,7 @@ def sheet(out):
     sw, sh = 2700, 760
     sc = Image.new('RGB', (sw, sh), BG)
     cam = view_cam((0.0, 80.0, 0.0), (sw, sh - 120), fit=22.0)
-    spr = draw(cam, Pose(), pattern=0, ol=5, flap=0.0, beat=0.0)
+    spr = draw(cam, Pose(), pattern=0, flap=0.0, beat=0.0)
     lay = Image.new('RGBA', (sw, sh - 120), (0, 0, 0, 0))
     spr.paste(lay)
     sc.paste(lay, (0, 40), lay)
@@ -913,14 +916,14 @@ def moves(out):
     for label, pitch, arch in (('climb 25', 25, -0.25), ('level', 0, 0.0), ('dive -25', -25, 0.25),
                                ('steep climb 45', 45, -0.15), ('arched', 0, 0.4)):
         cam = view_cam(side, (tw, th - 40), fit=18)
-        spr = draw(cam, Pose(pitch=pitch), pattern=3, ol=5, flap=0.3, beat=0.3, arch=arch)
+        spr = draw(cam, Pose(pitch=pitch), pattern=3, flap=0.3, beat=0.3, arch=arch)
         fr = Image.new('RGBA', (tw, th - 40), (0, 0, 0, 0))
         spr.paste(fr)
         r3.append(_tile(label, fr, tw, th, BG))
     r4 = []
     for age in (0.1, 0.3, 0.6, 1.0, 1.4):
         cam = view_cam((-10.0, 22.0, 8.0), (tw, th - 40), fit=19)
-        spr = draw(cam, Pose(), pattern=3, ol=5, flap=0.5, beat=0.5, blow=age)
+        spr = draw(cam, Pose(), pattern=3, flap=0.5, beat=0.5, blow=age)
         fr = Image.new('RGBA', (tw, th - 40), (0, 0, 0, 0))
         spr.paste(fr)
         r4.append(_tile(f'blow {age:.1f}s', fr, tw, th, BG))
@@ -958,7 +961,7 @@ def check():
         lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
         for i, eye in enumerate(((0.0, 30.0, 0.0), (-22.0, 16.0, 14.0))):
             cam = view_cam(eye, (1080, 900))
-            spr = draw(cam, Pose(), pattern=k, ol=5, t=0.4, flap=1.0, beat=1.0)
+            spr = draw(cam, Pose(), pattern=k, t=0.4, flap=1.0, beat=1.0)
             fr = Image.new('RGBA', (1080, 900), (0, 0, 0, 0))
             spr.paste(fr)
             lay.alpha_composite(fr, (0, i * 960))
