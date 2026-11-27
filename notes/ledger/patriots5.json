@@ -1111,66 +1111,66 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.38,
+   "cost": 1.63,
    "src": "estimate",
    "sid": "session_01J1JB7VmBNix1SpRrBBfJas",
-   "steps": 92,
-   "hist_k": 217,
+   "steps": 105,
+   "hist_k": 236,
    "kinds": {
-    "tool search": 25.3,
-    "renders": 5.4,
-    "pictures": 1.4,
-    "other": 67.9
+    "tool search": 26.4,
+    "renders": 5.2,
+    "pictures": 1.7,
+    "other": 66.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 58,
+    "tool search": 68,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 6,
-    "pictures": 4,
+    "renders": 7,
+    "pictures": 5,
     "other": 22
    },
    "split": {
-    "usd": 5.0608,
-    "total": 5.0608,
+    "usd": 5.9789,
+    "total": 5.9789,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 31.2,
-     "Claude's words": 24.8,
-     "carried history": 22.8,
-     "new writes": 21.2
+     "start-up floor": 29.7,
+     "carried history": 24.9,
+     "Claude's words": 24.9,
+     "new writes": 20.5
     },
     "origins": {
-     "Claude's words": 39.3,
-     "start-up floor": 31.2,
-     "result: tool search": 18.1,
-     "result: other": 5.2,
+     "Claude's words": 40.6,
+     "start-up floor": 29.7,
+     "result: tool search": 18.2,
+     "result: other": 5.0,
+     "result: pictures": 2.5,
      "messages and reminders": 2.3,
-     "result: pictures": 2.1,
-     "result: renders": 1.8
+     "result: renders": 1.7
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 31.2,
-     "thinking": 12.0,
-     "writing notes": 9.3,
-     "commands": 8.3,
-     "reading notes": 7.6,
-     "writing code": 5.7,
-     "reading guides": 4.7,
+     "start-up reading (rules, tools, first files)": 29.7,
+     "thinking": 12.2,
+     "writing notes": 9.6,
+     "commands": 8.0,
+     "reading notes": 7.8,
+     "writing code": 7.0,
+     "reading guides": 4.5,
      "other commands": 3.3,
-     "reading chat records": 3.2,
+     "reading chat records": 3.0,
+     "looking at pictures": 2.5,
      "messages to Sam": 2.3,
      "messages and reminders": 2.3,
-     "looking at pictures": 2.1,
-     "helper and chat prompts": 1.7,
-     "renders": 1.7,
-     "reading kit code": 1.7,
-     "app tools (chats, files sent)": 1.1,
+     "reading kit code": 1.8,
+     "renders": 1.6,
+     "helper and chat prompts": 1.5,
+     "app tools (chats, files sent)": 1.0,
      "running checks and tools": 0.7,
      "start-up and handover tools": 0.7,
-     "git and saving": 0.5
+     "git and saving": 0.4
     },
     "leftover": 0.0
    },
@@ -1182,15 +1182,15 @@
      [
       "guides/job-packs.md",
       1.7,
-      0.0408
+      0.0447
      ],
      [
       "story/status.md",
       0.5,
-      0.0119
+      0.013
      ]
     ],
-    "base_pct": 27.2
+    "base_pct": 26.3
    },
    "search": {
     "show": 0,
@@ -1198,17 +1198,19 @@
      "no show": 0
     },
     "other": {
-     "film notes": 19,
-     "guides": 5,
-     "other": 21,
+     "film notes": 20,
+     "guides": 7,
+     "other": 22,
      "shared:kitfilm.py": 1,
      "shared:handover.py": 1,
      "shared:patriots2.py": 2,
      "shared:patriots3_bunker.py": 1,
      "shared:catalogue.py": 1,
      "shared:ledger.py": 2,
-     "shared:plainwords.py": 1,
-     "shared:facepick.py": 4
+     "shared:plainwords.py": 5,
+     "shared:facepick.py": 4,
+     "shared:maps.py": 1,
+     "shared:kittests_proposals.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -1734,6 +1736,96 @@
       "git fetch -q origin && git log --oneline -1 && git rev-parse --short origin/clau",
       "",
       144
+     ],
+     [
+      90,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py notes/learn/plain-words/ source/kittests*.py",
+      "^def \\|^[A-Z_]* = \\|blame\\|long chat",
+      "",
+      6612
+     ],
+     [
+      91,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py",
+      "sed -n 89,142p source/plainwords.py",
+      "",
+      3089
+     ],
+     [
+      92,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py notes/learn/plain-words/bad-7-hook-suggest-27nov.md source/",
+      "python3 - <<'EOF' p='source/plainwords.py'; t=open(p).read() t=t.replace(\"\"\" if ",
+      "",
+      285
+     ],
+     [
+      93,
+      "other",
+      "guides",
+      "guides/tiktok-design.md",
+      "Hook Text is mine",
+      "",
+      216
+     ],
+     [
+      94,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "tail -8 guides/film-quality-rules.md | cut -c1-250",
+      "",
+      1199
+     ],
+     [
+      95,
+      "other",
+      "shared:maps.py",
+      "guides/film-quality-rules.md notes/learn/plain-words/bad-7-hook-suggest-27nov.md",
+      "python3 - <<'EOF' p='guides/film-quality-rules.md'; t=open(p).read() i=t.index('",
+      "",
+      161
+     ],
+     [
+      96,
+      "other",
+      "shared:kittests_proposals.py",
+      "source/kittests_proposals.py source/plainwords.py source/maps.py",
+      "hook_text_never_suggested\\|hook_suggested",
+      "",
+      365
+     ],
+     [
+      97,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py source/kittests_proposals.py notes/learn/plain-words notes/",
+      "https://(i2-prod\\.mirror\\.co\\.uk|static\\.standard\\.co\\.uk)/[^\" ]*\\.(jpg|jpeg)",
+      "",
+      1745
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "https://i2-prod\\.mirror\\.co\\.uk/[^\" ]*\\.jpg",
+      "",
+      46
+     ],
+     [
+      100,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/learn/shoulder-tower/lesson.md",
+      "\n     ",
+      "",
+      174
      ]
     ]
    },
