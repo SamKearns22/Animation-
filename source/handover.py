@@ -605,7 +605,7 @@ def _edited_source(since):
     return sorted({os.path.basename(f) for f in names_ if re.fullmatch(r'source/[^/]+\.py', f)})
 
 
-REACH_FREE = {'kittests.py'}                      # a notes round adds its test here; never a finder gap
+REACH_FREE = {'kittests.py'} | {f for f in os.listdir(os.path.join(ROOT, 'source')) if f.startswith('kittests_')}  # a round adds its test here
 
 
 def reach_faults(edited=None, shows=None, files_fn=None, notes_fn=None):
@@ -1173,6 +1173,63 @@ def learn_first_lines(film=None, text=None):
     return [LEARN_FIRST] + need if need else []
 
 
+def next_model(film, notes=None):
+    """The model the film notes' Next line gives the next chat: the first model named on it ('' when none)."""
+    p = notes or (film and os.path.join(ROOT, 'notes', f'{film}.md'))
+    if not p or not os.path.exists(p):
+        return ''
+    nxt = next((ln for ln in open(p, encoding='utf-8') if ln.lstrip('- *').lower().startswith('next')), '')
+    m = re.search(r'opus|sonnet|haiku|fable', nxt, re.I)
+    return m.group(0).lower() if m else ''
+
+
+def chain_model_lines(film, notes=None, model=None, record=None):
+    """Cost-spike fix 6 (Sam's Y, 27 Nov; the animatic chat that switched to Opus partway): this chat should run on
+    the model its handover names (--model, else the notes' Next line). Says STOP at once when it does not, and
+    leaves the expectation for the chain guard hook (.claude/hooks/chainguard.py), which says it again if the model
+    switches partway."""
+    want = (model or next_model(film, notes) or '').lower()
+    if not want:
+        return []
+    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+    import chainguard
+    import modelguard
+    rec = record or this_record()
+    chainguard.expect(want, rec)
+    got = chainguard.family(modelguard.served_model(rec))
+    if got and got != chainguard.family(want):
+        return [f'STOP (model): this chat runs on {got}; its handover names {want}. Open the {want} chat now '
+                f'(create_session with model "{want}", the project attached, the same handover) and do no work here '
+                '(CLAUDE.md, Models and chats; Sam\'s word override skips this)']
+    return [f'model: this chat runs on {got or "?"}, as its handover names ({want}); the chain guard watches for a switch']
+
+
+def appcost_faults():
+    """Cost-spike fix 7: the app's own cost figure for this chat is on record (ledger.py appcost)."""
+    import ledger
+    return ledger.appcost_faults()
+
+
+FIXING = re.compile(r'\bfix(es|ing)?\b|\bnotes? round|\bround of (sam\'s )?notes', re.I)
+
+
+def fixpack_faults(film, notes=None):
+    """Cost-spike fix 4 (Sam's Y, 27 Nov): a handover whose Next is a fixing chat names the one-page fix pack
+    (guides/fix-pack.md) on its Read line, so the fixing chat reads that page, not the guides."""
+    p = notes or (film and os.path.join(ROOT, 'notes', f'{film}.md'))
+    if not p or not os.path.exists(p):
+        return []
+    text = open(p, encoding='utf-8').read()
+    i = text.find('## Where things stand')
+    part = text[i:] if i >= 0 else text
+    nxt = next((ln for ln in part.splitlines() if ln.lstrip('- *').lower().startswith('next')), '')
+    read = next((ln for ln in part.splitlines() if ln.lstrip('- *').lower().startswith('read')), '')
+    if FIXING.search(nxt) and 'fix-pack' not in read:
+        return ['READ: the Next chat fixes notes, so its Read line names guides/fix-pack.md (the one page a fixing '
+                'chat reads; cost-spike fix 4)' + ('' if read else '; there is no Read line')]
+    return []
+
+
 def touch_faults():
     """Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read every
     file, and every big code file opens with a MAP that matches it (source/maps.py)."""
@@ -1211,7 +1268,8 @@ def main(argv):
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
                   ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
                   ('rule', rule_faults), ('shared', shared_faults), ('reach', reach_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
-                  ('castsheet', lambda: castsheet_faults(film)), ('touch', touch_faults)]
+                  ('castsheet', lambda: castsheet_faults(film)), ('touch', touch_faults),
+                  ('fixpack', lambda: fixpack_faults(film, nf)), ('appcost', appcost_faults)]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
         return report(faults, f'(end of chat, {film})')
@@ -1219,6 +1277,8 @@ def main(argv):
         tail = pos[0].split('_')[-1][-8:].lower()
         p = os.path.join(LOGDIR, f'{tail}.md')
         for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
+            print(f)
+        for f in chain_model_lines(opt('--film'), opt('--notes'), opt('--model')):   # cost-spike fix 6
             print(f)
         for f in kept_report_faults(opt('--film')):              # chat 22: a missing report is found first, not at the send
             print(f)

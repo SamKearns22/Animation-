@@ -77,7 +77,7 @@ def inventory():
                 rows.append(dict(kind='hook', name=name, where=when, film='', doc=e.get('matcher', '')))
     films = film_modules()
     for f in sorted(os.listdir(HERE)):
-        if not f.endswith('.py') or f in ('kittests.py', 'checkaudit.py'):
+        if not f.endswith('.py') or f.startswith('kittests') or f == 'checkaudit.py':
             continue
         tree = _parse(os.path.join(HERE, f))
         if tree is None:
@@ -88,10 +88,11 @@ def inventory():
                 kind = 'film only' if mod in films else KIND_BY_MODULE.get(mod, 'shared check')
                 rows.append(dict(kind=kind, name='%s.%s' % (mod, node.name), where=f, film=mod if mod in films else '',
                                  doc=_doc(node)))
-    tree = _parse(os.path.join(HERE, 'kittests.py'))
-    for node in (tree.body if tree else []):
-        if isinstance(node, ast.FunctionDef) and any(getattr(d, 'id', '') == 'test' for d in node.decorator_list):
-            rows.append(dict(kind='kit test', name=node.name, where='kittests.py', film='', doc=_doc(node)))
+    for kf in sorted(f for f in os.listdir(HERE) if f.startswith('kittests') and f.endswith('.py')):
+        tree = _parse(os.path.join(HERE, kf))      # kittests.py and its topic files (split 27 Nov)
+        for node in (tree.body if tree else []):
+            if isinstance(node, ast.FunctionDef) and any(getattr(d, 'id', '') == 'test' for d in node.decorator_list):
+                rows.append(dict(kind='kit test', name=node.name, where=kf, film='', doc=_doc(node)))
     rb = os.path.join(ROOT, 'guides', 'film-quality-rules.md')
     for line in open(rb, encoding='utf-8'):
         c = [x.strip() for x in line.strip().strip('|').split('|')]

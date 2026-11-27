@@ -41,6 +41,9 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - At the end: each new thing that passed the critique gets a row in the catalogue's "Passed the critique".
 
 ## Notes round (Opus, medium): Sam's notes, fixes, clips
+- **First, the one-page fix pack, `guides/fix-pack.md`** (cost-spike fix 4, Sam's Y, 27 Nov): each note marked
+  (`notesteps.py note`), found (`page.py show`), its functions' users and kit tests asked (`touch.py NAME`), the
+  RERUN line run; it replaces reading the rest of this pack for a fixing chat.
 - Read: the notes printout `handover.py start --film` gives (Where things stand and the unticked notes; startup-fixes 3), not the file; then, for each note, ONE look at the code:
   `python3 source/page.py FILM show "note words"` (~40 numbered lines of the functions it touches). No greps or sed
   ranges on film files first; only if `show` misses, `page.py FILM find` or a second `show` in the thing's own words.

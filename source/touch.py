@@ -42,10 +42,15 @@ ROOT = os.path.dirname(HERE)
 CACHE = os.environ.get('TOUCH_CACHE') or os.path.expanduser('~/.claude/touch')
 DIRS = ('source', os.path.join('.claude', 'hooks'))
 CHECK_NAME = re.compile(r'(_faults$|^check_|_check$|gate|^audit|_audit$|_guard$|^lint|^test$)')
-VERSION = 6
+VERSION = 7
 
 
 # ------------------------------------------------------------------------------------------------ one file -> facts
+def _kit(i):
+    """A def in the kit tests (kittests.py or a topic file, kittests_*.py)."""
+    return i.split('.')[0].startswith('kittests')
+
+
 def _files(root=ROOT):
     out = []
     for d in DIRS:
@@ -301,14 +306,15 @@ def build(root=ROOT, cache=CACHE, quiet=True):
             if a in method_names:
                 idx['maybe'].setdefault(a, []).append([caller, rel, ln])
         for caller, names in fx.get('strings', {}).items():   # a kit test that runs `python3 source/X.py test`
-            if not caller.startswith('kittests.'):        # elsewhere a file name in a string is a message, not a run
+            if not _kit(caller):                          # elsewhere a file name in a string is a message, not a run
                 continue
             for nm in names:
                 for t in (f'{nm}.test', f'{nm}.main'):
                     if t in defs:
                         idx['callers'].setdefault(t, []).append([caller, rel, 0, 'runs'])
                         idx['calls'].setdefault(caller, []).append(t)
-    idx['tests'] = sorted(d['id'] for d in defs.values() if d['id'].startswith('kittests.') and 'test' in d['deco'])
+    idx['tests'] = sorted(d['id'] for d in defs.values() if d['id'].split('.')[0].startswith('kittests')
+                         and 'test' in d['deco'])
     for k in idx['callers']:
         seen, uniq = set(), []
         for c in idx['callers'][k]:
@@ -468,8 +474,8 @@ def report(idx, name, n=20):
                      + '; '.join(f"{x} {_where(idx, x)}" for x in exact[1:5]))
     calls = idx['callers'].get(i, [])
     film_c = [c for c in calls if c[0].split('.')[0] in films]
-    shared_c = [c for c in calls if c[0].split('.')[0] not in films and not c[0].startswith('kittests.')]
-    kit_c = [c for c in calls if c[0].startswith('kittests.')]
+    shared_c = [c for c in calls if c[0].split('.')[0] not in films and not _kit(c[0])]
+    kit_c = [c for c in calls if _kit(c[0])]
     room = max(3, (n - 8) // 2)
 
     def row(c):
@@ -485,13 +491,13 @@ def report(idx, name, n=20):
         lines.append(f'  name-only maybe ({len(mb)}, `x.{short}` on a value the index cannot name): '
                      + '; '.join(f'{m[0]}@{m[1]}:{m[2]}' for m in mb[:3]))
     up = reach(idx, i)
-    checks = [c for c in up if CHECK_NAME.search(c.rsplit('.', 1)[1]) and not c.startswith('kittests.')]
+    checks = [c for c in up if CHECK_NAME.search(c.rsplit('.', 1)[1]) and not _kit(c)]
     checks.sort(key=lambda c: up[c][0])
     lines.append(f'  checks it feeds ({len(checks)}): ' + (', '.join(checks[:6]) or '-')
                  + (f', +{len(checks) - 6} more' if len(checks) > 6 else ''))
     tests = tests_for(idx, [i])
     direct = [t for t, (dp, _) in tests.items() if dp == 1]
-    lines.append(f'  kit tests ({len(tests)}; {len(direct)} call it directly, {len(kit_c)} uses in kittests.py): '
+    lines.append(f'  kit tests ({len(tests)}; {len(direct)} call it directly, {len(kit_c)} uses in the kit test files): '
                  + ', '.join(f"{t.split('.', 1)[1]}" + (f' (via {v.split(".", 1)[1]})' if dp > 1 else '')
                              for t, (dp, v) in list(tests.items())[:6])
                  + (f', +{len(tests) - 6} more' if len(tests) > 6 else ''))

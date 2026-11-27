@@ -7,6 +7,10 @@ MAP
   record() ......... called by report.summarise: every check's full result (clean ones too) goes into the round file
   save / note ...... the check sheet's text, false alarms, "could not test", into the round file
   log .............. at every handover: this chat's cost (from the cost watch), model, stage, notes, repeated notes
+  appcost .......... cost-spike fix 7 (Sam's Y, 27 Nov): at each chat's end the app's own figure (get_session) goes
+                     into app-costs.tsv and notes/ledger/app-check.tsv beside the estimate (main chat, helpers and
+                     other records apart); an estimate more than 25% under it is flagged (chat 36: $4.71 vs $12.50).
+                     handover.py end flags a cloud chat with no app figure. Test: appcost_test (kittest app_cost_gap)
   app .............. the REAL record (cost job, 13 Nov): notes/ledger/app-costs.tsv holds each chat's cost from the
                      app (get_session usage.cost_usd, list $); `app` turns it into each film's rows, replacing the
                      estimates for the same chats (and, from a film's first app row on, its estimate rows without a
@@ -696,6 +700,100 @@ def app_import(path=APP):
     return out
 
 
+CHECK = os.path.join(DIR, 'app-check.tsv')
+GAP = 0.25
+
+
+def estimate_parts(transcript):
+    """This chat's own estimate in dollars, split: the main chat, its helpers (critique and other agents), and other
+    records in this machine's chat folder (a restart that began a new record)."""
+    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+    import costwatch
+    st, _ = costwatch.read_usage(transcript)
+    others = 0.0
+    for p in glob.glob(os.path.join(os.path.dirname(transcript), '*.jsonl')):
+        if os.path.abspath(p) != os.path.abspath(transcript):
+            try:
+                others += costwatch.read_usage(p)[0]['usd']
+            except Exception:
+                pass
+    return {'main': round(st['usd'], 3), 'helpers': round(st.get('helpers_usd', 0.0), 3), 'restarts': round(others, 3),
+            'model': costwatch.fam(st.get('model'))}
+
+
+def appcost(film, usd, transcript=None, sid=None, restarts=0, usage=None, check=CHECK, app=APP, today=None, est=None):
+    """Cost-spike fix 7 (Sam's Y, 27 Nov; chat 36: estimated $4.71, the app said $12.50): at a chat's end the app's
+    own figure (get_session: external_metadata.usage.cost_usd) goes into app-costs.tsv beside the estimate, and the
+    chat is flagged when the estimate is more than 25% under it. Helpers and restarts are counted apart, so the gap
+    says where the missing money went. Returns the line to print."""
+    sid = (sid or this_sid() or '').replace('session_', '')
+    est = est or estimate_parts(transcript)
+    total = est['main'] + est['helpers'] + est['restarts']
+    gap = (usd - total) / usd if usd > 0 else 0.0
+    flag = gap > GAP
+    day = today or str(date.today())
+    u = usage or {}
+    row = [film, sid, day + 'T' + datetime.now().strftime('%H:%M'), 'chat end (appcost)', f'{usd:.3f}',
+           f"{u.get('cache_read_tokens', 0) / 1e6:.3f}", f"{u.get('cache_write_tokens', 0) / 1e6:.3f}",
+           f"{u.get('output_tokens', 0) / 1e3:.1f}", '', est['model']]
+    lines = open(app, encoding='utf-8').read().splitlines() if os.path.exists(app) else []
+    lines = [ln for ln in lines if ln.startswith('#') or ln.split('\t')[1:2] != [sid]]
+    lines.append('\t'.join(row))
+    with open(app, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines) + '\n')
+    head = '# date\tsession\tfilm\tapp_usd\testimate_usd\tmain\thelpers\trestart_records\trestarts_app\tgap\tflag\n'
+    old = open(check, encoding='utf-8').read().splitlines()[1:] if os.path.exists(check) else []
+    old = [ln for ln in old if ln.split('\t')[1:2] != [sid]]
+    old.append('\t'.join([day, sid, film, f'{usd:.2f}', f'{total:.2f}', f"{est['main']:.2f}", f"{est['helpers']:.2f}",
+                          f"{est['restarts']:.2f}", str(restarts), f'{gap:.0%}', 'UNDER' if flag else 'ok']))
+    with open(check, 'w', encoding='utf-8') as f:
+        f.write(head + '\n'.join(old) + '\n')
+    split = f"main ${est['main']:.2f}, helpers ${est['helpers']:.2f}, other records ${est['restarts']:.2f}" + \
+        (f', {restarts} restart(s) by the app' if restarts else '')
+    if flag:
+        return (f'COST GAP: the estimate (${total:.2f}: {split}) is {gap:.0%} under the app\'s own figure '
+                f'(${usd:.2f}). The missing part is what no record here shows (restarts on another machine, a model '
+                'switch, helpers the app bills apart); the app figure is the one that counts.')
+    return f'ledger appcost: app ${usd:.2f}, estimate ${total:.2f} ({split}); within {GAP:.0%}'
+
+
+def appcost_faults(sid=None, check=CHECK):
+    """handover.py end: a cloud chat with no app figure recorded (ledger.py appcost) is a fault."""
+    sid = (sid or this_sid() or '').replace('session_', '')
+    if not sid:
+        return []
+    rows = open(check, encoding='utf-8').read().splitlines() if os.path.exists(check) else []
+    if any(r.split('\t')[1:2] == [sid] for r in rows):
+        return []
+    return ['COST: this chat has no app cost figure on record (cost-spike fix 7): call get_session (no id), then '
+            'python3 source/ledger.py appcost FILM COST_USD --restarts N (cost_usd from external_metadata.usage, N = '
+            'worker_epoch - 1)']
+
+
+def appcost_test():
+    """The fault, saved as an example: chat 36 (Brexit, 26 Nov) was estimated at $4.71 and the app said $12.50."""
+    import tempfile
+    d = tempfile.mkdtemp()
+    chk, app = os.path.join(d, 'check.tsv'), os.path.join(d, 'app.tsv')
+    open(app, 'w').write('# film\tsession\tcreated\ttitle\tcost_usd\tcache_read_M\tcache_write_M\toutput_k\thistory_k\tmodel\n')
+    est = {'main': 4.21, 'helpers': 0.5, 'restarts': 0.0, 'model': 'opus'}
+    bad = []
+    if appcost_faults('session_x36', chk) == []:
+        bad.append('a chat with no app figure was not flagged')
+    a = appcost('brexit-is-done', 12.50, sid='session_x36', restarts=5, check=chk, app=app, est=est)
+    if not a.startswith('COST GAP') or '62%' not in a or '5 restart' not in a:
+        bad.append('chat 36 not flagged: ' + a)
+    b = appcost('brexit-is-done', 4.90, sid='session_x37', check=chk, app=app, est=est)
+    if 'within' not in b:
+        bad.append('a close estimate was flagged: ' + b)
+    appcost('brexit-is-done', 13.0, sid='session_x36', restarts=5, check=chk, app=app, est=est)  # a later read
+    rows = [r for r in open(chk).read().splitlines() if not r.startswith('#')]
+    apps = [r for r in open(app).read().splitlines() if not r.startswith('#')]
+    if len(rows) != 2 or len(apps) != 2 or not any('13.000' in r for r in apps) or appcost_faults('x36', chk):
+        bad.append(f'rows {rows} / {apps}')
+    return not bad, '; '.join(bad) or 'chat 36 flagged (62% under, 5 restarts named); a close one passes; one row a chat'
+
+
 def parse_stages(text):
     """'cast 2, sets 2.5, round 1.5' -> [{'name': 'cast', 'pct': 2.0, 'done': None}, ...]"""
     out = []
@@ -961,6 +1059,10 @@ def main():
     p = s.add_parser('rebook', help='move the film\'s own chats (named in its handovers) from other ledgers to it')
     p.add_argument('film'); p.add_argument('--dry', action='store_true')
     s.add_parser('app', help='rebuild film rows from notes/ledger/app-costs.tsv (the app\'s real per-chat costs)')
+    p = s.add_parser('appcost', help='at a chat\'s end: the app\'s own figure beside the estimate (cost-spike fix 7)')
+    p.add_argument('film'); p.add_argument('usd', type=float); p.add_argument('--restarts', type=int, default=0)
+    p.add_argument('--read', type=float, default=0); p.add_argument('--write', type=float, default=0)
+    p.add_argument('--out', type=float, default=0)
     o = a.parse_args()
     if o.cmd == 'coldstart':
         print(coldstart(load(o.film)) or f'ledger coldstart: {o.film} has no start figures yet (recorded from 19 Nov)')
@@ -971,6 +1073,11 @@ def main():
             print(f'ledger rebook: {o.film} chat {r["chat"]} ({r.get("cost")}%) {"is under" if o.dry else "moved from"} {other}')
         tot = sum(c.get('cost') or 0 for c in load(o.film)['chats'])
         print(f'ledger rebook: {len(rows)} rows; {o.film} now {round(tot, 2)}% of a week on its own record')
+        return
+    if o.cmd == 'appcost':
+        import handover
+        print(appcost(o.film, o.usd, handover.this_record(), restarts=o.restarts,
+                      usage={'cache_read_tokens': o.read, 'cache_write_tokens': o.write, 'output_tokens': o.out}))
         return
     if o.cmd == 'app':
         for film, (n, pct) in app_import().items():

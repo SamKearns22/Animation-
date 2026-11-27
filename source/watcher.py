@@ -138,7 +138,7 @@ def unlisted():
     """Systems with no promise, and promises whose proof names a kittest that does not exist."""
     out = sorted(s for s in systems() if s not in PROMISES)
     try:
-        tests = set(re.findall(r'^@test\ndef (\w+)', open(os.path.join(ROOT, 'source', 'kittests.py')).read(), re.M))
+        tests = set(re.findall(r'^@test\ndef (\w+)', ''.join(open(f, encoding='utf-8').read() for f in __import__('kitstamps').kit_files()), re.M))
     except OSError:
         tests = set()
     if tests:

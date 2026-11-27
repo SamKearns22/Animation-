@@ -51,7 +51,7 @@ def claude_anchors(text=None):
 
 def _tests():
     try:
-        return set(re.findall(r'^@test\ndef (\w+)', open(os.path.join(ROOT, 'source', 'kittests.py')).read(), re.M))
+        return set(re.findall(r'^@test\ndef (\w+)', ''.join(open(f, encoding='utf-8').read() for f in __import__('kitstamps').kit_files()), re.M))
     except OSError:
         return set()
 
