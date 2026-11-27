@@ -198,15 +198,23 @@ SAME = {'famous': 'famous likeness face tool facepick facehouse', 'celebrity': '
         'children': 'child kid crowd', 'kids': 'child kid crowd', 'walk': 'walk walking', 'sit': 'seated sitting',
         'drink': 'glass held prop hold', 'glass': 'held prop hold', 'phone': 'held prop phone'}
 STOP = {'the', 'and', 'with', 'for', 'from', 'that', 'this', 'into', 'any', 'one', 'two', 'its', 'his', 'her', 'their',
-        'new', 'film', 'person', 'people', 'who', 'what', 'has', 'are', 'was', 'not', 'all', 'each', 'every'}
+        'new', 'film', 'person', 'people', 'who', 'what', 'has', 'are', 'was', 'not', 'all', 'each', 'every',
+        # Sam, 28 Nov ("make sure the cost saving fixes are working"): the start lookups for The Patriot 5 matched on
+        # filler words (a car chase for "in the process of sighing", an oil rig for "at each other"): left out
+        'other', 'just', 'proces', 'process', 'looking', 'look', 'forward', 'him', 'above', 'only', 'name', 'letting',
+        'deeply', 'clearly', 'variety', 'way', 'back', 'slightly', 'suddenly', 'coming', 'toward', 'towards', 'see',
+        'there', 'here', 'then', 'some', 'very', 'also', 'out', 'off', 'about', 'like', 'over', 'we', 'they', 'them',
+        'but', 'our', 'your', 'you', 'can', 'will', 'still', 'goe', 'goes', 'get', 'got', 'way', 'side', 'view',
+        'shot', 'cut', 'left', 'right', 'line', 'camera', 'move', 'behind', 'head', 'see'}   # a brief's labels
 
 
 def _words(t):
     return {w[:-1] if w.endswith('s') and len(w) > 4 else w for w in re.findall(r'[a-z]{3,}', t.lower())} - STOP
 
 
-def find(text, n=5):
-    """The kit catalogue's rows that best match plain words: [(score, what it is, where it lives)]."""
+def find(text, n=5, least=1):
+    """The kit catalogue's rows that best match plain words: [(score, what it is, where it lives)]; only rows scoring
+    `least` or more (the film-start lookups ask 2: one shared word is chance, not a match)."""
     want = _words(text)
     raw = set(re.findall(r'[a-z]{3,}', text.lower())) | want   # B3: 'likeness' trimmed to 'likenes' missed SAME
     want |= _words(' '.join(SAME[w] for w in raw if w in SAME))
@@ -217,7 +225,7 @@ def find(text, n=5):
         cells = [c.strip() for c in line.strip().strip('|').split('|')]
         have = _words(line)
         score = len(want & have) + 2 * len(want & _words(cells[1] if len(cells) > 1 else ''))
-        if score:
+        if score >= least:
             rows.append((score, re.sub(r'\*\*', '', cells[0])[:150], (cells[1] if len(cells) > 1 else '')[:110]))
     return sorted(rows, key=lambda r: -r[0])[:n]
 
