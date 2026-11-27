@@ -14,3 +14,4 @@
 {"chat": "81b35345", "event": "block", "faults": [["word", "finder"]], "t": "2026-11-26 23:25"}
 {"chat": "68229d56", "event": "let-through", "faults": [["code", "`claude/open-wounds-chat41`"]], "reply": "Saved to GitHub (branch `claude/open-wounds-chat41`). The animatic render is still running; I'll carry on when it finishes.", "t": "2026-11-27 05:01"}
 {"chat": "68229d56", "event": "block", "faults": [["word", "hook"], ["file", "animations/drafts"]], "t": "2026-11-27 05:09"}
+{"chat": "e5800d1f", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-27 05:32"}

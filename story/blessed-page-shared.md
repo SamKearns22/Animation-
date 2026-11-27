@@ -1,83 +1,91 @@
 # blessed: the shared code this film uses (R12: the kit and checks it imports). Never read whole: show/find search it with the page and point to the lines.
 
 
-## acting.py (1244 lines)
+## acting.py (1315 lines)
 - 62: HERE (data)
 - 64: ROOT (data)
 - 73: PLACES (data)
 - 119: RAISED (data)
 - 122: BODY (data)
 - 137: SHAKES (data)
-- 138: CHANNELS (data)
-- 139: SWAY (data)
-- 142: `ease` 
-- 146: `ramp` 
-- 153: HEAD_MIN (data)
-- 157: `bump` 
-- 162: `_num` 
-- 166: `_split_time` 'heart from "feeling" to "mate" -0.35' -> words before the first time word, then the time parts.
-- 171: `parse` The moves file -> {'gaits', 'places', 'body', 'shots': {shot: block}}. A block is a dict of its lines.
-- 233: `block_key` A shot's first block is keyed by the shot ('van'); anyone else in it by 'shot.who' ('oath.judge').
-- 240: `_stance` 'seated' | 'standing' | 'upright on SEAT, lap 0.4' | 'slump on SEAT' (SEAT: the film's seats).
-- 254: `_keyline` 'keys CH: V at T | V at T' (eased between, held outside); 'keys CH from T: ...' applies only after T.
-- 264: `_idle` 'CH A sine P' (a slow swing, P seconds a cycle), 'CH A shifts SEED H0 H1' (filmkit.shifts weight shifts),
-- 278: `_gait` 
-- 288: `_place` 
-- 301: `_channels` 
-- 312: `_face` 
-- 343: `_walk` 
-- 371: `_num_or_time` 
-- 378: `_key` 
-- 389: `_body` 
-- 409: `_holds` 
-- 419: `lines` The moves file for the page (page.py): (line number, 'SHOT (WHO): the line') for every line in a block, so a
-- 437: `gist` A moves line without its times, for the page: 'gates2 (brand): R: messiah | hair | hair back | rest'.
-- 446: `load` 
-- 452: `class Clock` Resolves the language's times for one block at one shot: words through the film's word_at, beats from T.
-- 496: `_contact` 
-- 501: `_rest_spec` 
-- 509: `_arm` 
-- 518: `arm_keys` The hand on `side` through timed keys [(t, spec)]: spec = (target, pole, shape), or None for the hand where `j
-- 550: `place` A named hand place for `side` as an arm spec. 'wide fist' = the place 'wide' with a fist.
-- 569: `unlean` A point where it should end up AFTER the body leans `lean` degrees, in the torso frame before the lean.
-- 577: `_elbows_on_rests` A seated gesture from an armrest or desk: the elbow stays on the surface it rested on (never sinks into it;
-- 597: `hand_keys` 
-- 609: `body_value` {channel: value} of one body move at t (and its 0..1 curve, with_u).
-- 640: `dip` Down at the knees by `amt` person units, feet kept on the floor, knees opening a little (blessed._dip).
-- 653: `install_gaits` 
-- 660: `block_for` 
-- 668: `walk_time` 
-- 674: EYES (data)
-- 675: EYES_LEAD (data)
-- 676: ALIAS (data)
-- 679: `_keys_at` A number eased between timed keys [(t, value)], held before the first and after the last (blessed._keys).
-- 689: `_idle_value` 
-- 700: `channels` The block's channel values at t: (set, add, curve) -- `keys` lines set a channel (a second line for the same
-- 726: `_realize_seated` The sitting kit's stances ('upright on SEAT', 'slump on SEAT'): lean and hands go into its spec.
-- 748: `SEATED_KINDS` The stances the sitting kit realizes: upright, slump, and any of its named poses (sitting.POSES).
-- 754: `pose` (mark or None, yaw, joints) for the block of `shot` (or 'shot.who') at film time t. Eye channels (look, gaze,
-- 841: `clock_for` 
-- 846: `face` (mood, shades, gaze) of the block's face line at t.
-- 866: `face_extras` The face line's other parts at t: {'blink': False/True, 'lid4': .., 'head_dy': +..} (blink off/shut windows,
-- 881: `person` (face and look, mark, yaw, joints, head yaw) for one block: what the film's person(shot, who, t) returns.
-- 915: `channel` One channel of a block at t (a hook: gates2_head, guard_eyes).
-- 924: `_blessed` Blessed's side of the kit: its timeline, words, places and the things its people hold.
-- 954: `_blessed_sp` A Blessed person's build and face for a mood (what brand_sp and the shots' dict(CAST, **face(..)) make).
-- 968: `_milburn` Milburn's side of the kit: stand-in timing until Sam records; nobody walks, holds or sits on a kit seat (his
-- 980: `_brexit` Open Wounds' side of the kit (chat 14): stand-in timing until Sam records; May and Blair on the sitting kit's
-- 995: FILMS (data)
-- 996: FRAMES (data)
-- 1000: `film_side` 
-- 1004: `install` Swap the film's pose functions for the kit's (returns the originals, to put back).
-- 1069: `uninstall` 
-- 1075: `check` Faults in plain words: a block that does not read, a time that does not resolve, a block whose acting-list
-- 1116: ROW_ID (data)
-- 1119: `acting_rows` The acting-list table in a film's notes ('## The acting list ...'): [(id, who, lands on, row text)].
-- 1133: `check_list` The acting list itself against the moves file (rule 74): every row with someone moving has a block (matched
-- 1177: `_differ` 
-- 1184: `replicate` The finished film's frames beside the same frames with the kit's moves swapped in. One labelled sheet; a score
-- 1217: `picture` One film frame with the kit's moves in (the catalogue's tile: catalogue.py).
-- 1227: `main` 
+- 144: SIZE_PX (data)
+- 145: SIZE_PX_BIG (data)
+- 146: BIG_MOVES (data)
+- 147: SIZED (data)
+- 148: _PX_CURVE (data)
+- 149: _KS (data)
+- 152: `px_curve` [(k, px)]: how far (px on the 1080 x 1920 frame) the eyes move for k times the move's table amount on a person
+- 185: `screen_amount` The amount (the move's first channel's units, as a moves file writes it) that moves the eyes SIZE_PX[size]
+- 197: CHANNELS (data)
+- 198: SWAY (data)
+- 201: `ease` 
+- 205: `ramp` 
+- 212: HEAD_MIN (data)
+- 216: `bump` 
+- 221: `_num` 
+- 225: `_split_time` 'heart from "feeling" to "mate" -0.35' -> words before the first time word, then the time parts.
+- 230: `parse` The moves file -> {'gaits', 'places', 'body', 'shots': {shot: block}}. A block is a dict of its lines.
+- 292: `block_key` A shot's first block is keyed by the shot ('van'); anyone else in it by 'shot.who' ('oath.judge').
+- 299: `_stance` 'seated' | 'standing' | 'upright on SEAT, lap 0.4' | 'slump on SEAT' (SEAT: the film's seats).
+- 313: `_keyline` 'keys CH: V at T | V at T' (eased between, held outside); 'keys CH from T: ...' applies only after T.
+- 323: `_idle` 'CH A sine P' (a slow swing, P seconds a cycle), 'CH A shifts SEED H0 H1' (filmkit.shifts weight shifts),
+- 337: `_gait` 
+- 347: `_place` 
+- 360: `_channels` 
+- 371: `_face` 
+- 402: `_walk` 
+- 430: `_num_or_time` 
+- 437: `_key` 
+- 448: `_body` 
+- 472: `_holds` 
+- 482: `lines` The moves file for the page (page.py): (line number, 'SHOT (WHO): the line') for every line in a block, so a
+- 500: `gist` A moves line without its times, for the page: 'gates2 (brand): R: messiah | hair | hair back | rest'.
+- 509: `load` 
+- 515: `class Clock` Resolves the language's times for one block at one shot: words through the film's word_at, beats from T.
+- 559: `_contact` 
+- 564: `_rest_spec` 
+- 572: `_arm` 
+- 581: `arm_keys` The hand on `side` through timed keys [(t, spec)]: spec = (target, pole, shape), or None for the hand where `j
+- 613: `place` A named hand place for `side` as an arm spec. 'wide fist' = the place 'wide' with a fist.
+- 632: `unlean` A point where it should end up AFTER the body leans `lean` degrees, in the torso frame before the lean.
+- 640: `_elbows_on_rests` A seated gesture from an armrest or desk: the elbow stays on the surface it rested on (never sinks into it;
+- 660: `hand_keys` 
+- 672: `body_value` {channel: value} of one body move at t (and its 0..1 curve, with_u).
+- 703: `dip` Down at the knees by `amt` person units, feet kept on the floor, knees opening a little (blessed._dip).
+- 716: `install_gaits` 
+- 723: `block_for` 
+- 731: `walk_time` 
+- 737: EYES (data)
+- 738: EYES_LEAD (data)
+- 739: ALIAS (data)
+- 742: `_keys_at` A number eased between timed keys [(t, value)], held before the first and after the last (blessed._keys).
+- 752: `_idle_value` 
+- 763: `channels` The block's channel values at t: (set, add, curve) -- `keys` lines set a channel (a second line for the same
+- 789: `_realize_seated` The sitting kit's stances ('upright on SEAT', 'slump on SEAT'): lean and hands go into its spec.
+- 811: `SEATED_KINDS` The stances the sitting kit realizes: upright, slump, and any of its named poses (sitting.POSES).
+- 817: `pose` (mark or None, yaw, joints) for the block of `shot` (or 'shot.who') at film time t. Eye channels (look, gaze,
+- 912: `clock_for` 
+- 917: `face` (mood, shades, gaze) of the block's face line at t.
+- 937: `face_extras` The face line's other parts at t: {'blink': False/True, 'lid4': .., 'head_dy': +..} (blink off/shut windows,
+- 952: `person` (face and look, mark, yaw, joints, head yaw) for one block: what the film's person(shot, who, t) returns.
+- 986: `channel` One channel of a block at t (a hook: gates2_head, guard_eyes).
+- 995: `_blessed` Blessed's side of the kit: its timeline, words, places and the things its people hold.
+- 1025: `_blessed_sp` A Blessed person's build and face for a mood (what brand_sp and the shots' dict(CAST, **face(..)) make).
+- 1039: `_milburn` Milburn's side of the kit: stand-in timing until Sam records; nobody walks, holds or sits on a kit seat (his
+- 1051: `_brexit` Open Wounds' side of the kit (chat 14): stand-in timing until Sam records; May and Blair on the sitting kit's
+- 1066: FILMS (data)
+- 1067: FRAMES (data)
+- 1071: `film_side` 
+- 1075: `install` Swap the film's pose functions for the kit's (returns the originals, to put back).
+- 1140: `uninstall` 
+- 1146: `check` Faults in plain words: a block that does not read, a time that does not resolve, a block whose acting-list
+- 1187: ROW_ID (data)
+- 1190: `acting_rows` The acting-list table in a film's notes ('## The acting list ...'): [(id, who, lands on, row text)].
+- 1204: `check_list` The acting list itself against the moves file (rule 74): every row with someone moving has a block (matched
+- 1248: `_differ` 
+- 1255: `replicate` The finished film's frames beside the same frames with the kit's moves swapped in. One labelled sheet; a score
+- 1288: `picture` One film frame with the kit's moves in (the catalogue's tile: catalogue.py).
+- 1298: `main` 
 
 ## agelines.py (313 lines)
 - 32: LINES (data)
@@ -504,7 +512,7 @@
 - 167: `_faults` 
 - 201: `main` 
 
-## castsheet.py (1109 lines)
+## castsheet.py (1032 lines)
 - 32: HERE (data)
 - 34: ROOT (data)
 - 35: BG (data)
@@ -540,35 +548,33 @@
 - 466: TEETH_MIN (data)
 - 470: `teeth_share` The teeth's share of the open mouth in an RGB picture (None: no open mouth).
 - 488: `doubled_points` A closed curve through the same point twice in a row overshoots into a spike (Sam's note 11, chat 7: "a stray
-- 496: `hair_spike_faults` Every hair and hat outline the cast draws (front, turned, back, seated): no closed curve through one point
-- 542: R7_TEST_TROUSERS (data)
-- 543: R7_BOTTOM_SHARE (data)
-- 544: R7_EXAMPLES (data)
-- 550: R7_EXAMPLE_INK (data)
-- 555: `_near` 
-- 559: BALL_ROUND (data)
-- 562: `ball_knees` Trouser-coloured patches shut inside an ink ring and round: a knee drawn as a ball.
-- 584: `cloth` The trousers in a picture in each tone the kit draws them: their own colour, the far or under leg in shadow
-- 596: `no_bottom` The jacket's hem with no bottom under it: along the hem, the share of its width where the next thing below
-- 677: `unmark` Sam's pen marks taken off a marked picture: each marked pixel takes the nearest unmarked one's colour.
-- 686: R7_TONE (data)
-- 689: `leg_tones` The cloth's tones in a picture: [(brightness as a share of the trousers', share of the cloth's pixels)], the
-- 706: `one_tone` Two legs or the lap in one flat tone (R7 judges, chat 3: "the far leg merges with the near leg: one dark
-- 718: `seated_look` The faults a viewer would see in one seated picture (an RGB array). tones: the view shows two legs overlapping
-- 737: `seated_example_faults` The seated look run on each saved example (R7_EXAMPLES): every one must be caught.
-- 750: R7_POSES (data)
-- 751: R7_YAWS (data)
-- 754: `seated_look_faults` Every cast member drawn seated (R7_POSES, from the front, three-quarter both ways and the side), each picture
-- 805: `seated_faults` Every cast member seated (three-quarter both ways, the sitting kit's upright, which crosses a woman's legs):
-- 872: `mouth_spike_faults` Every house mouth a cast member wears (and each kind): no closed curve through one point twice.
-- 903: `teeth_faults` 
-- 929: JUDGE_MIN (data)
-- 930: JUDGES (data)
-- 933: JUDGE_FILES (data)
-- 937: `_same_outlines` Redraw the judge's outline sheet from the current drawing code (notes/learn/kemi-build/judge.py, its fixed
-- 961: `judge_faults` 
-- 1000: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
-- 1016: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
+- 503: R7_TEST_TROUSERS (data)
+- 504: R7_BOTTOM_SHARE (data)
+- 505: R7_EXAMPLES (data)
+- 511: R7_EXAMPLE_INK (data)
+- 516: `_near` 
+- 520: BALL_ROUND (data)
+- 523: `ball_knees` Trouser-coloured patches shut inside an ink ring and round: a knee drawn as a ball.
+- 545: `cloth` The trousers in a picture in each tone the kit draws them: their own colour, the far or under leg in shadow
+- 557: `no_bottom` The jacket's hem with no bottom under it: along the hem, the share of its width where the next thing below
+- 638: `unmark` Sam's pen marks taken off a marked picture: each marked pixel takes the nearest unmarked one's colour.
+- 647: R7_TONE (data)
+- 650: `leg_tones` The cloth's tones in a picture: [(brightness as a share of the trousers', share of the cloth's pixels)], the
+- 667: `one_tone` Two legs or the lap in one flat tone (R7 judges, chat 3: "the far leg merges with the near leg: one dark
+- 679: `seated_look` The faults a viewer would see in one seated picture (an RGB array). tones: the view shows two legs overlapping
+- 698: `seated_example_faults` The seated look run on each saved example (R7_EXAMPLES): every one must be caught.
+- 711: R7_POSES (data)
+- 712: R7_YAWS (data)
+- 715: `seated_look_faults` Every cast member drawn seated (R7_POSES, from the front, three-quarter both ways and the side), each picture
+- 766: `seated_faults` Every cast member seated (three-quarter both ways, the sitting kit's upright, which crosses a woman's legs):
+- 833: `teeth_faults` 
+- 859: JUDGE_MIN (data)
+- 860: JUDGES (data)
+- 863: JUDGE_FILES (data)
+- 867: `_same_outlines` Redraw the judge's outline sheet from the current drawing code (notes/learn/kemi-build/judge.py, its fixed
+- 891: `judge_faults` 
+- 930: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
+- 946: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
 
 ## checkreplay.py (315 lines)
 - 27: ROOT (data)
@@ -801,120 +807,120 @@
 - 44: `spill` The share of `shape` that lies outside `outline`: 0 when it is all inside.
 - 50: `iris_and_pupil` Iris, pupil and one shine, each cut to the outline. shine = (dx, dy, r) as shares of iris_r, or None.
 
-## facehouse.py (2149 lines)
+## facehouse.py (2141 lines)
 - 89: HERE (data)
 - 91: ROOT (data)
-- 97: `curve` The closed curve, through each point once (Open Wounds chat 9: a closed curve through one point twice in a row
-- 114: `pick_dir` Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
-- 120: `pick_file` 
-- 124: `load` Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
-- 136: TV (data)
-- 139: `_skin_rows` One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
-- 161: `trace` The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
-- 179: `overlay` Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over.
-- 207: HOUSE_SKIN (data)
-- 218: HV (data)
-- 219: OVAL (data)
-- 223: `_poly_halfw` A closed outline's half width at each row (nan where it does not reach).
-- 236: `_head_rows` One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
-- 287: EAR (data)
-- 290: `_canon_oval` The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units.
-- 299: `measure_head` The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
-- 326: `head_overlay` Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan).
-- 360: `_photo_brows` One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
-- 407: SHARP (data)
-- 410: `browcheck` The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
-- 474: `house_tone` The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
-- 489: LOOKS (data)
-- 494: EYE_OPEN_MIN (data)
-- 496: LID0 (data)
-- 499: `face_layout` The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
-- 521: `_cheek` The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows.
-- 526: `feature_scale` Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
-- 544: SHAPE_PUSH (data)
-- 548: PROP_ROWS (data)
-- 549: SQUARE (data)
-- 552: `proportions` The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
-- 566: `_smooth` 
-- 571: `drawn_head` The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
-- 598: SKIN_BIAS (data)
-- 604: HEAD_EYES (data)
-- 605: EYE_OPEN_HEAD (data)
-- 608: `_sil` The head's measured silhouette (hair and skin) half width at row v.
-- 614: `_brow_gap` The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths.
-- 624: `_peak` Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured.
-- 630: `house_head` The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece.
-- 639: `_head` 
-- 703: `_focus_room` How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
-- 716: `ears` The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
-- 729: `_ear_L` The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
-- 735: `_eye` The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's.
-- 742: `stubble` A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
-- 777: `lashes` Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
-- 793: `sockets` The socket shade (the test's, kept for the 'detail' look): one flat crescent of darker skin under the brow,
-- 806: `_swept_shapes` The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light.
-- 833: `_swept_measured` Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
-- 874: `class _Squeeze` A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
-- 893: `_swept_strokes` The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail').
-- 915: `swept` Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
-- 926: `bald_shapes` Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
-- 940: `bald` The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left.
-- 953: `bob_shapes` Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
-- 983: `_bob_strokes` The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark
-- 1005: `bob` 
-- 1011: `earrings` Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
-- 1023: `hard_hat` Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
-- 1041: `_hard_hat_parts` 
-- 1052: `turned_hat` The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
-- 1108: `back_shapes` Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
-- 1130: `_round_strokes` The hair's strokes on the side and back of a turned head, drawn on the hair's own surface (turnhead.hair_point
-- 1171: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
-- 1184: `back` 
-- 1191: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
-- 1225: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
-- 1269: `_face_u` The face outline's half width at row v (our right side).
-- 1276: VJ (data)
-- 1277: VS (data)
-- 1280: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
-- 1301: `_out` 
-- 1305: `_resample` A path resampled to n points evenly along its length.
-- 1313: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
-- 1326: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
-- 1337: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
-- 1362: `_looks` 
-- 1368: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
-- 1392: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
-- 1423: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
-- 1459: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
-- 1511: HAIR (data)
-- 1512: TURN_PROF (data)
-- 1519: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
-- 1525: `_turn_key` 
-- 1531: `_turn_mood` 
-- 1539: `_turn_mouth` 
-- 1549: `_turn_face` 
-- 1556: `_turn_over` 
-- 1562: `_turn_hair` 
-- 1569: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
-- 1588: `_turn_hair0` 
-- 1625: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
-- 1698: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
-- 1712: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
-- 1719: `_turn_person` 
-- 1737: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
-- 1758: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
-- 1766: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
-- 1805: CAST (data)
-- 1828: `install` 
-- 1836: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
-- 1867: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
-- 1894: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
-- 1934: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
-- 1958: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
-- 1991: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
-- 2056: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
-- 2102: KEPT (data)
-- 2112: `_fit` 
+- 97: `curve` The closed curve, through each point once: ink.curve drops repeats itself now (R8 A4, 27 Nov).
+- 106: `pick_dir` Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
+- 112: `pick_file` 
+- 116: `load` Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
+- 128: TV (data)
+- 131: `_skin_rows` One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
+- 153: `trace` The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
+- 171: `overlay` Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over.
+- 199: HOUSE_SKIN (data)
+- 210: HV (data)
+- 211: OVAL (data)
+- 215: `_poly_halfw` A closed outline's half width at each row (nan where it does not reach).
+- 228: `_head_rows` One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
+- 279: EAR (data)
+- 282: `_canon_oval` The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units.
+- 291: `measure_head` The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
+- 318: `head_overlay` Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan).
+- 352: `_photo_brows` One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
+- 399: SHARP (data)
+- 402: `browcheck` The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
+- 466: `house_tone` The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
+- 481: LOOKS (data)
+- 486: EYE_OPEN_MIN (data)
+- 488: LID0 (data)
+- 491: `face_layout` The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
+- 513: `_cheek` The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows.
+- 518: `feature_scale` Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
+- 536: SHAPE_PUSH (data)
+- 540: PROP_ROWS (data)
+- 541: SQUARE (data)
+- 544: `proportions` The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
+- 558: `_smooth` 
+- 563: `drawn_head` The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
+- 590: SKIN_BIAS (data)
+- 596: HEAD_EYES (data)
+- 597: EYE_OPEN_HEAD (data)
+- 600: `_sil` The head's measured silhouette (hair and skin) half width at row v.
+- 606: `_brow_gap` The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths.
+- 616: `_peak` Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured.
+- 622: `house_head` The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece.
+- 631: `_head` 
+- 695: `_focus_room` How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
+- 708: `ears` The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
+- 721: `_ear_L` The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
+- 727: `_eye` The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's.
+- 734: `stubble` A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
+- 769: `lashes` Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
+- 785: `sockets` The socket shade (the test's, kept for the 'detail' look): one flat crescent of darker skin under the brow,
+- 798: `_swept_shapes` The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light.
+- 825: `_swept_measured` Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
+- 866: `class _Squeeze` A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
+- 885: `_swept_strokes` The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail').
+- 907: `swept` Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
+- 918: `bald_shapes` Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
+- 932: `bald` The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left.
+- 945: `bob_shapes` Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
+- 975: `_bob_strokes` The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark
+- 997: `bob` 
+- 1003: `earrings` Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
+- 1015: `hard_hat` Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
+- 1033: `_hard_hat_parts` 
+- 1044: `turned_hat` The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
+- 1100: `back_shapes` Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
+- 1122: `_round_strokes` The hair's strokes on the side and back of a turned head, drawn on the hair's own surface (turnhead.hair_point
+- 1163: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
+- 1176: `back` 
+- 1183: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
+- 1217: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
+- 1261: `_face_u` The face outline's half width at row v (our right side).
+- 1268: VJ (data)
+- 1269: VS (data)
+- 1272: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
+- 1293: `_out` 
+- 1297: `_resample` A path resampled to n points evenly along its length.
+- 1305: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
+- 1318: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
+- 1329: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
+- 1354: `_looks` 
+- 1360: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
+- 1384: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
+- 1415: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
+- 1451: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
+- 1503: HAIR (data)
+- 1504: TURN_PROF (data)
+- 1511: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
+- 1517: `_turn_key` 
+- 1523: `_turn_mood` 
+- 1531: `_turn_mouth` 
+- 1541: `_turn_face` 
+- 1548: `_turn_over` 
+- 1554: `_turn_hair` 
+- 1561: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
+- 1580: `_turn_hair0` 
+- 1617: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
+- 1690: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
+- 1704: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
+- 1711: `_turn_person` 
+- 1729: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
+- 1750: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
+- 1758: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
+- 1797: CAST (data)
+- 1820: `install` 
+- 1828: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
+- 1859: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
+- 1886: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
+- 1926: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
+- 1950: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
+- 1983: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
+- 2048: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
+- 2094: KEPT (data)
+- 2104: `_fit` 
 
 ## facepick.py (1004 lines)
 - 58: HERE (data)
@@ -1360,7 +1366,7 @@
 - 692: `run` Every Nth frame of the film (or of span), on all processor cores; returns the summary rows.
 - 713: `main` 
 
-## handover.py (1268 lines)
+## handover.py (1282 lines)
 - 49: ROOT (data)
 - 50: LOGDIR (data)
 - 51: NOT_SAM (data)
@@ -1410,32 +1416,34 @@
 - 685: `kittest_gate_faults` named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at this handover and at the one
 - 759: CASTSTAMPS (data)
 - 762: `castsheet_faults` Open Wounds chat 6 (Sam's notes 5 and 7): every woman in a new film's cast reads as a woman in every turned
-- 788: `_safe` Lesson 7 step 3, fail closed: a handover check that cannot run stops the handover; it is never skipped.
-- 796: `branch_faults` startup-fixes 2 (Sam's Y, 16 Nov): CLAUDE.md "merge or name every branch the start lists". A fresh scan
-- 812: TAG (data)
+- 787: `_safe` Lesson 7 step 3, fail closed: a handover check that cannot run stops the handover; it is never skipped.
+- 795: `branch_faults` startup-fixes 2 (Sam's Y, 16 Nov): CLAUDE.md "merge or name every branch the start lists". A fresh scan
+- 811: TAG (data)
+- 812: SAW (data)
 - 815: `note_tags` check-catches change 2 (Sam's Y, 20 Nov): Sam's numbered notes (the "## Notes" table) as {number: tag}, the
-- 842: `tag_faults` change 2: the handover refuses while any of Sam's notes lacks "should have caught: CHECK / none"; the tags and
-- 862: `record_faults` check-catches change 1 (Sam's Y, 20 Nov): this chat ran pre-flight but the check record holds nothing from it.
-- 885: `cost_faults` Job 2 (Sam, 19 Nov): the cost line is recorded at every handover, quietly (costline.py; never shown, Sam 26 No
-- 895: `size_faults` Status check (Sam, 21 Nov: "everything needs checking"): CLAUDE.md "Reading little" keeps a film's notes under
-- 928: `push_faults` Status check (Sam, 21 Nov): CLAUDE.md "Models and chats": push notifications when a render or long job
-- 948: `ledger_faults` Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand
-- 974: `freeze_faults` One route to the kit (Sam's Y, 20 Nov): old-film files loaded, steps swapped and the like may never rise;
-- 985: `sentence_faults` startup fixes 4 (Sam's Y, 16 Nov): no CLAUDE.md sentence lost; text leaves only word for word (sentences.py).
-- 994: `report` 
-- 1008: `this_record` 
-- 1014: `_not_typed` True when the chat record shows this prompt came from a parent chat's seed, a task notice or a peer.
-- 1038: TYPED (data)
-- 1039: ROBOT (data)
-- 1042: `log_hook` UserPromptSubmit: hand Sam's message to a background step that saves it to notes/ledger/sam/CHAT.md and
-- 1059: `_late` 
-- 1094: POSE_JOB (data)
-- 1095: POSE_SAY (data)
-- 1100: `pose_job_lines` pose-kit-format C3 as Sam changed it (26 Nov: "No hard stop on handover. Just tell me you're using the default
-- 1115: LEARN_FIRST (data)
-- 1120: `pose_families` The families in guides/pose-kits.md, The Learn-First rule: (name, proven, words, to learn).
-- 1134: `learn_first_lines` Rule 91 (the Learn-First rule): every pose family the job names (the film's brief checklist, Where things
-- 1161: `main` 
+- 844: `class _NoFilm` 
+- 848: `tag_faults` change 2: the handover refuses while any of Sam's notes lacks "should have caught: CHECK / none"; the tags and
+- 876: `record_faults` check-catches change 1 (Sam's Y, 20 Nov): this chat ran pre-flight but the check record holds nothing from it.
+- 899: `cost_faults` Job 2 (Sam, 19 Nov): the cost line is recorded at every handover, quietly (costline.py; never shown, Sam 26 No
+- 909: `size_faults` Status check (Sam, 21 Nov: "everything needs checking"): CLAUDE.md "Reading little" keeps a film's notes under
+- 942: `push_faults` Status check (Sam, 21 Nov): CLAUDE.md "Models and chats": push notifications when a render or long job
+- 962: `ledger_faults` Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand
+- 988: `freeze_faults` One route to the kit (Sam's Y, 20 Nov): old-film files loaded, steps swapped and the like may never rise;
+- 999: `sentence_faults` startup fixes 4 (Sam's Y, 16 Nov): no CLAUDE.md sentence lost; text leaves only word for word (sentences.py).
+- 1008: `report` 
+- 1022: `this_record` 
+- 1028: `_not_typed` True when the chat record shows this prompt came from a parent chat's seed, a task notice or a peer.
+- 1052: TYPED (data)
+- 1053: ROBOT (data)
+- 1056: `log_hook` UserPromptSubmit: hand Sam's message to a background step that saves it to notes/ledger/sam/CHAT.md and
+- 1073: `_late` 
+- 1108: POSE_JOB (data)
+- 1109: POSE_SAY (data)
+- 1114: `pose_job_lines` pose-kit-format C3 as Sam changed it (26 Nov: "No hard stop on handover. Just tell me you're using the default
+- 1129: LEARN_FIRST (data)
+- 1134: `pose_families` The families in guides/pose-kits.md, The Learn-First rule: (name, proven, words, to learn).
+- 1148: `learn_first_lines` Rule 91 (the Learn-First rule): every pose family the job names (the film's brief checklist, Where things
+- 1175: `main` 
 
 ## hands3d.py (538 lines)
 - 30: INK (data)
@@ -1562,17 +1570,18 @@
 - 497: `sendgate` PreToolUse hook (SendUserFile): exit 2 with the reasons when a video may not go to Sam yet.
 - 517: `main` 
 
-## ink.py (144 lines)
+## ink.py (158 lines)
 - 13: INK (data)
 - 14: HARD (data)
 - 18: `smooth` 
 - 23: `soft` A painted shadow or highlight: one flat, hard-edged shape (ink.HARD); blurred only when ink.HARD is False, on 
 - 51: `bent_check` A check (or stripes) printed on cloth round a body, not flat on the screen (Job K, proposal 4: a flat grid
-- 80: `curve` Catmull-Rom through the points, CLOSED (the end joins back to the start): for shapes with an outline (a face,
-- 94: `open_curve` Catmull-Rom through the points, end to end, stopping at the last point: for limbs, antennae, tails, wires and
-- 108: `oval` 
-- 112: `class Pen` A plain pen on a camera with P (point) and S (size): polygons, ellipses and lines in INK.
-- 135: `glaze` A drawer whose see-through fills (soft shadows, wet shine) blend onto what is already painted (Open Wounds cha
+- 80: `once` The points of a closed outline with no point twice in a row, the last not the first again (see curve).
+- 91: `curve` Catmull-Rom through the points, CLOSED (the end joins back to the start): for shapes with an outline (a face,
+- 108: `open_curve` Catmull-Rom through the points, end to end, stopping at the last point: for limbs, antennae, tails, wires and
+- 122: `oval` 
+- 126: `class Pen` A plain pen on a camera with P (point) and S (size): polygons, ellipses and lines in INK.
+- 149: `glaze` A drawer whose see-through fills (soft shadows, wet shine) blend onto what is already painted (Open Wounds cha
 
 ## kit.py (228 lines)
 - 20: INK (data)
@@ -1640,35 +1649,36 @@
 - 789: `faces` Rule 50 (Job L; was by hand): every name in the film's FAMOUS list gets at least one drawn frame with the face
 - 824: `main` 
 
-## kitfilm.py (247 lines)
-- 34: HERE (data)
-- 35: ROOT (data)
-- 36: FILMS (data)
-- 37: START_STALE (data)
-- 38: MAJOR (data)
-- 39: ANIMATIC_GATE (data)
-- 43: `sid_now` 
-- 47: `rows` 
-- 54: `_add` 
-- 61: `_norm` 
-- 65: `first_chat` The film's first chat: no start row yet, or the start row is this chat's own. No film (a tool job): False.
-- 74: `started_here` handover end: this chat wrote a film's start row at its start (so it is that film's first chat). Needs no film
-- 81: `_stale_names` 
-- 88: `at_start` handover.py start. Returns the lines to print. In the film's first chat: the start row and the background run.
-- 124: BEGUN (data)
-- 127: `begun` True when the film's notes say Sam gave the screenplay and title (the film's start, Sam 26 Nov).
-- 136: `begin` Sam gave the screenplay and title in this chat: the start line in the notes, the start row, the run.
-- 150: `lessons` Sam asked for the film's lessons (the film's end): run the stale kit tests now and write the 'end' row.
-- 163: `practice` A practice job (a test clip, a learn job): its notes file has a line 'Kind: practice' (Sam, 26 Nov). No kit
-- 173: `_launch` 
-- 178: `never_green` Tests with no stamp line at all: a new tool's own kit test (run once at its chat's handover).
-- 187: `made_stale` The tests stale now that were not stale at this chat's start (None when the start list is not this chat's).
-- 201: `major_line` handover end: '' or one plain line suggesting a full kit check to Sam (his Y runs it).
-- 215: `setup_faults` Rule 90's check on the start-up hook: no kit run when a machine starts (the old fault: every chat ran them).
-- 223: `final_row` 
-- 228: `main` 
+## kitfilm.py (265 lines)
+- 36: HERE (data)
+- 37: ROOT (data)
+- 38: FILMS (data)
+- 39: START_STALE (data)
+- 40: MAJOR (data)
+- 41: ANIMATIC_GATE (data)
+- 45: `sid_now` 
+- 49: `rows` 
+- 56: `_add` 
+- 63: `_norm` 
+- 67: `first_chat` The film's first chat: no start row yet, or the start row is this chat's own. No film (a tool job): False.
+- 76: `started_here` handover end: this chat wrote a film's start row at its start (so it is that film's first chat). Needs no film
+- 83: `_stale_names` 
+- 90: `_health` R14 (Sam, 26 Nov): the tool health report runs beside the kit tests, one plain line per tool for Sam.
+- 100: `at_start` handover.py start. Returns the lines to print. In the film's first chat: the start row and the background run.
+- 138: BEGUN (data)
+- 141: `begun` True when the film's notes say Sam gave the screenplay and title (the film's start, Sam 26 Nov).
+- 150: `begin` Sam gave the screenplay and title in this chat: the start line in the notes, the start row, the run.
+- 166: `lessons` Sam asked for the film's lessons (the film's end): run the stale kit tests now and write the 'end' row.
+- 181: `practice` A practice job (a test clip, a learn job): its notes file has a line 'Kind: practice' (Sam, 26 Nov). No kit
+- 191: `_launch` 
+- 196: `never_green` Tests with no stamp line at all: a new tool's own kit test (run once at its chat's handover).
+- 205: `made_stale` The tests stale now that were not stale at this chat's start (None when the start list is not this chat's).
+- 219: `major_line` handover end: '' or one plain line suggesting a full kit check to Sam (his Y runs it).
+- 233: `setup_faults` Rule 90's check on the start-up hook: no kit run when a machine starts (the old fault: every chat ran them).
+- 241: `final_row` 
+- 246: `main` 
 
-## kitinputs.py (502 lines)
+## kitinputs.py (522 lines)
 - 44: HERE (data)
 - 46: ROOT (data)
 - 47: SURVEY_FPS (data)
@@ -1695,13 +1705,13 @@
 - 324: `_places` 
 - 333: `_span` 
 - 341: `prop_sizes` 
-- 356: `outfit` Each kit person's top hem as views.person draws it (their `hem`, else the kit's JACKET), standing.
-- 368: `line_subjects` Each kit person alone, at the largest size the film draws them (the survey's scale; 1.26 if never seen).
-- 389: `class Film` The film as the checks see it: its own inputs first, the kits' where it has none.
-- 400: `alone_audit` The general audit (house style) from a film's ALONE = {name: (t0, t1, draw)}: draw(t) paints that one person
-- 416: `fill` (Film, lines said, faults): what the kits hand the checks, ONLY where the film gave nothing.
-- 469: `main` 
-- 481: `_test` 
+- 361: `outfit` Each kit person's top hem as views.person draws it (their `hem`, else the kit's JACKET), standing.
+- 373: `line_subjects` Each kit person alone, at the largest size the film draws them (the survey's scale; 1.26 if never seen).
+- 409: `class Film` The film as the checks see it: its own inputs first, the kits' where it has none.
+- 420: `alone_audit` The general audit (house style) from a film's ALONE = {name: (t0, t1, draw)}: draw(t) paints that one person
+- 436: `fill` (Film, lines said, faults): what the kits hand the checks, ONLY where the film gave nothing.
+- 489: `main` 
+- 501: `_test` 
 
 ## kitstamps.py (783 lines)
 - 37: HERE (data)
@@ -1974,7 +1984,7 @@
 - 499: `parts` Stretches of the film (seconds from, to), back to back, each with its own sound, as a quick look.
 - 527: `main` 
 
-## linecheck.py (129 lines)
+## linecheck.py (135 lines)
 - 23: HERE (data)
 - 25: RUN (data)
 - 26: EDGE (data)
@@ -3152,6 +3162,38 @@
 - 382: `can` A drinks can standing on a table (the point: its foot, middle; 6.6 cm across, 12 cm tall): its colour, a
 - 399: `coaster` A round coaster lying flat on a table (Milburn note 10): `at X Z, depth D` its middle, `width W` across in
 
+## plainwords.py (274 lines)
+- 33: ROOT (data)
+- 34: EX (data)
+- 35: WORDS (data)
+- 36: LET_LOG (data)
+- 37: STATE (data)
+- 39: FILE_RE (data)
+- 42: CODE_RE (data)
+- 43: LABEL_RE (data)
+- 44: URL_RE (data)
+- 46: LABEL_OK (data)
+- 47: CODE_OK (data)
+- 49: EXPLAIN_RE (data)
+- 51: CONFUSED_RE (data)
+- 56: `words` 
+- 64: `_sentences` Sentences, one per line piece; markdown marks dropped, so '**kit tests**' reads as 'kit tests'.
+- 76: `skip_line` 
+- 81: `explained` True when the sentence explains the word right where it is used.
+- 89: `faults` 
+- 120: CHAT_LONG_RE (data)
+- 124: OWN_TOOL_RE (data)
+- 128: `say` 
+- 135: `block_reason` 
+- 143: `_log` 
+- 150: `_last_reply` The chat's last reply text (all text blocks of the last assistant turn, after Sam's last real message).
+- 170: `hook` 
+- 195: `_terms` Terms a confusing message leaned on: its flagged project words and labels, and quoted or bold phrases.
+- 205: `learn` Sam's "I don't understand" / "explain": save the message he replied to, and add its terms to the list.
+- 232: `example_text` 
+- 237: `score` {name: (expected, faults)} over the saved examples: bad-* must fail, good-* must pass.
+- 247: `main` 
+
 ## plan.py (426 lines)
 - 35: HERE (data)
 - 37: FONT (data)
@@ -3174,6 +3216,18 @@
 - 291: `front_faults` Rule 38: each person faces the lens within about 25 degrees, unless the film lists that shot and mark in
 - 323: `sketch` The plan from above, to show Sam: rooms (floor colours from LOOKS), walls with their openings, doors and their
 - 415: `main` 
+
+## planning.py (122 lines)
+- 21: HERE (data)
+- 22: ROOT (data)
+- 23: HEAD (data)
+- 26: ASKS (data)
+- 38: `key_of` The planning ask a check line is, or None.
+- 46: `_section` 
+- 54: `rows` {key: answer} for every planning row in the brief checklist ('' = unanswered).
+- 69: `add_rows` Write the missing planning rows at the end of the brief checklist table (once).
+- 88: `route` (the lines left, the one planning line or None, the stop lines). Each planning ask in `lines` becomes a row of
+- 109: `main` 
 
 ## posecheck.py (418 lines)
 - 31: HERE (data)
@@ -3247,7 +3301,7 @@
 - 314: `_wrap` Words in lines no wider than `width` pixels (a word too long alone is cut to fit).
 - 333: `main` 
 
-## preflight.py (733 lines)
+## preflight.py (748 lines)
 - 51: ROOT (data)
 - 52: SAFE (data)
 - 53: KINDS (data)
@@ -3266,16 +3320,16 @@
 - 241: `_notes_file` 
 - 248: `notes_path` The film's notes; a finished film's are in notes/archive/ (2 Nov: every film before then is archived).
 - 255: `gates` Rule 14: what stops pre-flight before it starts: a blank row in the brief checklist, rule 11's shot board
-- 288: `acting_shot_faults` Rule 74 (Sam, 20 Nov, GTA shot 4: "no acting notes anywhere"): every shot gets acting rows, with or without
-- 307: `gate_warnings` Job J: by-hand rules turned into checks, printed (not yet refusing: Sam's numbers decide): rule 74 (an acting
-- 337: `head_life_faults` Rule 74 (Sam, 11 Nov: Remakes' KG and Link talked with still heads although Job K's head acting was in the
-- 364: `cast_faults` Rule 14 / CLAUDE.md (25 Oct): every shot has everyone the brief puts in it, on screen at some point (SHOT_CAST
-- 380: `_sheet_tile` 
-- 394: `_in_child` Run fn(*args) in a forked child and return its result (a list of fault strings): whatever libraries it loads
-- 422: `_text_only` `preflight.py NAME OUT --text` (film-quality-rules 67): after the shared checks, only the subtitles (rows, rea
-- 456: COVER_BEFORE (data)
-- 462: `untested_waived` could-not-test: the COULD NOT TEST lines the notes' "## Exceptions" excuses: a row for the check (clipcheck)
-- 483: `main` 
+- 290: `acting_shot_faults` Rule 74 (Sam, 20 Nov, GTA shot 4: "no acting notes anywhere"): every shot gets acting rows, with or without
+- 309: `gate_warnings` Job J: by-hand rules turned into checks, printed (not yet refusing: Sam's numbers decide): rule 74 (an acting
+- 339: `head_life_faults` Rule 74 (Sam, 11 Nov: Remakes' KG and Link talked with still heads although Job K's head acting was in the
+- 366: `cast_faults` Rule 14 / CLAUDE.md (25 Oct): every shot has everyone the brief puts in it, on screen at some point (SHOT_CAST
+- 382: `_sheet_tile` 
+- 396: `_in_child` Run fn(*args) in a forked child and return its result (a list of fault strings): whatever libraries it loads
+- 424: `_text_only` `preflight.py NAME OUT --text` (film-quality-rules 67): after the shared checks, only the subtitles (rows, rea
+- 462: COVER_BEFORE (data)
+- 468: `untested_waived` could-not-test: the COULD NOT TEST lines the notes' "## Exceptions" excuses: a row for the check (clipcheck)
+- 489: `main` 
 
 ## propose.py (1001 lines)
 - 64: ROOT (data)
@@ -3866,7 +3920,7 @@
 - 902: `_watch_usd` 
 - 916: `_load_fixture_facts` 
 
-## subtitles.py (256 lines)
+## subtitles.py (299 lines)
 - 41: _CACHE (data)
 - 42: HERE (data)
 - 43: FONT (data)
@@ -3876,11 +3930,13 @@
 - 99: `chunk_times` [(text, start)] for one line, seconds into the line, timed from its recording and made readable.
 - 146: `line_caption` The subtitle on screen `u` seconds into the line.
 - 157: `pieces` [(text, start)] seconds into the line: 3-5 words at a time, each up on the syllable it starts with (the take's
-- 192: `caption_at` The piece on screen at t (or None): each line's pieces from just before it starts to `tail` after it ends,
-- 203: `_font` 
-- 208: `rows` 
-- 213: `draw` The kit's caption on an RGBA picture or layer: large, lower third, at most two rows, Montserrat Black, white
-- 237: `readable_faults` Rule 62 on the delivered file (rule 70: played at `speed`): each piece at most 5 words and two rows that fit
+- 193: `need` Seconds a piece needs on screen in the film's own time, so the delivered file (at `speed`) keeps it up at
+- 199: `fit` Check audit A2 (26 Nov; Open Wounds' captions flagged 'too fast to read' on 9 runs, the kit and the check neve
+- 235: `caption_at` The piece on screen at t (or None): each line's pieces from just before it starts to `tail` after it ends,
+- 246: `_font` 
+- 251: `rows` 
+- 256: `draw` The kit's caption on an RGBA picture or layer: large, lower third, at most two rows, Montserrat Black, white
+- 280: `readable_faults` Rule 62 on the delivered file (rule 70: played at `speed`): each piece at most 5 words and two rows that fit
 
 ## takes.py (145 lines)
 - 30: HERE (data)
@@ -3897,6 +3953,61 @@
 - 115: `stretches` 
 - 119: `plays_shared_loader` Does the film's code play its recordings through mossad_audio.line (the shared loader the voice check reads)?
 - 133: `_test` 
+
+## toolhealth.py (701 lines)
+- 30: HERE (data)
+- 31: ROOT (data)
+- 34: MAIN (data)
+- 35: DAYS (data)
+- 36: OUT (data)
+- 37: RED_K (data)
+- 38: CHAIN_RE (data)
+- 40: NOT_SAM_RE (data)
+- 44: `_git` 
+- 51: `class Rec` The real records, read on first use. Any attribute may be set beforehand (a kittest's saved example).
+- 186: `_plural` 
+- 190: `_real_sam` Sam's own typed messages: not a chat's opening prompt written by the chain, not a system notice.
+- 196: `handover_reach` 
+- 207: `handover_use` What actually happened: a request of Sam's that no notes line carried, which he then had to make again later
+- 239: `costwatch_reach` 
+- 248: `costwatch_use` 
+- 256: `routine_commands` The commands the guides and notes tell a chat to run for a whole-film render or the finishing step, as written
+- 271: `modelguard_reach` 
+- 281: `modelguard_use` An Opus chat whose record counts a routine step: caught if the guard's log refused it in that chat; slipped if
+- 298: `_dyn_imports` source/ modules a file loads by name (__import__('x'), importlib.import_module('x')): the plain import scan
+- 309: `_tools` The project's own tools (the watcher's list of systems, the hooks): a note on a film never lands in these, so
+- 316: `closure` Every source file the film's code loads, worked out here on its own (not with the finder's list): its own
+- 343: `finder_reach` 
+- 355: `_edits_by_session` {session tail: [(iso time, file)]}: code files each chat changed this week (source/*.py).
+- 365: REPLAY_MAX (data)
+- 368: `finder_use` Last week's real notes, asked again of the finder as it is NOW: does it point to a drawing file that chat then
+- 393: `finderwarn_reach` 
+- 403: `finderwarn_use` 
+- 412: `page_reach` 
+- 420: `page_use` 
+- 429: `packs_reach` 
+- 438: `packs_use` 
+- 452: `kittests_reach` 
+- 467: `kittests_use` 
+- 481: `ledger_reach` 
+- 496: `ledger_use` 
+- 504: CHANNELS (data)
+- 509: `plain_reach` 
+- 520: `plain_use` 
+- 538: `save_reach` 
+- 552: `save_use` 
+- 568: `body_reach` 
+- 582: `body_use` 
+- 592: `cast_reach` 
+- 611: `cast_use` 
+- 624: `missing` 
+- 628: TOOLS (data)
+- 645: RANK (data)
+- 648: `_run` 
+- 655: `check` 
+- 666: `line` 
+- 676: `report` 
+- 685: `at_start` A film's start (kitfilm.at_start / begin): the report beside the kit tests, saved for handover start.
 
 ## turnhead.py (739 lines)
 - 35: H (data)
@@ -4181,7 +4292,7 @@
 - 289: `release` A render held for its picture checks (film_engine) goes under its own name once every line saved beside it
 - 308: `main` 
 
-## watcher.py (484 lines)
+## watcher.py (486 lines)
 - 38: ROOT (data)
 - 41: LOGS (data)
 - 42: BROKEN (data)
@@ -4189,23 +4300,23 @@
 - 44: KITLOG (data)
 - 45: STATE (data)
 - 47: PROMISES (data)
-- 109: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
-- 135: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
-- 149: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
-- 166: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
-- 172: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
-- 201: OFF (data)
-- 205: SWITCHES (data)
-- 208: `_read` 
-- 217: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
-- 236: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
-- 263: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
-- 316: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
-- 322: `check` 
-- 337: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
-- 356: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
-- 366: `standing` The open faults on the standing list (main line).
-- 371: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
-- 382: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
-- 429: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
-- 443: `main` 
+- 111: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
+- 137: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
+- 151: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
+- 168: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
+- 174: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
+- 203: OFF (data)
+- 207: SWITCHES (data)
+- 210: `_read` 
+- 219: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
+- 238: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
+- 265: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
+- 318: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
+- 324: `check` 
+- 339: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
+- 358: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
+- 368: `standing` The open faults on the standing list (main line).
+- 373: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
+- 384: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
+- 431: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
+- 445: `main` 
