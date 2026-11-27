@@ -1192,7 +1192,7 @@ def sheet(film, out, cast=None, yaws=YAWS, crowd=8):
             tile.thumbnail((tw, th - 34))
             img.paste(tile.convert('RGB'), (x0 + k * tw, y0 + 28))
     img.save(out, quality=88)
-    for line in colour_faults(film) if cast is None else []:   # replay test 2: far from the photo, said at once
+    for line in colour_faults(film):             # replay test 2: far from the photo, said at once
         print('COLOUR:', line)
     return out
 
