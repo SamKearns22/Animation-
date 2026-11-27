@@ -50,7 +50,8 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
   five findings files relabelled A-E (shuffled; not which tool) and marks each finding caught / other real / wrong,
   and each key note caught or missed; then one plain table for Sam (one line per tool, plus the plain-frames
   baseline), Lost/Added lines, and his yes/no on each winner one at a time (touching, then movement).
-- Needs Sam: nothing yet.
+- Needs Sam: the chain stopped (this chat is at the chat-chain depth limit, 8, and cannot open chat 2). Sam starts
+  chat 2 with the text in notes/seeing-test/next-prompt.md.
 - End check, named (not this chat's): STOP RULE: CLAUDE.md's "Never tell me my chats are long (Sam, 26 Nov)" came
   in from the main line with no rule_proofs.json entry (another chat added it); chat 2 adds its proof or names its owner.
 - Read: this file; notes/seeing-test/key.md; findings/; CLAUDE.md "Messages to me".
