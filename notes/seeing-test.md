@@ -51,10 +51,12 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
   and each key note caught or missed; then one plain table for Sam (one line per tool, plus the plain-frames
   baseline), Lost/Added lines, and his yes/no on each winner one at a time (touching, then movement).
 - Needs Sam: nothing yet.
+- End check, named (not this chat's): STOP RULE: CLAUDE.md's "Never tell me my chats are long (Sam, 26 Nov)" came
+  in from the main line with no rule_proofs.json entry (another chat added it); chat 2 adds its proof or names its owner.
 - Read: this file; notes/seeing-test/key.md; findings/; CLAUDE.md "Messages to me".
 - Open rule requests: none.
 - For Claude: worktrees for re-rendering: `git worktree add /scratch/wt-COMMIT COMMIT`; then
   `python3 source/seeing.py render CASE --film MOD --span T0 T1 --src WT/source` and `seeing.py views CASE`.
   Models fetched on demand into source/models/ (not on GitHub).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 149.31% of 15%; forecast not yet planned (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 149.56% of a week (2026-11-27)
