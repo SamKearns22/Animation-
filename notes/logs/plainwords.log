@@ -28,7 +28,9 @@
 {"chat": "d251ebda", "event": "block", "faults": [["word", "kit"]], "t": "2026-11-27 16:58"}
 {"chat": "774a3f06", "event": "block", "faults": [["code", "McFadden"]], "t": "2026-11-27 17:32"}
 {"chat": "4e93d9da", "event": "block", "faults": [["file", "animations/drafts/patriot-5-character-sheet.jpg"]], "t": "2026-11-27 20:56"}
+{"chat": "4e93d9da", "event": "block", "faults": [["word", "handover"], ["word", "drawing tools"]], "t": "2026-11-27 22:09"}
 {"chat": "22904d63", "event": "let-through", "faults": [["word", "main line"]], "reply": "I've saved the tower drawing code to this chat's own branch on GitHub, so nothing is lost while I wait for your Y on the faster clip. It's work in progress, so it's not on the main line yet.\n\nDone: the tower code is saved; the clip is not made yet.\nNext: on your Y, make the fast clip (about 1 to 2 minutes) and send it.", "t": "2026-11-27 21:47"}
 {"chat": "22904d63", "event": "let-through", "faults": [["word", "handover"], ["word", "main line"]], "reply": "I've saved everything to this chat's own branch on GitHub: the tower drawing, the neck fix, the two new checks with their tests, your two saved notes as examples, the clip and the close-up still. It's not on the main line yet; that happens at the handover.\n\nStill need: a line from you saying what the other job is, so I can open a chat for it alongside this one.\n\nDone: all of the tower work is saved.\nNext: open the other job's chat once you tell me what it is, then write up the lesson and hand over.", "t": "2026-11-27 22:04"}
 {"chat": "345bd082", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-27 21:39"}
 {"chat": "38fe1c77", "event": "block", "faults": [["word", "handover"], ["word", "rig"], ["word", "guard"], ["word", "ledger"], ["word", "finder"]], "t": "2026-11-27 21:44"}
+{"chat": "22904d63", "event": "block", "faults": [["word", "guard"], ["word", "main line"]], "t": "2026-11-27 22:05"}
