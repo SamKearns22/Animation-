@@ -806,6 +806,68 @@ def wolf_house_line():
         + '; now ' + ', '.join(f'{v:.2f}' for v in res['now']))
 
 
+# --- R8 A6: each kit beside a person (houseline.py's survey; it draws Open Wounds' cast, so it lives here)
+def _hl_white():
+    from PIL import Image
+    return Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+
+
+def _hl_person(d):
+    import brexit_is_done as F                       # read only: its people are the crowd pack (CLAUDE.md, tests)
+    img = _hl_white()
+    F.ACT.person_at(img, F._cam('site'), F.ACT.WORKERS[0], 0, d, 0, 90, None, 0.0, shadow=False)
+    return img
+
+
+def _hl_wolf(d):
+    import brexit_is_done as F
+    img = _hl_white()
+    F.ACT.wolf_at(img, F._cam('site'), 0, d, 0, 1, F.ACT.WF.pose('stand', 0), pal=1, shade=False)
+    return img
+
+
+def _hl_whale(fit, ol=None):
+    import whale as W
+    cam = W.view_cam((0, -30, 3), (1080, 1920), fit=fit)
+    img = _hl_white()
+    W.draw(cam, W.Pose(), pattern=0, flap=0, beat=0, ol=ol).paste(img)
+    return img
+
+
+def _hl_horse(sc):
+    """A chestnut: its points and mane are coat-coloured, so only its outline is ink (a bay's dark legs are not line)."""
+    import burnham as B
+    import kit
+    import mounts as MO
+    B.SS = 1
+    kit.install(B)
+    img = _hl_white()
+    MO.Mount('horse', coat='chestnut').draw(img, B.Cam(1.0, 540, 960), 600, 1500, sc, 0.0, 'stand')
+    return img
+
+
+# each kit: (name, [(size label, drawing function)]): sizes span near to far on a 1080-wide frame
+LINE_KITS = [
+    ('wolf', [('5 m', lambda: _hl_wolf(5.0)), ('10 m', lambda: _hl_wolf(10.0))]),
+    ('whale', [('close', lambda: _hl_whale(8)), ('far', lambda: _hl_whale(30))]),
+    ('horse', [('near', lambda: _hl_horse(0.4)), ('far', lambda: _hl_horse(0.15))]),
+]
+
+
+def line_survey(kits=None):
+    """[(kit, size, ratio of its outline to a person's)], the person measured at 5, 7 and 10 m (their mean)."""
+    import houseline as H
+    person = sum(H.ring(_hl_person(d)) for d in (5.0, 7.0, 10.0)) / 3.0
+    rows = []
+    for name, sizes in (kits or LINE_KITS):
+        for lab, fn in sizes:
+            rows.append((name, lab, H.ring(fn()) / person))
+    return rows
+
+
+
+
+
 @test
 def one_line_weight_every_kit():
     """R8 A6 (27 Nov): one line weight for every kit. Open Wounds note 16 (Sam, 26 Nov: "the line work on the wolves
@@ -821,10 +883,10 @@ def one_line_weight_every_kit():
     keep_ctx, keep_line = WF.house_ctx, W.HOUSE_LINE
     try:
         WF.house_ctx, W.HOUSE_LINE = (lambda X, s, ppm: X), False
-        old = H.faults(H.survey())
+        old = H.faults(line_survey())
     finally:
         WF.house_ctx, W.HOUSE_LINE = keep_ctx, keep_line
-    rows = H.survey()
+    rows = line_survey()
     now = H.faults(rows)
     caught = {f.split(' ')[0] for f in old}
     return {'wolf', 'whale'} <= caught and not now, (
