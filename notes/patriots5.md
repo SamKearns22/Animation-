@@ -36,7 +36,7 @@ notes/ledger/. Honest risk: Brexit Is Done ran 1.4x and Grand Theft Autism 2x ov
 | thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
 |---|---|---|---|---|---|---|
 | The Patriot, redesigned | KNOWN once the sister chat pushes (patriots3_cast PATRIOT, new style) | front, side, behind, three-quarter; balaclava, PP badges | cast | 0 here (sister chat's own cost) | - | |
-| 7 more PP men (Nick and six) | NEW variants of the Patriot (heights, builds, jacket shades, eyes) | must read as 8 different men at phone size | cast | 1 | Milburn sets/props rows (people-file variants) | |
+| 7 more PP men (Nick and six) | NEW: crowd-pack or made-up house heads with balaclava=True (shared, facehouse_d) and neck_c; untested on a crowd | must read as 8 different men at phone size | cast | 1 | Milburn sets/props rows (people-file variants) | |
 | Islamic religious clothes over the outfits (skull caps, checked headscarves, robes, beads) | NEW outfit extras | worn over balaclava and jacket; front and side; turn with the body | cast | 1 | unmeasured | |
 | Danny Tommo (real person) | NEW likeness (face tool from Sam's photos) | front, side, from behind (shot 6), seated slumped, standing on the bunk | cast | 1.5 | Brexit Is Done cast row (3 likenesses, 9.5 planned): about a third | |
 | Two prison officers | KNOWN (story/blessed-people.txt officer, guard2) | front and side, eyes that track | cast | 0.2 | known | |
@@ -91,6 +91,8 @@ rule 14)
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
 |---|------|------|
+| 0a | Sam, 27 Nov: "run The Patriot character through our new drawing style to bring him up to speed" | sheet sent, awaiting Sam; known faults told to Sam: side-view collar sticks out with a thin white gap under it; three-quarter hood comes to a slight point at the chin; the from-behind-at-the-grate view untested |
+| 0b | Sam, 27 Nov: "Start a new film file/ledger for The Patriot 5. I am still writing the screenplay." | yes |
 | 1 | Shot 1: "We are in a British Prison cell. It is evening. We look dead ahead at the cot at the end of the room." | |
 | 2 | Shot 1: "Danny Tommo is in the process of sighing deeply, downcast." | |
 | 3 | Shot 1: "Above him, a grated window, letting in moonlight." | |
