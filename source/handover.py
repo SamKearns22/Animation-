@@ -21,7 +21,9 @@ MAP
                      the chat reads in place of the notes file
   branches ......... in end (startup-fixes 2, 16 Nov): every branch source/branches.py lists (work never on the main
                      line, last 7 days) must be merged or named in the notes
-  finder ........... in end (finder-use, 17 Nov): this chat edited the film's code with no page.py show call
+  reach ............ in end (R12, 26 Nov): a chat that used the code finder edited a file the finder does not search
+                     for that film (a blind spot), or one no show call pointed to (reach_faults); a chat with no
+                     show call is the live reminder's (.claude/hooks/finderwarn.py)
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
                      sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
   watcher .......... in start: the watcher's standing BROKEN list and any system with no promise (source/watcher.py)
@@ -578,6 +580,86 @@ def shared_faults(since=None, diff=None):
     return out
 
 
+def _since_last_end():
+    """The time of the last handover end by another chat (shared_faults' window), else '1 day ago'."""
+    ends = os.path.join(ROOT, 'notes', 'logs', 'handover-end.log')
+    me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1]
+    prev = [ln.split('\t')[0] for ln in (open(ends, encoding='utf-8') if os.path.exists(ends) else [])
+            if ln.strip() and ln.split('\t')[-1].strip() != me]
+    return prev[-1] if prev else '1 day ago'
+
+
+def _edited_source(since):
+    """source/*.py files THIS chat changed since then: its own commits (the Claude-Session line names the chat; work
+    merged in from other chats is theirs) and what is not yet committed."""
+    me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1]
+    git = lambda *a: subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True).stdout
+    names_ = git('diff', '--name-only', 'HEAD', '--', 'source/').split()
+    names_ += git('ls-files', '--others', '--exclude-standard', '--', 'source/').split()
+    if me:
+        for blk in git('log', f'--since={since}', '--no-merges', '--name-only',
+                       '--format=@@%(trailers:key=Claude-Session,valueonly,separator=)').split('@@')[1:]:
+            head, _, body = blk.partition('\n')
+            if head.strip().endswith(me):
+                names_ += body.split()
+    return sorted({os.path.basename(f) for f in names_ if re.fullmatch(r'source/[^/]+\.py', f)})
+
+
+REACH_FREE = {'kittests.py'}                      # a notes round adds its test here; never a finder gap
+
+
+def reach_faults(edited=None, shows=None, files_fn=None, notes_fn=None):
+    """R12 (Sam, 26 Nov, Open Wounds chat 39: "It should cover everything in the project that we use!!"): in a chat
+    that used the code finder (page.py FILM show), every code file it then edited must be (1) one the finder searches
+    for that film (page.files: its own code plus the shared kit and checks it imports), else the finder has a blind
+    spot; and (2) one a show call pointed to, else the finder missed the note's code and the chat found it by hand.
+    edited: [file names]; shows: {film: {files the show calls pointed to}} for THIS chat; a chat with no show call is
+    the live reminder's (finderwarn), not this check's. Settled by a notes line `finder reach: FILE (why)`."""
+    since = None
+    if edited is None or shows is None:
+        since = _since_last_end()
+    if edited is None:
+        edited = _edited_source(since)
+    if shows is None:
+        me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', 'local').split('_')[-1][-8:]
+        from datetime import datetime as _dt
+        try:
+            t0 = _dt.fromisoformat(since).replace(tzinfo=None).isoformat(timespec='seconds')
+        except ValueError:
+            t0 = ''
+        shows = {}
+        for lg in glob.glob(os.path.join(ROOT, 'notes', 'logs', '*-show.log')):
+            for ln in open(lg, encoding='utf-8'):
+                p = ln.rstrip('\n').split('\t')
+                if len(p) >= 6 and p[5] == me and p[0] >= t0:
+                    pts = shows.setdefault(os.path.basename(lg)[:-len('-show.log')], set())
+                    pts.add(p[3].split(':')[0])
+                    pts |= set(p[6].split(',')) if len(p) > 6 else set()
+    if not shows:
+        return []
+    if files_fn is None:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import page
+        files_fn = lambda film: [os.path.basename(f) for f in page.files(film)]
+    notes_fn = notes_fn or (lambda film: open(_keep_notes(film), encoding='utf-8').read() if _keep_notes(film) else '')
+    covered = {film: set(files_fn(film)) for film in shows}
+    pointed = set().union(*shows.values())
+    said = ' '.join(notes_fn(film) for film in shows).lower()
+    out = []
+    for f in edited:
+        if f in REACH_FREE or re.search(rf'finder reach:[^\n]*\b{re.escape(f.lower())}', said):   # one line may name several
+            continue
+        if not any(f in c for c in covered.values()):
+            out.append(f'FINDER REACH: this chat used the code finder ({", ".join(sorted(shows))}) and then edited {f}, '
+                       f'which the finder does not search for that film: a blind spot. Make page.files reach it (the '
+                       f'film imports it?), or write `finder reach: {f} (why)` in the notes')
+        elif f not in pointed:
+            out.append(f'FINDER MISSED: this chat edited {f}, but none of its show calls pointed there: the finder '
+                       f'missed the note\'s code and it was found by hand. Add the note to the finder replay, or write '
+                       f'`finder reach: {f} (why)` in the notes')
+    return out
+
+
 def _kit_stale():
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import kitstamps
@@ -1105,7 +1187,7 @@ def main(argv):
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
                   ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
-                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
+                  ('rule', rule_faults), ('shared', shared_faults), ('reach', reach_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
                   ('castsheet', lambda: castsheet_faults(film))]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])

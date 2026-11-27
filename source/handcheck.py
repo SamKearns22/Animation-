@@ -197,6 +197,8 @@ def probe(img, args):
                sw=sp.get('shoulders', 150), hem=sp.get('bottom', V.JACKET),
                ink=B.Pen(lay, L).w(2.6), tucked=(joints or {}).get('tucked'),
                behind=set(j2.get('_drawn', {}).get('behind', ())), head=head, hw=sp.get('hw', 70), hh=sp.get('hh', 92),
+               meant=list(F.MEANT) + [(m[0], m[1]) for m in (joints or {}).get('meant', ())   # the drawing's
+                                      if len(m) < 3 or m[2] == V.VIEWS[V.snap(yaw)[0]]],   # own marks (figure.meant)
                head_c=(sp.get('head_dx', 0.0), -150.0 + sp.get('head_dy', 0.0) + (joints or {}).get('head_dy', 0.0), 0.0))
     a_ = np.asarray(lay).astype(np.int16)                       # for the seam check (rule 81): the ink lines, and
     out['inkpx'] = body & (np.abs(a_[:, :, :3] - INK).sum(axis=2) < 60)   # what is neither ink nor his own sleeves
@@ -259,6 +261,7 @@ def frame_faults(people):
     for i, pp in enumerate(people):
         x0, y0, x1, y1 = pp['at']
         mine = top[y0:y1, x0:x1] == i
+        first = len(out)
         for sd, a in pp['arms'].items():
             whole = int(a['full'].sum())
             if a['shape'] != 'none' and whole < SHOWN * pp['expect']:
@@ -292,6 +295,10 @@ def frame_faults(people):
                             (vis_hand & _part(pp, other)).sum() > OVER * vis_hand.sum():
                         out.append(dict(who=pp['name'], side=sd, kind=f"over {other['name']}", box=box,
                                         text=f"the hand over {other['name']}'s body (a touch not listed)"))
+        for f in out[first:]:                       # what the drawing says it means (figure.meant, a gait's mark)
+            why = F.meant_for(f['kind'], pp.get('meant', ()))
+            if why:
+                f['meant'] = why
     return out
 
 
@@ -590,7 +597,7 @@ def summary(film, found=None, fps=12):
     found = FOUND if found is None else found
     runs = {}
     for f in sorted(found, key=lambda f: f['t']):
-        if _allowed(film, f):
+        if _allowed(film, f) or f.get('meant'):     # meant: one line each from meant_lines(), never a fault
             continue
         key = (f['who'], f['side'], f['kind'])
         r = runs.setdefault(key, [])
@@ -611,6 +618,19 @@ def summary(film, found=None, fps=12):
                            f"{who}'s {part}: {r[0]['text']} ({span}; rule {r[0].get('rule', 41)})", r[0]))
     out.sort(key=lambda x: x[0])
     return out
+
+
+def meant_lines(found=None):
+    """Flags the drawing marked as meant (figure.meant), one short line per person, arm and reason: printed with the
+    checks, never counted as faults and never hidden."""
+    found = FOUND if found is None else found
+    seen = {}
+    for f in sorted((f for f in found if f.get('meant')), key=lambda f: f['t']):
+        what = 'hand over someone' if f['kind'].startswith('over') else 'hand hidden'
+        r = seen.setdefault((f['who'], f['side'], what, f['meant']), [f['t'], f['t'], 0])
+        r[1], r[2] = f['t'], r[2] + 1
+    return [f"meant: {who}'s {'left' if sd == 'L' else 'right'} arm, {kind} "
+            f"{a:.2f}-{b:.2f} s ({n} frames): {why}" for (who, sd, kind, why), (a, b, n) in seen.items()]
 
 
 def sheet(film, rows, path):

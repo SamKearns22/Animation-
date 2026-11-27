@@ -106,12 +106,29 @@ def faults(text, wordlist=None):
         for w in wl:
             if re.search(r'\b' + re.escape(w) + r's?\b', sent, re.I) and not explained(sent, w):
                 add('word', w, sent)
+        m = CHAT_LONG_RE.search(re.sub(r'"[^"]*"|\u201c[^\u201d]*\u201d', '', sent))   # Sam's own words quoted are not a claim
+        if m and not OWN_TOOL_RE.search(sent):
+            add('chatlong', m.group(0), sent)
     return out
+
+
+# Sam, 26 Nov (Open Wounds chat 39, after "Long chats and heavy reading look like a big cause"): "If you tell me my
+# chats are long one more time, Claude, I will slap you. ... You built a chat handover tool to save usage. You
+# confirmed today that it is working as intended. Stop telling me chats are long unless you are admitting that your
+# own tool is broken." A reply that puts cost on long chats or a growing history is stopped, unless the same sentence
+# owns it as the handover tool's failure.
+CHAT_LONG_RE = re.compile(r"\b(long|longer|lengthy)\s+(chats?|histor(y|ies)|conversations?)\b|"
+                          r"\b(chats?|histor(y|ies)|conversations?)\s+(is|are|was|were|ran|runs?|gets?|got|grows?|grew|"
+                          r"getting|growing)\s+(too\s+|so\s+|very\s+|quite\s+)?long\b|"
+                          r"\bhistory\s+(is\s+|has\s+)?(long|grown|growing)\b", re.I)
+OWN_TOOL_RE = re.compile(r"\b(my|our|the)\s+(own\s+)?(handover|hand-over|chat[- ]handover)\s+tool\b.{0,60}"
+                         r"\b(broken|failed|failing|not working|didn't work)\b", re.I)
 
 
 def say(fs, limit=12):
     kinds = {'file': 'a file or folder name', 'code': 'a code name', 'label': 'a label or code',
-             'word': 'a project word with no everyday explanation in the same sentence'}
+             'word': 'a project word with no everyday explanation in the same sentence',
+             'chatlong': 'chat length given as a cause (Sam, 26 Nov: never, unless admitting the handover tool is broken)'}
     return '\n'.join(f'- "{w}" ({kinds[k]}): "{s[:140]}"' for k, w, s in fs[:limit])
 
 

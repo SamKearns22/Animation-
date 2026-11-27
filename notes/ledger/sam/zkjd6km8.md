@@ -30,3 +30,34 @@ If I asked you to build Netanyahoo from scratch from the same information I gave
 ### 2026-11-26T22:57:13
 Whole film rebuild. Patriots 2 instead. New reserve job.
 
+### 2026-11-26T23:04:53
+The reason why I choose to run that test is because we are way off our 15% target and we used to be a lot closer to it. We need to diagnose why and I can’t think of a better way to do it.
+
+### 2026-11-26T23:05:25
+do you agree or are you being agreeable?
+
+### 2026-11-26T23:07:18
+If you tell me my chats are long one more time, Claude, I will slap you.
+
+Record this Permanently.
+
+You built a chat handover tool to save usage. You confirmed today that it is working as intended.
+
+Stop telling me chats are long unless you are admitting that your own tool is broken.
+
+### 2026-11-26T23:08:38
+Now, tell me about heavy reading. Are we doing heavy reading and can it be fixed?
+
+### 2026-11-26T23:09:54
+1. Are you saying that we aren’t using the code searching tool that you assured me we were using
+
+### 2026-11-26T23:11:07
+yes, obviously! It should cover everything in the project that we use!! How was this missed??
+
+### 2026-11-26T23:11:52
+3. Why not?
+4. Why would you only party keep to it?
+
+### 2026-11-26T23:12:53
+Add to reserve jobs
+

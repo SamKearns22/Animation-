@@ -213,6 +213,7 @@ def gait(sp, t, kind='walk', stride=None, steps_per_s=None):
         j['foot' + side] = (fx, fy, fz)
     j['lean'] = g['lean']
     j['planted'] = planted
+    j['meant'] = [(('no hand',), f'a {kind} seen side on: the far hand swings behind the body', 'side')]
     return j
 
 
