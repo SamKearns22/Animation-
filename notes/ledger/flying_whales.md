@@ -10,4 +10,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 |---|---|---|---|---|---|---|---|---|---|
 
 ## Checks (runs, faults, by kind)
-- quick check: 1 runs, 4 faults (CAMERA FEEL 1, caption 1, other 1, rule 57 1)
+- quick check: 2 runs, 9 faults (CAMERA FEEL 3, caption 2, other 2, rule 57 2)

@@ -45,10 +45,29 @@ The "before" trace count is a floor (one search per function on the path, none w
 - Steps per note (aim 10-18) is unverified until the next notes round: `notesteps.py report` measures it.
 - move to shared: nothing (all of this is shared).
 
+## Kit tests before and after (27 Nov, the whole suite on both copies)
+- Old copy (main line before today): 207 passed, 5 failed. New copy: 217 run; 8 failed at first.
+- Both copies: head_moves_not_comic, early_move_size, movers_never_meet_head_on, side_by_side_out_of_reach (the
+  Brexit film as it stands; not this job's). Old copy only: people_from_a_description (a git name missing in a
+  side copy).
+- New copy only, all four mine and fixed (each passes now): watcher_catches_last_weeks_four (the new tools had no
+  promise line), finished_films_keep_their_bookmark (the freeze count read the 9 topic files as 9 kit files),
+  check_audit_lists_and_flags_repeats and critique_saw_it_column (touch.py's own test left a stand-in loaded).
+- App figure for this chat: $7.86; the estimate $8.81 (12% over, so not flagged). One chat proves nothing yet.
+
+## Handover check settled (end of chat)
+- 95 QUICK CHECK lines on 20 finished films: their code only gained a MAP at the top (no code changed, ast-proved);
+  the faults are theirs from before (rule 61: finished films are not retrofitted). Not fixed, on purpose.
+- Branches named, not merged (logs and one-off files, none of this job's): claude/jolly-ramanujan-2lcl2o,
+  claude/upbeat-dirac-w16tn9, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz,
+  claude/gta-chat31.
+- RECORD "pre-flight ran on and": a false read of a command line here; no pre-flight ran in this chat.
+- PUSH: sent at the handover. COST: recorded (above).
+
 ## Where things stand
 - Rules that bite next: 30 (a repeat note: find why first), 61 (MAP; now checked), 85 (cost watch).
-- Done: steps 1-7 built and kit-tested (7 new kit tests); 5c (27 other big files) not done; full kit run before/after
-  in this chat's notes below.
+- Done: steps 1-7 built and kit-tested (6 new kit tests); full kit run before/after: no new failure left; 5c (27
+  other big files) not done.
 - Next (Opus, high; a tool job): split the other 27 files over 1,500 lines, setters first (touch.py "sets"), kit
   tests before/after. Not urgent: the fixing chats already read MAPs and touch.py, not whole files.
 - Needs Sam: nothing.

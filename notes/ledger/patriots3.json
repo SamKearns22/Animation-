@@ -1,0 +1,12 @@
+{
+ "film": "patriots3",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "quick_checks": [
+  {
+   "at": "2026-11-27T11:44+00:00",
+   "faults": 3
+  }
+ ]
+}

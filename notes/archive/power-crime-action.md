@@ -36,6 +36,8 @@ Recordings: `source/audio/power-crime-1..6.m4a` (filed 20 Oct, see row 30).
 | 28 | Senior officer: "I don't have time to be dealing with your small fry problems, Jenkins. Interrupt me again and see what happens." | yes: line 6 |
 | 29 | The joke: "policing old ladies with signs is more important than actual terrorism." | yes |
 | 30 | "Please learn from lessons from previous round of videos. Please advise on references" | references asked for and written up; lessons applied |
+| 31 | Planning: the acting list, one row per line (rule 74) |  |
+| 32 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## Recordings (voices.py, 20 Oct: no duplicates; every length fits its line)
 | line | file | who | speech (s) | note |

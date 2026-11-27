@@ -55,6 +55,8 @@ Shots (about 40-45 s with the real voices):
 | 21 | ALEX (hopefully): "Invade Europe?" | yes: brows up |
 | 22 | Abdul chuckles. "Invade Europe." They clink glasses. | yes: chuckle, line, clink |
 | 23 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. | finish.py on every animatic (none yet) |
+| 24 | Planning: the acting list, one row per line (rule 74) |  |
+| 25 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## Acting (rule 74; front on at their marks, rule 38; every shot flat, note 4)
 | line | who | face | body | lands on |

@@ -80,6 +80,8 @@ Ticked at the rehearsal clip (8 Nov) except 4, where he stands at his mark: he s
 | 27 | The joke: Vance sincerely claims he isn't responsible for the election, prices or war, despite being Vice President. | yes: played straight by Vance throughout |
 | 28 | Hook Text + CranbriJoos sign-off (finish.py) on every animatic and the final. Hook Text (Sam, 8 Nov): "JD Vance Addresses The Nation" (his capitals kept), popping in at 0.5 s (rule 82). | yes: Hook Text pops at 0.5 s on the check sheet frame; finish.py adds both to the animatic |
 | 0 | (Sam, 8 Nov) The video starts with JD swivelling round in his chair, as in our sitting kit, a big smile on his face. | yes: opens with his back to us in the oxblood swivel chair; he swivels round grinning (0.1-0.9 s) |
+| 30 | Planning: the acting list, one row per line (rule 74) |  |
+| 31 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## Acting (rule 74; front on, rule 38)
 | line | who | face | body | lands on |

@@ -126,6 +126,8 @@ Composition sheet sent: 26 Oct, the plan and the key shots (`source/netan_yahoo_
 | 20 | Dialogue recordings arrive later in the day | done: five recordings in (`source/audio/netan-yahoo-1..5`) |
 | 21 | No set dressing added (Sam: real sets are very clean) | done: no set dressing |
 | 22 | Presenter's chair: a third wooden armchair behind him | done: a third armchair behind him |
+| 23 | Planning: the acting list, one row per line (rule 74) |  |
+| 24 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 | reference | what it shows (count, colours, positions, facing, brands, proportions) | ours matches? |
