@@ -3,78 +3,79 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## brexit_is_done.py (524 lines)
+## brexit_is_done.py (527 lines)
 - 31: HERE (data)
 - 39: READ_TIMES (data)
-- 41: B (data)
-- 42: V (data)
-- 47: NAME (data)
-- 48: FILM (data)
-- 49: NOTES (data)
-- 50: HAS (data)
-- 51: FPS (data)
-- 55: LINES (data)
-- 63: SOUNDS (data)
-- 64: PRE (data)
-- 65: POST (data)
-- 66: TAKE_GAP (data)
-- 68: SR (data)
-- 71: `_voices` Each line's voice, cleaned by the shared takes.clean (hum and hiss out, cut to the speech, the takes of one li
-- 109: DUR (data)
-- 112: CHASE_DELAY (data)
-- 113: SHOT_CAST (data)
-- 114: SHOT_MARKS (data)
-- 117: THREE_QUARTER_OK (data)
-- 121: RESTS (data)
-- 129: MOVESIZE_OK (data)
-- 132: HANDS_OK (data)
-- 137: ALLOWED_POPS (data)
-- 143: BENCHMARK (data)
-- 174: PLAN (data)
-- 194: HOOK (data)
-- 197: `scene_of` 
-- 205: `shot_of` 
-- 212: FACE_X (data)
-- 213: EYE_Y (data)
-- 214: KEEP_CLEAR (data)
-- 217: CAST (data)
-- 218: FEET (data)
-- 221: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
-- 226: `seated` `who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose
-- 244: DRAWN (data)
-- 256: TRACK (data)
-- 258: BLINKS (data)
-- 260: MOODS (data)
-- 285: PIECE_FIX (data)
-- 288: `caption_at` 
-- 292: `word_at` When line n reaches `words` (the k-th time): the moment Sam says it on his take.
-- 300: HEAD_LIFE (data)
-- 303: `head_life` Rule 74: the head tilts and nods on the voice (headlife): the loudness of Sam's take, on their own line only.
-- 322: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own line, blinks, head life.
-- 333: _MOVES (data)
-- 336: `acted` (face sp, joints) for who's block in shot at film time t (story/brexit-is-done-moves.txt).
-- 349: _DESC (data)
-- 350: _PAINT (data)
-- 352: MAY (data)
-- 357: `_cam` 
-- 361: `_paint` 
-- 366: `may_shot` 
-- 380: `standing` `who` standing on the ground at depth d (m) through level camera L, body centre at screen X.
-- 391: KEMI (data)
-- 394: `kemi_shot` 
-- 409: BLAIR (data)
-- 412: `blair_shot` 
-- 430: `_alone` `who` alone on a clear layer at t (the shared general audit: kitinputs.alone_audit, through ALONE).
-- 445: ALONE (data)
-- 451: `picture` 
-- 460: `frame_image` 
-- 466: GROWLS (data)
-- 468: BED_DIP_DB (data)
-- 469: VOICE_OVER_BED_DB (data)
-- 472: `soundtrack` Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi).
-- 489: `main` 
+- 41: ON_SCREEN (data)
+- 44: B (data)
+- 45: V (data)
+- 50: NAME (data)
+- 51: FILM (data)
+- 52: NOTES (data)
+- 53: HAS (data)
+- 54: FPS (data)
+- 58: LINES (data)
+- 66: SOUNDS (data)
+- 67: PRE (data)
+- 68: POST (data)
+- 69: TAKE_GAP (data)
+- 71: SR (data)
+- 74: `_voices` Each line's voice, cleaned by the shared takes.clean (hum and hiss out, cut to the speech, the takes of one li
+- 112: DUR (data)
+- 115: CHASE_DELAY (data)
+- 116: SHOT_CAST (data)
+- 117: SHOT_MARKS (data)
+- 120: THREE_QUARTER_OK (data)
+- 124: RESTS (data)
+- 132: MOVESIZE_OK (data)
+- 135: HANDS_OK (data)
+- 140: ALLOWED_POPS (data)
+- 146: BENCHMARK (data)
+- 177: PLAN (data)
+- 197: HOOK (data)
+- 200: `scene_of` 
+- 208: `shot_of` 
+- 215: FACE_X (data)
+- 216: EYE_Y (data)
+- 217: KEEP_CLEAR (data)
+- 220: CAST (data)
+- 221: FEET (data)
+- 224: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
+- 229: `seated` `who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose
+- 247: DRAWN (data)
+- 259: TRACK (data)
+- 261: BLINKS (data)
+- 263: MOODS (data)
+- 288: PIECE_FIX (data)
+- 291: `caption_at` 
+- 295: `word_at` When line n reaches `words` (the k-th time): the moment Sam says it on his take.
+- 303: HEAD_LIFE (data)
+- 306: `head_life` Rule 74: the head tilts and nods on the voice (headlife): the loudness of Sam's take, on their own line only.
+- 325: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own line, blinks, head life.
+- 336: _MOVES (data)
+- 339: `acted` (face sp, joints) for who's block in shot at film time t (story/brexit-is-done-moves.txt).
+- 352: _DESC (data)
+- 353: _PAINT (data)
+- 355: MAY (data)
+- 360: `_cam` 
+- 364: `_paint` 
+- 369: `may_shot` 
+- 383: `standing` `who` standing on the ground at depth d (m) through level camera L, body centre at screen X.
+- 394: KEMI (data)
+- 397: `kemi_shot` 
+- 412: BLAIR (data)
+- 415: `blair_shot` 
+- 433: `_alone` `who` alone on a clear layer at t (the shared general audit: kitinputs.alone_audit, through ALONE).
+- 448: ALONE (data)
+- 454: `picture` 
+- 463: `frame_image` 
+- 469: GROWLS (data)
+- 471: BED_DIP_DB (data)
+- 472: VOICE_OVER_BED_DB (data)
+- 475: `soundtrack` Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi).
+- 492: `main` 
 
-## brexit_is_done_action.py (1022 lines)
+## brexit_is_done_action.py (1031 lines)
 - 36: HERE (data)
 - 48: B (data)
 - 49: V (data)
@@ -114,54 +115,57 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 278: `w1` W1 and the two wolves on him: returns [(depth, draw)]. u is shot time; the attack's clock starts LEAD s in.
 - 379: LIFT_END (data)
 - 380: RUN_SPEED (data)
-- 383: `_runner_x` 
-- 387: `runner` W2 on the 9.6 m lift and the two wolves after him.
-- 451: BAR_X (data)
-- 452: BAR_MEN (data)
-- 459: LUNGES (data)
-- 460: STRIKE (data)
-- 461: CLANG (data)
-- 464: `_exchange` The latest exchange of wolf (or man) k at time u: (seconds into it, its number) or (None, -1).
-- 473: `_bar_man` Two hands on the tube at chest height. As his wolf lunges he gives ground (a step back, leaning away, the tube
-- 509: `bars` 
-- 590: WEAR (data)
-- 591: BLOODY (data)
-- 594: `milling` 
-- 631: DOOR (data)
-- 640: PASSES (data)
-- 658: PASSAGE_D (data)
-- 659: PASSAGE_X (data)
-- 662: `_from_passage` 
-- 673: ROOM_WOLF (data)
-- 674: TOSS (data)
-- 675: RUN_STEP (data)
-- 678: `_guest_pose` A running guest's yaw and joints: straight at us out of the doorway (front_run), three-quarter on a diagonal,
-- 691: `_beyond_door` 
-- 695: `tray_state` Where the tray and the three glasses are at shot time u: before TOSS on the butler's palm (None: drawn with
-- 719: `tray_movers` Every guest and wolf of the chase as moves.kicked / moves.trodden want them.
-- 724: `tray_track` Where the fallen tray lies at u, or None while it is in the air (the check moves.trodden reads it).
-- 730: `_tray` The silver tray: an ellipse in perspective (thin when level with the eye), tumbling in the air, flat on the
-- 766: `_ell` 
-- 772: `_flute` A champagne flute (stem, foot, bowl) of height 0.2 m * s px-per-m, turned `ang` radians.
-- 790: `_glass_down` A glass that has landed: shards flung a little way and still, champagne spreading into a wet pool.
-- 825: `lunger` Wp, the last pounce on Blair; the film cuts on the lunge (item 13, locked), before it reaches him. It closes
-- 871: LUNGE_CUT (data)
-- 872: LUNGE_LEN (data)
-- 873: LUNGE_COIL (data)
-- 874: LUNGE_CREEP (data)
-- 875: LUNGE_D (data)
-- 876: LUNGE_STALK (data)
-- 877: LUNGE_PATH (data)
-- 878: LUNGE_T (data)
-- 881: READ_TIMES (data)
-- 884: LOCK_GAP (data)
-- 885: _LOCK (data)
-- 888: `_box` 
-- 896: `_ranks` Who is drawn in front of whom at chase frame n (25 a second), stuck once two overlap (Sam, 26 Nov: "Decide who
-- 927: `room_actors` room_actors with the chase's drawing order stuck (see _ranks): the depths handed to the painter keep each
-- 952: `_raw_actors` Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway).
-- 1013: `set_cam` The level camera as a 3D set camera (lying.py's bodies and floor-placed people need one).
-- 1019: `site_actors` Every background actor of shot 2 at shot time u: [(depth, draw)].
+- 381: LEAP_T (data)
+- 382: LEAP_SEEN (data)
+- 385: `leap_point` The runner's screen point at shot time u (for readtime.on_screen: is the leap inside the frame?).
+- 392: `_runner_x` 
+- 396: `runner` W2 on the 9.6 m lift and the two wolves after him.
+- 460: BAR_X (data)
+- 461: BAR_MEN (data)
+- 468: LUNGES (data)
+- 469: STRIKE (data)
+- 470: CLANG (data)
+- 473: `_exchange` The latest exchange of wolf (or man) k at time u: (seconds into it, its number) or (None, -1).
+- 482: `_bar_man` Two hands on the tube at chest height. As his wolf lunges he gives ground (a step back, leaning away, the tube
+- 518: `bars` 
+- 599: WEAR (data)
+- 600: BLOODY (data)
+- 603: `milling` 
+- 640: DOOR (data)
+- 649: PASSES (data)
+- 667: PASSAGE_D (data)
+- 668: PASSAGE_X (data)
+- 671: `_from_passage` 
+- 682: ROOM_WOLF (data)
+- 683: TOSS (data)
+- 684: RUN_STEP (data)
+- 687: `_guest_pose` A running guest's yaw and joints: straight at us out of the doorway (front_run), three-quarter on a diagonal,
+- 700: `_beyond_door` 
+- 704: `tray_state` Where the tray and the three glasses are at shot time u: before TOSS on the butler's palm (None: drawn with
+- 728: `tray_movers` Every guest and wolf of the chase as moves.kicked / moves.trodden want them.
+- 733: `tray_track` Where the fallen tray lies at u, or None while it is in the air (the check moves.trodden reads it).
+- 739: `_tray` The silver tray: an ellipse in perspective (thin when level with the eye), tumbling in the air, flat on the
+- 775: `_ell` 
+- 781: `_flute` A champagne flute (stem, foot, bowl) of height 0.2 m * s px-per-m, turned `ang` radians.
+- 799: `_glass_down` A glass that has landed: shards flung a little way and still, champagne spreading into a wet pool.
+- 834: `lunger` Wp, the last pounce on Blair; the film cuts on the lunge (item 13, locked), before it reaches him. It closes
+- 880: LUNGE_CUT (data)
+- 881: LUNGE_LEN (data)
+- 882: LUNGE_COIL (data)
+- 883: LUNGE_CREEP (data)
+- 884: LUNGE_D (data)
+- 885: LUNGE_STALK (data)
+- 886: LUNGE_PATH (data)
+- 887: LUNGE_T (data)
+- 890: READ_TIMES (data)
+- 893: LOCK_GAP (data)
+- 894: _LOCK (data)
+- 897: `_box` 
+- 905: `_ranks` Who is drawn in front of whom at chase frame n (25 a second), stuck once two overlap (Sam, 26 Nov: "Decide who
+- 936: `room_actors` room_actors with the chase's drawing order stuck (see _ranks): the depths handed to the painter keep each
+- 961: `_raw_actors` Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway).
+- 1022: `set_cam` The level camera as a 3D set camera (lying.py's bodies and floor-placed people need one).
+- 1028: `site_actors` Every background actor of shot 2 at shot time u: [(depth, draw)].
 
 ## brexit-is-done-people.txt (5 people; a note on a person changes their lines)
 - 3: may (Theresa May (the BBC interview, Nov : plum jacket, patterned blouse, pearls)): head: house may, hair bob, look detail; outfit: suit , shirt white, no tie, open collar; extras: pattern; tailoring: v_wide , v_deep , lapel_w , v_collar , v_close , lapel_x , stripe_w , plaid; body: , woman, shoulders
@@ -181,38 +185,38 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 16: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, far right)
 - 17: May, chest up, turned to screen-left, looking off-frame left): block (the floor: dark carpet; Added, the tall frame shows it)
 ### site (shot 2
-- 30: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): sky (the overcast)
-- 31: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a cloud bank
-- 32: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): cloud (a darker bank)
-- 33: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a low cloud
-- 34: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the blue crane
-- 35: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the red crane
-- 36: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the frame
-- 37: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pipe (a drain run down the face)
-- 38: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a big orange pipe riser
-- 39: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pipe (a second riser)
-- 40: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a pipe end out of a slab
-- 41: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): another pipe end
-- 42: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the scaffold, inner
-- 43: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the scaffold, outer; seed was 3: chat 11 keeps the 6.4 m lift open where the bar fight is, so the barrier boards never hide the tubes
-- 44: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the blue hoarding
-- 45: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the skip
-- 46: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pipe stack (the big pipes)
-- 47: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pallet (the blocks)
-- 48: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the sand heap
-- 49: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the fence
-- 50: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a cone
-- 51: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a near cone
-- 52: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): dirt (the dusty ground)
+- 32: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): sky (the overcast)
+- 33: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a cloud bank
+- 34: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): cloud (a darker bank)
+- 35: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a low cloud
+- 36: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the blue crane
+- 37: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the red crane
+- 38: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the frame
+- 39: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pipe (a drain run down the face)
+- 40: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a big orange pipe riser
+- 41: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pipe (a second riser)
+- 42: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a pipe end out of a slab
+- 43: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): another pipe end
+- 44: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the scaffold, inner
+- 45: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the scaffold, outer; seed was 3: chat 11 keeps the 6.4 m lift open where the bar fight is, so the barrier boards never hide the tubes
+- 46: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the blue hoarding
+- 47: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the skip
+- 48: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pipe stack (the big pipes)
+- 49: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): pallet (the blocks)
+- 50: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the sand heap
+- 51: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): the fence
+- 52: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a cone
+- 53: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): a near cone
+- 54: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800): dirt (the dusty ground)
 ### blair
-- 61: panels (the oak panelling)
-- 62: block (the cornice)
-- 63: the bookcases, left
-- 64: the bookcases, right
-- 65: the double doors; the corridor behind, its cross passage at 13.35-14.95 m: note 15
-- 66: block (the floor)
-- 67: carpet (the rug)
-- 68: the chandelier
+- 63: panels (the oak panelling)
+- 64: block (the cornice)
+- 65: the bookcases, left
+- 66: the bookcases, right
+- 67: the double doors; the corridor behind, its cross passage at 13.35-14.95 m: note 15
+- 68: block (the floor)
+- 69: carpet (the rug)
+- 70: the chandelier
 
 ## brexit-is-done-moves.txt (44 lines; a note on a move changes its line: open that line)
 ### 1 (may)
@@ -238,8 +242,8 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 29: row: 10 "...more time doing his job: reducing the number of British people with their face
 ### kemi
 - 31: face: stare | blink shut start start | disdain Andy | stare less | curt job | flat job | stare faces | 
-- 32: R: rest less | press less less | rest backwards | rest job | chop wide high job | chop wide low job | p
-- 33: L: rest backwards | point back swing backwards | point back mid backwards | point back backwards backwa
+- 32: R: rest less | press less less | rest backwards | point side swing backwards | point side backwards bac
+- 33: L: rest backwards # chat Sam note : the point moved the hand on the carnage side out her left it ran of
 - 34: keys shoulders: start | start | start
 - 35: body: chin up start # chat Sam note : comically large : moved it px; moved it
 - 36: body: tilt Andy less
@@ -266,4 +270,4 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 58: keys look:
 - 59: idle: roll shifts
 
-(The shared code this film uses, 117 files, is mapped in story/brexit-is-done-page-shared.md: show and find search it too; do not read it whole.)
+(The shared code this film uses, 120 files, is mapped in story/brexit-is-done-page-shared.md: show and find search it too; do not read it whole.)

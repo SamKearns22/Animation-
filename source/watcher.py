@@ -104,6 +104,14 @@ PROMISES = {
     'takes.py': ('the voice check hears the cleaned take the film plays, and says so when it reads a raw file the film does not play (lesson named-lines, change 3)', 'kittest takes_cleaned_and_registered'),
     'staging.py': ('no shot reaches Sam as a clip or animatic before he has seen its framing (rule 11, lesson staging-stills)', 'kittest staging_stills_milburn_replay'),
     'satire_template.py': ('a new satire film starts from the house template', 'named: used by hand'),
+    # cost-spike fix (Sam's Y, 27 Nov)
+    'touch.py': ('"what uses this, which checks rerun" is answered exactly in one step', 'kittest touch_index'),
+    'touch.py hook': ('after an edit to code the chat is told the one line of kit tests to rerun', 'kittest touch_index'),
+    'touch_faults': ('the who-uses-this index is fresh and every big file opens with a matching MAP', 'kittest maps_on_big_files'),
+    'notesteps.py': ('a note past 12 steps is asked what is stuck; past 20 it stops and is reported', 'kittest notes_step_counter'),
+    'chainguard.py': ('every chat in the chain runs on the model its handover names; create_session always passes one', 'kittest chain_model_lock'),
+    'fixpack_faults': ('a fixing chat is told to read the one-page fix pack', 'kittest fix_pack_named'),
+    'appcost_faults': ("each chat's own app cost figure is recorded beside the estimate; a gap over 25% is flagged", 'kittest app_cost_gap'),
 }
 
 

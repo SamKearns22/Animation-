@@ -232,10 +232,12 @@ def parse_file(path, rel, known):
 # ------------------------------------------------------------------------------------------------ the index
 def film_modules(root=ROOT):
     """A film's own code: a module with a top-level SHOTS (or its stem's sibling), as checkaudit counts it."""
-    sys.path.insert(0, os.path.join(root, 'source'))
-    try:
-        import checkaudit
-        return set(checkaudit.film_modules())
+    import importlib.util                       # loaded apart: never left in sys.modules or sys.path (a test's
+    try:                                        # stand-in tree once replaced the real checkaudit for later tests)
+        spec = importlib.util.spec_from_file_location('_touch_checkaudit', os.path.join(root, 'source', 'checkaudit.py'))
+        m = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(m)
+        return set(m.film_modules())
     except Exception:
         return set()
 

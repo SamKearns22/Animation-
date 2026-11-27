@@ -349,7 +349,8 @@ def static_loads():
         g[m.split('.')[-1]] = sorted(d for d in deps if d in top)
     films = {k for k in g if FILM.match(k) and not k.startswith('gta')}
     kit = [k for k in g if k not in films and not k.startswith('gta')]
-    loads = sorted(k for k in kit if any(d in films for d in g[k]))
+    loads = sorted({'kittests' if k.startswith('kittests') else k   # its topic files (split 27 Nov) count as one
+                    for k in kit if any(d in films for d in g[k])})
     seen, st = set(), ['people', 'places']
     while st:
         x = st.pop()
