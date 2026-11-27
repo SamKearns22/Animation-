@@ -40,9 +40,15 @@ Count: real 5 (4 separate faults), borderline 2, taste 3, misread 7.
 | c09 | blood spots on Blair come and go | misread: his red tie |
 | c16 | woman in red vanishes for good | misread: she runs behind the seated man |
 | c16 | guest's feet on top of the armchair (29.417) | REAL |
-| c12 | (see below) | |
+| c12 | bald guest's body merges with the woman's (20.333-20.417) | REAL (clipping, the same kind as Sam's note 23.4) |
+| c12 | grey wolf lies down and gets a brown dog's head (20.25) | REAL: two animals overlap and read as one |
+| c12 | dark-haired guest's legs inside the brown dog (20.917) | REAL (overlap) |
+
+Extras count (13): real 6, borderline 2, misread 5.
 
 ## What this says
+- Of the extras, about half are real faults Sam never noted (tray floating, foot on the armchair, guests
+  running through each other).
 - About a third of the watch judges' flags on passed moves are real faults Sam let pass (a floating gun, a hand
   with no arm, bystanders not reacting to an explosion). About 40% are misreadings, mostly something covered by
   another thing in front, which the judges read as a vanish.
