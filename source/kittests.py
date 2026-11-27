@@ -6875,6 +6875,62 @@ def seeing_views_see_a_vanish():
 
 
 @test
+def seeing_watch_shows_every_frame():
+    """seeing.py watch (Sam's Y 27 Nov, the watch-the-clip test): a made-up film, 20 frames: a big still 'person 1'
+    fills the left, a small 'person 2' square hops along the bottom right. Every frame must be on a whole-frame
+    sheet (each sheet starting on the last frame of the one before), each person must get a coloured outline, and
+    the close-up must hold the small mover, not the big still figure."""
+    import tempfile
+    import types
+    import numpy as np
+    import seeing as SE
+    from PIL import Image, ImageDraw
+    mod = types.ModuleType('seeing_watch_film')
+    mod.__file__ = os.path.join(HERE, 'seeing_watch_film.py')
+    mod.FPS = 12
+
+    def pic(t):
+        img = Image.new('RGB', (1080, 1920), (200, 220, 240))
+        i = int(round(t * 12))
+        x = 640 + 12 * i
+        items = [('person 1', 20.0, lambda im: ImageDraw.Draw(im).rectangle((60, 300, 560, 1800), fill=(150, 60, 40))),
+                 ('person 2', 10.0, lambda im, x=x: ImageDraw.Draw(im).rectangle(
+                     (x, 1500 - 30 * (i % 2), x + 80, 1700 - 30 * (i % 2)), fill=(30, 30, 160)))]
+        for e in mod.sorted(items, key=lambda e: -e[1]):
+            e[2](img)
+        return img
+    mod.sorted = sorted
+    mod.picture = mod.world4 = pic              # world4: the street films' sorted-items marker
+    sys.modules['seeing_watch_film'] = mod
+    out = tempfile.mkdtemp()
+    here, path = os.getcwd(), list(sys.path)
+    try:
+        SE.frames(HERE, 'seeing_watch_film', 0.0, 20 / 12, out)
+    finally:
+        os.chdir(here)
+        sys.path[:] = path
+        sys.modules.pop('seeing_watch_film', None)
+    paths = SE.watch(out)
+    whole = [p for p in paths if 'zoom' not in p]
+    zoom = [p for p in paths if 'zoom' in p]
+    per = SE.WCOLS * SE.WROWS
+    shown = set()
+    for s in range(0, 19, per - 1):
+        shown |= set(range(s, min(s + per, 20)))
+    o = np.asarray(SE.outline_image(os.path.join(out, 'frames', '000.png'), os.path.join(out, 'layers', '000.npz')))
+    plain = np.asarray(Image.open(os.path.join(out, 'frames', '000.png')).convert('RGB'))
+    ring = np.abs(o.astype(int) - plain).sum(2) > 60
+    box = SE.busy_box(SE.case_frames(out)[1])
+    sx = SE.W / 1080
+    holds = box is not None and box[0] <= 640 * sx and box[2] >= (640 + 12 * 19 + 80) * sx and box[0] > 560 * sx * 0.5
+    ok = (shown == set(range(20)) and len(whole) == len(range(0, 19, per - 1)) and ring[:, :SE.W // 2].any()
+          and ring[:, SE.W // 2:].any() and holds and len(zoom) == len(whole))
+    return ok, (f'{len(whole)} whole-frame sheets show frames {min(shown)}-{max(shown)} of 0-19; outlines on both '
+                f'people: {ring[:, :SE.W // 2].any()}/{ring[:, SE.W // 2:].any()}; close-up {box} '
+                f'({"holds the small mover" if holds else "misses it"}), {len(zoom)} close-up sheets')
+
+
+@test
 def body_model_downloads_once():
     """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
     not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight
