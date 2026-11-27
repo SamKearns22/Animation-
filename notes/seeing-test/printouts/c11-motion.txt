@@ -1,0 +1,5 @@
+2.58 s  jump: the fastest part moved 67 px in one frame (span usual 8)
+2.67 s  jump: the fastest part moved 36 px in one frame (span usual 8)
+3.92 s  jump: the fastest part moved 40 px in one frame (span usual 8)
+4.00 s  jump: the fastest part moved 37 px in one frame (span usual 8)
+4.17 s  jump: the fastest part moved 27 px in one frame (span usual 8)

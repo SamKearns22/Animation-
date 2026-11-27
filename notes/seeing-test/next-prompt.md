@@ -1,0 +1,1 @@
+Seeing test, chat 2 (scoring and Sam's table). Opus, medium effort. Read CLAUDE.md, then notes/seeing-test.md ("Where things stand") and do its "Next" line. Parent chat: session_01J1JB7Vrny18WkjhSqkatGT.

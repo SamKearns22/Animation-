@@ -1,0 +1,4 @@
+4.25 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 21x12 px at (291,416) of 540x960
+4.33 s  jump: the fastest part moved 45 px in one frame (span usual 8)
+4.33 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 14x21 px at (196,663) of 540x960
+4.42 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 34x37 px at (217,557) of 540x960

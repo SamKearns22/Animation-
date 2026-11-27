@@ -1,0 +1,20 @@
+20.08 s  people found: 4 -> 3
+20.17 s  people found: 3 -> 4
+20.25 s  people found: 4 -> 3
+20.33 s  people found: 3 -> 5
+20.42 s  people found: 5 -> 3
+20.50 s  people found: 3 -> 5
+20.58 s  people found: 5 -> 2
+20.67 s  people found: 2 -> 4
+20.67 s  main object cut-out size 95279 -> 50856 px
+20.75 s  people found: 4 -> 6
+20.83 s  people found: 6 -> 3
+20.92 s  people found: 3 -> 4
+21.00 s  people found: 4 -> 3
+21.08 s  people found: 3 -> 2
+21.17 s  people found: 2 -> 1
+21.25 s  people found: 1 -> 4
+21.33 s  people found: 4 -> 5
+21.42 s  people found: 5 -> 4
+21.42 s  main object cut-out size 53711 -> 79408 px
+21.50 s  people found: 4 -> 3

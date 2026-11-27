@@ -97,9 +97,15 @@ def faults(film, sheet=None):
     out, tiles = [], []
     for name, draw in film.LINE_SUBJECTS():
         lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
-        draw(lay)
+        got = draw(lay)
         found, bad = analyse(lay)
+        face = got.get('face') if isinstance(got, dict) else None
         for kind, x, y, det in found:
+            if face and kind != 'no outline' and \
+                    ((x - face[0]) / face[2]) ** 2 + ((y - face[1]) / face[3]) ** 2 <= 1:
+                continue                # check audit B8 (26 Nov): brows and an open mouth (its dark inside is no line)
+                #                         are flat shapes in every face
+                #                         (the face has its own checks: the cast sheet's mouth, teeth and judge)
             if any(name == n and kind == k and abs(x - ox) < 60 and abs(y - oy) < 60 for n, k, ox, oy in ok):
                 continue
             out.append(f'{name}: {kind} at ({x}, {y}): {det}')

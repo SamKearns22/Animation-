@@ -1,0 +1,35 @@
+19.77 s  bodies found: 0 -> 1
+19.85 s  bodies found: 1 -> 2
+19.93 s  bodies found: 2 -> 1
+19.93 s  a wrist jumped 108 px at (167,446)
+19.93 s  a wrist jumped 113 px at (163,442)
+20.02 s  bodies found: 1 -> 0
+20.18 s  bodies found: 0 -> 1
+20.35 s  bodies found: 1 -> 0
+20.43 s  bodies found: 0 -> 1
+20.52 s  bodies found: 1 -> 2
+20.52 s  a wrist jumped 110 px at (110,414)
+20.52 s  a wrist jumped 82 px at (163,441)
+20.52 s  a wrist jumped 89 px at (127,432)
+20.60 s  bodies found: 2 -> 1
+20.60 s  a wrist jumped 49 px at (167,392)
+20.68 s  bodies found: 1 -> 0
+20.77 s  bodies found: 0 -> 1
+20.85 s  bodies found: 1 -> 2
+20.85 s  a wrist jumped 95 px at (129,366)
+20.85 s  a wrist jumped 58 px at (157,397)
+20.85 s  a wrist jumped 93 px at (134,367)
+21.02 s  bodies found: 2 -> 0
+21.18 s  bodies found: 0 -> 1
+21.27 s  bodies found: 1 -> 0
+21.35 s  bodies found: 0 -> 1
+21.43 s  bodies found: 1 -> 2
+21.43 s  a wrist jumped 59 px at (193,425)
+21.52 s  bodies found: 2 -> 1
+21.60 s  bodies found: 1 -> 0
+21.68 s  bodies found: 0 -> 1
+21.77 s  bodies found: 1 -> 0
+21.85 s  bodies found: 0 -> 1
+21.93 s  a wrist jumped 65 px at (196,414)
+21.93 s  a wrist jumped 55 px at (203,397)
+22.02 s  bodies found: 1 -> 0

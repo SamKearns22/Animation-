@@ -183,10 +183,53 @@ def pieces(ln, fix=None, most=4):
         for (c, _), (_, share) in zip(ch[1:], ch[:-1]):
             a += share * ln.get('_dur', ln.get('end', 0) - ln.get('start', 0))
             out.append([c, max(out[-1][1] + 0.45, a)])
+    out = fit(out, ln.get('_dur', ln.get('end', 0) - ln.get('start', 0)) + 0.45)
     for i, at in ((fix or {}).get(ln.get('n'), {}) or {}).items():
         out[i][1] = at
     ln['_pieces'] = [tuple(p) for p in out]
     return ln['_pieces']
+
+
+def need(text, speed=SPEED, fps=12):
+    """Seconds a piece needs on screen in the film's own time, so the delivered file (at `speed`) keeps it up at
+    least 0.8 s and at most 220 words a minute (readable_faults' limits), with a drawing to spare."""
+    return max(0.8, len(text.split()) * 60 / 220) * speed + 1.0 / fps
+
+
+def fit(out, end, speed=SPEED):
+    """Check audit A2 (26 Nov; Open Wounds' captions flagged 'too fast to read' on 9 runs, the kit and the check never
+    agreeing): each piece made readable where it is made. While the pieces' times fit the line, each comes up as near
+    its syllable as it can: later only as far as the piece before needs, earlier only as far as the line's end needs
+    (`end`: seconds into the line). When they cannot all fit, the shortest neighbours join, if the two are at most 5
+    words in two rows (the kit's 3-5 words); a piece that still cannot fit is left, and the check still says so."""
+    out = [list(p) for p in out]
+    while True:
+        first = out[0][1]
+        for k in range(1, len(out)):                        # forward: never before the last piece has had its time
+            out[k][1] = max(out[k][1], out[k - 1][1] + need(out[k - 1][0], speed))
+        lim = end
+        for k in range(len(out) - 1, 0, -1):               # backward: never so late the next has no time
+            out[k][1] = max(first, min(out[k][1], lim - need(out[k][0], speed)))
+            lim = out[k][1]
+        gaps = [((out[k + 1][1] if k + 1 < len(out) else end) - out[k][1]) - need(out[k][0], speed)
+                for k in range(len(out))]
+        bad = [k for k, g in enumerate(gaps) if g < -1e-6]
+        if not bad or len(out) < 2:
+            return out
+        joined = False
+        for i in bad:
+            for j in sorted({i - 1, i + 1} & set(range(len(out))), key=lambda q: len(out[q][0].split())):
+                lo, hi = sorted((i, j))
+                text = out[lo][0] + ' ' + out[hi][0]
+                if len(text.split()) <= 5 and len(rows(text)) <= 2 and \
+                        max(_font().getbbox(r)[2] for r in rows(text)) <= WIDE:
+                    out[lo:hi + 1] = [[text, out[lo][1]]]
+                    joined = True
+                    break
+            if joined:
+                break
+        if not joined:
+            return out
 
 
 def caption_at(lines, t, fix=None, lead=0.05, tail=0.45):

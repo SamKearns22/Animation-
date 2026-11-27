@@ -1,0 +1,4 @@
+24.35 s  person 138 vanished mid-frame (had 165 px, not at the edge)
+24.35 s  person 136 vanished mid-frame (had 326 px, not at the edge)
+24.35 s  person 139 vanished mid-frame (had 450 px, not at the edge)
+24.35 s  jason vanished mid-frame (had 9853 px, not at the edge)

@@ -6532,6 +6532,58 @@ def smirk_one_corner():
 
 
 @test
+def seeing_views_see_a_vanish():
+    """seeing.py (seeing-five-candidates option 1, Sam's Y 26 Nov): a made-up film paints a sorted item list (as Grand
+    Theft Autism's street does): a 'person' square walks right and vanishes mid-frame at frame 3 (GTA v5 note 5's
+    kind), a 'wall' stays. The item wrapper must record both as layers, the who-is-where events must name the
+    vanish, the movement measure must print an unexplained change at that frame, and every sheet must be saved."""
+    import tempfile
+    import types
+    import seeing as SE
+    from PIL import Image, ImageDraw
+    mod = types.ModuleType('seeing_kit_film')
+    mod.__file__ = os.path.join(HERE, 'seeing_kit_film.py')     # counts as the film's own code
+    mod.FPS = 12
+
+    def world4(t):
+        img = Image.new('RGB', (1080, 1920), (200, 220, 240))
+        i = int(round(t * 12))
+        items = [('wall', 30.0, lambda im: ImageDraw.Draw(im).rectangle((700, 600, 1000, 1400), fill=(120, 90, 70)))]
+        if i < 3:
+            x = 200 + 40 * i
+            items.append(('person 1', 10.0, lambda im, x=x: ImageDraw.Draw(im).rectangle(
+                (x, 800, x + 160, 1300), fill=(30, 30, 160))))
+        for e in mod.sorted(items, key=lambda e: -e[1]):
+            e[2](img)
+        return img
+    mod.world4 = world4
+    mod.sorted = sorted
+    mod.picture = world4
+    sys.modules['seeing_kit_film'] = mod
+    out = tempfile.mkdtemp()
+    here = os.getcwd()
+    path = list(sys.path)
+    try:
+        SE.frames(HERE, 'seeing_kit_film', 0.0, 6 / 12, out)
+    finally:
+        os.chdir(here)
+        sys.path[:] = path
+        sys.modules.pop('seeing_kit_film', None)
+    _, painted, meta = SE.load_layers(os.path.join(out, 'layers', '001.npz'))
+    names = [L['name'] for L in meta]
+    if names != ['wall', 'person 1']:
+        return False, f'layers recorded: {names} (want wall, person 1)'
+    wev = [m for t, m in SE.whereis_events(out) if 'vanished' in m]
+    mev, F = SE.motion_events(out)
+    at3 = [m for t, m in mev if abs(t - 3 / 12) < 1e-3 and 'unexplained' in m]
+    SE.views(out, ('plain', 'whereis', 'motion'))
+    sheets = [v for v in ('plain', 'whereis', 'motion') if os.path.exists(os.path.join(out, v + '.jpg'))]
+    ok = bool(wev) and bool(at3) and len(sheets) == 3
+    return ok, (f'who-is-where: {wev[:1] or "no vanish"}; movement at the vanish: {at3[:1] or "nothing"}; '
+                f'sheets {sheets}')
+
+
+@test
 def body_model_downloads_once():
     """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
     not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight
@@ -6782,6 +6834,63 @@ def critique_saw_it_column():
     if c.get('yes') != 1 or c.get('no critique') != 1 or c.get('blank') != 1:
         out.append(f'counted wrong: {dict(c)}')
     return (not out), ('; '.join(out) or f'blank refused (note 2); old table not asked; counted {dict(c)}')
+
+
+@test
+def line_check_whole_person():
+    """Check audit B8 (26 Nov; saved example: Open Wounds' checks.jsonl, 'may: no outline at (674, 14)' and 'blair: edge
+    with no line at (502, 14)' on 6 runs): the line check drew each person alone with the head off the top of the
+    picture, so the cut read as a missing outline. Now the whole person fits (nothing touches the picture's edge),
+    May and Blair are clean (their brows and open mouth are flat on purpose; the face has its own checks), and a
+    flat patch painted on Blair's jacket with no line round it is still caught."""
+    import importlib
+    import body as B
+    import kitinputs as K
+    import linecheck as LC
+    from PIL import Image, ImageDraw
+    f = importlib.import_module('brexit_is_done')
+    B.SS = 1
+    subs = dict(K.line_subjects(f, {w: 1.6 for w in f.CAST})())
+    out = []
+    for who in ('may', 'blair'):
+        lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+        subs[who](lay)
+        x0, y0, x1, y1 = lay.getbbox()
+        if y0 <= 2 or y1 >= 1918 or x0 <= 2 or x1 >= 1078:
+            out.append(f'{who} touches the picture edge {lay.getbbox()}')
+    film = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [(w, subs[w]) for w in ('may', 'blair')])})
+    clean = LC.faults(film)
+    if clean:
+        out.append(f'faults on May and Blair: {clean}')
+
+    def patched(img):
+        got = subs['may'](img)                         # May's plum jacket (Blair's suit is near-black: read as ink)
+        ImageDraw.Draw(img).rectangle([470, 900, 610, 1040], fill=(230, 200, 60, 255))   # on the jacket, no line
+        return got
+    film2 = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [('may', patched)])})
+    caught = LC.faults(film2)
+    if not any('edge with no line' in x for x in caught):
+        out.append(f'an unlined patch on the jacket was missed: {caught}')
+    return (not out), ('; '.join(out) or f'whole people fit; May and Blair clean; the painted patch caught ({caught[0][:60]})')
+
+
+@test
+def subtitles_fit_where_made():
+    """Check audit A2 (Sam's Y, 26 Nov; saved example: Open Wounds' checks.jsonl, 'caption "The Prime Minister": 0.76 s
+    on screen at 1.1x for 3 words (too fast to read)' and three more, on 9 runs): the subtitle kit makes each piece
+    readable when it is made (moves its neighbours a little, or joins two short ones up to 5 words), so the check
+    agrees. Open Wounds' captions now pass at the delivered speed; a line spoken too fast for any timing is still
+    flagged; pieces with room stay where they were."""
+    import importlib
+    import subtitles as SUB
+    f = importlib.import_module('brexit_is_done')
+    ow = SUB.readable_faults(f.caption_at, getattr(f, 'BLACK_AT', getattr(f, 'DUR', 60)), getattr(f, 'FPS', 12))
+    roomy = SUB.fit([['one two three', 0.0], ['four five six', 2.0]], 4.5)
+    cram = [dict(n=1, text='one two three four. five six seven eight. nine ten eleven twelve.', start=0.0, end=1.5,
+                 _dur=1.5)]
+    bad = SUB.readable_faults(lambda t: SUB.caption_at(cram, t), 3.0, 12)
+    ok = not ow and roomy == [['one two three', 0.0], ['four five six', 2.0]] and bad
+    return ok, f'Open Wounds: {len(ow)} caption fault(s) {ow[:1]}; roomy pieces kept: {roomy}; crammed line flagged: {len(bad)}'
 
 
 def main():
