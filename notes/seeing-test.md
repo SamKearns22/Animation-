@@ -73,4 +73,4 @@ version Sam flagged (c06, 21.33-22.75 s) the trousers bulge out below that edge.
   WT/source), then `seeing.py watch CASE`; GTA cases ~14 min each, run 4 at once; render c01 alone first (it
   downloads the body model). Old commits' GTA code races that download if two start together.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.56% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 4.1% of a week (2026-11-27)
