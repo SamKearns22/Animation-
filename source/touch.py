@@ -282,8 +282,7 @@ def build(root=ROOT, cache=CACHE, quiet=True):
     for rel in files:
         p = os.path.join(root, rel)
         st = os.stat(p)
-        stamp = [st.st_mtime_ns, st.st_size] + [os.stat(f).st_mtime_ns for f in _family(p) if f != p
-                                                 and os.path.exists(f)]    # a part is parsed again when its module changes
+        stamp = _stamp(p)
         cp = os.path.join(cache, 'parse', rel.replace(os.sep, '__') + '.pkl')
         got = None
         try:
@@ -377,11 +376,17 @@ def load(root=ROOT, cache=CACHE):
     return idx
 
 
+def _stamp(p):
+    """A file's stamp: its time and size, and for a module kept in parts its family's times too (a part is parsed
+    again when its module changes)."""
+    st = os.stat(p)
+    return [st.st_mtime_ns, st.st_size] + [os.stat(f).st_mtime_ns for f in _family(p) if f != p and os.path.exists(f)]
+
+
 def _changed(idx, root=ROOT):
     now = {}
     for rel in _files(root):
-        st = os.stat(os.path.join(root, rel))
-        now[rel] = [st.st_mtime_ns, st.st_size]
+        now[rel] = _stamp(os.path.join(root, rel))
     return sorted(r for r in set(now) | set(idx['stamps']) if now.get(r) != idx['stamps'].get(r))
 
 
