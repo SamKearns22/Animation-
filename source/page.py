@@ -100,7 +100,9 @@ def files(film):
         for m in _imports(todo.pop()):
             if m not in seen and m not in others:
                 seen.add(m); todo.append(os.path.join(HERE, m + '.py'))
-    return mine + sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine} - {'page'})
+    import parts                                 # a module kept in parts (cost-spike fix 5c): its parts are searched too
+    shared = sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine} - {'page'})
+    return mine + [x for f in shared for x in parts.family(f)]
 
 
 def tokens(text):

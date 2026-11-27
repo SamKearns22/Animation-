@@ -42,7 +42,7 @@ ROOT = os.path.dirname(HERE)
 CACHE = os.environ.get('TOUCH_CACHE') or os.path.expanduser('~/.claude/touch')
 DIRS = ('source', os.path.join('.claude', 'hooks'))
 CHECK_NAME = re.compile(r'(_faults$|^check_|_check$|gate|^audit|_audit$|_guard$|^lint|^test$)')
-VERSION = 7
+VERSION = 9
 
 
 # ------------------------------------------------------------------------------------------------ one file -> facts
@@ -164,7 +164,8 @@ def parse_file(path, rel, known):
         tree = ast.parse(src)
     except (SyntaxError, UnicodeDecodeError, ValueError) as e:
         return {'error': str(e)[:120]}
-    mod = _mod(rel)
+    fam = _family(path)                        # a module kept in parts (parts.py): one module, one namespace
+    mod = _mod(fam[0]) if len(fam) > 1 else _mod(rel)
     top, classes, defs = set(), set(), []
     for n in tree.body:
         if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
@@ -187,9 +188,26 @@ def parse_file(path, rel, known):
                         top.add(x.id)
                         defs.append({'id': f'{mod}.{x.id}', 'line': n.lineno, 'end': n.end_lineno, 'kind': 'table',
                                      'doc': '', 'deco': []})
+    heads = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
+    for sib in fam if len(fam) > 1 else []:      # the other files of the module: their names and imports are this one's
+        if os.path.abspath(sib) == os.path.abspath(path):
+            continue
+        try:
+            st = ast.parse(open(sib, encoding='utf-8').read())
+        except (OSError, SyntaxError, ValueError):
+            continue
+        for n in st.body:
+            if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+                top.add(n.name)
+                if isinstance(n, ast.ClassDef):
+                    classes.add(n.name)
+            elif isinstance(n, (ast.Assign, ast.AnnAssign)):
+                for t in (n.targets if isinstance(n, ast.Assign) else [n.target]):
+                    top |= {x.id for x in ast.walk(t) if isinstance(x, ast.Name)}
+            elif isinstance(n, (ast.Import, ast.ImportFrom)):
+                heads.append(n)
     fx = {'mod': mod, 'top': top, 'classes': classes}
-    m_alias, m_from = _imports(ast.Module(body=[n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))],
-                                          type_ignores=[]), known)
+    m_alias, m_from = _imports(ast.Module(body=heads, type_ignores=[]), known)
     reexport = {k: '%s.%s' % v for k, v in m_from.items()}
     uses, maybe, strings = [], [], {}
 
@@ -226,7 +244,19 @@ def parse_file(path, rel, known):
                    for x in ast.walk(t) if isinstance(x, ast.Name)]
             scan(f'{mod}.{tgt[0]}' if tgt else f'{mod}.<module>', n)
     return {'mod': mod, 'defs': defs, 'uses': uses, 'modalias': m_alias, 'maybe': maybe, 'strings': strings, 'reexport': reexport,
-            'lines': len(src.splitlines()), 'map': 'MAP' in (ast.get_docstring(tree) or '')}
+            'lines': len(src.splitlines()), 'map': 'MAP' in (ast.get_docstring(tree) or ''),
+            'part': len(fam) > 1 and os.path.abspath(fam[0]) != os.path.abspath(path)}
+
+
+def _family(path):
+    """[the module's file, its parts] for a module kept in parts (parts.py, cost-spike fix 5c), else [path]."""
+    if HERE not in sys.path:
+        sys.path.insert(0, HERE)
+    try:
+        import parts
+        return parts.family(path)
+    except Exception:
+        return [path]
 
 
 # ------------------------------------------------------------------------------------------------ the index
@@ -252,7 +282,8 @@ def build(root=ROOT, cache=CACHE, quiet=True):
     for rel in files:
         p = os.path.join(root, rel)
         st = os.stat(p)
-        stamp = [st.st_mtime_ns, st.st_size]
+        stamp = [st.st_mtime_ns, st.st_size] + [os.stat(f).st_mtime_ns for f in _family(p) if f != p
+                                                 and os.path.exists(f)]    # a part is parsed again when its module changes
         cp = os.path.join(cache, 'parse', rel.replace(os.sep, '__') + '.pkl')
         got = None
         try:
@@ -272,7 +303,7 @@ def build(root=ROOT, cache=CACHE, quiet=True):
     films = film_modules(root)
     idx = {'v': VERSION, 'built': time.time(), 'stamps': stamps, 'films': sorted(films),
            'errors': {r: fx['error'] for r, fx in per.items() if 'error' in fx},
-           'files': {fx['mod']: r for r, fx in per.items() if 'mod' in fx},
+           'files': {fx['mod']: r for r, fx in per.items() if 'mod' in fx and not fx.get('part')},
            'lines': {r: fx['lines'] for r, fx in per.items() if 'lines' in fx},
            'maps': {r: fx['map'] for r, fx in per.items() if 'map' in fx},
            'defs': {}, 'callers': {}, 'maybe': {}, 'tests': [], 'calls': {}}

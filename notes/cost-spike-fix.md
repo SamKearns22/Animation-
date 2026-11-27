@@ -122,7 +122,6 @@ the parent chat, 27 Nov).
 - Not yet measured: the next real notes round is the test (`notesteps.py report`). Cost watch went amber at 160 steps
   (2.3% of the week) in this chat; handed over at the end of this build, nothing left mid-way.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.34% of a week (2026-11-27)
 - Handover check answered: finder reach: handover.py, page.py, still.py (tool job: the finder was run on Brexit to
   test the word list, never to find these tools' own code). COST: get_session gives this chat no cost figure (only
   "weekly limit: warning"); the cost watch said about 2.3% of the week at 160 steps. Nothing recorded by guess.
@@ -184,3 +183,5 @@ comparing. Whole chat about 75 steps.
 be redone (Sam's own words are lost); I knew the satire guide names Islamocommunism's acting list as its example
 (did not read it); no Sam review; one chat; the first animatic was not reached, and the animatic stages (sets, film
 code) are where the original spent most (three of four chats).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.92% of a week (2026-11-27)
