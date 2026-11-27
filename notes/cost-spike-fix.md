@@ -231,7 +231,7 @@ braided and long-hair photos for the braids check. Both passed to chat 4 (sessio
   claude/gta-chat31.
 - FREEZE: brexit-is-done added to the freeze list (save 2c00a7b8), bookmarks pushed. Branches the start listed: the same six
   (logs, one-off files), named in chat 1, not merged.
-- Kit run `--touching facehouse._turned_braids` (37 tests) started mid-chat; see the commit for its result line.
+- Kit run `--touching facehouse._turned_braids` (37 tests, 19 min): 35 passed; head_moves_not_comic and early_move_size failed, the same two chats 2 and 3 named (the Brexit film's small nods), not this change.
 
 - COST (chat 4): get_session gives no cost figure (no usage in its record; weekly limit: warning); the step hook said about 2.2% of a week at step 140. Nothing recorded by guess.
 
