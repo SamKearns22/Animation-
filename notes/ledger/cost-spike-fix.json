@@ -8,67 +8,69 @@
    "model": "opus",
    "stage": "tools",
    "round": null,
-   "cost": 2.61,
+   "cost": 2.86,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01J1JB7XURs9drkktpyQsMqf",
-   "steps": 179,
-   "hist_k": 267,
+   "steps": 192,
+   "hist_k": 279,
    "kinds": {
-    "tool search": 21.4,
-    "page.py": 5.3,
-    "renders": 0.6,
-    "pictures": 3.6,
-    "other": 69.1
+    "tool search": 21.3,
+    "page.py": 5.0,
+    "renders": 0.9,
+    "pictures": 3.5,
+    "other": 69.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 101,
+    "tool search": 110,
     "whole-file .py read": 0,
     "page.py": 22,
     "routine": 0,
-    "renders": 3,
+    "renders": 4,
     "pictures": 12,
-    "other": 20
+    "other": 21
    },
    "split": {
-    "usd": 9.544,
-    "total": 9.544,
+    "usd": 10.4711,
+    "total": 10.4711,
     "floor_k": 85,
     "blocks": {
-     "carried history": 32.7,
-     "start-up floor": 30.7,
+     "carried history": 34.0,
+     "start-up floor": 29.9,
      "Claude's words": 21.4,
-     "new writes": 15.3
+     "new writes": 14.8
     },
     "origins": {
-     "Claude's words": 40.7,
-     "start-up floor": 30.7,
-     "result: tool search": 17.0,
+     "Claude's words": 41.4,
+     "start-up floor": 29.9,
+     "result: tool search": 16.9,
      "result: page.py": 3.7,
-     "messages and reminders": 3.3,
+     "messages and reminders": 3.6,
      "result: pictures": 3.2,
      "result: other": 1.1,
-     "Claude's edits": 0.2
+     "Claude's edits": 0.2,
+     "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 30.7,
-     "thinking": 12.7,
-     "writing code": 12.0,
-     "commands": 9.9,
-     "reading kit code": 7.6,
-     "messages to Sam": 5.2,
+     "start-up reading (rules, tools, first files)": 29.9,
+     "thinking": 12.6,
+     "writing code": 12.5,
+     "commands": 9.7,
+     "reading kit code": 7.5,
+     "messages to Sam": 5.4,
      "reading notes": 4.9,
      "start-up and handover tools": 4.0,
-     "running checks and tools": 3.9,
-     "messages and reminders": 3.3,
+     "running checks and tools": 3.8,
+     "messages and reminders": 3.6,
      "looking at pictures": 3.2,
      "other commands": 0.8,
      "writing notes": 0.7,
+     "helper and chat prompts": 0.7,
      "app tools (chats, files sent)": 0.5,
-     "helper and chat prompts": 0.3,
-     "reading chat records": 0.2
+     "reading chat records": 0.3,
+     "renders": 0.1
     },
     "leftover": 0.0
    },
@@ -80,50 +82,50 @@
      [
       "/tmp/claude-0/-home-user-Animation-/8b239ec0-6ed9-56e9-aae5-92b8af726ecb/scratchpad/n19_before.png",
       3.2,
-      0.1206
+      0.1281
      ],
      [
       "source/sitting.py",
       2.0,
-      0.0748
+      0.0796
      ],
      [
       "source/brexit_is_done.py",
       1.8,
-      0.0698
+      0.0741
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/8b239ec0-6ed9-56e9-aae5-92b8af726ecb/scratchpad/n19_shot.png",
       1.6,
-      0.0577
+      0.0615
      ],
      [
       "source/acting.py",
       1.5,
-      0.0545
+      0.0579
      ],
      [
       "guides/fix-pack.md",
       1.3,
-      0.0526
+      0.0557
      ],
      [
       "notes/cost-spike-fix.md",
       1.3,
-      0.0526
+      0.0557
      ],
      [
       "source/page.py",
       0.8,
-      0.0294
+      0.0312
      ],
      [
       ".claude/settings.json",
       0.4,
-      0.0137
+      0.0146
      ]
     ],
-    "base_pct": 28.8
+    "base_pct": 28.2
    },
    "search": {
     "show": 5,
@@ -133,8 +135,8 @@
      "after show": 0
     },
     "other": {
-     "other": 23,
-     "film notes": 11,
+     "other": 28,
+     "film notes": 12,
      "shared:touch.py": 9,
      "shared:brexit_is_done.py": 2,
      "shared:acting.py": 8,
@@ -151,7 +153,10 @@
      "shared:still.py": 1,
      "shared:finish.py": 1,
      "shared:kitfilm.py": 1,
-     "shared:kitstamps.py": 1
+     "shared:kitstamps.py": 1,
+     "shared:watcher.py": 1,
+     "guides": 1,
+     "shared:maps.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -1064,6 +1069,87 @@
       "git add -A && git commit -qm \"Logs Co-Authored-By: Claude Opus 5.5 <noreply@anth",
       "",
       67
+     ],
+     [
+      159,
+      "other",
+      "other",
+      "notes/ledger/ notes/ledger/app-costs.tsv notes/ledger/brexit-is-done.json",
+      "ls notes/ledger/ | head -20; head -3 notes/ledger/app-costs.tsv 2>/dev/null; wc ",
+      "",
+      799
+     ],
+     [
+      160,
+      "other",
+      "other",
+      "notes/ledger/*.json notes/ledger/app-costs.tsv",
+      "ls -t notes/ledger/*.json | head -8; python3 - <<'EOF' import json,glob,os fs=so",
+      "",
+      836
+     ],
+     [
+      161,
+      "other",
+      "film notes",
+      "notes/ledger/ story/status.md",
+      "^- \\*\\*\\|week",
+      "",
+      873
+     ],
+     [
+      162,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Logs Co-Authored-By: Claude Opus 5.5 <noreply@anth",
+      "",
+      267
+     ],
+     [
+      163,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit origin",
+      "",
+      109
+     ],
+     [
+      164,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin && git rev-list --count origin/claude/create-claude-md-oe8z4",
+      "",
+      65
+     ],
+     [
+      165,
+      "other",
+      "shared:watcher.py",
+      "source/*.py source/watcher.py guides/job-packs.md",
+      "promise",
+      "",
+      258
+     ],
+     [
+      166,
+      "other",
+      "guides",
+      "guides/job-packs.md source/data/freeze/films.json",
+      "sed -n 70,76p guides/job-packs.md | cut -c1-250; python3 -c \" import json;d=json",
+      "",
+      911
+     ],
+     [
+      168,
+      "other",
+      "shared:maps.py",
+      "notes/cost-spike-fix.md source/maps.py source/kittests_health.py source/kittests",
+      " What was said, with all of 27 Nov's work in (savings 1-8, fix pack step 4):\n- a",
+      "",
+      217
      ]
     ]
    },
