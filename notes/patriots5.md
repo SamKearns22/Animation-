@@ -185,4 +185,4 @@ Screenplay and title: given 27 Nov 2026 (the film's start: kit tests, rule 90)
 - "Every video: Hook Text and the CranbriJoos sign-off; no title by defau": Hook Text beside a person, three rows (`--w`); 😅 emoji [`source/hook_text.py`, `1f605.png`]; Word times from Sam's takes (speech-to-text; Open Wounds chat 29, 26 Nov, Sam's  [`source/words.py` (`times`, `text`, `track`, `at_word`); in ]
 - "Sound: voices only (the script names no sound effects)": The proposal route (Sam, 15 Nov): any change to rules, tools, checks, kits or ho [`source/propose.py` (`new`, `pack`, `judge`, `record`, `show]; Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 7% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 7.99% of a week (2026-11-27)
