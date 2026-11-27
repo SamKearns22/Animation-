@@ -27,8 +27,9 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
 - [x] A separate scorer with the key (notes/seeing-test/key.md) counts caught / missed / wrongly flagged per view.
       Done blind (chat 2): notes/seeing-test/scores.md.
 - [x] Watch-the-clip test (Sam's Y 27 Nov) built and scored blind: notes/seeing-test/scores-watch.md.
-- [ ] Check the watch test's flags in passed moves at full size (real or misread), then one plain table for Sam,
-      one line per tool; his yes/no per winner, one at a time.
+- [x] Check the watch test's flags in passed moves at full size (real or misread), then one plain table for Sam,
+      one line per tool; his yes/no per winner, one at a time. Checked (chat 4): notes/seeing-test/flags-checked.md;
+      table sent 27 Nov; waiting on Sam's one question.
 - Not duplicated: check-knows-intent option 1 (R8, notes/check-audit.md) is about intent lists for the picture
   checks; this job only adds ways of looking.
 
@@ -51,26 +52,29 @@ version Sam flagged (c06, 21.33-22.75 s) the trousers bulge out below that edge.
   out of the new outlines) and kittests.py gained seeing_watch_shows_every_frame. Both seeing tests run green; the
   full kit check waits for the next film's end, as CLAUDE.md sets (kit tests at a film's start and end).
 
+- claude/cost-spike-fix (chat 4 end, 0 h): a live chat's cost-spike fix (who-uses-this index, step counter);
+  not this job's, left for that chat to merge.
+
 ## Open
 - The who-is-where copy sees only what is drawn through the engine's layer recorder (cover.py: places pieces, the
   people kit's people, arms and heads) or a sorted item list (GTA's street). At these versions it could NOT see the
   wolves (drawn by their own code) or the people/arms of GTA's 3D Jason separately from the car's inside; those show
   as faint grey picture. A film that wants this view needs its own-drawn things wrapped (cover.thing).
 
-## Where things stand (27 Nov, seeing test chat 3)
-- Rules that bite next: Statement Two (say plainly what the test can't do), 93 (advice only), "Messages to me".
-- Done: watch sheets built (seeing.py watch: every frame, 8 a sheet, people outlined, close-up of the busy part;
-  kittest seeing_watch_shows_every_frame PASS). Blind score (scores-watch.md), same brief both arms: watch caught 6
-  of Sam's 14 notes vs plain 3, but flagged 17 things in the 5 passed moves (plain 5) and 46 extras (plain 12).
-  c10 settled: no door fault in the posted film (false alarm from small pictures; c10-door.jpg).
-- Next: chat 4, Opus, medium effort (deciding from a clear plan). Look at full size at the 17 passed-move flags and
-  a dozen extras (scores-watch.md lists them): which are real faults Sam let pass, which are misreadings. That
-  decides if the watch test is noise or a real gain; then the plain table for Sam with one numbered question.
-- Needs Sam: nothing until chat 4 has checked the flags.
-- Read: this file; scores-watch.md; findings/watch.md (only the flagged lines); key.md.
+## Where things stand (27 Nov, seeing test chat 4)
+- Rules that bite next: Statement Two (say plainly what the tools can't do), 93 (advice only), "Messages to me".
+- Done: all 17 watch flags on passed moves and 13 extras checked at full size (flags-checked.md): passed moves
+  5 real (4 faults), 2 borderline, 3 taste, 7 misread (most "vanished" = covered by something in front);
+  extras 6 real, 2 borderline, 5 misread. Verdict: the watch sheets are a real gain, the four other ways no better
+  than plain pictures (scores.md). Table and one question sent to Sam.
+- Next: on Sam's Y: Opus, medium. Make the watch sheets an advised check (offered before a clip or animatic, run on
+  his Y), and Claude sorts every flag at full size before anything reaches Sam; who-is-where kept only to settle
+  "vanished" flags (drawing order). On N: the job closes, tools stay in the kit unused.
+- Needs Sam: 1 question (watch sheets as an advised check, Y/N).
+- Read: this file; flags-checked.md; CLAUDE.md "Asking me before you go on" (checks are advised).
 - Open rule requests: none.
-- For Claude: re-render as chat 2 (git worktree per commit; seeing.py render CASE --film MOD --span T0 T1 --src
-  WT/source), then `seeing.py watch CASE`; GTA cases ~14 min each, run 4 at once; render c01 alone first (it
-  downloads the body model). Old commits' GTA code races that download if two start together.
+- For Claude: frames re-made with seeing.py render (worktrees per commit) + watch; full-size pairs by a small
+  crop script (chat 4 scratchpad, not kept). Brexit commits also fetch the body model into /tmp/makehuman: start
+  one render alone first, as with GTA.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 4.1% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 4.77% of a week (2026-11-27)

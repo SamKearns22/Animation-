@@ -300,6 +300,16 @@
    "cost": 3.63,
    "notes": 0,
    "repeats": []
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "7a6d1e31",
+   "model": "opus",
+   "stage": "check flags",
+   "round": null,
+   "cost": 0.67,
+   "notes": 0,
+   "repeats": []
   }
  ],
  "checks": {},
@@ -315,6 +325,18 @@
   {
    "date": "2026-11-27",
    "spent": 4.1
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 4.55
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 4.77
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 4.77
   }
  ]
 }

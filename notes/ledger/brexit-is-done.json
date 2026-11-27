@@ -25291,6 +25291,163 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "d4bf191c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.07,
+   "src": "estimate",
+   "sid": "session_01J1JB7X5yz8uHRr4bfdMGhc",
+   "steps": 14,
+   "hist_k": 94,
+   "kinds": {
+    "film-file search": 1.4,
+    "tool search": 11.1,
+    "other": 87.5
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 7,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 3
+   },
+   "split": {
+    "usd": 0.2699,
+    "total": 0.2699,
+    "floor_k": 0,
+    "blocks": {
+     "new writes": 49.1,
+     "carried history": 39.2,
+     "Claude's words": 11.6
+    },
+    "origins": {
+     "messages and reminders": 73.1,
+     "Claude's words": 15.9,
+     "result: tool search": 8.1,
+     "start-up floor": 2.3,
+     "result: other": 0.4,
+     "result: film-file search": 0.1
+    },
+    "named": {
+     "messages and reminders": 73.1,
+     "commands": 13.2,
+     "start-up and handover tools": 3.7,
+     "reading guides": 3.3,
+     "start-up reading (rules, tools, first files)": 2.3,
+     "thinking": 1.6,
+     "messages to Sam": 1.1,
+     "other commands": 0.7,
+     "reading kit code": 0.4,
+     "app tools (chats, files sent)": 0.4,
+     "renders": 0.1,
+     "reading other files": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 0,
+    "work_step": 7,
+    "work_pct": 0.05,
+    "reads": [],
+    "base_pct": 0.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 4,
+     "shared:handover.py": 1,
+     "guides": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; git log --oneline -3; ls a",
+      "",
+      608
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git status -sb | head -3; ",
+      "",
+      426
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "date; git stash -q; git checkout -q --detach origin/claude/create-claude-md-oe8z",
+      "",
+      296
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/brexit-is-done.md",
+      "Where things stand",
+      "",
+      3933
+     ],
+     [
+      4,
+      "film",
+      "before show",
+      "source/brexit_is_done.py notes/brexit-is-done.md",
+      "mkdir -p /tmp/claude-0/ren && (time python3 source/brexit_is_done.py final /tmp/",
+      "",
+      267
+     ],
+     [
+      6,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "finish.py",
+      "",
+      469
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "/home/user/Animation-/guides/job-packs.md",
+      "pgrep -af brexit_is_done | head -3; sed -n 52,60p /home/user/Animation-/guides/j",
+      "",
+      2824
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "/home/user/Animation-/source/data/*.mp4",
+      "brexit_is_done.py final",
+      "",
+      701
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
