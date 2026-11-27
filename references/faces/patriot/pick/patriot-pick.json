@@ -1,0 +1,88 @@
+{
+ "title": "patriot",
+ "fronts": [],
+ "tq": [],
+ "unsure": [],
+ "gain": 1.0,
+ "glasses": null,
+ "beard": false,
+ "age": {
+  "depth": {},
+  "strength": {
+   "crows_feet": 0.6,
+   "eye_bags": 0.7,
+   "forehead": 0.5
+  }
+ },
+ "colours": {
+  "skin": [
+   236,
+   198,
+   178
+  ],
+  "hair": [
+   30,
+   30,
+   34
+  ],
+  "lip": [
+   196,
+   130,
+   120
+  ],
+  "brow": [
+   104,
+   74,
+   54
+  ],
+  "cloth": [
+   38,
+   38,
+   44
+  ],
+  "rim": [
+   30,
+   28,
+   30
+  ]
+ },
+ "heads": {
+  "C": {
+   "what": "no photos: the average face pushed thick-set (a fictional masked man; only his eyes and brows show)",
+   "measures": {
+    "face_wide": 0.97,
+    "jaw_wide": 0.98,
+    "forehead_wide": 0.93,
+    "eyes_apart": 1.325,
+    "eye_size": 0.2,
+    "eye_open": 0.34,
+    "eye_tilt": 2.474,
+    "brow_high": 0.5,
+    "brow_slope": -6.0,
+    "nose_long": 0.417,
+    "nose_wide": 0.641,
+    "mouth_wide": 0.802,
+    "lip_top": 0.121,
+    "lip_low": 0.183,
+    "philtrum": 0.133,
+    "chin_long": 0.27
+   }
+  }
+ },
+ "card": {},
+ "eyes": {
+  "scale": 1.0,
+  "dark": 0.7,
+  "sock": 0.5,
+  "iris_r": 1.2,
+  "pupil_r": 0.5,
+  "iris": [
+   78,
+   92,
+   104
+  ],
+  "shade": 0.4
+ },
+ "picked": "C",
+ "picked_by": "Patriots 5 chat 1 (27 Nov): made by hand, no photos: he is fictional and masked"
+}

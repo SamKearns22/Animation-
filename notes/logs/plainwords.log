@@ -27,3 +27,4 @@
 {"chat": "d251ebda", "event": "let-through", "faults": [["word", "main line"]], "reply": "Saved: both my branch and the main line on GitHub hold this work. One file (the test stamps) is still being rewritten by the test run that's going; I'll save it once that run ends.", "t": "2026-11-27 16:51"}
 {"chat": "d251ebda", "event": "block", "faults": [["word", "kit"]], "t": "2026-11-27 16:58"}
 {"chat": "774a3f06", "event": "block", "faults": [["code", "McFadden"]], "t": "2026-11-27 17:32"}
+{"chat": "4e93d9da", "event": "block", "faults": [["file", "animations/drafts/patriot-5-character-sheet.jpg"]], "t": "2026-11-27 20:56"}

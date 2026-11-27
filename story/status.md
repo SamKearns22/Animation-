@@ -1,3 +1,3 @@
-patriots-5: plan done (estimate 15.4% of a week); waiting on Sam's answers and photos.
-Done chat 1: screenplay as a checklist, shots and acting list, estimate; Patriot redesign continues in its own chat.
-Next: cast sheet (Opus high) once Sam answers.
+patriots5 (The Patriot 5): plan done (estimate 15.4% of a week); Patriot redrawn in the new style (sheet sent).
+Done: redesign chat 1 (the Patriot sheet); plan chat 1 (screenplay as a checklist, shots, acting list, estimate).
+Next: the cast sheet (Opus high) once Sam answers the plan questions and looks at the Patriot sheet.

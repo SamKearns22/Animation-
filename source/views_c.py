@@ -283,7 +283,7 @@ def torso_view(img, p, sp, view, seated=False):
         if not sp.get('neck_off'):
             # its sides run on up under the head (were cut flat at -80: the top corners showed as hooks under a
             # rounded jaw; face tool chat 12, Sam: "very strange bumps ... Kemi's chin")
-            p.poly([(-26.2, -130), (36.7, -130), (46, 10), (-20, 10)], skin, INK, 2.6)
+            p.poly([(-26.2, -130), (36.7, -130), (46, 10), (-20, 10)], sp.get('neck_c', skin), INK, 2.6)
         # Fitted (face tool chat 12, Sam: the clothes "look like they are coming forward and out, like a ridge, rather
         # than fitting"): the shoulders one soft slope round into the arms (were a flat roof with square corners), the
         # near side's hard-edged shadow panel and seam line gone (they read as a box's side plane).
@@ -354,7 +354,7 @@ def torso_view(img, p, sp, view, seated=False):
     elif view == 'side':
         d = 0.6 * sw
         if not sp.get('neck_off'):
-            p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], skin, INK, 2.6)
+            p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], sp.get('neck_c', skin), INK, 2.6)
         body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
         _bare_neck(p, sp, [(-28.5, -40), (28.5, -40), (32.6, -5), (-29.5, -5)], front_flare=False)
@@ -380,10 +380,10 @@ def torso_view(img, p, sp, view, seated=False):
         nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
         if not sp.get('neck_off'):
             nw = sp.get('neck_w', 1.0)                # a bigger head on a thicker neck (Blessed note 23: Brand's
-            p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (36 * nw, 10), (-36 * nw, 10)], skin, INK, 2.6)
+            p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (36 * nw, 10), (-36 * nw, 10)], sp.get('neck_c', skin), INK, 2.6)
             if sp.get('neck_shade'):                  # the jaw's shadow on it: the neck sits under the head
                 p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (30 * nw, -40 + ny), (0, -28 + ny),
-                        (-30 * nw, -40 + ny)], B.dk(skin, 0.82), None)
+                        (-30 * nw, -40 + ny)], B.dk(sp.get('neck_c', skin), 0.82), None)
         body = torso_outline(sp, view, bottom, B.ink_units(p))
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):

@@ -588,7 +588,7 @@ def draw(img, p, sp, t, view, hx, hy):
         inside(img, p, head, lambda pen: P.face(pen, f, L, sp))
     outline(p, f, view, skin, fill=False)
     if view in ('three_back', 'back') and not sp.get('nape_in_head'):   # lying (lying_flat): its own neck bends up
-        neck_over(p, f, view, skin)                   # from the collar; drawn again over a tipped head it was a
+        neck_over(p, f, view, sp.get('neck_c', skin))                   # from the collar; drawn again over a tipped head it was a
         #                                               square block, a blindfold with his hair band (Sam, 11 Nov, 18)
     if P.over:
         P.over(img, p, f, L, sp, view)

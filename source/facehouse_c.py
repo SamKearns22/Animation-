@@ -490,6 +490,9 @@ def _turn_hair(img, p, f, L, sp):
     kh = sp['kit_house']
     if kh.get('hat'):
         turned_hat(p, f, kh, _hair(L, kh)['crown'] if kh['hair'] in ('braids', 'long') else -0.46)
+    if kh.get('balaclava'):                               # Patriots 5: the knit over the turned head
+        yaw = abs(math.degrees(f.th))
+        balaclava_turned(img, p, f, L, sp, min(TH.YAW, key=lambda k: abs(TH.YAW[k] - yaw)))
 
 
 def hair_shell(cap, step=0.02, upto=0.1):
@@ -841,7 +844,7 @@ def install_turned():
         if kh and view in TH.YAW:
             key = _turn_person(sp)
             with PP._Big():
-                return TH.draw(img, p, dict(sp, who=key, ears_hidden=kh['hair'] in ('braids', 'long') and not kh.get('ears')),
+                return TH.draw(img, p, dict(sp, who=key, ears_hidden=(kh['hair'] in ('braids', 'long') and not kh.get('ears')) or bool(kh.get('balaclava'))),
                                t, view, hx, PP._lift(hy) - kh.get('neck_up', 0.0) * 172.0)   # note 20, as the front
         return V.NOT_MINE
     V.TURNED_HEADS['kit_house'] = head_view     # one list of turned heads in views.py, newest tried first

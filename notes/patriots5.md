@@ -1,4 +1,4 @@
-# Notes for patriots-5 (The Patriot 5; one file, numbered; mark each done as it is fixed)
+# Notes for patriots5 (The Patriot 5; one file, numbered; mark each done as it is fixed)
 
 Kind: film (satire-style, flat people). Started 27 Nov from Sam's screenplay and title (chat session_01J1JB7VmBNix1SpRrBBfJas).
 The Patriot redesign (the new drawing style) runs in a sister chat, session_01J1JB7XCcqv7vGytWyb2oNY ("The Patriot
@@ -10,12 +10,12 @@ The joke (Sam): The Patriot and his crew of balaclava'd PP men try to break Tomm
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
 - **Locked by Sam:** all 11 shots as the screenplay sets them: cell dead ahead at the cot; side angle; close-up of the grate from inside; side-on outside with the tower; close-up through the grate at Danny; from behind Danny's head; the entrance with the two officers; the four 180s (boat, officers, Patriot, officers).
 - **Rules that bite next:** 24 (the estimate), 74 (acting list), 38 (front, side and back on the cast sheet).
-- **Done:** chat 1 (plan, Opus high): brief checklist, estimate 15.4%, shots and acting list; sister chat asked to carry on the Patriot redesign.
+- **Done:** redesign chat 1: the Patriot on the new house head and balaclava, sheet sent (Sam's look pending). Plan chat 1 (Opus high): brief checklist, estimate 15.4%, shots and acting list; sister chat asked to carry on the Patriot redesign.
 - **Next:** this chat, on Sam's answers: the cast sheet (Opus, high: new people and clothes), then practice clips of the tower, boat walk and climb.
-- **Needs Sam:** photos of Danny Tommo's real model; the religious clothes; the boat; the tower; the Hook Text; two tones.
+- **Needs Sam:** his look at the Patriot's sheet; photos of Danny Tommo's real model; the religious clothes; the boat; the tower; the Hook Text; two tones.
 - **Read:** guides/job-packs.md, Build; guides/figure-rig.md 2-4, 5c.
 - **Open rule requests:** none.
-- **For Claude:** film name patriots-5; boat = patriots2.shot_dinghy; cell, gates and officers = story/blessed-places.txt / blessed-people.txt; Patriot = patriots3_cast.PATRIOT until the sister chat (session_01J1JB7XCcqv7vGytWyb2oNY) pushes its redesign.
+- **For Claude:** film name patriots5; boat = patriots2.shot_dinghy; cell, gates and officers = story/blessed-places.txt / blessed-people.txt; Patriot = patriots5_cast.patriot(mood) (`patriots5_cast.py sheet OUT.jpg`; balaclava facehouse_d). Open Wounds (brexit-is-done) notes stay in place: acting.py reads its acting list (move to shared: repoint, then archive).
 
 ## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
 its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees
@@ -141,8 +141,10 @@ the handover check refuses a blank one.
 | 1 |      |      |      |      |                    |                  | open   |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
+- The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi). (redesign chat 1)
+- One film name, patriots5 (the redesign chat's); the plan chat's patriots-5 files folded in, 27 Nov.
 - The template's held estimates note is already settled: Sam said Y to option 1 on 17 Nov (notes/archive/milburn-handovers.md); not asked again.
-- Branches the start listed (jolly-ramanujan, upbeat-dirac, gta-v5-sound-draft, gta-chat46-build, dreamy-fermi, gta-chat31): logs, an archive note and old Grand Theft Autism files only, nothing for this film; left as they are.
+- Branches the start listed (also named by the redesign chat) (jolly-ramanujan, upbeat-dirac, gta-v5-sound-draft, gta-chat46-build, dreamy-fermi, gta-chat31): logs, an archive note and old Grand Theft Autism files only, nothing for this film; left as they are.
 - Photos of the real man Danny Tommo stands for: news tag page had none; the free photo library refused (too many requests); Openverse had only protest photos. Asked Sam (27 Nov).
 - The small boat "see patriots 2" = Patriots 2's grey inflatable (source/patriots2.py, shot_dinghy).
 - 
