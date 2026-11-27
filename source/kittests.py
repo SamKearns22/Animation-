@@ -6527,6 +6527,60 @@ def faults_said_once():
     return (not out), ('; '.join(out) or 'one count line for the repeat, the new fault in full; ' + out_n)
 
 
+@test
+def planning_asks_once():
+    """Check audit B4 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, where 'the film has
+    no PLAN', 'no BENCHMARK' and 'no audits' printed on 4 runs each, never answered): the paperwork asks become rows of
+    the brief checklist the first time; a run prints one planning line instead of each ask; an answered row ("none:
+    why") is never asked again; a real drawing fault passes through untouched; rows 74 and 8 still stop new films."""
+    import shutil
+    import tempfile
+    import planning as P
+    tmp = tempfile.mkdtemp()
+    path = os.path.join(tmp, 'kt.md')
+    shutil.copy(os.path.join(HERE, '..', 'notes', '_template.md'), path)
+    asks = ['plan (rule 1): the film has no PLAN (rooms...)', 'benchmark (rule 3): the film has no BENCHMARK (8-10)',
+            'house style: the film has no audits: the general audit', 'HANDS: 2 11.08s: a hand over a body']
+    out = []
+    kept, line, stops = P.route(asks, path)
+    if kept != [asks[-1]] or not line or '3 unanswered' not in line or stops:
+        out.append(f'first run wrong: kept {kept}, line {line}, stops {stops}')
+    again = P.route(asks, path)
+    if open(path).read().count('Planning: ') != 3:
+        out.append('rows written more than once')
+    text = open(path).read().replace('(rule 1) |  |', '(rule 1) | none: a one-room film, the set is a drawing |')
+    open(path, 'w').write(text)
+    kept3, line3, _ = P.route(asks, path)
+    if not line3 or '2 unanswered' not in line3 or 'plan' in line3.split('(')[1]:
+        out.append(f'an answered row was asked again: {line3}')
+    _, _, st = P.route(['no "Rehearsal clips sent: DATE" line in the notes (rule 8)'], path, ('rehearsal',))
+    if not st:
+        out.append('an unanswered rule-8 row did not stop a new-template film')
+    shutil.rmtree(tmp, ignore_errors=True)
+    return (not out), ('; '.join(out) or f'first run: one line ({line[:60]}...); answered row dropped; rule 8 stops')
+
+
+@test
+def row_of_bookcases_sized_per_bay():
+    """Check audit B3 (Sam's Y, 26 Nov; saved example: Open Wounds' 'the bookcases, right: 4.00 m wide; a real bookcase
+    is about 0.8 m (500%)', on 10 runs): the size check reads the set's own description, so a wall of shelves written
+    'bays 4' is four bookcases side by side, each judged alone; one bookcase 4 m wide is still a fault."""
+    import types
+    import kitinputs as K
+    import sizes
+    keep = K._places
+    item = lambda raw: dict(name='shelves', kind='bookcase', raw=raw)
+    try:
+        K._places = lambda film: {'views': {'v': {'items': [item({'x': '0.3 to 4.3', 'z': '0 to 3.7', 'bays': '4'})]}}}
+        row = [sizes.check(*r) for r in K.prop_sizes(types.SimpleNamespace())]
+        K._places = lambda film: {'views': {'v': {'items': [item({'x': '0.3 to 4.3', 'z': '0 to 3.7'})]}}}
+        one = [sizes.check(*r) for r in K.prop_sizes(types.SimpleNamespace())]
+    finally:
+        K._places = keep
+    ok = row == [None] and one and one[0]
+    return ok, f'a row of 4: {row}; one 4 m bookcase: {one}'
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
