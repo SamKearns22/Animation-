@@ -299,16 +299,16 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.8,
+   "cost": 3.09,
    "src": "estimate",
    "sid": "session_01J1JB7X4D5fXmWtyEsq1eUg",
-   "steps": 78,
-   "hist_k": 179,
+   "steps": 80,
+   "hist_k": 181,
    "kinds": {
-    "tool search": 12.2,
+    "tool search": 12.0,
     "renders": 3.6,
-    "pictures": 3.9,
-    "other": 80.3
+    "pictures": 3.8,
+    "other": 80.6
    },
    "calls": {
     "film-file search": 0,
@@ -321,35 +321,35 @@
     "other": 30
    },
    "split": {
-    "usd": 4.4299,
-    "total": 4.4299,
+    "usd": 4.5125,
+    "total": 4.5125,
     "floor_k": 84,
     "blocks": {
-     "new writes": 35.0,
-     "start-up floor": 25.5,
-     "Claude's words": 21.1,
-     "carried history": 18.5
+     "new writes": 34.7,
+     "start-up floor": 25.0,
+     "Claude's words": 20.7,
+     "carried history": 19.6
     },
     "origins": {
-     "Claude's words": 30.8,
-     "messages and reminders": 30.4,
-     "start-up floor": 25.7,
-     "result: tool search": 6.0,
-     "result: pictures": 3.7,
+     "messages and reminders": 31.6,
+     "Claude's words": 30.4,
+     "start-up floor": 25.2,
+     "result: tool search": 5.9,
+     "result: pictures": 3.6,
      "result: other": 2.4,
      "Claude's edits": 0.7,
      "result: renders": 0.1
     },
     "named": {
-     "messages and reminders": 30.4,
-     "start-up reading (rules, tools, first files)": 25.7,
-     "writing code": 10.2,
-     "thinking": 9.9,
-     "commands": 8.4,
-     "looking at pictures": 3.7,
-     "reading kit code": 3.5,
+     "messages and reminders": 31.6,
+     "start-up reading (rules, tools, first files)": 25.2,
+     "writing code": 10.0,
+     "thinking": 9.7,
+     "commands": 8.3,
+     "looking at pictures": 3.6,
+     "reading kit code": 3.4,
      "reading notes": 2.7,
-     "helper and chat prompts": 1.5,
+     "helper and chat prompts": 1.4,
      "messages to Sam": 1.1,
      "other commands": 0.6,
      "reading guides": 0.5,
@@ -409,7 +409,7 @@
       0.0038
      ]
     ],
-    "base_pct": 26.6
+    "base_pct": 26.7
    },
    "search": {
     "show": 0,
