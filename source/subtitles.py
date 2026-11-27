@@ -196,12 +196,19 @@ def need(text, speed=SPEED, fps=12):
     return max(0.8, len(text.split()) * 60 / 220) * speed + 1.0 / fps
 
 
+LATE = 0.5           # s: the most a piece may come up after its own syllable (the voice check allows 0.6)
+
+
 def fit(out, end, speed=SPEED):
     """Check audit A2 (26 Nov; Open Wounds' captions flagged 'too fast to read' on 9 runs, the kit and the check never
     agreeing): each piece made readable where it is made. While the pieces' times fit the line, each comes up as near
     its syllable as it can: later only as far as the piece before needs, earlier only as far as the line's end needs
     (`end`: seconds into the line). When they cannot all fit, the shortest neighbours join, if the two are at most 5
-    words in two rows (the kit's 3-5 words); a piece that still cannot fit is left, and the check still says so."""
+    words in two rows (the kit's 3-5 words); a piece that still cannot fit is left, and the check still says so.
+    R8 chat 5 (Milburn's kit test went red: three pieces pushed 0.64-0.79 s after their word, past the voice check's
+    0.6 s): a piece is never pushed more than LATE after its own syllable; one that would be counts as not fitting,
+    so its neighbours join instead, and if they cannot, it comes up in step with the voice."""
+    said = [p[1] for p in out]
     out = [list(p) for p in out]
     while True:
         first = out[0][1]
@@ -213,7 +220,8 @@ def fit(out, end, speed=SPEED):
             lim = out[k][1]
         gaps = [((out[k + 1][1] if k + 1 < len(out) else end) - out[k][1]) - need(out[k][0], speed)
                 for k in range(len(out))]
-        bad = [k for k, g in enumerate(gaps) if g < -1e-6]
+        bad = [k for k, g in enumerate(gaps) if g < -1e-6] + [k for k in range(len(out)) if out[k][1] > said[k] + LATE]
+        bad = list(dict.fromkeys(bad))
         if not bad or len(out) < 2:
             return out
         joined = False
@@ -223,12 +231,15 @@ def fit(out, end, speed=SPEED):
                 text = out[lo][0] + ' ' + out[hi][0]
                 if len(text.split()) <= 5 and len(rows(text)) <= 2 and \
                         max(_font().getbbox(r)[2] for r in rows(text)) <= WIDE:
-                    out[lo:hi + 1] = [[text, out[lo][1]]]
+                    out[lo:hi + 1] = [[text, said[lo]]]
+                    said[lo:hi + 1] = [said[lo]]
                     joined = True
                     break
             if joined:
                 break
-        if not joined:
+        if not joined:                                      # in step with the voice wins: a piece that cannot
+            for k in range(len(out)):                       # join is never later than LATE after its syllable (the
+                out[k][1] = min(out[k][1], said[k] + LATE)  # piece before is then short, and the check says so)
             return out
 
 
