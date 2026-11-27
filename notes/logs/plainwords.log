@@ -28,3 +28,4 @@
 {"chat": "d251ebda", "event": "block", "faults": [["word", "kit"]], "t": "2026-11-27 16:58"}
 {"chat": "774a3f06", "event": "block", "faults": [["code", "McFadden"]], "t": "2026-11-27 17:32"}
 {"chat": "4e93d9da", "event": "block", "faults": [["file", "animations/drafts/patriot-5-character-sheet.jpg"]], "t": "2026-11-27 20:56"}
+{"chat": "22904d63", "event": "let-through", "faults": [["word", "main line"]], "reply": "I've saved the tower drawing code to this chat's own branch on GitHub, so nothing is lost while I wait for your Y on the faster clip. It's work in progress, so it's not on the main line yet.\n\nDone: the tower code is saved; the clip is not made yet.\nNext: on your Y, make the fast clip (about 1 to 2 minutes) and send it.", "t": "2026-11-27 21:47"}
