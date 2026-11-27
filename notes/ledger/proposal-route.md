@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 2.5% of a week; spent 149.72% (+147.22); 74 chats, 0 rounds, 2 notes, 0 repeated.**
+**Estimate 2.5% of a week; spent 151.78% (+149.28); 75 chats, 0 rounds, 2 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -82,6 +82,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-26 | 52f3dc5e | est | opus | auto |  | 0.78 |  | 0 | 0 |
 | 2026-11-27 | 5449ea5f | est | opus | seeing test: build + blind judges |  | 5.13 |  | 0 | 0 |
 | 2026-11-27 | cb29989e | est | sonnet | auto |  | 0.16 |  | 0 | 0 |
+| 2026-11-27 | c93e33d5 | est | opus | auto |  | 2.06 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 83ccf353 (auto): 18 steps, history 141k at the end; other 60.5%, page.py 26.5%, tool search 13%
@@ -145,6 +146,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 52f3dc5e (auto): 46 steps, history 184k at the end; other 68%, tool search 29.2%, renders 2.9%
 - 2026-11-27 5449ea5f (seeing test: build + blind judges): 93 steps, history 240k at the end; other 77.3%, tool search 20.7%, renders 1%, pictures 1%
 - 2026-11-27 cb29989e (auto): 13 steps, history 116k at the end; other 68.9%, tool search 30%, page.py 1.1%
+- 2026-11-27 c93e33d5 (auto): 105 steps, history 262k at the end; other 72.5%, tool search 22.6%, renders 3.5%, page.py 1.4%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 3a437266 (auto): Claude's words 33%, start-up floor 30.8%, new writes 20.8%, carried history 15.3%. Biggest origins: Claude's words 49.3%, start-up floor 30.8%, result: tool search 16.2%. Leftover 0%
@@ -183,9 +185,10 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 52f3dc5e (auto): start-up floor 38.1%, Claude's words 25.4%, new writes 23.8%, carried history 12.7%. Biggest origins: start-up floor 38.1%, Claude's words 36.2%, result: tool search 23.9%. Leftover 0%
 - 2026-11-27 5449ea5f (seeing test: build + blind judges): new writes 34.6%, Claude's words 25.4%, carried history 22%, start-up floor 18%. Biggest origins: Claude's words 37.1%, messages and reminders 29.1%, start-up floor 18.2%. Leftover 0%
 - 2026-11-27 cb29989e (auto): Claude's words 39.4%, start-up floor 36%, new writes 21.1%, carried history 3.5%. Biggest origins: Claude's words 49.1%, start-up floor 36%, result: tool search 9.9%. Leftover 0%
+- 2026-11-27 c93e33d5 (auto): Claude's words 33.9%, start-up floor 24%, carried history 23.3%, new writes 18.8%. Biggest origins: Claude's words 53.4%, start-up floor 24%, result: tool search 11.8%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 7% of the film (10.28% of a week over 36 chats: start 10.17, re-learning 0.11; 0.29% a chat; step-1 context re-read is 24% of a chat on average).
+A new chat's start and re-learning cost 7% of the film (10.63% of a week over 37 chats: start 10.50, re-learning 0.13; 0.29% a chat; step-1 context re-read is 23% of a chat on average).
 - 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
 - 2026-11-19 3498a80f: step-1 context 83k; first real work at step 31 (0.44% of a week); read before it: source/preflight.py 5.6k, source/posecheck.py 2.2k, source/milburn.py 1.9k, notes/proposals/front-on-focus/retirement-and-handover.md 1.1k, source/film_engine.py 1k, guides/job-packs.md 0.7k
 - 2026-11-19 6a247f23: step-1 context 82k; first real work at step None (None% of a week); read before it: notes/archive/milburn.md 2.8k, source/checkreplay.py 0.9k, notes/proposals/check-catches/replay/milburn.md 0.4k, notes/proposals/check-catches/replay/blessed.md 0.3k, notes/proposals/check-catches/replay/protest-tiers.md 0k
@@ -222,3 +225,4 @@ A new chat's start and re-learning cost 7% of the film (10.28% of a week over 36
 - 2026-11-26 52f3dc5e: step-1 context 99k; first real work at step 26 (0.45% of a week); read before it: notes/proposals/chat-size-and-model.md 0.7k, notes/proposals/chat-size-and-model/sam.md 0.7k, notes/proposals/dearest-week.md 0.7k, notes/logs/grand-theft-autism-show.log 0.6k, story/status.md 0.4k, notes/steps-breakdown.md 0.1k
 - 2026-11-27 5449ea5f: step-1 context 84k; first real work at step 46 (0.84% of a week); read before it: notes/proposals/seeing-five-candidates.md 3.1k, source/cover.py 3.5k, notes/bench/learn-step.md 2.3k, notes/proposals/better-seeing-tools.md 1.4k, notes/archive/grand-theft-autism-notes.md 1.7k, source/branches.py 1.2k
 - 2026-11-27 cb29989e: step-1 context 85k; first real work at step 3 (0.05% of a week); read before it: notes/cost-diagnosis.md 0.7k, .claude/hooks/finderwarn.py 0.7k, notes/real-cost-answer.md 0.7k, .claude/settings.json 0.3k
+- 2026-11-27 c93e33d5: step-1 context 85k; first real work at step 14 (0.33% of a week); read before it: .claude/hooks/finderwarn.py 1.5k, .claude/hooks/modelguard.py 1.4k, source/kittests.py 1.2k, .claude/settings.json 1.2k, source/ledger.py 1k, source/stepcost.py 0.9k
