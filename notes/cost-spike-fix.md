@@ -199,7 +199,6 @@ code) are where the original spent most (three of four chats).
 - S4 every step counts toward the chat's total (notesteps); `ledger.py stage` keeps the steps since the last stage
   mark in the ledger's stage row and table. Kittest `stage_steps_saved`.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.5% of a week (2026-11-27)
 - Verified end to end on the replay (throwaway copy of today's project): facepick printed "El-Sayed: hair piece:
   swept" and "aoc: NEW: long hair ... no hair piece fits"; the cast sheet printed the COLOUR line for the grey beard,
   quiet once `beard: boxed 30 26 26` was in the file. Skin not flagged: on this bright studio photo the face tool's
@@ -213,3 +212,5 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   list too, which this chat left alone). FREEZE line (animations/brexit-is-done-vertical.mp4 not in the freeze list)
   belongs to Open Wounds' chain, not this tool job.
 - Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.8% of a week (2026-11-27)
