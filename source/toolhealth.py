@@ -450,7 +450,7 @@ def packs_use(R):
 
 
 def kittests_reach(R):
-    tests = set(re.findall(r'^@test\ndef (\w+)', open(os.path.join(HERE, 'kittests.py'), encoding='utf-8').read(), re.M))
+    tests = set(re.findall(r'^@test\ndef (\w+)', ''.join(open(f, encoding='utf-8').read() for f in __import__('kitstamps').kit_files()), re.M))
     try:
         stamped = {ln.split('\t')[0] for ln in open(os.path.join(ROOT, 'notes', 'kittest-stamps.tsv'), encoding='utf-8')
                    if not ln.startswith('#')}

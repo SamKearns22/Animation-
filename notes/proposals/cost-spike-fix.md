@@ -1,6 +1,6 @@
 # Cost spike: fix proposal (Sam's weekly spike analysis, 27 Nov)
 
-Status: PROPOSED, nothing built. Waiting for Sam's numbers (bottom).
+Status: BUILT 27 Nov (Sam said Y to both). Results, what is solved and what is not: notes/cost-spike-fix.md.
 
 ## What I measured in this chat (27 Nov), not guessed
 - A fresh chat's very first step already carries about 85,300 pieces of text (25,346 newly stored + 59,953 re-read;

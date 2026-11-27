@@ -66,6 +66,8 @@ Composition sheet sent: 3 Nov, review/terfwarts-composition.jpg
 | 26 | Note 10: Hook Text "Rowling left HBO some edits 😬" | yes: finish.py puts it on |
 | 27 | Note 11: dialogue subtitles choppy (a few words each) and quick; quick scene transitions, no camera held over 3 s | yes: longest shot 2.95 s |
 | 28 | Note 12: the Hat's subtitle reads "He's a Biological Male!" | yes |
+| 29 | Planning: the acting list, one row per line (rule 74) |  |
+| 30 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## References as checklists (`references/terfwarts/`)
 | reference | what it shows | ours matches? |

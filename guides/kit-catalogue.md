@@ -123,6 +123,7 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 | A shell bursting on a bunker's slit: flash, black smoke outside, dust puffs rolling in (drawn in depth order), grit from the ceiling, concrete chips that land apart and stay, the bite left in the lintel, camera shake | `source/patriots3_fx.py` |
 
 ## Movement and checks (the kit tools)
+**The every-frame watch (Sam's Y, 27 Nov):** `source/seeing.py` `render` + `watch CASE --film NAME`: every frame, 8 a sheet, people outlined, a close-up of the busiest part; only frames changed since that film's last watch (kittest `seeing_watch_only_changed`). Offered before clips and animatics: `guides/job-packs.md`, Checks and animatic.
 **New poses (default, Sam 26 Nov):** the full body under the posted outfit, `source/solid_seat.py` (mode `seat_solid='body'`), posed by joints (`sitting._leg_by_knee`); the method and its layer-edge checks: `guides/pose-kits.md`.
 `views.py`, `moves.py`, `stage.py`, `filmkit.py`, `perform.py`, `audit.py`, `clipcheck.py`, `voices.py`: see
 `guides/satire.md` (Movement; Staging and acting) and `guides/figure-rig.md`. The film-quality checks (25 Oct):

@@ -27,6 +27,9 @@ MAP
                line holds 2+ of the note's words joins; tables whose keys name the note's thing are lifted (chin ->
                chin_long); the best line is shown before the head. --who (the notes table's who column) lifts a def or
                table named for them. Files are parsed once and kept until they change (the replay: 52 s -> 0.5 s).
+  SAME ....... savings 2 (Sam's go, 27 Nov): Sam's everyday words bring the code's words with them (wrinkles -> age
+               lines, crease; hover -> rest; overlap -> order, depth), a note's words only; page.py never searches
+               itself. With --at, show prints a LOOK line: still.py cuts Sam's frame from the last render (savings 1).
   log ........ every show call writes one line to notes/logs/FILM-show.log; handover.py end flags a chat that changed
                the film's code today with no show call.
   film names . `protest-tiers` and `protest_tiers` both work (code files use _, story files use -).
@@ -92,12 +95,12 @@ def files(film):
     the checks), other films' own code left out. Own files first; the shared ones by name."""
     mine = own_files(film)
     others = _film_mods() - {os.path.basename(f)[:-3] for f in mine}
-    seen, todo = {os.path.basename(f)[:-3] for f in mine}, list(mine)
+    seen, todo = {os.path.basename(f)[:-3] for f in mine} | {'page'}, list(mine)   # never itself (its SAME table)
     while todo:
         for m in _imports(todo.pop()):
             if m not in seen and m not in others:
                 seen.add(m); todo.append(os.path.join(HERE, m + '.py'))
-    return mine + sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine})
+    return mine + sorted(os.path.join(HERE, m + '.py') for m in seen - {os.path.basename(f)[:-3] for f in mine} - {'page'})
 
 
 def tokens(text):
@@ -171,6 +174,23 @@ def _bare(txt):
     return re.sub(r'\s+', ' ', re.sub(r'[-+]?\d+\.?\d*(\s*m\b)?|\bseed:?|[|]', ' ', txt)).strip()
 
 
+# Sam's everyday words -> the words the code uses for the same thing (savings 2, Sam's go, 27 Nov: "too many wrinkles"
+# found nothing; the code says age lines, creases, crow's feet). Added to a NOTE's words only, never to the code's.
+SAME = {'wrinkle': 'age line crease crow nasolabial', 'older': 'age line', 'younger': 'age line',
+        'hover': 'rest armrest', 'float': 'rest contact', 'resting': 'rest armrest',
+        'sharp': 'rise fall snap head_min', 'jerky': 'rise fall snap', 'snap': 'rise fall',
+        'overlap': 'order depth cover beyond', 'clip': 'order depth cover beyond', 'clipping': 'order depth cover',
+        'vanish': 'pop', 'disappear': 'pop', 'appear': 'pop', 'materialise': 'pop', 'materialize': 'pop',
+        'bob': 'nod', 'jump': 'leap', 'offscreen': 'frame edge on_screen', 'lost': 'frame edge on_screen',
+        'mouth': 'lip mouth', 'smirk': 'smile lip', 'teeth': 'grin teeth', 'thick': 'line width weight'}
+
+
+def _note_words(s):
+    """A note's words plus the code's words for the same things (SAME)."""
+    w = _words(s)
+    return w | _words(' '.join(SAME[x].replace('_', ' ') for x in w if x in SAME))
+
+
 def _words(s):
     return {w[:-1] if w.endswith('s') and len(w) > 4 else w for w in re.findall(r'[a-z]{3,}', s.lower())} - STOP
 
@@ -203,7 +223,7 @@ def find(film, note, n=5):
     p = page_path(film)
     if stale(film):
         build(film)
-    want, cur, grp, hits = _words(note), '', '', []
+    want, cur, grp, hits = _note_words(note), '', '', []
     for ln in [x for q in (p, shared_path(film)) for x in open(q, encoding='utf-8')]:
         if ln.startswith('## '):
             cur, grp = ln[3:].split()[0], ''
@@ -348,7 +368,7 @@ def show(film, note, budget=40, shot=None, at=None, who=None):
     The best hit gets the lion's share: the whole def if it fits, else its first lines plus every line holding the
     note's words (one line either side). Runners-up get their first lines; the rest are listed as FILE:LINE.
     shot/at (the notes table's columns) add a second count: defs named for the shot, lines naming it in quotes."""
-    want = _words(note)
+    want = _note_words(note)
     hits = find(film, note, 12)
     sh, msg = _shot_of(film, shot, at) if (shot or at is not None) else ([], '')
     show.msg = msg
@@ -442,6 +462,9 @@ def main(a):
         _log(a[0], a[2], shot, at, res)
         if getattr(show, 'msg', ''):
             print('note: ' + show.msg)
+        if at is not None:                         # savings 1 (Sam's go, 27 Nov): the look, cut from the last render
+            print(f'LOOK: python3 source/still.py {a[0]} {at:g} [--box X0,Y0,X1,Y1] (what Sam saw; add --after once '
+                  f'the code is changed, for the new frame beside it)')
         if not res:
             print('no code matches those words: try the thing on screen (who, what object), or `page.py FILM` and read the page')
         for head, rows in res:

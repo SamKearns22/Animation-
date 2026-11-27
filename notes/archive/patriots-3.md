@@ -47,6 +47,8 @@
 | 16 | Camera in the slit facing into the bunker; the Patriot mans the gun, shakes his head sadly: "They ain't even wearing poppies." | built: shot 9, camera in the slit; head shake 33.7 |
 | 17 | He begins to fire; the bunker lit by muzzle flare | built: fires 36.6 (four bursts), room lit on every flash |
 | 18 | Zoom back in on the soldiers standing dumbfounded in the background; their eyes meet in confusion | built: push-in 39.2-40.8; their eyes meet 41.0 |
+| 19 | Planning: the acting list, one row per line (rule 74) |  |
+| 20 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## References as checklists
 | reference | what it shows | ours matches? |

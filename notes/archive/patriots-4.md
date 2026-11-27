@@ -116,6 +116,8 @@ Claudia 2 (rule 51 asks 3; Bash's card reads light stubble as a beard: check by 
 | 18 | The Patriot points at the other two contestants: "Traitors." | yes: shot 12, both arms, fingers (Sam's note 6); then shot 13, their reaction (my addition, Sam said yes) |
 | 19 | No supershots, no sound effects | yes: voices only |
 | 20 | Timing of shots and the awkward looks and eye moves carry the comedy | by the animatic: Sam to judge |
+| 21 | Planning: the acting list, one row per line (rule 74) |  |
+| 22 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## References as checklists (guides/satire.md)
 | reference | what it shows | ours matches? |

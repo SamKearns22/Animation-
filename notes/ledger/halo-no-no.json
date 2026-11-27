@@ -33,5 +33,25 @@
    }
   }
  ],
- "checks": {}
+ "checks": {
+  "quick check": {
+   "runs": 1,
+   "faults": 14,
+   "kinds": {
+    "caption": 1,
+    "clipcheck COULD NOT TEST": 1,
+    "cortana": 1,
+    "musk": 1,
+    "rule 57": 1,
+    "rule S5": 1,
+    "script/mouth": 8
+   }
+  }
+ },
+ "quick_checks": [
+  {
+   "at": "2026-11-27T11:43+00:00",
+   "faults": 14
+  }
+ ]
 }

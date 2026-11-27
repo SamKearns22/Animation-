@@ -1,0 +1,46 @@
+# Sam's messages, chat cse_01J1JB7XURs9drkktpyQsMqf (handover.py log)
+
+### 2026-11-27T12:22:07
+Explain more
+
+### 2026-11-27T12:23:28
+1. Explain the context of this compared to what our films already do
+
+### 2026-11-27T12:24:05
+Y
+
+### 2026-11-27T12:39:24
+From this project and the work you've done, are there any other opportunities for savings?
+
+### 2026-11-27T12:40:38
+That's great!
+
+On 1. Why do you redraw the still rather than taking the one you had already drawn?
+
+### 2026-11-27T12:41:04
+Go
+
+### 2026-11-27T13:28:58
+You're doing really important work. 
+
+Are your fixes universal throughout the project? Do they apply to any conceivable action we take?
+
+### 2026-11-27T13:31:13
+Y
+
+Do you have any further insights into cost cutting from this project?
+
+### 2026-11-27T13:33:51
+Extrapolate those 4 into proposed action.
+
+### 2026-11-27T13:36:59
+Y to all. 
+
+Estimated saving on our latest 3 films if all work suggested today is implemented?
+
+### 2026-11-27T13:39:16
+The next time I say a film is posted and closed (not this film, Open Wounds -- call it by its title please) check back in on what you just said and ensure that it is true.
+
+### 2026-11-27T13:40:40
+As for the 15% target, we must keep working towards it. Today was a good step towards it. Any other ideas on hitting 15%/Statement One?
+

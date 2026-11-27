@@ -41,6 +41,9 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - At the end: each new thing that passed the critique gets a row in the catalogue's "Passed the critique".
 
 ## Notes round (Opus, medium): Sam's notes, fixes, clips
+- **First, the one-page fix pack, `guides/fix-pack.md`** (cost-spike fix 4, Sam's Y, 27 Nov): each note marked
+  (`notesteps.py note`), found (`page.py show`), its functions' users and kit tests asked (`touch.py NAME`), the
+  RERUN line run; it replaces reading the rest of this pack for a fixing chat.
 - Read: the notes printout `handover.py start --film` gives (Where things stand and the unticked notes; startup-fixes 3), not the file; then, for each note, ONE look at the code:
   `python3 source/page.py FILM show "note words"` (~40 numbered lines of the functions it touches). No greps or sed
   ranges on film files first; only if `show` misses, `page.py FILM find` or a second `show` in the thing's own words.
@@ -57,12 +60,22 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
   ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): `python3
   source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 --film NAME` (or `["Hook Text"]` for a film with no
   `HOOK`), from the clean render in `source/data/`.
+- **The every-frame watch (Sam's Y, 27 Nov; seeing test):** named in the one-line check offer before every clip or
+  animatic (about 1 minute a second of film to render plus the look). On his Y: `seeing.py render CASE --film MOD
+  --span T0 T1`, then `seeing.py watch CASE --film NAME`: only frames changed since that film's last watch are shown
+  (Sam: "doesn't check the same footage twice"); `--all` shows everything. Claude looks at every flag at full size
+  first (a third were real, most of the rest something hidden behind something in front: settle those with the
+  who-is-where view) and tells Sam only the real ones. Evidence: notes/seeing-test/flags-checked.md.
 
 ## Final and posting (Sonnet)
 - Read: `guides/tiktok-design.md` The video file, Sign-off, Posting; `guides/preflight.md` Stage 5.
 - Bite: 70, 75, 52, 47, 37. Tools: `finish.py CLEAN OUT --film NAME`, `ledger.py log/audit`.
 - The day a film is posted: add it to `source/data/freeze/films.json`, then `python3 source/freeze.py tag --push` (its bookmark
   at the save its final video came from). The handover check refuses a video in `animations/` that no film lists.
+- The day a film is posted (Sam, 27 Nov: "check back in on what you just said and ensure that it is true"): the first
+  film posted after Open Wounds is checked against the 27 Nov estimate (notes/cost-spike-fix.md, "Estimate to check"):
+  its real cost against what was said, told to Sam plainly, the film called by its title. `handover.py end` flags it
+  until the notes carry "## Estimate checked" (estimate_faults).
 
 ### My accounts (Sam, 26 Oct)
 (Moved from CLAUDE.md word for word, startup fixes 4, 16 Nov.)

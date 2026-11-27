@@ -93,6 +93,8 @@ Brief: `prompts/prepper-minister.md` (Sam, 24 Oct). Plan in metres: `source/prep
 | 47 | Continuity: every shot starts where the last left off (except 5-6); anything broken, dropped or killed stays so | |
 | 48 | Sam records Andy (shots 1-7, 9) and Wes (shot 8); snarl in 10 is silent | |
 | 49 | Hook Text later from Sam; CranbriJoos sign-off via `finish.py` | |
+| 50 | Planning: the acting list, one row per line (rule 74) |  |
+| 51 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## References as checklists (guides/satire.md): what each photo shows
 | reference | what it shows | use |

@@ -118,6 +118,8 @@ hit, the biggest at the crown; judge in motion).
 | 18 | CranbriJoos sign-off at the end (CLAUDE.md) | at the final: `finish.py` adds it (not in the animatic) |
 | 19 | "Let's do the 12 second shot" | yes: the rig scene is 12.0 s (5.6-17.6) |
 | 20 | Sign: "Jackdaw" (the real name) | yes: JACKDAW on the deck sign (5.8) |
+| 21 | Planning: the acting list, one row per line (rule 74) |  |
+| 22 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## Opening scene brief (Sam, 1 Nov; a checklist, ticked before the first animatic)
 | # | from the brief or a note (word for word) | done? |

@@ -4,13 +4,13 @@
  "chats": [],
  "checks": {
   "quick check": {
-   "runs": 1,
-   "faults": 4,
+   "runs": 2,
+   "faults": 9,
    "kinds": {
-    "CAMERA FEEL": 1,
-    "caption": 1,
-    "other": 1,
-    "rule 57": 1
+    "CAMERA FEEL": 3,
+    "caption": 2,
+    "other": 2,
+    "rule 57": 2
    }
   }
  },
@@ -18,6 +18,10 @@
   {
    "at": "2026-11-23T12:07+00:00",
    "faults": 4
+  },
+  {
+   "at": "2026-11-27T11:41+00:00",
+   "faults": 2
   }
  ]
 }

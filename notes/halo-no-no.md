@@ -149,6 +149,8 @@ Composition sheet sent: 29 Oct, review/halo-no-no-composition.jpg
 | 28 | Hook Text: "Elon Finishes The Fight" (Sam, 29 Oct). | yes: `HOOK` (finish.py adds it) |
 | 26 | Usage is incredibly tight: be efficient, keep the action simple. | yes: about 12-15% of a week planned |
 | 27 | The theme music should always be playing, quieter but still noticeable in the Roadster scenes and louder in the space scenes. | yes: `music_gain` (space loud, cabin -11 dB, 0.3 s eases, dips under the space lines) |
+| 29 | Planning: the acting list, one row per line (rule 74) |  |
+| 30 | Planning: the riskiest moves as 2-3 s clips, a "Rehearsal clips sent:" line (rule 8) |  |
 
 ## Benchmarks (rule 3): each place beside its reference, `review/halo-no-no-sets.jpg` (`python3 source/halo_sets.py sheet OUT`)
 | place | item | ours |
