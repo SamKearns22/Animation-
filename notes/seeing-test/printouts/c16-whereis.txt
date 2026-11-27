@@ -1,0 +1,2 @@
+27.33 s  guest appeared mid-frame (6804 px, not from the edge)
+28.58 s  guest appeared mid-frame (12192 px, not from the edge)
