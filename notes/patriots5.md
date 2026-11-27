@@ -149,7 +149,7 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - One film name, patriots5 (the redesign chat's); the plan chat's patriots-5 files folded in, 27 Nov.
 - The template's held estimates note is already settled: Sam said Y to option 1 on 17 Nov (notes/archive/milburn-handovers.md); not asked again.
 - Branches the start listed (also named by the redesign chat) (jolly-ramanujan, upbeat-dirac, gta-v5-sound-draft, gta-chat46-build, dreamy-fermi, gta-chat31): logs, an archive note and old Grand Theft Autism files only, nothing for this film; left as they are.
-- Photos of the real man Danny Tommo stands for: news tag page had none; the free photo library refused (too many requests); Openverse had only protest photos. Asked Sam (27 Nov).
+- Photos of the real man Danny Tommo stands for: Sam (27 Nov) said ask for big UK news sites; the network was already fully open (nothing to grant). Guardian, Sky, Reuters, AP and the Telegraph refuse automated visits themselves; the Mirror's topic page gave 5 press photos, filed in references/faces/tommo (2 front, 2 three-quarter, 1 smiling). Face tool run: A 73%, B 78%, C 72%, all first in the line-up; my look: the hair piece reads as a boxy block with the sides too long (his are faded short) and the stubble should be ginger-brown. Sent to Sam to pick.
 - The small boat "see patriots 2" = Patriots 2's grey inflatable (source/patriots2.py, shot_dinghy).
 - 
 
