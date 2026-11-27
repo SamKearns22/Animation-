@@ -213,7 +213,7 @@ def master(mix, end=None, lufs_target=MASTER_LUFS):
     return smooth_limit(x * g, -1.0), g
 
 
-def bed(voice, clips, start, dip_db=9.0, sr=None):
+def bed(voice, clips, start, dip_db=9.0, sr=None, mutes=()):
     """A background bed (growls, crowd, rain) under the voice, for any film (Open Wounds note 17, Sam 26 Nov: "a
     background growl underneath people talking"). clips: [(samples, from_s, loudness_lufs)], laid from `start` seconds
     to the end; loud peaks tamed by a slow limiter, each set to its loudness, a 0.25 s fade in, and the whole bed
@@ -233,4 +233,12 @@ def bed(voice, clips, start, dip_db=9.0, sr=None):
         out[i0:i0 + len(x)] += x
     w = int(0.15 * sr)
     talk = np.convolve((np.abs(voice) > 1e-4).astype(float), np.ones(w) / w, 'same')
-    return out * 10 ** (-dip_db * np.minimum(1.0, talk * 3) / 20)
+    gate = np.ones(n)                      # mutes: [(from_s, to_s)] the bed is silent there, 0.15 s fades either side
+    for a, b in mutes:
+        ramp = int(0.15 * sr)
+        i, j = int(a * sr), int(b * sr)
+        gate[max(0, i):j] = 0.0
+        if i - ramp >= 0:
+            gate[i - ramp:i] = np.minimum(gate[i - ramp:i], np.linspace(1, 0, ramp))
+        gate[j:j + ramp] = np.minimum(gate[j:j + ramp], np.linspace(0, 1, len(gate[j:j + ramp]))) if j < n else gate[j:j + ramp]
+    return out * gate * 10 ** (-dip_db * np.minimum(1.0, talk * 3) / 20)

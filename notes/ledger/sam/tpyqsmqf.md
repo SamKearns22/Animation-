@@ -30,3 +30,17 @@ Y
 
 Do you have any further insights into cost cutting from this project?
 
+### 2026-11-27T13:33:51
+Extrapolate those 4 into proposed action.
+
+### 2026-11-27T13:36:59
+Y to all. 
+
+Estimated saving on our latest 3 films if all work suggested today is implemented?
+
+### 2026-11-27T13:39:16
+The next time I say a film is posted and closed (not this film, Open Wounds -- call it by its title please) check back in on what you just said and ensure that it is true.
+
+### 2026-11-27T13:40:40
+As for the 15% target, we must keep working towards it. Today was a good step towards it. Any other ideas on hitting 15%/Statement One?
+

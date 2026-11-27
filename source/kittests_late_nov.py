@@ -1058,3 +1058,19 @@ def subtitles_fit_where_made():
     bad = SUB.readable_faults(lambda t: SUB.caption_at(cram, t), 3.0, 12)
     ok = not ow and roomy == [['one two three', 0.0], ['four five six', 2.0]] and bad
     return ok, f'Open Wounds: {len(ow)} caption fault(s) {ow[:1]}; roomy pieces kept: {roomy}; crammed line flagged: {len(bad)}'
+
+
+@test
+def bed_mutes():
+    """Sam, 27 Nov (Open Wounds): "disable the wolf sound effect from the start of the Tony scene to the moment the
+    door is burst open". audiokit.bed(mutes=[(from, to)]) makes the background bed silent there and leaves it
+    elsewhere."""
+    import numpy as np
+    import audiokit as AK
+    sr = 8000
+    voice = np.zeros(sr * 6)
+    clip = (np.random.RandomState(1).randn(sr * 6) * 0.1, 0.0, -30.0)
+    on = AK.bed(voice, [clip], 0.0, sr=sr)
+    off = AK.bed(voice, [clip], 0.0, sr=sr, mutes=[(2.0, 3.0)])
+    inside, outside = np.abs(off[int(2.1 * sr):int(2.9 * sr)]).max(), np.abs(off[int(4 * sr):int(5 * sr)]).max()
+    return (inside == 0 and outside > 0 and np.abs(on[int(2.1 * sr):int(2.9 * sr)]).max() > 0), f'muted {inside}, kept {outside:.3f}'

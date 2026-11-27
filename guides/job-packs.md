@@ -72,6 +72,10 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Bite: 70, 75, 52, 47, 37. Tools: `finish.py CLEAN OUT --film NAME`, `ledger.py log/audit`.
 - The day a film is posted: add it to `source/data/freeze/films.json`, then `python3 source/freeze.py tag --push` (its bookmark
   at the save its final video came from). The handover check refuses a video in `animations/` that no film lists.
+- The day a film is posted (Sam, 27 Nov: "check back in on what you just said and ensure that it is true"): the first
+  film posted after Open Wounds is checked against the 27 Nov estimate (notes/cost-spike-fix.md, "Estimate to check"):
+  its real cost against what was said, told to Sam plainly, the film called by its title. `handover.py end` flags it
+  until the notes carry "## Estimate checked" (estimate_faults).
 
 ### My accounts (Sam, 26 Oct)
 (Moved from CLAUDE.md word for word, startup fixes 4, 16 Nov.)

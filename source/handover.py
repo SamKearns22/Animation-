@@ -1249,6 +1249,23 @@ def nocheck_faults(film, notes=None):
     return out
 
 
+def estimate_faults(films_path=None, notes=None, before=None):
+    """Sam (27 Nov): "The next time I say a film is posted and closed (not Open Wounds) check back in on what you just
+    said and ensure that it is true": the 27 Nov savings estimate (30-40% off a film, notes rounds about halved, still
+    about 3x the 15% target). Once a film not on the 27 Nov list is posted, the notes must hold '## Estimate checked'."""
+    films_path = films_path or os.path.join(ROOT, 'source', 'data', 'freeze', 'films.json')
+    notes = notes or os.path.join(ROOT, 'notes', 'cost-spike-fix.md')
+    before = before or os.path.join(ROOT, 'source', 'data', 'estimate-27nov-before.json')
+    try:
+        new = sorted(set(json.load(open(films_path))) - set(json.load(open(before))) - {'brexit-is-done', 'open-wounds'})
+    except Exception:
+        return []
+    if not new or '## Estimate checked' in open(notes, encoding='utf-8').read():
+        return []
+    return [f'ESTIMATE: {new[0]} is posted: check the 27 Nov savings estimate against its real cost and tell Sam '
+            f'plainly, calling the film by its title (notes/cost-spike-fix.md, "Estimate to check")']
+
+
 def touch_faults():
     """Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read every
     file, and every big code file opens with a MAP that matches it (source/maps.py)."""
@@ -1288,7 +1305,7 @@ def main(argv):
                   ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
                   ('rule', rule_faults), ('shared', shared_faults), ('reach', reach_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
                   ('castsheet', lambda: castsheet_faults(film)), ('touch', touch_faults),
-                  ('fixpack', lambda: fixpack_faults(film, nf)), ('nocheck', lambda: nocheck_faults(film, nf)), ('appcost', appcost_faults)]
+                  ('fixpack', lambda: fixpack_faults(film, nf)), ('nocheck', lambda: nocheck_faults(film, nf)), ('estimate', estimate_faults), ('appcost', appcost_faults)]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
         return report(faults, f'(end of chat, {film})')

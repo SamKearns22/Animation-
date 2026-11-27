@@ -127,6 +127,15 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   test the word list, never to find these tools' own code). COST: get_session gives this chat no cost figure (only
   "weekly limit: warning"); the cost watch said about 2.3% of the week at 160 steps. Nothing recorded by guess.
 
+## Estimate to check (said to Sam, 27 Nov)
+Sam: "The next time I say a film is posted and closed (not Open Wounds) check back in on what you just said and ensure
+that it is true." What was said, with all of 27 Nov's work in (savings 1-8, fix pack step 4):
+- about 30-40% off a film's cost; Open Wounds about $73 -> $44-51, Grand Theft Autism $108 -> $65-76, Blessed $101 -> $61-71;
+- the notes rounds (about half a film's cost) about halved: ~35 steps a note -> ~16-18;
+- the other stages 10-20% off; still about 3x the 15%-of-a-week target (~$16).
+Check: the next posted film's ledger total and its steps per note (`notesteps.py report`, the notes rounds), against
+these; say plainly which held. Call films by their title (Sam, 27 Nov: "Open Wounds", not "Brexit").
+
 ## Replay test 2: a film's opening (27 Nov)
 Kind: tool test. Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy
 (worktrees in the scratchpad; no film code pushed). Opus, medium. Film: Islamocommunism (finished; opening 4 Nov).
