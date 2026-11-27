@@ -6621,6 +6621,42 @@ def row_of_bookcases_sized_per_bay():
     return ok, f'a row of 4: {row}; one 4 m bookcase: {one}'
 
 
+@test
+def critique_saw_it_column():
+    """Check audit, the critique column (Sam's "1. Y", 26 Nov): each of Sam's notes says whether the fresh-eye critique
+    had already flagged it (yes, no, no critique). The handover refuses a blank cell on a table that has the column
+    (the template has it); an older table without it is not asked; the audit counts the answers."""
+    import tempfile
+    import checkaudit as CA
+    import handover as H
+    tmp = tempfile.mkdtemp()
+    os.makedirs(os.path.join(tmp, 'notes'))
+    p = os.path.join(tmp, 'notes', 'kt.md')
+    head = '## Notes\n| # | shot | time | note | line | should have caught | critique saw it? | status |\n|---|---|---|---|---|---|---|---|\n'
+    open(p, 'w').write(head + '| 1 | 2 | 3.0 | the hand floats | 12 | AUDIT | yes | fixed |\n'
+                              '| 2 | 3 | 9.0 | the door pops | 30 | pop-in | | open |\n'
+                              '| 3 | 1 | 1.0 | too dark | 2 | none | no critique | open |\n')
+    keep = H.ROOT
+    out = []
+    try:
+        H.ROOT = tmp
+        f = H.tag_faults(None, p)
+    finally:
+        H.ROOT = keep
+    saw = [x for x in f if 'critique saw' in x]
+    if len(saw) != 1 or 'note 2' not in saw[0]:
+        out.append(f'blank cell not refused once: {f}')
+    old = os.path.join(tmp, 'notes', 'old.md')
+    open(old, 'w').write('## Notes\n| # | shot | time | note | line | should have caught | status |\n|---|---|---|---|---|---|---|\n'
+                         '| 1 | 2 | 3.0 | a note | 1 | none | open |\n')
+    if H.note_tags(old, H.SAW):
+        out.append('an older table without the column was asked')
+    c = CA.critique_saw(tmp)
+    if c.get('yes') != 1 or c.get('no critique') != 1 or c.get('blank') != 1:
+        out.append(f'counted wrong: {dict(c)}')
+    return (not out), ('; '.join(out) or f'blank refused (note 2); old table not asked; counted {dict(c)}')
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test

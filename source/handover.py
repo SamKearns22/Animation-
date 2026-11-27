@@ -810,9 +810,10 @@ def branch_faults(film, notes=None):
 
 
 TAG = re.compile(r'(?i)should\s+have\s+caught')
+SAW = re.compile(r'(?i)critique\s+saw')       # check audit (Sam's "1. Y", 26 Nov): did the fresh-eye critique see it too?
 
 
-def note_tags(notes_path):
+def note_tags(notes_path, col=None):
     """check-catches change 2 (Sam's Y, 20 Nov): Sam's numbered notes (the "## Notes" table) as {number: tag}, the
     tag being the "should have caught" cell (a check's name, or "none"); None when the table has no such column.
     Only rows with words in their note cell count (the template's empty row 1 does not)."""
@@ -834,9 +835,15 @@ def note_tags(notes_path):
         ni = next((i for i, h in enumerate(head) if h.startswith('note')), 3)
         if ni >= len(cells) or not cells[ni]:
             continue
-        ti = next((i for i, h in enumerate(head) if TAG.search(h)), None)
+        ti = next((i for i, h in enumerate(head) if (col or TAG).search(h)), None)
+        if col is not None and ti is None:
+            return {}                               # an older table without the column: nothing asked
         tags[cells[0]] = cells[ti] if ti is not None and ti < len(cells) else None
     return tags
+
+
+class _NoFilm(Exception):
+    pass
 
 
 def tag_faults(film, notes=None):
@@ -847,16 +854,24 @@ def tag_faults(film, notes=None):
     if not tags:
         return []
     try:
+        if not film:
+            raise _NoFilm()
         sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
         import ledger
         d = ledger.load(film)
         if d.get('notes_tags') != tags:
             d['notes_tags'] = tags
             ledger.store(d)
+    except _NoFilm:
+        pass                                        # a notes file with no film (a test): nothing to record
     except Exception as e:
         return [f'TAG: the notes\' tags could not be saved to the record ({e})']
-    return [f'TAG: note {n} has no "should have caught" (a check\'s name, or none): add it to the notes table'
-            for n, t in tags.items() if not t]
+    out = [f'TAG: note {n} has no "should have caught" (a check\'s name, or none): add it to the notes table'
+           for n, t in tags.items() if not t]
+    saw = note_tags(p, SAW)                         # the critique column, on tables that have it (template, 27 Nov)
+    out += [f'TAG: note {n} has no "critique saw it?" (yes, no, or no critique: did the fresh-eye critique flag '
+            'this before Sam did?)' for n, t in saw.items() if not t]
+    return out
 
 
 def record_faults(rec):
