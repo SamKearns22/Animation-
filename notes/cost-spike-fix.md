@@ -103,5 +103,5 @@ the parent chat, 27 Nov).
   others' fixes in the notes archive and commit subjects while finding them); no Sam review; one chat; the main
   quality gap is the same in all five: I fixed the picture but added no check, which the fix pack's step list does
   not ask for (rule 30 / "Seeing like Sam" 3 do). Next: add "name and add the check" as a step in guides/fix-pack.md.
-- Kit tests: note 19's 7 (2 failed before the change too); 24.1's 2 and 28's 1 pass; note 21's 40-test run
-  incomplete at write-up: 15 pass, 5 fail (2 failed before, 1 a side-copy git name, 2 hold Kemi's old face on purpose).
+- Kit tests: note 19's 7 (2 failed before the change too); 24.1's 2 and 28's 1 pass; note 21's run
+  finished: 28 run, 23 pass, 5 fail (2 failed before, 1 a side-copy git name, 2 hold Kemi's old face on purpose).
