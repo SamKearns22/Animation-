@@ -29,7 +29,11 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
 - [x] Watch-the-clip test (Sam's Y 27 Nov) built and scored blind: notes/seeing-test/scores-watch.md.
 - [x] Check the watch test's flags in passed moves at full size (real or misread), then one plain table for Sam,
       one line per tool; his yes/no per winner, one at a time. Checked (chat 4): notes/seeing-test/flags-checked.md;
-      table sent 27 Nov; waiting on Sam's one question.
+      table sent 27 Nov. Sam: "Y. Can it be designed so that it doesn't check the same footage twice and only does
+      the frames that have changed in future clips and animatics".
+- [x] Watch sheets made an advised check (job-packs Checks and animatic; kit-catalogue), with only-changed frames:
+      `seeing.py watch CASE --film NAME`, record notes/seeing/FILM-seen.tsv; kittest seeing_watch_only_changed PASS;
+      re-drawing the same moment gives the same fingerprint (12 of 12 frames, Brexit c07).
 - Not duplicated: check-knows-intent option 1 (R8, notes/check-audit.md) is about intent lists for the picture
   checks; this job only adds ways of looking.
 
@@ -61,20 +65,15 @@ version Sam flagged (c06, 21.33-22.75 s) the trousers bulge out below that edge.
   wolves (drawn by their own code) or the people/arms of GTA's 3D Jason separately from the car's inside; those show
   as faint grey picture. A film that wants this view needs its own-drawn things wrapped (cover.thing).
 
-## Where things stand (27 Nov, seeing test chat 4)
-- Rules that bite next: Statement Two (say plainly what the tools can't do), 93 (advice only), "Messages to me".
-- Done: all 17 watch flags on passed moves and 13 extras checked at full size (flags-checked.md): passed moves
-  5 real (4 faults), 2 borderline, 3 taste, 7 misread (most "vanished" = covered by something in front);
-  extras 6 real, 2 borderline, 5 misread. Verdict: the watch sheets are a real gain, the four other ways no better
-  than plain pictures (scores.md). Table and one question sent to Sam.
-- Next: on Sam's Y: Opus, medium. Make the watch sheets an advised check (offered before a clip or animatic, run on
-  his Y), and Claude sorts every flag at full size before anything reaches Sam; who-is-where kept only to settle
-  "vanished" flags (drawing order). On N: the job closes, tools stay in the kit unused.
-- Needs Sam: 1 question (watch sheets as an advised check, Y/N).
-- Read: this file; flags-checked.md; CLAUDE.md "Asking me before you go on" (checks are advised).
+## Where things stand (27 Nov, seeing test chat 4, job closed)
+- Rules that bite next: Statement Two, 93 (advice only), "Checks are advised, not automatic".
+- Done: flags checked at full size (flags-checked.md); Sam's Y; the every-frame watch is now an advised check
+  that skips footage already watched (only changed frames), tested; the four other ways stay in seeing.py unused.
+- Next: none for this job. Any film's next clip or animatic offers the watch in its one-line check offer.
+- Needs Sam: nothing.
+- Read: guides/job-packs.md, Checks and animatic (the watch bullet).
 - Open rule requests: none.
-- For Claude: frames re-made with seeing.py render (worktrees per commit) + watch; full-size pairs by a small
-  crop script (chat 4 scratchpad, not kept). Brexit commits also fetch the body model into /tmp/makehuman: start
-  one render alone first, as with GTA.
+- For Claude: the fingerprint is taken at 270x480, so a --small clip and a full render usually match; a mismatch
+  only means frames are shown again, never skipped wrongly. `--all` ignores the record.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 4.77% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 5.14% of a week (2026-11-27)
