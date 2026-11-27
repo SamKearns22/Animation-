@@ -13,3 +13,5 @@
 {"chat": "2fda13cc", "event": "block", "faults": [["word", "guard"]], "t": "2026-11-26 23:12"}
 {"chat": "81b35345", "event": "block", "faults": [["word", "finder"]], "t": "2026-11-26 23:25"}
 {"chat": "c62c6596", "event": "block", "faults": [["file", "notes/ledger/sam/1ghyne9z.md"], ["word", "ledger"]], "t": "2026-11-27 04:41"}
+{"chat": "c62c6596", "event": "let-through", "faults": [["code", "`claude/upbeat-dirac-w16tn9`"], ["word", "main line"]], "reply": "I committed the one pending change and pushed it to this session's branch, `claude/upbeat-dirac-w16tn9`. The working folder is now clean.\n\nThe change was a log entry written by the plain-words check on my last reply. The message log you were worried about was already saved to GitHub, so nothing else needed committing. I didn't touch the main line.\n\nWatcher: 37 systems checked, 2 still broken (on the list, each owned).", "t": "2026-11-27 04:42"}
+{"chat": "c62c6596", "event": "block", "faults": [["file", "notes/archive/waiting-list-settled-27-nov.md"], ["label", "R8"]], "t": "2026-11-27 04:44"}
