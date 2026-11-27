@@ -807,6 +807,32 @@ def wolf_house_line():
 
 
 @test
+def one_line_weight_every_kit():
+    """R8 A6 (27 Nov): one line weight for every kit. Open Wounds note 16 (Sam, 26 Nov: "the line work on the wolves
+    is very thick in comparison to our house style") was one kit drawing its own outline; houseline.py now gives every
+    kit the people's weight (wolf via houseline.ctx, whale via houseline.px; the horse already draws with the people's
+    pen). houseline.survey measures each kit beside a person: red with the old wolf and whale lines, green now."""
+    import sys
+    sys.path.insert(0, 'source')
+    import houseline as H
+    import whale as W
+    import brexit_is_done as F
+    WF = F.ACT.WF
+    keep_ctx, keep_line = WF.house_ctx, W.HOUSE_LINE
+    try:
+        WF.house_ctx, W.HOUSE_LINE = (lambda X, s, ppm: X), False
+        old = H.faults(H.survey())
+    finally:
+        WF.house_ctx, W.HOUSE_LINE = keep_ctx, keep_line
+    rows = H.survey()
+    now = H.faults(rows)
+    caught = {f.split(' ')[0] for f in old}
+    return {'wolf', 'whale'} <= caught and not now, (
+        f'old lines caught: {sorted(caught)}; now: ' + ('; '.join(now) if now else
+                                                      ', '.join(f'{n} {lab} {r:.2f}' for n, lab, r in rows)))
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
     seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These

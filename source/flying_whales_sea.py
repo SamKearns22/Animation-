@@ -37,6 +37,7 @@ from PIL import Image, ImageDraw, ImageFilter
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import whale as W                                    # noqa: E402  (the Cam class and the house ink)
+W.HOUSE_LINE = False                                 # posted: its whales keep the old default outline (R8 A6)
 
 INK = W.INK
 SIZE = (1080, 1920)
