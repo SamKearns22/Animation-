@@ -300,6 +300,232 @@
    "cost": 3.63,
    "notes": 0,
    "repeats": []
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "7a6d1e31",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.2,
+   "src": "estimate",
+   "sid": "session_01J1JB7Zkqtjxj1bwaP5bCiS",
+   "steps": 17,
+   "hist_k": 106,
+   "kinds": {
+    "tool search": 23.7,
+    "renders": 2.9,
+    "other": 73.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 12,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.7252,
+    "total": 0.7252,
+    "floor_k": 85,
+    "blocks": {
+     "start-up floor": 56.8,
+     "new writes": 24.0,
+     "Claude's words": 13.5,
+     "carried history": 5.6
+    },
+    "origins": {
+     "start-up floor": 56.8,
+     "result: tool search": 22.4,
+     "Claude's words": 18.6,
+     "messages and reminders": 1.8,
+     "result: renders": 0.2,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 56.8,
+     "commands": 12.1,
+     "reading notes": 10.9,
+     "renders": 5.2,
+     "thinking": 4.9,
+     "reading kit code": 2.0,
+     "messages and reminders": 1.8,
+     "running checks and tools": 1.8,
+     "other commands": 1.6,
+     "messages to Sam": 1.5,
+     "start-up and handover tools": 1.2,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/seeing-test/findings/watch.md",
+      2.6,
+      0.0257
+     ],
+     [
+      "notes/seeing-test.md",
+      1.9,
+      0.0198
+     ],
+     [
+      "notes/seeing-test/scores-watch.md",
+      1.9,
+      0.0198
+     ],
+     [
+      "notes/seeing-test/cases.tsv",
+      0.8,
+      0.0082
+     ],
+     [
+      "notes/seeing-test/key.md",
+      0.8,
+      0.0079
+     ],
+     [
+      "source/seeing.py",
+      0.8,
+      0.0077
+     ]
+    ],
+    "base_pct": 33.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 3,
+     "shared:handover.py": 1,
+     "shared:seeing.py": 3,
+     "other": 5
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "notes/seeing-test.md",
+      "Where things stand",
+      "",
+      1608
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01J1JB7X4D5fXmWtyEsq1eUg --film seeing-",
+      "",
+      2101
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/seeing-test.md notes/seeing-test/scores-watch.md notes/seeing-test",
+      "sed -n 1,59p notes/seeing-test.md; echo ----; cat notes/seeing-test/scores-watch",
+      "",
+      15347
+     ],
+     [
+      3,
+      "other",
+      "shared:seeing.py",
+      "notes/seeing-test/cases.tsv notes/seeing-test/findings/watch.md source/seeing.py",
+      "c03\\|c05\\|c07\\|c10\\|c15",
+      "",
+      3230
+     ],
+     [
+      4,
+      "other",
+      "shared:seeing.py",
+      "notes/seeing-test/findings/watch.md source/seeing.py",
+      "def render\\|def watch\\|argv\\|case_dir\\|CASES\\|scratch",
+      "",
+      10292
+     ],
+     [
+      5,
+      "other",
+      "shared:seeing.py",
+      "source/seeing.py",
+      "^ROOT\\|^OUT\\|scratch\\|CASEDIR\\|def case_dir",
+      "",
+      3159
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "source/models",
+      "S=/tmp/claude-0/-home-user-Animation-/7a6d1e31-c2f2-5172-8b65-d8f842dd67c1/scrat",
+      "",
+      245
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/seeing-test/key.md",
+      "cat notes/seeing-test/key.md | head -60",
+      "",
+      3399
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "",
+      "sleep 1; tail -3 /tmp/claude-0/-home-user-Animation-/7a6d1e31-c2f2-5172-8b65-d8f",
+      "",
+      39
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "tail -20 /tmp/claude-0/-home-user-Animation-/7a6d1e31-c2f2-5172-8b65-d8f842dd67c",
+      "",
+      1744
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "sleep 240; cat /tmp/claude-0/-home-user-Animation-/7a6d1e31-c2f2-5172-8b65-d8f84",
+      "",
+      408
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/7a6d1e31-c2f2-5172-8b65-d8f842dd67c1/tas",
+      "",
+      85
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
