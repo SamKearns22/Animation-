@@ -2956,6 +2956,1386 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "e5800d1f",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.23,
+   "src": "estimate",
+   "sid": "session_01J1JB7YXTxRKCuAaZAxnzYT",
+   "steps": 148,
+   "hist_k": 256,
+   "kinds": {
+    "tool search": 33.2,
+    "renders": 1.4,
+    "pictures": 2.0,
+    "other": 63.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 136,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 5,
+    "other": 7
+   },
+   "split": {
+    "usd": 8.1747,
+    "total": 8.1747,
+    "floor_k": 85,
+    "blocks": {
+     "start-up floor": 29.8,
+     "carried history": 28.8,
+     "Claude's words": 24.7,
+     "new writes": 16.8
+    },
+    "origins": {
+     "Claude's words": 44.5,
+     "start-up floor": 29.8,
+     "result: tool search": 20.4,
+     "messages and reminders": 2.9,
+     "result: pictures": 1.6,
+     "Claude's edits": 0.6,
+     "result: renders": 0.1,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 29.8,
+     "writing code": 18.0,
+     "thinking": 14.3,
+     "reading kit code": 11.2,
+     "commands": 7.4,
+     "reading notes": 4.6,
+     "messages and reminders": 2.9,
+     "writing notes": 2.8,
+     "messages to Sam": 2.6,
+     "reading guides": 1.9,
+     "looking at pictures": 1.6,
+     "start-up and handover tools": 1.1,
+     "running checks and tools": 1.0,
+     "other commands": 0.4,
+     "renders": 0.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 29,
+    "work_pct": 0.38,
+    "reads": [
+     [
+      "notes/check-audit.md",
+      4.2,
+      0.1434
+     ],
+     [
+      "guides/kit-catalogue.md",
+      2.2,
+      0.0713
+     ],
+     [
+      "source/whale.py",
+      0.7,
+      0.0221
+     ],
+     [
+      "source/mounts.py",
+      0.7,
+      0.0221
+     ],
+     [
+      "source/gta_cars.py",
+      0.3,
+      0.0079
+     ],
+     [
+      "source/prepper_robot.py",
+      0.3,
+      0.0079
+     ],
+     [
+      "source/flying_whales.py",
+      0.3,
+      0.0077
+     ]
+    ],
+    "base_pct": 27.7
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 27,
+     "shared:handover.py": 1,
+     "film notes": 6,
+     "shared:wolf.py": 3,
+     "shared:lying.py": 1,
+     "guides": 4,
+     "shared:kittests.py": 29,
+     "shared:burnham.py": 1,
+     "shared:whale.py": 4,
+     "shared:satire_style.py": 1,
+     "shared:brexit_is_done_action.py": 2,
+     "shared:gta_cars.py": 2,
+     "shared:flying_whales_sea.py": 1,
+     "shared:flying_whales_opener.py": 1,
+     "shared:houseline.py": 9,
+     "shared:mounts.py": 1,
+     "shared:castsheet.py": 3,
+     "shared:facehouse.py": 1,
+     "shared:ink.py": 3,
+     "shared:people_parts.py": 1,
+     "shared:body.py": 4,
+     "shared:solid_seat.py": 1,
+     "shared:movesize.py": 5,
+     "shared:acting.py": 9,
+     "shared:views.py": 4,
+     "shared:limbs.py": 1,
+     "shared:handcheck.py": 2,
+     "shared:finish.py": 1,
+     "shared:signoff.py": 3,
+     "shared:join.py": 1,
+     "shared:freeze.py": 4
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      "",
+      229
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01J1JB7XUfViKYhjGFpQDLw5 --film check-a",
+      "",
+      2816
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/check-audit.md",
+      "A6\\|A4\\|A5\\|A3\\|A7\\|A8",
+      "",
+      736
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/check-audit.md guides/job-packs.md",
+      "A tool job",
+      "",
+      17000
+     ],
+     [
+      4,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "def house_ctx",
+      "",
+      1782
+     ],
+     [
+      5,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "def house_ol",
+      "",
+      892
+     ],
+     [
+      6,
+      "other",
+      "shared:lying.py",
+      "source/lying.py guides/kit-catalogue.md",
+      "def _lw",
+      "",
+      1604
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "sed -n 84,124p guides/kit-catalogue.md",
+      "",
+      8636
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "OL\\b\\|OL *=\\|ol *=\\|outline\\|LW *=\\|lw *=\\|width=",
+      "",
+      4560
+     ],
+     [
+      9,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def kt_wolf_house_line\\|wolf_house_line",
+      "",
+      2313
+     ],
+     [
+      10,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def _ring_px",
+      "",
+      1325
+     ],
+     [
+      11,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/lying.py source/whale.py source/mounts.py",
+      "^SS\\|^M *=\\|^M=",
+      "",
+      1956
+     ],
+     [
+      12,
+      "other",
+      "shared:whale.py",
+      "source/whale.py source/mounts.py",
+      "ol",
+      "",
+      2785
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/s",
+      "",
+      95
+     ],
+     [
+      14,
+      "other",
+      "shared:whale.py",
+      "source/whale.py source/mounts.py",
+      "sed -n 342,350p source/whale.py; sed -n 798,828p source/whale.py; sed -n 571,600",
+      "",
+      2758
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/s",
+      "",
+      533
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      121
+     ],
+     [
+      17,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py source/burnham.py source/mounts.py source/whale.py source",
+      "^OUT\\|^INK",
+      "",
+      161
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/s",
+      "",
+      623
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "P=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      610
+     ],
+     [
+      20,
+      "other",
+      "shared:brexit_is_done_action.py",
+      "source/brexit_is_done_action.py",
+      "def wolf_at",
+      "",
+      99
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "P=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      611
+     ],
+     [
+      22,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py source/prepper_robot.py",
+      "^def draw_car\\|^def sheet\\|^class Car\\|^def _sheet_cam\\|Cam(",
+      "",
+      789
+     ],
+     [
+      23,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py source/prepper_robot.py",
+      "lw\\|Pen\\|w=",
+      "",
+      2088
+     ],
+     [
+      24,
+      "other",
+      "shared:whale.py",
+      "source/*.py source/whale.py",
+      "import whale\\|whale\\.draw\\|from whale",
+      "",
+      1349
+     ],
+     [
+      25,
+      "other",
+      "shared:flying_whales_sea.py",
+      "source/flying_whales_sea.py source/flying_whales.py",
+      "def whale_ol",
+      "",
+      1031
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "P=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      68
+     ],
+     [
+      27,
+      "other",
+      "shared:brexit_is_done_action.py",
+      "source/brexit_is_done_action.py",
+      "def person_at",
+      "",
+      1022
+     ],
+     [
+      29,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py source/whale.py",
+      "^import\\|^from",
+      "",
+      316
+     ],
+     [
+      30,
+      "other",
+      "shared:whale.py",
+      "source/whale.py source/ad_vanced_notice_sets.py source/flying_whales*.py",
+      "whale\\|W\\.draw\\|WH\\.",
+      "",
+      1372
+     ],
+     [
+      31,
+      "other",
+      "shared:flying_whales_opener.py",
+      "source/flying_whales_opener.py source/flying_whales_paths.py source/flying_whale",
+      "flying_whales_sea",
+      "",
+      942
+     ],
+     [
+      32,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py",
+      "time python3 source/houseline.py survey 2>&1 | grep -v Warn | tail -8",
+      "",
+      276
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "P=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      10
+     ],
+     [
+      36,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py",
+      "sed -i 's/max(-1) <= 40/max(-1) <= 25/' source/houseline.py && python3 source/ho",
+      "",
+      424
+     ],
+     [
+      37,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import houseline as H for t",
+      "",
+      119
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import houseline as H, nump",
+      "",
+      652
+     ],
+     [
+      39,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py",
+      "python3 - <<'EOF' p='source/houseline.py'; s=open(p).read() i=s.index('def ring(",
+      "",
+      57
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -4 import sys; sys.path.insert(0,'source') import ",
+      "",
+      811
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      ")\nS=S.resize((S.width*2,S.height*2),Image.NEAREST); S.save(",
+      "",
+      11
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      ")\nS=S.resize((S.width*2,S.height*2),Image.NEAREST); S.save(",
+      "",
+      11
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -3 import sys; sys.path.insert(0,'source') import ",
+      "",
+      303
+     ],
+     [
+      47,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py",
+      "sed -i \"/('robot', \\[('near'/d\" source/houseline.py && python3 source/houseline.",
+      "",
+      276
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "P=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      31
+     ],
+     [
+      50,
+      "other",
+      "shared:mounts.py",
+      "source/mounts.py",
+      "COATS\\|'points'\\|points=",
+      "",
+      714
+     ],
+     [
+      51,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py",
+      "sed -i \"s/ MO.Mount('horse').draw(img/ MO.Mount('horse', coat='chestnut').draw(i",
+      "",
+      243
+     ],
+     [
+      52,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def run\\|argv\\|def main",
+      "",
+      238
+     ],
+     [
+      53,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "argv\\|run\\|print",
+      "",
+      492
+     ],
+     [
+      54,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 source/kittests.py one_line_weight_every_kit wolf_house_line 2>&1 | grep",
+      "",
+      324
+     ],
+     [
+      55,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/whale.py",
+      "python3 source/kittests.py wolf_house_line 2>&1 | grep -v Warn | tail -2; timeou",
+      "",
+      230
+     ],
+     [
+      56,
+      "other",
+      "shared:houseline.py",
+      "notes/check-audit.md source/houseline.py guides/kit-catalogue.md",
+      "python3 - <<'EOF' p='notes/check-audit.md'; s=open(p).read() anchor=\"Sam's words",
+      "",
+      519
+     ],
+     [
+      57,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "One line weight for every kit",
+      "",
+      159
+     ],
+     [
+      58,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py source/wolf.py source/whale.py source/flying_whales_sea.py s",
+      "git add -A source/houseline.py source/wolf.py source/whale.py source/flying_whal",
+      "",
+      305
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv",
+      "git add notes/kittest-stamps.tsv && git commit -qm \"kittest stamps\" && git fetch",
+      "",
+      339
+     ],
+     [
+      60,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "def hair_spike_faults\\|def mouth_spike_faults",
+      "",
+      3791
+     ],
+     [
+      61,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/faces.py source/castsheet.py",
+      "^def curve\\|^def _curve\\|^curve =\\|^_curve",
+      "",
+      2277
+     ],
+     [
+      62,
+      "other",
+      "shared:ink.py",
+      "source/ink.py source/facehouse.py notes/*.md source/castsheet.py",
+      "^def curve",
+      "",
+      2705
+     ],
+     [
+      63,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/castsheet.py source/handover.py source/kittests.py",
+      "^def curve\\|^from ink\\|^curve",
+      "",
+      4485
+     ],
+     [
+      64,
+      "other",
+      "shared:ink.py",
+      "source/ink.py source/facehouse.py source/castsheet.py source/handover.py source/",
+      "s wing, 19 Oct).\"\"\"\n    p = np.asarray(pts, float)",
+      "",
+      682
+     ],
+     [
+      65,
+      "other",
+      "shared:ink.py",
+      "source/ink.py source/kittests.py",
+      "python3 - <<'EOF' p='source/ink.py'; s=open(p).read() old=''' q = [] for x, y in",
+      "",
+      326
+     ],
+     [
+      66,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() s=s.replace(''' keep ",
+      "",
+      333
+     ],
+     [
+      68,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() i=s.index(\" def poke(",
+      "",
+      333
+     ],
+     [
+      69,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "castsheet.py.*selftest\\|'selftest'",
+      "",
+      33
+     ],
+     [
+      70,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "FAIL\\|MISSED\\|grin",
+      "",
+      354
+     ],
+     [
+      71,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 source/kittests.py castsheet_only_when_cast_changed 2>&1 | grep -v Warn ",
+      "",
+      288
+     ],
+     [
+      72,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "first run {n1}\\|n1 ==\\|n1 == 7\\|== 7",
+      "",
+      207
+     ],
+     [
+      73,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/castsheet.py",
+      "May seated",
+      "",
+      348
+     ],
+     [
+      74,
+      "other",
+      "film notes",
+      "notes/check-audit.md notes/kittest-stamps.tsv",
+      "python3 - <<'EOF' p='notes/check-audit.md'; s=open(p).read() anchor=\"Sam's words",
+      "",
+      130
+     ],
+     [
+      75,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py notes/logs/handover-end.log",
+      "def crotch_faults",
+      "",
+      5188
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "P=/tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/scrat",
+      "",
+      11
+     ],
+     [
+      79,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py source/people_parts.py",
+      "crotch",
+      "",
+      256
+     ],
+     [
+      80,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "git log -S \"the crotch a small round\" --format=\"%h %ad %s\" --date=format:%d-%H:%",
+      "",
+      3741
+     ],
+     [
+      81,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py source/people_parts.py",
+      "kemi\\|crotch\\|legs\\|trouser",
+      "",
+      1278
+     ],
+     [
+      82,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py",
+      "^[+-]",
+      "",
+      1074
+     ],
+     [
+      83,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py notes/brexit-is-done.md",
+      "^[+-]",
+      "",
+      1943
+     ],
+     [
+      84,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/*.py",
+      "^+def\\|^+@test",
+      "",
+      298
+     ],
+     [
+      85,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() anchor=\"@test\\ndef se",
+      "",
+      279
+     ],
+     [
+      86,
+      "other",
+      "shared:kittests.py",
+      "notes/check-audit.md source/kittests.py notes/kittest-stamps.tsv",
+      "python3 - <<'EOF' p='notes/check-audit.md'; s=open(p).read() anchor=\"Sam's words",
+      "",
+      93
+     ],
+     [
+      87,
+      "other",
+      "shared:movesize.py",
+      "source/movesize* source/movesize.py source/*.py",
+      "^def ",
+      "",
+      3580
+     ],
+     [
+      88,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/movesize.py",
+      "HEAD_MIN\\|MIN_PX\\|NOD_DEG\\|def .*size\\|on screen\\|px",
+      "",
+      454
+     ],
+     [
+      89,
+      "other",
+      "shared:movesize.py",
+      "source/movesize.py source/acting.py",
+      "sed -n 41,53p source/movesize.py; sed -n 150,160p source/acting.py; sed -n 600,6",
+      "",
+      3425
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "notes/check-audit.html notes/checks/*.md",
+      "A3[^<]*<[^>]*>[^<]*",
+      "",
+      1254
+     ],
+     [
+      91,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/*.py",
+      "^def \\|^class ",
+      "",
+      2056
+     ],
+     [
+      92,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "^BODY *=\\|'nod':",
+      "",
+      4065
+     ],
+     [
+      93,
+      "other",
+      "shared:movesize.py",
+      "source/movesize.py source/views.py",
+      "_drawn\\[.head_at.\\]\\|_drawn\\['eye\\|'eyes'\\]",
+      "",
+      3271
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/e5800d1f-497a-5e8f-a3e7-c5bd7b9b9aea/s",
+      "",
+      312
+     ],
+     [
+      95,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/*.py",
+      "AC.pose\\|A.pose\\|acting.pose\\|AC.person\\|acting.person",
+      "",
+      5023
+     ],
+     [
+      96,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/satire_template.py",
+      "acting\\|ACTING\\|film_side",
+      "",
+      1463
+     ],
+     [
+      97,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "import\\|^[A-Z]",
+      "",
+      4454
+     ],
+     [
+      98,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "^import\\|^from",
+      "",
+      189
+     ],
+     [
+      99,
+      "other",
+      "shared:movesize.py",
+      "source/movesize.py",
+      "for m in\\|HEAD_MOVES\\|curve",
+      "",
+      100
+     ],
+     [
+      100,
+      "other",
+      "shared:movesize.py",
+      "source/movesize.py source/kittests.py",
+      "python3 - <<'EOF' p='source/movesize.py'; s=open(p).read() old=\"\"\" if m['move'] ",
+      "",
+      213
+     ],
+     [
+      101,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import kittests as K print(",
+      "",
+      360
+     ],
+     [
+      102,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py",
+      "^import.* as B\\b",
+      "",
+      100
+     ],
+     [
+      103,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/kittests.py",
+      "B = V.B ",
+      "",
+      420
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | grep -v Warn | tail -5 import sys; sys.path.insert(0,'s",
+      "",
+      98
+     ],
+     [
+      105,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() old=\"\"\" e = jj['_draw",
+      "",
+      439
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | grep -v Warn | tail -5 import sys, math; sys.path.inser",
+      "",
+      142
+     ],
+     [
+      107,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/kittests.py",
+      "python3 - <<'EOF' p='source/acting.py'; s=open(p).read() i=s.index(\"_PX_PER_S = ",
+      "",
+      378
+     ],
+     [
+      108,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def ",
+      "",
+      369
+     ],
+     [
+      109,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      "",
+      791
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL",
+      "",
+      267
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs/*.log",
+      "moves_from_the_acting_list",
+      "",
+      362
+     ],
+     [
+      112,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      "",
+      204
+     ],
+     [
+      115,
+      "other",
+      "shared:limbs.py",
+      "notes/check-audit.html source/limbs.py source/body.py source/views.py",
+      "cuff",
+      "",
+      684
+     ],
+     [
+      116,
+      "other",
+      "shared:handcheck.py",
+      "source/*.py source/handcheck.py",
+      "limb\\|arm\\|sleeve",
+      "",
+      1648
+     ],
+     [
+      117,
+      "other",
+      "shared:handcheck.py",
+      "source/handcheck.py source/limbs.py",
+      "^def ",
+      "",
+      4514
+     ],
+     [
+      118,
+      "other",
+      "shared:views.py",
+      "source/views.py source/acting.py source/figure.py source/moves.py source/sitting",
+      "foreshort\\|at the lens\\|into the sleeve\\|in sleeve\\|in_sleeve\\|SLEEVE_BACK\\|towa",
+      "",
+      2035
+     ],
+     [
+      119,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 905,1000p source/views.py",
+      "",
+      5471
+     ],
+     [
+      120,
+      "other",
+      "shared:views.py",
+      "source/views.py source/people.py",
+      "def r7_on",
+      "",
+      1503
+     ],
+     [
+      121,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL",
+      "",
+      267
+     ],
+     [
+      123,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md source/*.py",
+      "S4",
+      "",
+      1196
+     ],
+     [
+      124,
+      "other",
+      "shared:finish.py",
+      "source/*.py source/finish.py source/filmkit.py source/satire_template.py source/",
+      "'concat'\\|\\",
+      "",
+      167
+     ],
+     [
+      125,
+      "other",
+      "shared:signoff.py",
+      "source/signoff.py source/sitting.py source/grand_theft_autism.py",
+      "concat",
+      "",
+      1534
+     ],
+     [
+      126,
+      "other",
+      "shared:signoff.py",
+      "source/signoff.py",
+      "fps *=\\|def ",
+      "",
+      1405
+     ],
+     [
+      127,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md notes/archive/*.md",
+      "fps=24\\|S4",
+      "",
+      3456
+     ],
+     [
+      128,
+      "other",
+      "shared:signoff.py",
+      "source/signoff.py source/kittests.py",
+      "^FF\\b\\|^FF =",
+      "",
+      2401
+     ],
+     [
+      130,
+      "other",
+      "shared:join.py",
+      "source/join.py source/signoff.py",
+      "sed -i 's/channel_layouts=mono/channel_layouts=stereo/; s/anullsrc=r=48000:cl=mo",
+      "",
+      1809
+     ],
+     [
+      131,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() anchor=\"@test\\ndef se",
+      "",
+      302
+     ],
+     [
+      132,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def ",
+      "",
+      207
+     ],
+     [
+      133,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      "",
+      1238
+     ],
+     [
+      134,
+      "other",
+      "film notes",
+      "story/brexit-is-done-moves.txt",
+      "\\b(nod|lean in|bow|chin up|preen|peer|lean|nod by) (small|slight|house|curt|big)",
+      "",
+      1019
+     ],
+     [
+      135,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      "",
+      339
+     ],
+     [
+      137,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3\\|--",
+      "",
+      183
+     ],
+     [
+      138,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^FAIL\\|^kittests:",
+      "",
+      267
+     ],
+     [
+      139,
+      "other",
+      "film notes",
+      "notes/check-audit.md",
+      "E1",
+      "",
+      364
+     ],
+     [
+      140,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def finished_films_keep_their_bookmark",
+      "",
+      1316
+     ],
+     [
+      141,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      "",
+      527
+     ],
+     [
+      142,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "houseline\\|join\\|acting\\|whale\\|ink\\b\\|new\\|rose",
+      "",
+      333
+     ],
+     [
+      143,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "timeout 300 python3 source/freeze.py count 2>&1 | grep -v Warn | head -60 | cut ",
+      "",
+      527
+     ],
+     [
+      144,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "def kit_files_loading\\|kit_files_loading_a_film_file\\|def _kit_files\\|old_films_",
+      "",
+      126
+     ],
+     [
+      145,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "sed -n 300,345p source/freeze.py",
+      "",
+      2089
+     ],
+     [
+      146,
+      "other",
+      "shared:houseline.py",
+      "source/houseline.py source/kittests.py",
+      "def line_survey",
+      "",
+      808
+     ],
+     [
+      147,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/houseline.py source/freeze.py",
+      "^def faults\\|^def survey",
+      "",
+      415
+     ],
+     [
+      148,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/houseline.py guides/kit-catalogue.md notes/check-audit",
+      "houseline.py survey",
+      "",
+      531
+     ],
+     [
+      149,
+      "other",
+      "film notes",
+      "notes/check-audit.md guides/kit-catalogue.md notes/kittest-stamps.tsv",
+      "python3 - <<'EOF' p='notes/check-audit.md'; s=open(p).read() s=s.replace(\"Extra ",
+      "",
+      145
+     ],
+     [
+      150,
+      "other",
+      "other",
+      "",
+      "^kittests:",
+      "",
+      701
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
