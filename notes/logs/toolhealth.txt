@@ -1,0 +1,15 @@
+Tool health (27 Nov 04:46): 7 of 14 working
+The handover: partly working – it saves 8 messages written by a chat (a chat's opening instructions, or a system notice) as if Sam typed them, so the start check asks for them to be carried as his words; 3 requests of Sam's this week were never written in the notes and he had to make them again (e.g. "Please reword your rule so it could apply to any film in any", 2026-11-21, again 2026-11-23).
+The cost watch: working.
+The model guard: working.
+The code finder: working.
+The finder reminder: partly working – it reminds a chat only when it hand-searches a film's own code, not the shared drawing code the finder now covers (125 files, e.g. acting.py).
+The film page: partly working – in 5 of 24 rounds of Sam's notes this week the chat read whole code files instead of the page.
+The job packs: working.
+Kit tests only when needed: working.
+The cost records: partly working – 29 of 159 cost rows this week do not say which chat they belong to, so 42 of 159 chats that saved work cannot be matched to a cost.
+The plain-words checker: partly working – it reads the replies but not the captions on files sent to Sam, push notifications or question boxes; 1 reply went to Sam still holding words it flagged.
+Saving to GitHub: working.
+The body check on finished films: partly working – 1 finished film saved this week have no body check record.
+The cast check: working.
+Printout and picture limits: not built yet.
