@@ -253,3 +253,19 @@ braided and long-hair photos for the braids check. Both passed to chat 4 (sessio
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 12.78% of a week (2026-11-27)
 - COST (chat 5): get_session gives no cost figure (no usage in its record; weekly limit: warning). Nothing recorded by guess.
 - Kit run (step 1): chat 4's own 37-test run finished: 35 passed; head_moves_not_comic, early_move_size failed (Brexit's nods, named before; not the hair). This chat's rerun stopped (redundant). beard_has_form, short_beard_solid pass.
+
+## Chat 5, 28 Nov (Sam: "keep an eye on the ledger; anything labelled 'other' gets a category; make sure the cost saving fixes are working")
+- "Other" named: the ledger's cost by kind of step had 67-75% "other" on The Patriot 5's two chats. Now every step's
+  own "other" takes its plain name (running checks, edits, reading notes, small shell commands ...) and the cost no
+  step explains is split by the exact split's origins: Claude's words, start-up reading, memory lapses (re-paying the
+  whole chat after a gap), messages and reminders. stepcost test: "nothing is left as other". Rows already written
+  (chats 4e93d9da, 345bd082) keep their old figures: their transcripts are in other machines.
+- Savings checked: 18 kit tests for the cost-spike fixes, savings 1-4, S1-S4 and B1-B4 pass (one crashed only because
+  the run read catalogue.py mid-edit; passes rerun).
+- NOT working, fixed: the start lookups (B3) gave chance matches on The Patriot 5 (a car chase for "Danny sighing",
+  a whale for the prison entrance, an oil rig for the guards): one shared word, often a label ("Shot", "camera") or
+  filler. Now two real shared words are needed, labels and filler left out; kittest start_lookups_no_chance_matches.
+  Honest limit: it matches words, not meaning; its rows are hints for the plan chat, not decisions. The Patriot 5's
+  own "Kit found" list (written yesterday) is left as it is: its plan stage is past and a live chat holds its notes.
+- Live film watch (The Patriot 5): 4.23% of a week spent over 2 chats against 15.4% estimated; "tool search" (looking
+  through kit code and notes by hand) was 20-26% of each chat: the finder tools cover film code, not planning reads.

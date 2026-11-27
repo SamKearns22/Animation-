@@ -234,8 +234,8 @@ def lookups(film, notes_dir=None, faces=None, launch_fn=None):
     if not brief:
         out.append(f'- no brief checklist in the notes yet: write it, then `python3 source/kitfilm.py lookups {film}`')
     for w in brief:
-        rows = catalogue.find(w, 2)
-        found = '; '.join(f'{what[:80]} [{where[:60]}]' for _, what, where in rows) or 'nothing in the catalogue: NEW'
+        rows = catalogue.find(w, 2, least=2)
+        found = '; '.join(f'{what[:80]} [{where[:60]}]' for _, what, where in rows) or 'nothing in the kit fits: NEW (or a plain moment, nothing to build)'
         out.append(f'- "{w[:70]}": {found}')
     for name, fronts, picked in people_filed(' '.join(brief), faces):
         if picked:
