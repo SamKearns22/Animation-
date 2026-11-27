@@ -29,3 +29,4 @@
 {"chat": "774a3f06", "event": "block", "faults": [["code", "McFadden"]], "t": "2026-11-27 17:32"}
 {"chat": "4e93d9da", "event": "block", "faults": [["file", "animations/drafts/patriot-5-character-sheet.jpg"]], "t": "2026-11-27 20:56"}
 {"chat": "345bd082", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-27 21:39"}
+{"chat": "38fe1c77", "event": "block", "faults": [["word", "handover"], ["word", "rig"], ["word", "guard"], ["word", "ledger"], ["word", "finder"]], "t": "2026-11-27 21:44"}
