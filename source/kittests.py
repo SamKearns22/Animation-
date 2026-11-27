@@ -4010,6 +4010,133 @@ def finder_reach_end_check():
 
 
 
+# ---------------------------------------------------------------------------------------- R14: the tool health check
+def _health_rec(**given):
+    import toolhealth
+    from datetime import datetime, timezone
+    return toolhealth, toolhealth.Rec(now=datetime(2026, 11, 27, tzinfo=timezone.utc), **given)
+
+
+@test
+def tool_health_report():
+    """R14 (Sam, 26 Nov: "how can I know if all essential tools are working?"): every essential tool is listed with a
+    plain promise, a reach test and a real-use test; the report is one plain line per tool; the printout and picture
+    limits (R13, not built) are listed as not built; a test that cannot run reads as broken, never as working; every
+    reach test runs on the project as it is now without failing to run."""
+    T, R = _health_rec()
+    ids = [t[0] for t in T.TOOLS]
+    want = {'handover', 'costwatch', 'modelguard', 'finder', 'finderwarn', 'page', 'packs', 'kittests', 'ledger',
+            'plainwords', 'save', 'body', 'cast', 'limits'}
+    bad = [f'missing tool {x}' for x in sorted(want - set(ids))]
+    bad += [f'{t[0]}: no plain promise' for t in T.TOOLS if len(t[2].split()) < 6 or re.search(r'\w+\.py|_\w+_', t[2])]
+    lim = [x for x in T.check(R, only=['limits'])]
+    if not lim or not lim[0][-1].endswith('not built yet.'):
+        bad.append('R13 not listed as not built')
+    boom = T._run(lambda R: 1 / 0, R)
+    if boom[0] != 'broken':
+        bad.append('a test that cannot run did not read as broken')
+    for tid, _, _, reach, _ in T.TOOLS:
+        v = T._run(reach, R)
+        if 'could not run' in v[1]:
+            bad.append(f'{tid} reach could not run: {v[1]}')
+    rows = [(t[0], t[1], t[2], ('ok', ''), ('partly', 'it misses x'), T.line(t[1], ('ok', ''), ('partly', 'it misses x')))
+            for t in T.TOOLS[:2]]
+    rep = T.report(rows).splitlines()
+    if len(rep) != 3 or 'partly working – it misses x.' not in rep[1]:
+        bad.append('report is not one plain line per tool')
+    return not bad, '; '.join(bad) or f'{len(ids)} tools listed; R13 not built; reach runs on the project now'
+
+
+@test
+def tool_health_finder_head_bob():
+    """R14 part on R12's note: chat 39 (26 Nov 22:11, zkJd6kM8) asked the finder about note 26, "It's not a nod, it's
+    a head-bob", was pointed only at brexit_is_done.py, then fixed views.py, solid_seat.py and facehouse.py by hand.
+    The real-use replay must call the old finder (own files only) partly working and today's working; the reach test,
+    worked out on its own, must find the shared kit missing from an own-files-only finder list."""
+    import page
+    T, _ = _health_rec()
+    t = '2026-11-26T22:11:03'
+    commits = [('c39', '2026-11-26T22:40:00+00:00', 'zkjd6km8', [f'source/{f}' for f in ('views.py', 'solid_seat.py', 'facehouse.py', 'kittests.py')])]
+    shows = {'zkjd6km8': [(t, 'brexit-is-done', ['brexit_is_done.py'], "It's not a nod, it's a head-bob")]}
+    now_files = [os.path.basename(f) for f in page.files('brexit-is-done')]
+    own = [os.path.basename(f) for f in page.own_files('brexit-is-done')]
+    old_show = lambda film, note: own
+    R1 = T.Rec(commits=commits, shows=shows, page_files={'brexit-is-done': now_files})
+    a = T.finder_use(R1, show_fn=old_show)
+    R2 = T.Rec(commits=commits, shows=shows, page_files={'brexit-is-done': now_files})
+    b = T.finder_use(R2)
+    c = T.finder_reach(T.Rec(page_files={'brexit-is-done': own}))
+    d = T.finder_reach(T.Rec(page_files={'brexit-is-done': now_files}))
+    bad = ([f'old finder replay: {a}'] if a[0] != 'partly' else []) + ([f'today\'s finder replay: {b}'] if b[0] != 'ok' else []) + \
+          ([f'own-files reach: {c}'] if c[0] != 'partly' or 'views.py' not in str(T.closure('brexit-is-done')) else []) + \
+          ([f'today\'s reach: {d}'] if d[0] != 'ok' else [])
+    return not bad, '; '.join(bad) or 'note 26: old finder partly, today\'s working; own-files-only reach caught'
+
+
+@test
+def tool_health_plain_words_misses():
+    """R14 part on the plain-words misses: (1) the 26 Nov 23:09 reply let through still holding "drawing tools"
+    (notes/logs/plainwords.log) makes the real-use test partly; (2) Sam asking for an explanation after the checker
+    went in is a miss; (3) the checker reads only the replies, so file captions, push notices and question boxes are
+    a reach gap; with a hook on each, the reach is whole; with none on replies, broken."""
+    T, _ = _health_rec()
+    let = {"chat": "2fda13cc", "event": "let-through", "faults": [["word", "drawing tools"]],
+           "reply": "For example, the results of the tests that prove the drawing tools still work", "t": "2026-11-26 23:09"}
+    blk = {"chat": "2fda13cc", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-26 23:10"}
+    a = T.plain_use(T.Rec(plainlog=[blk, let], sam=[]))
+    b = T.plain_use(T.Rec(plainlog=[blk], sam=[('2026-11-26T23:20:00', 'I don\'t understand what the finder is', 'x.md')]))
+    c = T.plain_use(T.Rec(plainlog=[blk], sam=[('2026-11-26T23:20:00', 'Y', 'x.md')]))
+    stop = [('Stop', '', 'python3 source/plainwords.py hook')]
+    d = T.plain_reach(T.Rec(hooks=stop))
+    e = T.plain_reach(T.Rec(hooks=stop + [('PreToolUse', m, 'python3 source/plainwords.py pre') for m in
+                                          ('SendUserFile', 'PushNotification', 'AskUserQuestion')]))
+    f = T.plain_reach(T.Rec(hooks=[]))
+    bad = ([f'let-through: {a}'] if a[0] != 'partly' else []) + ([f'Sam confused: {b}'] if b[0] != 'partly' else []) + \
+          ([f'clean: {c}'] if c[0] != 'ok' else []) + ([f'replies only: {d}'] if d[0] != 'partly' or 'captions' not in d[1] else []) + \
+          ([f'all ways: {e}'] if e[0] != 'ok' else []) + ([f'none: {f}'] if f[0] != 'broken' else [])
+    return not bad, '; '.join(bad) or 'let-through and confusion caught; captions, pushes and questions named as gaps'
+
+
+@test
+def tool_health_handover_records():
+    """R14 part on the handover: (1) the chain's opening message for R12 (26 Nov 23:15, saved to Sam's messages:
+    "Animation project, the job that makes the code search reach every file ... First check you can save to GitHub")
+    is not Sam's, and saving it as his is a reach gap; (2) Sam's 21 Nov 11:46 ask ("Please reword your rule so it could
+    apply to any film in any situation."), carried by no notes line, made again on 23 Nov, is a real-use miss; a
+    chat quoting him is not him asking again."""
+    T, _ = _health_rec()
+    chain = ('2026-11-26T23:15:05', 'Animation project, the job that makes the code search reach every file we use '
+             '(first job in the reserve list). Opus medium. First check you can save to GitHub; if not, stop.', 'k.md')
+    a = T.handover_reach(T.Rec(sam=[chain], hooks=[('UserPromptSubmit', '', 'python3 source/handover.py log')]))
+    b = T.handover_reach(T.Rec(sam=[('2026-11-26T22:00:00', 'Y', 'k.md')], hooks=[('UserPromptSubmit', '', 'python3 source/handover.py log')]))
+    ask = ('2026-11-21T11:46:00', 'Please reword your rule so it could apply to any film in any situation.', 'a.md')
+    again = ('2026-11-23T05:49:00', 'I would have expected the change on Blessed to apply to all films in the future. '
+             'Reword the rule so it could apply to any film in any situation.', 'b.md')
+    quote = ('2026-11-23T05:49:00', 'Sam said: "Please reword your rule so it could apply to any film in any situation."', 'b.md')
+    lines = ['A notes line about the courtroom set and its panelled walls, nothing more.']
+    c = T.handover_use(T.Rec(sam=[ask, again], notes_lines=lines))
+    d = T.handover_use(T.Rec(sam=[ask, quote], notes_lines=lines))
+    bad = ([f'chain saved as Sam: {a}'] if a[0] != 'partly' else []) + ([f'clean saver: {b}'] if b[0] != 'ok' else []) + \
+          ([f'asked twice: {c}'] if c[0] != 'partly' else []) + ([f'a quote: {d}'] if d[0] != 'ok' else [])
+    return not bad, '; '.join(bad) or 'chain message and the twice-made rule ask caught; a quote is not a repeat'
+
+
+@test
+def tool_health_guard_and_saving():
+    """R14 parts on the model guard and saving: a routine command the guides give that the guard misreads is a reach
+    gap, a short clip (--span) let through is right; an Opus chat that ran routine work with no refusal logged is a
+    miss; a chat whose work is on no main-line commit and on no branch named in the notes is a saving miss."""
+    T, _ = _health_rec()
+    a = T.modelguard_reach(T.Rec(routine_cmds=[('python3 source/x.py final OUT.mp4 --small', True),
+                                                ('python3 source/x.py final OUT.mp4 --small --span 1 2', False)]))
+    b = T.modelguard_reach(T.Rec(routine_cmds=[('cd source && python3 x.py final OUT.mp4', True)]))
+    c = T.save_use(T.Rec(commits=[('feedbeef' * 5, '2026-11-26T10:00:00', 'zzzz9999', ['source/a.py'])], on_main=set()))
+    d = T.save_use(T.Rec(commits=[('feedbeef' * 5, '2026-11-26T10:00:00', 'zzzz9999', ['source/a.py'])], on_main={'feedbeef' * 5}))
+    bad = ([f'guides read right: {a}'] if a[0] != 'ok' else []) + ([f'cd form: {b}'] if b[0] != 'partly' else []) + \
+          ([f'off main: {c}'] if c[0] != 'partly' else []) + ([f'on main: {d}'] if d[0] != 'ok' else [])
+    return not bad, '; '.join(bad) or 'guard reach and saving caught on their examples'
+
+
 def _repo_pair():
     """A pretend GitHub (a bare repo) with the main line holding one ledger row, and a chat's copy of it on its own
     branch: (bare, copy, git)."""
@@ -6707,6 +6834,44 @@ def critique_saw_it_column():
     if c.get('yes') != 1 or c.get('no critique') != 1 or c.get('blank') != 1:
         out.append(f'counted wrong: {dict(c)}')
     return (not out), ('; '.join(out) or f'blank refused (note 2); old table not asked; counted {dict(c)}')
+
+
+@test
+def line_check_whole_person():
+    """Check audit B8 (26 Nov; saved example: Open Wounds' checks.jsonl, 'may: no outline at (674, 14)' and 'blair: edge
+    with no line at (502, 14)' on 6 runs): the line check drew each person alone with the head off the top of the
+    picture, so the cut read as a missing outline. Now the whole person fits (nothing touches the picture's edge),
+    May and Blair are clean (their brows and open mouth are flat on purpose; the face has its own checks), and a
+    flat patch painted on Blair's jacket with no line round it is still caught."""
+    import importlib
+    import body as B
+    import kitinputs as K
+    import linecheck as LC
+    from PIL import Image, ImageDraw
+    f = importlib.import_module('brexit_is_done')
+    B.SS = 1
+    subs = dict(K.line_subjects(f, {w: 1.6 for w in f.CAST})())
+    out = []
+    for who in ('may', 'blair'):
+        lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+        subs[who](lay)
+        x0, y0, x1, y1 = lay.getbbox()
+        if y0 <= 2 or y1 >= 1918 or x0 <= 2 or x1 >= 1078:
+            out.append(f'{who} touches the picture edge {lay.getbbox()}')
+    film = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [(w, subs[w]) for w in ('may', 'blair')])})
+    clean = LC.faults(film)
+    if clean:
+        out.append(f'faults on May and Blair: {clean}')
+
+    def patched(img):
+        got = subs['may'](img)                         # May's plum jacket (Blair's suit is near-black: read as ink)
+        ImageDraw.Draw(img).rectangle([470, 900, 610, 1040], fill=(230, 200, 60, 255))   # on the jacket, no line
+        return got
+    film2 = type('F', (), {'LINE_SUBJECTS': staticmethod(lambda: [('may', patched)])})
+    caught = LC.faults(film2)
+    if not any('edge with no line' in x for x in caught):
+        out.append(f'an unlined patch on the jacket was missed: {caught}')
+    return (not out), ('; '.join(out) or f'whole people fit; May and Blair clean; the painted patch caught ({caught[0][:60]})')
 
 
 def main():
