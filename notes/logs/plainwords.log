@@ -5,3 +5,10 @@
 {"chat": "686ea287", "event": "block", "faults": [["label", "R8"], ["word", "handover"]], "t": "2026-11-26 23:00"}
 {"chat": "5d708050", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-26 23:03"}
 {"chat": "2fda13cc", "event": "block", "faults": [["word", "kit"]], "t": "2026-11-26 23:05"}
+{"chat": "2fda13cc", "event": "block", "faults": [["chatlong", "chats are long"]], "t": "2026-11-26 23:08"}
+{"chat": "2fda13cc", "event": "block", "faults": [["word", "kit"], ["word", "kit test"]], "t": "2026-11-26 23:09"}
+{"chat": "2fda13cc", "event": "let-through", "faults": [["word", "drawing tools"]], "reply": "For example, the results of the tests that prove the drawing tools still work, and the records of what each chat cost.", "t": "2026-11-26 23:09"}
+{"chat": "2fda13cc", "event": "block", "faults": [["word", "handover"], ["word", "drawing tools"]], "t": "2026-11-26 23:10"}
+{"chat": "2fda13cc", "event": "block", "faults": [["file", "notes/next-jobs.md"], ["label", "R12"], ["word", "finder"], ["file", "page.py"], ["file", "handover.py"], ["file", "views.py"], ["word", "handover"], ["file", "notes/brexit-is-done.md"]], "t": "2026-11-26 23:11"}
+{"chat": "2fda13cc", "event": "block", "faults": [["word", "guard"]], "t": "2026-11-26 23:12"}
+{"chat": "81b35345", "event": "block", "faults": [["word", "finder"]], "t": "2026-11-26 23:25"}

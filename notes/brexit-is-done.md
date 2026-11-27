@@ -70,6 +70,7 @@ Open rule requests: none. Notes file over 4,000 words: trim at the animatic.
 Branches: claude/seeing-test-chat1 (the seeing test, its own job), claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: not this film's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 framing 2, built). No change to timing, lines, mouths, soundtrack.
 For Claude: main line claude/create-claude-md-oe8z4g; chat 40 branch claude/open-wounds-shot-2-a7cfu2; places view site; brexit_is_done_action LIFT_END, BAR_X.
+Chat R12 (26 Nov, reserve job, between chats 40 and 41): `page.py show` now searches the shared kit and checks too (views, people, solid_seat...): a note on a nod lands on views.py's nod; handover end flags edits it can't see. finder reach: page.py, handover.py (R12 built them; its show calls were tests). Its end check's other stops (the cast-sheet judge, waiting on Sam's pick on note 5; the rule-proof entry for 'never tell me my chats are long') were there before it: left for chat 41.
 
 ## Open from chat 36 (Sam's picks pending)
 - Proposal check-knows-intent: Sam picked option 1 (26 Nov, R8 chat), built under R8 (notes/check-audit.md).
@@ -179,4 +180,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 68.48% of a week (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 69.38% of a week (2026-11-26)
