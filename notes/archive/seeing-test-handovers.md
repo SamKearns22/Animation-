@@ -18,3 +18,20 @@
   `python3 source/seeing.py render CASE --film MOD --span T0 T1 --src WT/source` and `seeing.py views CASE`.
   Models fetched on demand into source/models/ (not on GitHub).
 
+
+## Where things stand (27 Nov, seeing test chat 2)
+- Rules that bite next: Statement Two (no tool beat plain frames: say so), 93 (advice only), "Messages to me".
+- Done: blind scoring (notes/seeing-test/scores.md). Of 14 notes Sam gave: plain frames 2, pose 2, movement 2 (with
+  6 false alarms), who-is-where 1, cut-out 1. Every arm caught GTA note 8 (door); none caught the other 11. No
+  tool beats the plain frames, so no winner is adopted.
+- Next: chat 3, Opus, high effort (building something new). Sam said Y (27 Nov): drop the four views as checks; build
+  the watch-the-clip test. Honest limit: the model sees pictures, not video, so "watching" means short runs of
+  consecutive frames side by side (every frame, a few seconds), each person outlined; scored blind on the same 16
+  cases against plain frames, same scorer method (scores.md). Also settle c10 (posted GTA, door) on a real frame.
+- Needs Sam: nothing until chat 3 scores the new test.
+- Open, unverified: all five arms flag Jason through the door in c10 (posted GTA final); not matched to a frame.
+- Read: this file; notes/seeing-test/scores.md; key.md.
+- Open rule requests: none.
+- For Claude: re-render: `git worktree add /scratch/wt-COMMIT COMMIT`; `seeing.py render CASE --film MOD --span T0 T1
+  --src WT/source`; `seeing.py views CASE`. Letter map in scores.md.
+
