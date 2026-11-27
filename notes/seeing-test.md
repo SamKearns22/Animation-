@@ -24,7 +24,8 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
       layer movement: median error under 3 px on still-camera Brexit cases, 10-50 px on GTA's moving camera; the
       means are inflated by layers sharing one name, e.g. every 'worker'). Sheets were in the chat's scratchpad only
       (re-made by `seeing.py render` + `views` from notes/seeing-test/cases.tsv).
-- [ ] A separate scorer with the key (notes/seeing-test/key.md) counts caught / missed / wrongly flagged per view.
+- [x] A separate scorer with the key (notes/seeing-test/key.md) counts caught / missed / wrongly flagged per view.
+      Done blind (chat 2): notes/seeing-test/scores.md.
 - [ ] One plain table for Sam, one line per tool; his yes/no per winner, one at a time.
 - Not duplicated: check-knows-intent option 1 (R8, notes/check-audit.md) is about intent lists for the picture
   checks; this job only adds ways of looking.
@@ -41,23 +42,19 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
   wolves (drawn by their own code) or the people/arms of GTA's 3D Jason separately from the car's inside; those show
   as faint grey picture. A film that wants this view needs its own-drawn things wrapped (cover.thing).
 
-## Where things stand (27 Nov, seeing test chat 1, red)
-- Rules that bite next: 93 (advice only), Statement Two (say what can't be done), "Messages to me" (one plain table).
-- Done: seeing.py built, kit test green; 16 cases rendered from the versions Sam saw; all five blind judges' answers
-  saved (findings/). First read (unscored): judges found GTA's door fault (note 8) in every arm; most others found by
-  no arm; only who-is-where and movement judges said their view (not the plain frame) showed them anything.
-- Next: Opus, medium effort (scoring needs judgment, from a clear plan). A fresh scorer helper gets ONLY key.md and the
-  five findings files relabelled A-E (shuffled; not which tool) and marks each finding caught / other real / wrong,
-  and each key note caught or missed; then one plain table for Sam (one line per tool, plus the plain-frames
-  baseline), Lost/Added lines, and his yes/no on each winner one at a time (touching, then movement).
-- Needs Sam: the chain stopped (this chat is at the chat-chain depth limit, 8, and cannot open chat 2). Sam starts
-  chat 2 with the text in notes/seeing-test/next-prompt.md.
-- End check, named (not this chat's): STOP RULE: CLAUDE.md's "Never tell me my chats are long (Sam, 26 Nov)" came
-  in from the main line with no rule_proofs.json entry (another chat added it); chat 2 adds its proof or names its owner.
-- Read: this file; notes/seeing-test/key.md; findings/; CLAUDE.md "Messages to me".
+## Where things stand (27 Nov, seeing test chat 2)
+- Rules that bite next: Statement Two (no tool beat plain frames: say so), 93 (advice only), "Messages to me".
+- Done: blind scoring (notes/seeing-test/scores.md). Of 14 notes Sam gave: plain frames 2, pose 2, movement 2 (with
+  6 false alarms), who-is-where 1, cut-out 1. Every arm caught GTA note 8 (door); none caught the other 11. No
+  tool beats the plain frames, so no winner is adopted.
+- Next: none until Sam answers (Opus, medium on his answer). Plan if he says Y: the faults all arms missed are
+  hands-on-things, through-the-scenery and too-quick moves; the next try is the model watching the actual clip
+  (motion, not stills) with each person's outline, tested on these same 16 cases.
+- Needs Sam: Y/N on dropping the four views as Sam-facing checks and trying the watch-the-clip idea.
+- Open, unverified: all five arms flag Jason through the door in c10 (posted GTA final); not matched to a frame.
+- Read: this file; notes/seeing-test/scores.md; key.md.
 - Open rule requests: none.
-- For Claude: worktrees for re-rendering: `git worktree add /scratch/wt-COMMIT COMMIT`; then
-  `python3 source/seeing.py render CASE --film MOD --span T0 T1 --src WT/source` and `seeing.py views CASE`.
-  Models fetched on demand into source/models/ (not on GitHub).
+- For Claude: re-render: `git worktree add /scratch/wt-COMMIT COMMIT`; `seeing.py render CASE --film MOD --span T0 T1
+  --src WT/source`; `seeing.py views CASE`. Letter map in scores.md.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 149.56% of a week (2026-11-27)
