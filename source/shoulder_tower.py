@@ -40,19 +40,27 @@ import people_parts as PP    # noqa: E402
 B, V = PP.B, PP.V
 
 # ------------------------------------------------------------------------------------------------ the seat
-SEAT = (-47.0, -52.0)     # sitter's hip joint: behind the neck (his crotch against the back of the head), on the shoulders
+SEAT_UP = 52.0            # sitter's hip joints this far above the lower man's neck base (seated on the shoulders)
+SEAT = (-163.0, -52.0)     # sitter's hip joint: behind the neck (his crotch against the back of the head), on the shoulders
 KNEE_POLE = 0.55          # how far up the knee is pushed (thighs forward over the shoulders, not hanging)
-FOOT = (34.0, 226.0)      # sitter's ankle: tucked back under the lower man's arm, at the side of his chest (a
+FOOT = (0.0, 230.0)      # sitter's ankle: tucked back under the lower man's arm, at the side of his chest (a
 #                           cheerleader's shoulder sit: with our big heads, feet at the belly stood on the head below)
 LEG_OUT = 150.0           # sitter's feet apart: the shins round the outside of the lower man's chest, his own units
-GRIP = 0.42               # where the lower man holds the shin (0 knee .. 1 ankle)
+GRIP = 0.8               # where the lower man holds the shin (0 knee .. 1 ankle)
 BEND = 46.0               # the base's knees bent (soles this far up from a straight stand): the weight shows
-HEAD_TIP = 7.0            # a lower man's head tipped forward by the seat pressing it (degrees)
+HEAD_TIP = 25.0            # a lower man's head tipped forward by the seat pressing it (degrees)
 BALANCE_ARMS = (4, 5)     # tiers that let go with the near hand at the sway's far ends and throw it out to balance
 TOP_LEAN = 30.0           # the top man leans in to look through the window
-LEAN = 6.0                # every man tipped a little forward at the hips, so the seat (behind his neck) comes back over
+LEAN = 18.0                # every man tipped a little forward at the hips, so the seat (behind his neck) comes back over
 #                           his own hips: the column stays straight over the base's feet (SEAT x = -450 sin LEAN)
+CLIP_LIMIT = 0.04         # share of a head allowed to overlap the body above (the seat pressing on it)
 KEY = ((255, 0, 255), (0, 255, 0), (0, 128, 255), (255, 128, 0))   # mask colours: top, sleeve, trousers, shoes
+
+
+def column_seat():
+    """The seat's place behind the lower man's neck that keeps the column straight: his lean brings his neck
+    forward by exactly this, so each man's hips sit over the hips below (the weight stays over the base's feet)."""
+    return (-(V.HIP_Y + SEAT_UP) * math.tan(math.radians(LEAN)), -SEAT_UP)
 
 
 def seat_at(p):
@@ -76,7 +84,7 @@ def balance(i, t):
     peak = abs(sway(i, 0.5 + 0.07 * i))
     u = (abs(sway(i, t)) / peak - 0.72) / 0.22
     u = min(1.0, max(0.0, u))
-    return u * u * (3 - 2 * u)
+    return round(5 * u * u * (3 - 2 * u)) / 5           # six positions (each drawn once, reused)
 
 
 def sway(i, t, amp=0.011, period=2.0, lag=0.07, grow=0.22):
@@ -135,7 +143,7 @@ class Tower:
             if i == 0:
                 fr.append(Frame(self.k[0], (0.0, 928.0 - BEND), self.ground, a))
             else:
-                fr.append(Frame(self.k[i], (0.0, V.HIP_Y), fr[i - 1].W(seat_at(SEAT)), a))
+                fr.append(Frame(self.k[i], (0.0, V.HIP_Y), fr[i - 1].W(seat_at(column_seat())), a))
         return fr
 
     def tiers(self, t):
@@ -211,12 +219,13 @@ class Tower:
         return img, (nx, ny)
 
     def man_layers(self, i, sp, j, t):
-        """His core (far leg, body, head, far arm), near leg and near arm as three layers. The masks come from renders
-        in flat key colours (a near leg over the far leg, or a sleeve over a jacket of the same colour, would
-        otherwise leave only outlines); the pixels from the real renders."""
+        """His core (far leg, body, head, far arm), near leg and near arm as three layers, and two masks for the
+        clipping check: his head (and hat) and his body. The layer masks come from renders in flat key colours (a
+        near leg over the far leg, or a sleeve over a jacket of the same colour, would otherwise leave only
+        outlines); the pixels from the real renders."""
         k = self.k[i]
         R = lambda **kw: np.asarray(self._render(sp, j, k, t=t, **kw)[0])
-        core, o = self._render(sp, j, k, legs='far', near_arm=False, t=t)
+        core, (nx, ny) = self._render(sp, j, k, legs='far', near_arm=False, t=t)
         k0 = R(legs='none', near_arm=False, key=True)
         k1 = R(legs='near', near_arm=False, key=True)
         k2 = R(legs='none', near_arm=True, key=True)
@@ -226,32 +235,90 @@ class Tower:
         m_arm = np.any(k0 != k2, axis=2, keepdims=True)
         leg = np.where(m_leg, leg_px, 0).astype(np.uint8)
         arm = np.where(m_arm, arm_px, 0).astype(np.uint8)
-        return core, Image.fromarray(leg, 'RGBA'), Image.fromarray(arm, 'RGBA'), o
+        rgb = k0[..., :3].astype(int)
+        torso = np.all(np.abs(rgb - KEY[0]) < 40, axis=2) & (k0[..., 3] > 0)
+        keyed = np.zeros_like(torso)
+        for c in KEY:
+            keyed |= np.all(np.abs(rgb - c) < 40, axis=2)
+        head = (k0[..., 3] > 0) & ~keyed
+        neck_px = int((ny + 10 * k) * B.SS)                      # head, hair and hat: above his neck base
+        head[neck_px:] = False
+        body = torso.copy()
+        body[:int((ny + 30 * k) * B.SS)] = False                 # his body (the jacket), below the collar
+        feet = np.all(np.abs(k1[..., :3].astype(int) - KEY[3]) < 40, axis=2) & m_leg[..., 0]   # his near shoe
+        mk = lambda m: Image.fromarray((m * 255).astype(np.uint8), 'L')
+        return dict(core=core, leg=Image.fromarray(leg, 'RGBA'), arm=Image.fromarray(arm, 'RGBA'),
+                    head=mk(head), body=mk(body), feet=mk(feet), o=(nx, ny))
 
-    def draw(self, img, cam, t):
-        """Draw the tower at time t on img (a B.canvas). Returns (frames, joints) for the checks."""
+    def _key(self, i, t):
+        """Which of man i's drawings can be reused at time t (None: draw him afresh). Only the sway changes between
+        frames, and that is a turn of his finished layers; the top man (his hand stays on the sill) and the two who
+        throw an arm out are drawn per position."""
+        n = len(self.men)
+        if i == n - 1:
+            return None
+        if i in BALANCE_ARMS:
+            return (i, balance(i, t), sway(i, t) < 0 if balance(i, t) > 0 else None)
+        return (i,)
+
+    def draw(self, img, cam, t, cache=None):
+        """Draw the tower at time t on img (a B.canvas). Returns (frames, joints, knees); self.clips holds the
+        clipping check's findings for this frame (a head pushed into the body of the man sitting on it)."""
         fr, js, info = self.tiers(t)
         n = len(self.men)
-        parts = []
+        cache = {} if cache is None else cache
+        parts, masks = [], []
         for i in range(n):
-            core, leg, arm, (nx, ny) = self.man_layers(i, self.men[i], js[i], t)
+            key = self._key(i, t)
+            L = cache.get(key) if key else None
+            if L is None:
+                L = self.man_layers(i, self.men[i], js[i], t)
+                if key:
+                    cache[key] = L
+            nx, ny = L['o']
             k = self.k[i]
             pl = fr[i].pl
             pvx, pvy = (nx + pl[0] * k) * B.SS, (ny + pl[1] * k) * B.SS     # his pivot on his own canvas
             pw = cam.P(*fr[i].pw)
             deg = -math.degrees(fr[i].a)
-            out = []
-            for lay in (core, leg, arm):
-                r = lay.rotate(deg, resample=Image.BICUBIC, center=(pvx, pvy))
-                out.append((r, (int(round(pw[0] - pvx)), int(round(pw[1] - pvy)))))
-            parts.append(out)
+            off = (int(round(pw[0] - pvx)), int(round(pw[1] - pvy)))
+            turn = lambda lay: lay.rotate(deg, resample=Image.BICUBIC, center=(pvx, pvy))
+            parts.append([(turn(L[nm]), off) for nm in ('core', 'leg', 'arm')])
+            masks.append({nm: (turn(L[nm]), off) for nm in ('head', 'body', 'feet')})
         for i in reversed(range(n)):          # cores: the top man first, so each lower head goes over the sitter
             img.alpha_composite(*_clip(img, *parts[i][0]))
         for i in range(n):
             img.alpha_composite(*_clip(img, *parts[i][1]))
         for i in range(n):
             img.alpha_composite(*_clip(img, *parts[i][2]))
+        self.clips = []
+        self.alpha = np.zeros((img.height, img.width), bool)     # where the tower is (the wall check reads it)
+        for i in range(n):
+            for lay, off in parts[i]:
+                a = lay.getchannel('A')
+                self.alpha |= _world(img, a, off)
+        for i in range(n - 1):                # a head may touch the seat above it, never sink into that man's body
+            h, b = _world(img, *masks[i]['head']), _world(img, *masks[i + 1]['body'])
+            area = h.sum()
+            over = (h & b).sum()
+            if area and over / area > CLIP_LIMIT:
+                self.clips.append(f'{t:.2f}s man {i + 1}\'s head {100 * over / area:.0f}% inside man {i + 2}\'s body')
+        for i in range(n):                    # nobody's shoe on anybody else's head (a foot over a face reads as a kick)
+            h = _world(img, *masks[i]['head'])
+            for m in range(n):
+                if m != i:
+                    over = (h & _world(img, *masks[m]['feet'])).sum()
+                    if over > 20 * B.SS * B.SS:
+                        self.clips.append(f'{t:.2f}s man {m + 1}\'s foot over man {i + 1}\'s head ({over} px)')
         return fr, js, info
+
+
+def _world(img, m, off):
+    """A turned mask placed on the frame (a boolean array the frame's size)."""
+    w = Image.new('L', img.size, 0)
+    lay, o = _clip(img, m, off)
+    w.paste(lay, o)
+    return np.asarray(w) > 127
 
 
 def _clip(img, lay, off):
@@ -312,8 +379,9 @@ def practice_men(n=8):
     while len(men) < n:
         m = PK.pooled(i, 'london')
         i += 1
-        if m.get('figure') in V.WOMAN_LEGS:
-            continue
+        if m.get('figure') in V.WOMAN_LEGS or m.get('hat_c'):   # men only; no peaked caps (a bowed head turned
+            continue                                              # the cap into a black blob; the film's men wear
+            #                                                       balaclavas)
         men.append(m)
     assert not any(PK.head_faults(m) for m in men)
     return men
@@ -365,34 +433,47 @@ def sill_of(tw):
     return tw.frames(0.0)[-1].W((0.0, 150.0))[1]
 
 
-def frame_at(tw, wall_x, t, sill_y=None, top_y=None):
+def frame_at(tw, wall_x, t, sill_y=None, top_y=None, cache=None):
     B.SS = 2
     img = B.canvas(NIGHT)
     cam = B.Cam(1.0, 540, 960)
     sill = sill_y if sill_y is not None else sill_of(tw)
     top = top_y if top_y is not None else sill - 330 * tw.k[-1] * 1.4
     scene(img, cam, wall_x, sill, top)
-    tw.draw(img, cam, t)
+    tw.draw(img, cam, t, cache)
+    x0 = int(cam.P(wall_x + 3, 0)[0])                 # nothing through the wall (the top man's hand rests on the sill lip)
+    inside = int(tw.alpha[:, x0:].sum())
+    if inside > 30 * B.SS * B.SS:
+        tw.clips.append(f'{t:.2f}s the tower goes {inside // (B.SS * B.SS)} px into the wall')
     return img.resize((1080, 1920), Image.LANCZOS).convert('RGB')
 
 
 def clip(out, secs=4.0, n=8, fps=12):
-    tw, wall_x = practice_tower(n)
+    """The practice clip: 12 drawings a second, each man's drawings reused while only the sway turns them, the frames
+    split in runs across the processors. Returns the joins' and the clipping check's findings."""
     tmp = tempfile.mkdtemp()
     nf = int(secs * fps)
+    tw, _ = practice_tower(n)
     probs = [p for f in range(nf) for p in faults(tw, f / fps)]
     from multiprocessing import Pool
-    with Pool(min(8, os.cpu_count() or 1)) as pool:
-        pool.map(_one, [(n, secs, fps, f, tmp) for f in range(nf)])
+    w = min(4, os.cpu_count() or 1)
+    runs = [(n, fps, list(range(r, nf, w)), tmp) for r in range(w)]
+    with Pool(w) as pool:
+        for c in pool.map(_run, runs):
+            probs += c
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(fps), '-i', os.path.join(tmp, '%04d.png'),
                     '-vf', 'fps=24', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '20', out], check=True)
     return probs
 
 
-def _one(a):
-    n, secs, fps, f, tmp = a
+def _run(a):
+    n, fps, frames, tmp = a
     tw, wall_x = practice_tower(n)
-    frame_at(tw, wall_x, f / fps).save(os.path.join(tmp, f'{f:04d}.png'))
+    cache, clips = {}, []
+    for f in frames:
+        frame_at(tw, wall_x, f / fps, cache=cache).save(os.path.join(tmp, f'{f:04d}.png'))
+        clips += tw.clips
+    return clips
 
 
 def main(argv):
@@ -403,6 +484,7 @@ def main(argv):
     elif cmd == 'still':
         tw, wall_x = practice_tower()
         frame_at(tw, wall_x, float(argv[3]) if len(argv) > 3 else 0.5).save(argv[2])
+        print('\n'.join(tw.clips) or 'clipping: none')
     elif cmd == 'check':
         tw, _ = practice_tower()
         probs = [p for k in range(48) for p in faults(tw, k / 12)]
