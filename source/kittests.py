@@ -885,6 +885,27 @@ def closed_curves_never_spike():
 
 
 @test
+def standing_legs_part_in_the_kit():
+    """R8 A5 (27 Nov): the crotch limit lives in the body kit. Sam's note 8 ("camel toe"; refused 24 of 65 handovers'
+    cast checks, last 'CROTCH kemi front 0.96', 26 Nov): Kemi's thighs met from the knee up and the line between them
+    ran up into the seat. Open Wounds chat 39 put the fix in the shared body tool (solid_seat.STAND_LEG_GAP: standing
+    legs keep an even gap up to the crotch); nothing guarded it. Red with the gap 0 (Kemi front caught again), green
+    now (no standing person in the Open Wounds cast has a line up from the crotch)."""
+    import sys
+    sys.path.insert(0, 'source')
+    import solid_seat as SS
+    import castsheet as C
+    keep = SS.STAND_LEG_GAP
+    try:
+        SS.STAND_LEG_GAP = 0.0
+        old = C.crotch_faults('brexit-is-done', ['kemi'])
+    finally:
+        SS.STAND_LEG_GAP = keep
+    now = C.crotch_faults('brexit-is-done')
+    return bool(old) and not now, f'gap 0: {(old or ["nothing caught"])[0][:70]}; now: {"; ".join(now) or "clean"}'
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
     seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These
