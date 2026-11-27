@@ -884,54 +884,55 @@
 - 859: `_back_strokes` Combed straight back: strokes from the hairline up over the crown, fanning to the sides.
 - 872: `back` 
 
-## facehouse_c.py (987 lines)
-- 48: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
-- 82: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
-- 126: `_face_u` The face outline's half width at row v (our right side).
-- 133: VJ (data)
-- 134: VS (data)
-- 137: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
-- 158: `_out` 
-- 162: `_resample` A path resampled to n points evenly along its length.
-- 170: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
-- 183: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
-- 194: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
-- 219: `_looks` 
-- 225: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
-- 249: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
-- 280: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
-- 316: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
-- 368: HAIR (data)
-- 369: TURN_PROF (data)
-- 376: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
-- 382: `_turn_key` 
-- 388: `_turn_mood` 
-- 396: `_turn_mouth` 
-- 406: `_turn_face` 
-- 413: `_turn_over` 
-- 419: `_turn_hair` 
-- 426: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
-- 445: `_turn_hair0` 
-- 482: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
-- 555: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
-- 569: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
-- 576: `_turn_person` 
-- 594: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
-- 615: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
-- 623: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
-- 662: CAST (data)
-- 685: `install` 
-- 693: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
-- 724: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
-- 751: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
-- 791: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
-- 815: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
-- 848: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
-- 913: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
-- 959: KEPT (data)
-- 969: `_fit` 
+## facehouse_c.py (1004 lines)
+- 49: `pick_hair` The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
+- 83: `face_outline` The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
+- 127: `_face_u` The face outline's half width at row v (our right side).
+- 134: VJ (data)
+- 135: VS (data)
+- 138: `_hair` The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head.
+- 159: `_out` 
+- 163: `_resample` A path resampled to n points evenly along its length.
+- 171: `_crown_paths` The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
+- 184: `_edges` A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
+- 195: `_band` Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
+- 220: `_looks` 
+- 226: `braids_behind` Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
+- 250: `braids` Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
+- 281: `glasses` The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
+- 317: `age_lines` The measured age lines (agelines' strengths) drawn the house way, the hand-made Walliams' smile folds and
+- 369: HAIR (data)
+- 372: `hair_fit` Replay test 2 (Sam's Y, 27 Nov): Ocasio-Cortez's long straight hair has no piece, and the plan only found out 
+- 386: TURN_PROF (data)
+- 393: `class _Screen` A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned).
+- 399: `_turn_key` 
+- 405: `_turn_mood` 
+- 413: `_turn_mouth` 
+- 423: `_turn_face` 
+- 430: `_turn_over` 
+- 436: `_turn_hair` 
+- 443: `hair_shell` The front hair piece's outline as half widths row by row [(v, half width)], crown down to `upto`: the turned
+- 462: `_turn_hair0` 
+- 499: `_turned_braids` The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
+- 572: `_outside` draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek.
+- 586: `_turn_widths` The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
+- 593: `_turn_person` 
+- 611: `install_turned` Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
+- 632: `caricature` The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
+- 640: `person` The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
+- 679: CAST (data)
+- 702: `install` 
+- 710: `dome_faults` Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% an
+- 741: `line_faults` Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the
+- 768: `doll_faults` Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous
+- 808: `draw` One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
+- 832: `turns` Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
+- 865: `compare` The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
+- 930: `sheet` The design sheet: each person's front photo, the face tool's pick as Sam chose it, then each house look; the
+- 976: KEPT (data)
+- 986: `_fit` 
 
-## facepick.py (1004 lines)
+## facepick.py (1009 lines)
 - 58: HERE (data)
 - 64: FONT (data)
 - 65: KEYS (data)
@@ -978,15 +979,15 @@
 - 771: `_who` Who a reference photo shows: a faces pack's folder name, a likeness folder's letter, else the first name in
 - 787: `_others` Other people's front photos from EVERY film's references (any '*front*' photo: the faces packs, the
 - 803: `make` 
-- 892: ROOT (data)
-- 895: `_rel` A photo argument stored from the project's top folder, so redraw works from any folder (Burnham's pick held
-- 903: `_find` 
-- 910: BEARD_MIN (data)
-- 913: `_beard_word` What the pick keeps of the beard for the house head (facehouse.stubble): its colour, how much of the lower
-- 923: `_beard` The beard from every front photo. beardkit keeps what matches its FIRST photo, so a shaven first photo drops
-- 937: `redraw` The picked heads drawn again from NAME-pick.json's measures with today's extras (glasses, beard, age lines,
-- 961: `_check` likeness.check's own verdict on the clean head (as rule 49 runs it), read back from its printout.
-- 983: `_says` 
+- 897: ROOT (data)
+- 900: `_rel` A photo argument stored from the project's top folder, so redraw works from any folder (Burnham's pick held
+- 908: `_find` 
+- 915: BEARD_MIN (data)
+- 918: `_beard_word` What the pick keeps of the beard for the house head (facehouse.stubble): its colour, how much of the lower
+- 928: `_beard` The beard from every front photo. beardkit keeps what matches its FIRST photo, so a shaven first photo drops
+- 942: `redraw` The picked heads drawn again from NAME-pick.json's measures with today's extras (glasses, beard, age lines,
+- 966: `_check` likeness.check's own verdict on the clean head (as rule 49 runs it), read back from its printout.
+- 988: `_says` 
 
 ## faces.py (374 lines)
 - 20: `blend` 
@@ -1861,7 +1862,7 @@
 - 769: `sheet` 
 - 810: `strip` The move as a strip: a frame every `step` seconds from each view in `views` (the shot's camera sides), and eve
 
-## ledger.py (1180 lines)
+## ledger.py (1188 lines)
 - 55: ROOT (data)
 - 56: DIR (data)
 - 57: CURRENT (data)
@@ -1918,20 +1919,20 @@
 - 773: `appcost_test` The fault, saved as an example: chat 36 (Brexit, 26 Nov) was estimated at $4.71 and the app said $12.50.
 - 797: `parse_stages` 'cast 2, sets 2.5, round 1.5' -> [{'name': 'cast', 'pct': 2.0, 'done': None}, ...]
 - 808: `mark_stage` The first open planned stage of that name is done, at today's spend; a stage not in the plan is added, done,
-- 822: `compare_line` Rule 24 (Sam, 13 Nov): after the film, one line: its real cost against the last three films' (ledgers with an
-- 845: `totals` 
-- 853: `coldstart` cold-start change (Sam's Y, 19 Nov): the film-end line. Each chat's start (its cost up to the first real work)
-- 887: `render` 
-- 942: KEEP_DIRS (data)
-- 943: BIG_MB (data)
-- 946: `kept` Rule 37 (Job L; was by hand): every sound and reference file goes on GitHub; one over about BIG_MB stays off
-- 968: `kept_lines` 
-- 975: SESS (data)
-- 978: `film_sessions` The chats a film's own handovers name as its chats: every "where things stand (chat N, ..., session_X)" line i
-- 991: `misfiled` [(other ledger, row)] for the film's own chats (film_sessions) whose estimate row sits under another ledger
-- 1011: `rebook` Move every misfiled row to the film's own ledger (taken out of the other, on the main line too); a row already
-- 1034: `_cut` 
-- 1040: `main` 
+- 829: `compare_line` Rule 24 (Sam, 13 Nov): after the film, one line: its real cost against the last three films' (ledgers with an
+- 852: `totals` 
+- 860: `coldstart` cold-start change (Sam's Y, 19 Nov): the film-end line. Each chat's start (its cost up to the first real work)
+- 894: `render` 
+- 950: KEEP_DIRS (data)
+- 951: BIG_MB (data)
+- 954: `kept` Rule 37 (Job L; was by hand): every sound and reference file goes on GitHub; one over about BIG_MB stays off
+- 976: `kept_lines` 
+- 983: SESS (data)
+- 986: `film_sessions` The chats a film's own handovers name as its chats: every "where things stand (chat N, ..., session_X)" line i
+- 999: `misfiled` [(other ledger, row)] for the film's own chats (film_sessions) whose estimate row sits under another ledger
+- 1019: `rebook` Move every misfiled row to the film's own ledger (taken out of the other, on the main line too); a row already
+- 1042: `_cut` 
+- 1048: `main` 
 
 ## likeness.py (1014 lines)
 - 83: HERE (data)
@@ -2430,6 +2431,24 @@
 - 43: `pack` 
 - 78: `score` 
 
+## notesteps.py (194 lines)
+- 27: HERE (data)
+- 28: ROOT (data)
+- 29: STATE (data)
+- 30: LOG (data)
+- 32: MARK (data)
+- 33: DONE (data)
+- 34: SHOW (data)
+- 36: SAY_ASK (data)
+- 38: SAY_STOP (data)
+- 43: `_load` 
+- 52: `_close` 
+- 65: `step` One tool call -> the message to show the chat, or None.
+- 95: `stage_steps` Replay test 2 (Sam's Y, 27 Nov: "steps counted per stage and saved for good"): this chat's steps since its
+- 114: `report` 
+- 130: `test` The fault, saved as an example: a round like chat 30's (four notes, ~35 steps each, nobody told). Replayed
+- 170: `main` 
+
 ## parts.py (245 lines)
 - 33: HERE (data)
 - 34: PART_RE (data)
@@ -2517,103 +2536,105 @@
 - 778: `render` 
 - 799: `main` 
 
-## people.py (1333 lines)
-- 71: HERE (data)
-- 73: ROOT (data)
-- 76: COLOURS (data)
-- 81: HAIR_STYLES (data)
-- 83: FAMOUS_HAIR (data)
-- 84: BEHIND (data)
-- 87: OUTFITS (data)
-- 88: DEFAULTS (data)
-- 93: STEPS (data)
-- 95: STEP (data)
-- 98: `class DescriptionError` 
-- 103: `colour` 
-- 113: `_num` 
-- 120: `parse` The film's people file -> {who: description dict} in the order written.
-- 150: CYCLE (data)
-- 151: WHEN (data)
-- 154: `_formula` '3i+s' -> (3, 1): member i of a crowd takes item (3i + s) of a list (s: the shot's seed).
-- 166: `_crowd_line` A crowd's own lines, kept to apply per member: 'FACT (3i+s): item; item; ...' (member i takes one item) and
-- 196: KIT_HATS_ALL (data)
-- 198: SKIN_TONES (data)
-- 201: MIXES (data)
-- 208: TOPS (data)
-- 211: LEGS (data)
-- 212: SHOES (data)
-- 213: HATS (data)
-- 215: FACES (data)
-- 217: MEN_HAIR (data)
-- 218: WOMEN_HAIR (data)
-- 219: WOMEN (data)
-- 220: SAID (data)
-- 223: BEFORE_DEFAULTS (data)
-- 230: BEFORE_SEX (data)
-- 236: BEFORE_SEATED (data)
-- 240: `seat_r7` Does this film draw seated people with R7's lower body? (every film not in BEFORE_SEATED)
-- 250: SEAT_BODY (data)
-- 251: BODY_SPEC (data)
-- 252: STAND_BODY (data)
-- 256: `seat_body` Put one person on the seated body tool, with the spec Sam passed (R7 chat 10/15: the turned torso hangs
-- 265: SEXED (data)
-- 267: BODY_KEYS (data)
-- 270: `_sexed` The woman's body for a person marked `woman`: what the body line leaves unsaid comes from SEXED.
-- 280: `_said` The facts a crowd's own lines give (plain, cycled or per 'when'): the defaults leave these alone.
-- 292: `_pick` 
-- 297: `varied` Member i's defaults for what the crowd's lines leave unsaid (EPR's mix; the same member in every shot).
-- 373: BEFORE_POOL (data)
-- 376: POOL_SKINS (data)
-- 379: POOL_HAIR (data)
-- 385: POOL_HAIR_C (data)
-- 392: POOL_GREYS (data)
-- 393: POOL_FACES (data)
-- 395: POOL_TOPS (data)
-- 407: POOL_LEGS (data)
-- 410: POOL_SHOES (data)
-- 412: POOL_LIPS (data)
-- 413: POOL_PLACES (data)
-- 417: POOL_DRESS (data)
-- 421: `pool_varied` Member i's look from the pooled pack (what the crowd's lines leave unsaid), the same member in every shot.
-- 505: `pooled` One person from the pooled pack with no people file: member i of a bare pooled crowd at this place (a test
-- 513: `member` Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description.
-- 537: `_fact` 
-- 797: TAILORING (data)
-- 801: `person` One description -> the engine's person dict (views.person), with its face card in 'kit_face'.
-- 860: `_house` A face tool pick on the house head (facehouse.person): the pick's face, colours and age lines; the hair piece,
-- 892: `_famous` A measured head (people_famous): the likeness card, the beard, the curls, the moods, from the lines.
-- 908: `people_file` 
-- 912: `load` The film's people file -> {who: engine person} (crowds apart: crowds()).
-- 936: `crowds` The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i. A film built before the
-- 949: `crowd_person` Crowd member i as the engine's person (their own look; the film adds what they are doing).
-- 964: `_extras` 
-- 978: `turned` Each torso piece in the turned views (chat 15: one outfit in every view): 'back', its drawing seen from behind
-- 994: `pieces` The torso pieces this look wears, in the order drawn: the open collar (the outfit's), then the extras.
-- 1002: WORN_OVER (data)
-- 1005: TURNED_ON (data)
-- 1006: FILM_TURNED (data)
-- 1007: DREW (data)
-- 1010: `kit_torso_view` views.TORSO_EXTRAS: this look's torso pieces in a turned view.
-- 1028: `_head_parts` 
-- 1038: EXTRAS (data)
-- 1040: HEAD_PARTS (data)
-- 1043: `head_faults` Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"):
-- 1056: `install` Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person).
-- 1084: `kit_head` The look's own head: a head extra (the wig), a measured or named part, or the invented front face.
-- 1093: `kit_torso` The look's torso pieces, in the order written (open collar, open shirt, crucifix, scarf...); none: the plain
-- 1103: `faults` Blessed's notes 5, 13, 15, 45 (a repeated note): a face on the house head draws no mouth at rest. Everyone the
-- 1114: YAWS (data)
-- 1117: `sheet` Every person in the people file at five turns (front, three-quarter, side, three-quarter behind, behind) at
-- 1154: `cast_sheet` The catalogue's tile: the kit's test cast (Blessed's invented people).
-- 1164: FRAMES (data)
-- 1167: KEEP (data)
-- 1170: `_film_people` The film's own dicts for each person in its people file, found by name (film-specific: a small table).
-- 1200: `_differ` 
-- 1206: FROZEN_DRIFT (data)
-- 1207: FROZEN_FILMS (data)
-- 1210: `replicate` Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
-- 1301: `PT_WHO` Who the new turned-head route draws that the film drew plain (invented faces; crowds were already turned).
-- 1307: `lines` Each person's description, one page line each, for page.py (a note on a person changes these lines, not
+## people.py (1379 lines)
+- 72: HERE (data)
+- 74: ROOT (data)
+- 77: COLOURS (data)
+- 82: HAIR_STYLES (data)
+- 84: FAMOUS_HAIR (data)
+- 85: BEHIND (data)
+- 88: OUTFITS (data)
+- 89: DEFAULTS (data)
+- 94: STEPS (data)
+- 96: STEP (data)
+- 99: `class DescriptionError` 
+- 104: `colour` 
+- 114: `_num` 
+- 121: `parse` The film's people file -> {who: description dict} in the order written.
+- 151: CYCLE (data)
+- 152: WHEN (data)
+- 155: `_formula` '3i+s' -> (3, 1): member i of a crowd takes item (3i + s) of a list (s: the shot's seed).
+- 167: `_crowd_line` A crowd's own lines, kept to apply per member: 'FACT (3i+s): item; item; ...' (member i takes one item) and
+- 197: KIT_HATS_ALL (data)
+- 199: SKIN_TONES (data)
+- 202: MIXES (data)
+- 209: TOPS (data)
+- 212: LEGS (data)
+- 213: SHOES (data)
+- 214: HATS (data)
+- 216: FACES (data)
+- 218: MEN_HAIR (data)
+- 219: WOMEN_HAIR (data)
+- 220: WOMEN (data)
+- 221: SAID (data)
+- 224: BEFORE_DEFAULTS (data)
+- 231: BEFORE_SEX (data)
+- 237: BEFORE_SEATED (data)
+- 241: `seat_r7` Does this film draw seated people with R7's lower body? (every film not in BEFORE_SEATED)
+- 251: SEAT_BODY (data)
+- 252: BODY_SPEC (data)
+- 253: STAND_BODY (data)
+- 257: `seat_body` Put one person on the seated body tool, with the spec Sam passed (R7 chat 10/15: the turned torso hangs
+- 266: SEXED (data)
+- 268: BODY_KEYS (data)
+- 271: `_sexed` The woman's body for a person marked `woman`: what the body line leaves unsaid comes from SEXED.
+- 281: `_said` The facts a crowd's own lines give (plain, cycled or per 'when'): the defaults leave these alone.
+- 293: `_pick` 
+- 298: `varied` Member i's defaults for what the crowd's lines leave unsaid (EPR's mix; the same member in every shot).
+- 374: BEFORE_POOL (data)
+- 377: POOL_SKINS (data)
+- 380: POOL_HAIR (data)
+- 386: POOL_HAIR_C (data)
+- 393: POOL_GREYS (data)
+- 394: POOL_FACES (data)
+- 396: POOL_TOPS (data)
+- 408: POOL_LEGS (data)
+- 411: POOL_SHOES (data)
+- 413: POOL_LIPS (data)
+- 414: POOL_PLACES (data)
+- 418: POOL_DRESS (data)
+- 422: `pool_varied` Member i's look from the pooled pack (what the crowd's lines leave unsaid), the same member in every shot.
+- 506: `pooled` One person from the pooled pack with no people file: member i of a bare pooled crowd at this place (a test
+- 514: `member` Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description.
+- 538: `_fact` 
+- 798: TAILORING (data)
+- 802: `person` One description -> the engine's person dict (views.person), with its face card in 'kit_face'.
+- 861: `_house` A face tool pick on the house head (facehouse.person): the pick's face, colours and age lines; the hair piece,
+- 900: `colour_faults` Replay test 2 (Sam's Y, 27 Nov): El-Sayed came out pale-skinned with a grey beard (the face tool read a lit
+- 921: `_colour_lines` 
+- 936: `_famous` A measured head (people_famous): the likeness card, the beard, the curls, the moods, from the lines.
+- 952: `people_file` 
+- 956: `load` The film's people file -> {who: engine person} (crowds apart: crowds()).
+- 980: `crowds` The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i. A film built before the
+- 993: `crowd_person` Crowd member i as the engine's person (their own look; the film adds what they are doing).
+- 1008: `_extras` 
+- 1022: `turned` Each torso piece in the turned views (chat 15: one outfit in every view): 'back', its drawing seen from behind
+- 1038: `pieces` The torso pieces this look wears, in the order drawn: the open collar (the outfit's), then the extras.
+- 1046: WORN_OVER (data)
+- 1049: TURNED_ON (data)
+- 1050: FILM_TURNED (data)
+- 1051: DREW (data)
+- 1054: `kit_torso_view` views.TORSO_EXTRAS: this look's torso pieces in a turned view.
+- 1072: `_head_parts` 
+- 1082: EXTRAS (data)
+- 1084: HEAD_PARTS (data)
+- 1087: `head_faults` Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"):
+- 1100: `install` Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person).
+- 1128: `kit_head` The look's own head: a head extra (the wig), a measured or named part, or the invented front face.
+- 1137: `kit_torso` The look's torso pieces, in the order written (open collar, open shirt, crucifix, scarf...); none: the plain
+- 1147: `faults` Blessed's notes 5, 13, 15, 45 (a repeated note): a face on the house head draws no mouth at rest. Everyone the
+- 1158: YAWS (data)
+- 1161: `sheet` Every person in the people file at five turns (front, three-quarter, side, three-quarter behind, behind) at
+- 1200: `cast_sheet` The catalogue's tile: the kit's test cast (Blessed's invented people).
+- 1210: FRAMES (data)
+- 1213: KEEP (data)
+- 1216: `_film_people` The film's own dicts for each person in its people file, found by name (film-specific: a small table).
+- 1246: `_differ` 
+- 1252: FROZEN_DRIFT (data)
+- 1253: FROZEN_FILMS (data)
+- 1256: `replicate` Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
+- 1347: `PT_WHO` Who the new turned-head route draws that the film drew plain (invented faces; crowds were already turned).
+- 1353: `lines` Each person's description, one page line each, for page.py (a note on a person changes these lines, not
 
 ## people_famous.py (552 lines)
 - 22: ROOT (data)
@@ -3764,7 +3785,7 @@
 - 678: `report` 
 - 687: `at_start` A film's start (kitfilm.at_start / begin): the report beside the kit tests, saved for handover start.
 
-## touch.py (754 lines)
+## touch.py (759 lines)
 - 40: HERE (data)
 - 41: ROOT (data)
 - 42: CACHE (data)
@@ -3781,23 +3802,24 @@
 - 251: `_family` [the module's file, its parts] for a module kept in parts (parts.py, cost-spike fix 5c), else [path].
 - 263: `film_modules` A film's own code: a module with a top-level SHOTS (or its stem's sibling), as checkaudit counts it.
 - 275: `build` Every file parsed (or taken from the cache when unchanged) and joined into one index; written to the cache.
-- 369: `load` The index, rebuilt first for any file changed since (only those are parsed again).
-- 380: `_changed` 
-- 388: `stale_faults` For handover.py end: the index is missing or older than the code, or a file cannot be parsed.
-- 408: `lookup` NAME -> (exact defs, near defs). Exact: the whole id, its tail (`head_faults`, `Class.m`) or `mod.name`.
-- 421: HUBS (data)
-- 424: `reach` Every def whose calls lead to target, nearest first: {caller: (depth, via)}. A command's main() (a dispatcher:
-- 444: `tests_for` The kit tests whose calls reach any of targets (a target that is a kit test is its own).
-- 457: `_secs` 
-- 465: `rerun_line` One line: how many kit tests, about how long, and the command (long lists by --touching / --changed).
-- 479: `_where` 
-- 484: `report` The ~20-line answer for one NAME.
-- 549: `module_report` A whole file: its size, which files use it (film and shared apart), its most-used defs, the kit tests reaching
-- 577: `changed_defs` The defs whose lines a diff touched (working tree against `since`), from the diff's own line numbers.
-- 605: `rerun` 
-- 618: `test` The fault it catches, saved as an example: a hand trace of `people.head_faults` (the crowd-head check, Sam
-- 695: `hook` PostToolUse on Edit/Write: after an edit to code, the one RERUN line for everything changed since HEAD, said
-- 717: `main` 
+- 368: `load` The index, rebuilt first for any file changed since (only those are parsed again).
+- 379: `_stamp` A file's stamp: its time and size, and for a module kept in parts its family's times too (a part is parsed
+- 386: `_changed` 
+- 393: `stale_faults` For handover.py end: the index is missing or older than the code, or a file cannot be parsed.
+- 413: `lookup` NAME -> (exact defs, near defs). Exact: the whole id, its tail (`head_faults`, `Class.m`) or `mod.name`.
+- 426: HUBS (data)
+- 429: `reach` Every def whose calls lead to target, nearest first: {caller: (depth, via)}. A command's main() (a dispatcher:
+- 449: `tests_for` The kit tests whose calls reach any of targets (a target that is a kit test is its own).
+- 462: `_secs` 
+- 470: `rerun_line` One line: how many kit tests, about how long, and the command (long lists by --touching / --changed).
+- 484: `_where` 
+- 489: `report` The ~20-line answer for one NAME.
+- 554: `module_report` A whole file: its size, which files use it (film and shared apart), its most-used defs, the kit tests reaching
+- 582: `changed_defs` The defs whose lines a diff touched (working tree against `since`), from the diff's own line numbers.
+- 610: `rerun` 
+- 623: `test` The fault it catches, saved as an example: a hand trace of `people.head_faults` (the crowd-head check, Sam
+- 700: `hook` PostToolUse on Edit/Write: after an edit to code, the one RERUN line for everything changed since HEAD, said
+- 722: `main` 
 
 ## turnhead.py (739 lines)
 - 35: H (data)

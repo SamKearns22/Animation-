@@ -82,9 +82,10 @@ The "before" trace count is a floor (one search per function on the path, none w
 ## Where things stand
 - Rules that bite next: 30 (a repeat note: find why first), 61 (MAP; read only the lines a note touches), 85 (cost watch).
 - Done: steps 1-7 and 5c (six shared kit files kept in parts, proved unchanged; kit test parts_one_namespace); the
-  estimate rows looked at again (below: unproven until a real notes round; the "half" share is not in the ledgers).
+  estimate rows looked at again (below: unproven until a real notes round; the "half" share is not in the ledgers);
+  replay 2 savings S1-S4 built by the other cost chat (below).
 - Next: none for this job; it is finished. The estimate check runs when Sam says the next film is posted
-  (handover estimate_faults asks for it). Open Wounds waits at its whole-film animatic (story/status.md, chat 43).
+  (handover estimate_faults asks for it). Open Wounds runs on its own chain (story/status.md).
 - Needs Sam: nothing.
 - Read: guides/fix-pack.md (any fixing chat); a split module: its PARTS line, then `touch.py NAME` for the file.
 - Open rule requests: none.
@@ -209,10 +210,37 @@ be redone (Sam's own words are lost); I knew the satire guide names Islamocommun
 (did not read it); no Sam review; one chat; the first animatic was not reached, and the animatic stages (sets, film
 code) are where the original spent most (three of four chats).
 
+## Replay 2 savings S1-S4 built (Sam's "Y all", 27 Nov)
+- S1 `catalogue.py find "plain words"`: the kit catalogue's best rows (everyday words list `catalogue.SAME`); "a real
+  politician's likeness" -> facepick first, people kit second. Plan pack line added (find first; a real person's
+  route; NEW hair; colour lines). Kittest `catalogue_find_famous_face`.
+- S2 `people.colour_faults(FILM)`, run by every people-kit cast sheet (`COLOUR:` lines): skin, hair, beard against
+  the likeness card's whole-face colours (facepick now saves them, `shapes_card`). Root fault found: a face tool
+  person's `skin:`, `lips:`, `beard: boxed C` lines were silently dropped; they now win over the pick's colours (no
+  posted film used them). Picks made before today have no card colours: passed over. Kittest `colour_against_photo`
+  (the replay's pale El-Sayed and grey beard caught; corrected passes; May's pick takes a skin line).
+- S3 `facehouse.hair_fit`: facepick prints the hair piece that fits or "NEW: no hair piece fits" (long hair past the
+  jaw). Tested on 5 real faces (Ocasio-Cortez NEW, El-Sayed swept, Blair swept, May bob, Badenoch braids). Kittest
+  `hair_piece_fits`.
+- S4 every step counts toward the chat's total (notesteps); `ledger.py stage` keeps the steps since the last stage
+  mark in the ledger's stage row and table. Kittest `stage_steps_saved`.
+
+- Verified end to end on the replay (throwaway copy of today's project): facepick printed "El-Sayed: hair piece:
+  swept" and "aoc: NEW: long hair ... no hair piece fits"; the cast sheet printed the COLOUR line for the grey beard,
+  quiet once `beard: boxed 30 26 26` was in the file. Skin not flagged: on this bright studio photo the face tool's
+  skin is near the photo's (the "pale" look is partly the photo). **Look gap (Statement Two):** the beard drawn is
+  still stubble with skin through it, so a black value reads only a little darker; a solid short full beard on the
+  house head is a new build, offered to Sam, not started.
+- Kit tests: the 4 new pass; `--touching people._house` 43 of 46 pass; 3 fail outside this change
+  (people_from_a_description: no `film/blessed` branch in this copy; head_moves_not_comic, early_move_size: Open
+  Wounds' nod sizes, which the live notes round is changing). Not re-run on the old code.
+- Branches named, not merged: claude/cost-5c-split (another chat working on it now, 0 h old; it changes page.py's word
+  list too, which this chat left alone). FREEZE line (animations/brexit-is-done-vertical.mp4 not in the freeze list)
+  belongs to Open Wounds' chain, not this tool job.
+- Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy.
 
 Handover check answered (chat 2): KIT CHANGE: the whole kit suite ran this chat on both copies (above), and every test
 the changed tools touch was run again after the last fix; no question for Sam. COST: get_session gives this chat no
 cost figure (only "weekly limit: warning"); nothing recorded by guess. PUSH: sent at the handover. Branches the
 start listed: the same six as chat 1 (logs and one-off files), named in chat 1's lines above, not merged.
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.08% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.8% of a week (2026-11-27)

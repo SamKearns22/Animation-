@@ -64,6 +64,7 @@ Map: colours 55 | steps 70 | parse 81 (a crowd's lines 129, member 166) | the en
      366; crowds 391) | install 401 (each look's head and torso 437; faults 454) | sheet 464 | replicate 510 |
      lines for the page 643 | main 655
 """
+import json
 import os
 import re
 import sys
@@ -886,7 +887,50 @@ def _house(d):
         sp['sleeve'] = tuple(d['sleeve'])                                                    # of their own colour
     if 'trousers' in d:                           # the line's trousers (a suit with a tie: the jacket's cloth, chat 38)
         sp['trousers'] = tuple(d['trousers'])
+    if 'skin' in d:                               # replay test 2 (Sam's Y, 27 Nov): the file's skin, lips and beard
+        sp['skin'] = tuple(d['skin'])             # lines were dropped for a face tool person, so a pale-measured
+    if 'lips' in d:                               # El-Sayed could not be put right; they now win over the pick's
+        sp['lips'] = tuple(d['lips'])
+    kh = sp.get('kit_house') or {}
+    if d.get('beard') and kh.get('beard'):
+        sp['kit_house'] = dict(kh, beard=dict(kh['beard'], colour=list(d['beard']), moustache=list(d['beard'])))
     return sp
+
+
+def colour_faults(film):
+    """Replay test 2 (Sam's Y, 27 Nov): El-Sayed came out pale-skinned with a grey beard (the face tool read a lit
+    cheek and a grey beard) and nothing said so. Each face tool person's drawn skin, hair and beard against the likeness
+    card's whole-face colours (NAME-pick.json 'shapes_card', saved by facepick since 27 Nov): one line each when far
+    off. A pick made before then has no card colours and is passed over. Kittest colour_against_photo."""
+    import facehouse as FH
+    out = []
+    for w, d in load(film).items():
+        sp = d if d.get('kit_house') or 'house' not in d else _house(d)
+        kh = sp.get('kit_house')
+        if not kh:
+            continue
+        try:
+            card = json.load(open(FH.pick_file(kh['name'], kh.get('src')))).get('shapes_card') or {}
+        except (OSError, ValueError):
+            continue
+        out += _colour_lines(sp.get('name', w), sp.get('skin'), sp.get('hair_c'),
+                             (kh.get('beard') or {}).get('colour'), card)
+    return out
+
+
+def _colour_lines(name, skin, hair, beard, card, far=55):
+    def dist(a, b):
+        return sum(abs(int(x) - int(y)) for x, y in zip(a, b)) / 3
+    out = []
+    if skin and card.get('skin_rgb') and dist(skin, card['skin_rgb']) > far * 0.6:
+        out.append(f"{name}: skin {tuple(skin)} is far from the photo's {tuple(card['skin_rgb'])}: set 'skin:' in the people file")
+    if hair and card.get('hair_rgb') and dist(hair, card['hair_rgb']) > far:
+        out.append(f"{name}: hair {tuple(hair)} is far from the photo's {tuple(card['hair_rgb'])}")
+    if beard and card.get('hair_rgb') and (card.get('beard', 0) > 0.2 or card.get('moustache', 0) > 0.3) \
+            and dist(beard, card['hair_rgb']) > far:
+        out.append(f"{name}: beard {tuple(beard)} is far from the photo's dark hair {tuple(card['hair_rgb'])}: "
+                   f"set 'beard: boxed C' in the people file, or say it is grey")
+    return out
 
 
 def _famous(d, sp):
@@ -1148,6 +1192,8 @@ def sheet(film, out, cast=None, yaws=YAWS, crowd=8):
             tile.thumbnail((tw, th - 34))
             img.paste(tile.convert('RGB'), (x0 + k * tw, y0 + 28))
     img.save(out, quality=88)
+    for line in colour_faults(film):             # replay test 2: far from the photo, said at once
+        print('COLOUR:', line)
     return out
 
 

@@ -79,6 +79,7 @@ def step(inp, state_dir=STATE, log=LOG):
     elif s and not st['marked']:
         _close(st, chat, log)
         st['note'] = next(g for g in s.groups() if g is not None)
+    st['total'] = st.get('total', 0) + 1          # every step of the chat, for the stage counts (stage_steps)
     out = None
     if st['note'] is not None and not m:
         st['n'] += 1
@@ -89,6 +90,25 @@ def step(inp, state_dir=STATE, log=LOG):
             out = SAY_STOP.format(n=n, note=st['note'][:60])
     json.dump(st, open(sp, 'w'))
     return out
+
+
+def stage_steps(state_dir=None, chat=None):
+    """Replay test 2 (Sam's Y, 27 Nov: "steps counted per stage and saved for good"): this chat's steps since its
+    last stage mark (or its start), and the mark moved to now. ledger.py stage writes it into the film's ledger, so a
+    later test compares stage with stage (the 4 Nov chats were gone: only shares of the week were left). None when
+    nothing was counted. Kittest stage_steps_saved."""
+    state_dir = state_dir or STATE
+    files = sorted((os.path.join(state_dir, f) for f in os.listdir(state_dir)), key=os.path.getmtime) \
+        if os.path.isdir(state_dir) else []
+    if chat:
+        files = [f for f in files if os.path.basename(f).startswith(chat)]
+    if not files:
+        return None
+    st = _load(files[-1])
+    n = st.get('total', 0) - st.get('stage_at', 0)
+    st['stage_at'] = st.get('total', 0)
+    json.dump(st, open(files[-1], 'w'))
+    return n
 
 
 def report(chat=None, state_dir=STATE):
