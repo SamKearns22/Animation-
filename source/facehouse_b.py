@@ -389,6 +389,8 @@ def _head(img, p, sp, t, hx, hy):
         hard_hat(p, f, L, kh, cr, max(_face_u(L, 0.0) + 0.1, L['fw'] * 0.5 + 0.08))
     if kh.get('glasses'):
         glasses(p, FF.lens, L, kh['glasses'])
+    if kh.get('balaclava'):                               # Patriots 5: the knit over it all but the eyes
+        balaclava_front(img, p, f, L, kh, sp)
     return fx
 
 

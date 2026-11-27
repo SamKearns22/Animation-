@@ -709,8 +709,9 @@ def plain_torso(img, p, sp, t):
     # neck
     nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
     if not sp.get('neck_off'):                   # lying_flat draws the neck with the head (Job I)
-        p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # neck_lean: its top
-        soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
+        p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], sp.get('neck_c', skin), INK, 2.6)   # neck_lean: its top
+        if 'neck_c' not in sp:                   # a covered neck (Patriots 5: the balaclava's) has no skin shadow
+            soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
              (150, 90, 80), 0.35, 4)                # follows a shifted head, one neck (Ad-Vanced Notice, 8 Nov)
     body = front_outline(sw, bottom, ink_units(p), sp.get('figure'), sp.get('arm_w', 30.0), seat_hem(sp))
     if out == 'suit':

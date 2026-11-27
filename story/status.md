@@ -1,3 +1,3 @@
-brexit-is-done: Sam's Y past the budget (67.5% of a week).
-Done chat 42: notes 27 (Kemi points to the side) and 28 (the leap back, building shortened) fixed; clip sent.
-Next: chat 43 (Sonnet): whole-film animatic, finish.py, send, push drafts.
+patriots5 (The Patriot 5): Sam still writing the screenplay; Open Wounds posted (27 Nov).
+Done chat 1: the Patriot redrawn in the new house style (house head, new balaclava, every turn); sheet sent.
+Next: Sam's notes on the sheet (Opus, medium); then the plan when the screenplay and title come (Opus, high).

@@ -719,3 +719,6 @@ Titles, dance, judges and the whole-film animatic (49 s) are done and sent; wait
   showstopper, Maul attacks, whales smash the Jackdaw, ends on the Mossad blast. "WELCOME, / NEW FOLLOWERS" in
   cranberry two-thirds down; no subtitles (Patriots 2, Patriots 3 beach and Mossad re-drawn from their code with
   captions off, older body checks set to warn so they draw as posted). Code: `source/channel_trailer.py` (~6 min).
+
+
+## Finished (Sam, 27 Nov): "Open Wounds" (brexit-is-done; posted). Notes: `notes/brexit-is-done.md` (kept in place: acting.py reads it), handovers in `notes/archive/brexit-is-done-handovers.md`.

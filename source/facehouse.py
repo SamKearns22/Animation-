@@ -360,7 +360,7 @@ def head_overlay(name, got, out, src=None, T=420):
     return out
 
 
-_PARTS.include(globals(), 'facehouse_b', 'facehouse_c')
+_PARTS.include(globals(), 'facehouse_b', 'facehouse_c', 'facehouse_d')
 if __name__ == '__main__':
     a = sys.argv[1:]
     if a and a[0] == 'sheet':
