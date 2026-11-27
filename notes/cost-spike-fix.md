@@ -209,4 +209,9 @@ be redone (Sam's own words are lost); I knew the satire guide names Islamocommun
 (did not read it); no Sam review; one chat; the first animatic was not reached, and the animatic stages (sets, film
 code) are where the original spent most (three of four chats).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.92% of a week (2026-11-27)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 5.63% of a week (2026-11-27)
+
+Handover check answered (chat 2): KIT CHANGE: the whole kit suite ran this chat on both copies (above), and every test
+the changed tools touch was run again after the last fix; no question for Sam. COST: get_session gives this chat no
+cost figure (only "weekly limit: warning"); nothing recorded by guess. PUSH: sent at the handover. Branches the
+start listed: the same six as chat 1 (logs and one-off files), named in chat 1's lines above, not merged.
