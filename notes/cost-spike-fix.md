@@ -47,7 +47,8 @@ Kind: tool job (shared, every film). No film, shot, camera or beat touched.
 - Rules that bite next: 30 (a repeat note: find why first), 89 (new drawing: drawn alone and critiqued), 85 (cost watch).
 - Done: steps 1-7, 5c, replay 2 and S1-S4 (earlier chats); B1-B4 built, kit-tested, verified end to end on the
   replay's two people (section "B1-B4 built" below); before/after cast sheet sent to Sam.
-- Next (Opus, medium: a round of Sam's notes): Sam's words on the cast sheet; then the job ends (tool job, no film).
+- Next (Opus, high: a new drawing's fixes, rule 89 hunt 2; chat 4): the long hair from behind (crown band, shoulder
+  step) and the three-quarter neck gaps; critique hunt 2 (`critique.py pack`); resend the sheet; then Sam's words.
 - Needs Sam: his look at the sheet (the beard a little fuller than El-Sayed's own; a taste call).
 - Read: guides/fix-pack.md (a fixing chat's one page); this file's "B1-B4 built" section.
 - Open rule requests: none.
@@ -208,3 +209,6 @@ COST (chat 3): get_session gives no cost figure (no usage in its record; "weekly
 about 1.7% of a week at step 90. Nothing recorded by guess. NOTES trimmed to 3,220 words (finished sections to
 notes/archive/cost-spike-fix-notes.md). MAPS and the who-uses-this index remade. story/status.md left as Brexit Is
 Done's (a live chain; this tool job has no film line there).
+Kit tests (chat 3): `--changed` 59 run, 56 passed; head_moves_not_comic, early_move_size: the same two chat 2 named
+(Brexit's live nod sizes); places_from_a_description failed in the run (sets ~1% pixels) but passes alone on both old
+and new code: the main line was merged into this copy mid-run. The 4 new tests pass.
