@@ -6,3 +6,6 @@ A 4 second clip taking 15 minutes? That's insane
 ### 2026-11-27T21:48:07
 Y
 
+### 2026-11-27T21:48:21
+Y. I can tell you at this time that there are clipping errors.
+
