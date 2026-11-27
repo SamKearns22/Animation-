@@ -25684,15 +25684,38 @@
      "1-5 P14: the eyes are tiny at this size; a full-size face crop is needed to see whether the pupil stays inside the eye.",
      "2-3 P12: mouths are closed or a thin line while the line is spoken ('remember', 'referendum'); a frame labelled with the audio would show it."
     ]
+   },
+   {
+    "round": 28,
+    "pass": 1,
+    "stage": "animatic",
+    "date": "2026-11-27",
+    "hunt": 1,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "3-4 P11: Blair's head sits on a long thin neck, and the head is small for the wide torso.",
+     "3-4 P5 P3: Blair's arms. In 3 the left arm is a straight stick out to the side and the right arm hooks over the chair arm with a lumpy bend. In 4 the near arm s",
+     "3-4 P1: Blair's ball hands hover. In 3 both hands are in the air touching nothing. In 4 one hand hangs in front of the chest and the other is at the chair's edg",
+     "3-4 P7 P10: Blair's thighs vanish behind the armchair's arm, and his knees and shins poke out in front of the chair. He reads as sitting beside or in the chair,",
+     "2 P6: Badenoch's pointing hand is a bare ball with no finger out along the forearm, so it doesn't read as pointing. The far hand is lost against the hip.",
+     "2 P2: Her face is a small \"o\" mouth looking at the lens, not at what she points to. Too small for a phone.",
+     "2,4 A1: The wolves are unreadable. In 2 they are a brown and red gore pile that looks like a brawl of dogs. In 4 the second creature is a brown blob with red sp",
+     "4 P10: The running man in black overlaps the brown creature; his leg and body merge into it, with no clear contact or ground.",
+     "1 P7: May's dark trousers merge into the near-black floor. The seat is tiny and her lap and bottom are unclear, so she seems to hover in front of the chair.",
+     "1,3 P2: May's eyes are squinted half-shut. Blair's eyes in 3 are small and glance sideways. The feeling doesn't read at phone size.",
+     "1-4 P12: no frames labelled with who speaks, so I can't tell whether the mouths match the words. All four are open.",
+     "1-2 P4: check sheet says \"no reference\" for both; a reference crop of each would show whether hair and glasses match."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 7,
+    "faults": 8,
     "false": 1
    },
    "P2": {
-    "faults": 18,
+    "faults": 20,
     "false": 1
    },
    "P4": {
@@ -25704,11 +25727,11 @@
     "false": 0
    },
    "P11": {
-    "faults": 4,
+    "faults": 5,
     "false": 2
    },
    "P1": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "P13": {
@@ -25724,19 +25747,19 @@
     "false": 0
    },
    "P3": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P5": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P7": {
-    "faults": 9,
+    "faults": 11,
     "false": 0
    },
    "P10": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "M1": {
@@ -25760,7 +25783,7 @@
     "false": 0
    },
    "P6": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    }
   }
