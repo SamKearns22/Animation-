@@ -2,7 +2,7 @@
 
 Letters were shuffled; the scorer saw only key.md and A-E with the [view] tags removed. Letters: A=pose, B=whereis, C=motion, D=plain (frames only, the baseline), E=cutout.
 
-Open: every arm flags Jason's body through the door in c10 (the posted GTA final, 'passed' in the key). Not checked: the posted vertical's timing differs from the c10 render, so the frame was not matched. If real, Sam missed it and it is not a false alarm.
+Settled (chat 3): NO door fault in the posted c10 (notes/seeing-test.md, 'c10 settled'); every arm's c10 door flag is a false alarm. Was open: every arm flags Jason's body through the door in c10 (the posted GTA final, 'passed' in the key). Not checked: the posted vertical's timing differs from the c10 render, so the frame was not matched. If real, Sam missed it and it is not a false alarm.
 
 # Blind scoring of judges A-E against key.md
 
