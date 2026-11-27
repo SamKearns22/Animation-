@@ -46,3 +46,20 @@
   BRAID_FINE, people `beard: short C`, kitfilm.lookups/face_result, catalogue.find (raw words); throwaway picks in
   the chat's scratchpad only (never pushed).
 
+
+## Where things stand
+- Rules that bite next: 30 (a repeat note: find why first), 89 (critique: this stage has had its two hunts), 85 (cost watch).
+- Done (chat 4): long hair one piece turned (crown, curtains and hair behind the neck joined, inked once; outer edge falls
+  from the head's widest point with a gentle curve round the neck; three-quarter behind shows a slice of cheek); neck
+  gaps closed; kit test long_hair_one_piece (fails old: band 1.00, step 12 px, 5,870 gap px); six house faces 0 px
+  differ; short_beard_solid, long_hair_piece pass; critique hunts 2 and 3 recorded, `fixed`; sheet rebuilt and sent.
+- Next (chat 5, Opus medium: a round of Sam's notes): Sam's beard note (27 Nov, below: "a big black shape on his
+  face": give it form, edge and grain so it reads as hair on a face, not a patch; check it catches the note first),
+  then his Y: gather more braided and long-hair photos for the braids check; resend the sheet.
+- Needs Sam: his look at the long hair from behind (the rebuilt sheet, sent by chat 4).
+- Read: guides/fix-pack.md; this file's "B1-B4 built" section and "Chat 4" below.
+- Open rule requests: none.
+- Locked by Sam: no film, shot, camera, framing or beat is touched by this job (notes and shared tools only).
+- For Claude: facehouse._long_turned (NECKS, falls, waist), _turned_braids returns to it when not plaited;
+  kittests_health.long_hair_one_piece; throwaway picks in the chat's scratchpad only (never pushed).
+

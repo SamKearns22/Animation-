@@ -44,20 +44,17 @@ Kind: tool job (shared, every film). No film, shot, camera or beat touched.
 - move to shared: nothing (all of this is shared).
 
 ## Where things stand
-- Rules that bite next: 30 (a repeat note: find why first), 89 (critique: this stage has had its two hunts), 85 (cost watch).
-- Done (chat 4): long hair one piece turned (crown, curtains and hair behind the neck joined, inked once; outer edge falls
-  from the head's widest point with a gentle curve round the neck; three-quarter behind shows a slice of cheek); neck
-  gaps closed; kit test long_hair_one_piece (fails old: band 1.00, step 12 px, 5,870 gap px); six house faces 0 px
-  differ; short_beard_solid, long_hair_piece pass; critique hunts 2 and 3 recorded, `fixed`; sheet rebuilt and sent.
-- Next (chat 5, Opus medium: a round of Sam's notes): Sam's beard note (27 Nov, below: "a big black shape on his
-  face": give it form, edge and grain so it reads as hair on a face, not a patch; check it catches the note first),
-  then his Y: gather more braided and long-hair photos for the braids check; resend the sheet.
-- Needs Sam: his look at the long hair from behind (the rebuilt sheet, sent by chat 4).
-- Read: guides/fix-pack.md; this file's "B1-B4 built" section and "Chat 4" below.
+- Rules that bite next: 30 (a repeat note: find why first), 89 (critique before a send), 85 (cost watch).
+- Done (chat 5): Sam's beard note: check beard_has_form (fails the old beard: 95% one flat black, no tone range),
+  short_beard redrawn in tones (soft cheek edge, darker core at the jaw and chin, thin moustache, grain both ways);
+  six house faces 0 px differ; braids check tried on 3 new photos: braids right twice, a curly bob WRONG (see Chat 5).
+- Next (chat 6, Opus medium): Sam's look at the sheet; then the braids check's new measure and the beard strip.
+- Needs Sam: his look at the rebuilt sheet (the beard before and after; the braids finding).
+- Read: guides/fix-pack.md; this file's "Chat 5" below.
 - Open rule requests: none.
 - Locked by Sam: no film, shot, camera, framing or beat is touched by this job (notes and shared tools only).
-- For Claude: facehouse._long_turned (NECKS, falls, waist), _turned_braids returns to it when not plaited;
-  kittests_health.long_hair_one_piece; throwaway picks in the chat's scratchpad only (never pushed).
+- For Claude: facehouse.short_beard (tones), kittests_health.beard_has_form/_b_beard_form; photos in
+  references/faces/{butler,ribeiro-addy,moran}; throwaway picks in the scratchpad only.
 
 ## Estimate to check (said to Sam, 27 Nov)
 Sam: "The next time I say a film is posted and closed (not Open Wounds) check back in on what you just said and ensure
@@ -236,5 +233,22 @@ braided and long-hair photos for the braids check. Both passed to chat 4 (sessio
   (logs, one-off files), named in chat 1, not merged.
 - Kit run `--touching facehouse._turned_braids` (37 tests) started mid-chat; see the commit for its result line.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.92% of a week (2026-11-27)
 - COST (chat 4): get_session gives no cost figure (no usage in its record; weekly limit: warning); the step hook said about 2.2% of a week at step 140. Nothing recorded by guess.
+
+## Chat 5 (27 Nov, cost tests): Sam's beard note, braid photos
+- Beard ("a big black shape on his face"; example notes/learn/beard-black-shape). Why nobody saw it: short_beard_solid
+  only asked the beard to be dark (near its colour), never that it reads as hair; nothing measured tone. Check:
+  beard_has_form (under half the beard in one flat tone, brightness spread 25+, still dark: median within 45 of the
+  colour), front and turned; old: flat 0.95, spread 0; new passes; short_beard_solid still passes (stubble caught).
+  What the Islamocommunism beard did better: a tone part-way to the skin (hair 30% skin), the cheek kept clear high
+  up, a thin moustache. Fault found on the way and fixed: the dark core made a block by the ear turned.
+  Honest look: better, still heavy at phone size; the tone steps under the moustache read a little as bands.
+- Open (B1): at three-quarter behind a strip of beard still shows beside the neck (not fixed this chat).
+- Braids (Sam's Y): Dawn Butler and Bell Ribeiro-Addy (official portraits, Wikimedia) read braided (strength 23.5,
+  20.0); Layla Moran's short curly bob ALSO read braided (score 0.67, strength 10.6), above Badenoch's second braided
+  photo (10.1). So no threshold on these two numbers separates them: raising it loses Badenoch. What must be learned
+  first: a third measure (braids hang in long up-and-down strands; curls have no direction, or hair length past the
+  jaw). Threshold left as it is; next job. Wikimedia's search refused after 2 searches (rate limit).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 12.78% of a week (2026-11-27)
+- COST (chat 5): get_session gives no cost figure (no usage in its record; weekly limit: warning). Nothing recorded by guess.

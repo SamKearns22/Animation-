@@ -508,24 +508,40 @@ def short_beard(p, f, L, skin, bd, seed=67, ink=True):
            (us * 0.8, 0.66), (us - 0.07, 0.52), (us - 0.06, vs)]
     if turned:                                            # the near sideburn up to the ear's top, behind the edge
         top = [(f.wrap(vs + 0.02, -92), vs)] + top[2:]
-    shape = low + FA.tufts(top, 0.005, 0.014, out=1.0, seed=seed + 1)
-    pts = f.pts(shape)
-    p.poly(pts, col, None)
+    # Sam, 27 Nov (notes/learn/beard-black-shape): "a big black shape on his face". Built as the Islamocommunism
+    # film's beard and people_famous.full_beard are: tones that break the shape up. The whole shape in a soft tone
+    # part-way to the skin (its cheek edge reads as hair thinning onto the cheek), the body a step darker inside it,
+    # the beard's own colour only in a core along the jaw and round the chin, a thin moustache, small lighter patches
+    # either side of the soul patch, and grain both ways (light strokes on the dark, dark strokes on the soft edge).
+    edge_c, body_c = blend(col, skin, 0.45), blend(col, skin, 0.16)
+    shape = low + FA.tufts(top, 0.009, 0.014, out=1.0, seed=seed + 1)
+    p.poly(f.pts(shape), edge_c, None)
+    for k, (dv, t) in enumerate(((0.022, 0.3), (0.045, 0.16))):   # two soft steps in from the cheek edge
+        inset = [(u * (1 - dv * 0.6), min(v + dv, l13 + 0.004) if abs(u) < mw * 0.8 else v + dv) for u, v in top]
+        p.poly(f.pts(low + FA.tufts(inset, 0.01, 0.014, out=1.0, seed=seed + 4 + k * 7)), blend(col, skin, t), None)
+    deep = [q for q in low if q[1] > 0.76 and abs(q[0]) < 0.45]   # the jaw's corners round the chin only (wider,
+    core_in = [(u * 0.86, max(v - 0.1, l17 + 0.07 if abs(u) < mw * 1.2 else 0.68)) for u, v in deep]   # turned: a block)
+    p.poly(f.pts(deep + FA.tufts(core_in[::-1], 0.008, 0.018, out=1.0, seed=seed + 5)), col, None)
+    mt = max(ny + 0.035, l0 - 0.048)                      # a thinner moustache band over the lip
     mo = [(-mw * 0.66, l13 + 0.006), (-mw * 0.62, mt + 0.012), (-nw * 0.4, mt + 0.003), (0.0, mt + 0.008),
           (nw * 0.4, mt + 0.003), (mw * 0.62, mt + 0.012), (mw * 0.66, l13 + 0.006)]
-    if must != col:
-        p.poly(f.pts(mo + [(0.0, l0 + 0.01)]), must, None)
+    p.poly(f.pts(FA.tufts(mo, 0.004, 0.01, out=1.0, seed=seed + 6) + [(0.0, l0 + 0.008)]), must, None)
+    for sgn in (-1, 1):                                   # the clear patches either side of the soul patch
+        cu, cv = sgn * mw * 0.42, l17 + 0.045
+        p.poly(f.pts([(cu + 0.032 * math.cos(t), cv + 0.014 * math.sin(t)) for t in np.linspace(0, 6.28, 14)]),
+               blend(col, skin, 0.28), None)
     rng = np.random.default_rng(seed)
-    grain = blend(col, (236, 232, 226), 0.2 if sum(col) < 300 else 0.12)
-    for v in np.arange(vs + 0.08, 1.0, 0.055):            # the grain: short strokes falling down and in
-        for u in np.arange(-0.5, 0.5, 0.05):
-            uu, vv = u + rng.uniform(-0.015, 0.015), v + rng.uniform(-0.015, 0.015)
-            if abs(uu) > _face_u(L, vv) - 0.035 or (abs(uu) < mw * 0.75 and l0 - 0.07 < vv < l17 + 0.03):
+    light = blend(col, (236, 232, 226), 0.3 if sum(col) < 300 else 0.16)
+    for v in np.arange(vs + 0.06, 1.02, 0.04):            # the grain: short strokes falling down and in
+        for u in np.arange(-0.5, 0.5, 0.04):
+            uu, vv = u + rng.uniform(-0.013, 0.013), v + rng.uniform(-0.013, 0.013)
+            if abs(uu) > _face_u(L, vv) - 0.03 or (abs(uu) < mw * 0.95 and vv < l17 + 0.03):
                 continue                                  # inside the edge; the mouth kept clear
-            if vv < ny + 0.06 + (abs(uu) - mw) * 0.6 or rng.random() < 0.45:
-                continue                                  # under the cheek line; a sparse grain
-            a, b = f.pts([(uu, vv), (uu - uu * 0.12, vv + 0.024)])
-            p.line([a, b], grain, 1.3)
+            if vv < ny + 0.04 + (abs(uu) - mw) * 0.6 or rng.random() < 0.4:
+                continue                                  # under the cheek line; a broken grain
+            soft = vv < ny + 0.11 + (abs(uu) - mw) * 0.6   # the soft cheek zone: dark hairs on the light
+            a, b = f.pts([(uu, vv), (uu - uu * 0.12, vv + 0.026)])
+            p.line([a, b], body_c if soft else light, 1.4)
     if ink:                                               # front on: the beard's foot is the head's edge
         p.line(f.pts(low), INK, 2.6)
 
