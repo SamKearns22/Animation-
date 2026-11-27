@@ -1003,3 +1003,30 @@ def tower_clipping():
     r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE)
     got = (r.stdout.strip().split('\n') or [''])[-1]
     return got == 'True True', f'first seat flagged, learned seat clean -> {got!r} {r.stderr[-300:] if got != "True True" else ""}'
+
+
+@test
+def walking_boat_joins():
+    """The walking boat (Patriot 5 shot 8 practice, 27 Nov; notes/learn/walking-boat/): legs come out through holes in
+    the floor, never through the tube or the floor elsewhere, and planted feet stay put. Saved example of the fault
+    (notes/learn/walking-boat/fault-legs-under-tube-27nov.png): the front man's legs came out past the end of the floor,
+    straight under the tube. walking_boat.faults must pass the learned boat and flag: a crew spread past the floor's
+    ends, holes too narrow for the stride (a thigh through the floor), and a boat moving faster than its steps (feet
+    sliding)."""
+    import subprocess
+    code = ("import sys; sys.path.insert(0, %r); import walking_boat as W\n"
+            "men = W.practice_men()\n"
+            "def n(**kw):\n"
+            "    saved = {k: getattr(W, k) for k in kw if k != 'fast'}\n"
+            "    [setattr(W, k, v) for k, v in kw.items() if k != 'fast']\n"
+            "    bt = W.Boat(men, W.S, W.GROUND_Y, 200.0)\n"
+            "    if kw.get('fast'): bt.v *= 1.2\n"
+            "    out = [p for f in range(12) for p in W.faults(bt, f / 12)]\n"
+            "    [setattr(W, k, v) for k, v in saved.items()]\n"
+            "    return out\n"
+            "ok = n(); spread = n(SPACING=0.66); narrow = n(HOLE=0.12); fast = n(fast=1)\n"
+            "print(not ok, any('end of the floor' in p for p in spread), any('outside its hole' in p for p in narrow),"
+            " any('slides' in p for p in fast))") % HERE
+    r = subprocess.run([sys.executable, '-c', code], capture_output=True, text=True, cwd=HERE)
+    got = (r.stdout.strip().split('\n') or [''])[-1]
+    return got == 'True True True True', f'learned clean, three faults flagged -> {got!r} {r.stderr[-300:]}'
