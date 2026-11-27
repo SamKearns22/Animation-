@@ -135,3 +135,52 @@ that it is true." What was said, with all of 27 Nov's work in (savings 1-8, fix 
 - the other stages 10-20% off; still about 3x the 15%-of-a-week target (~$16).
 Check: the next posted film's ledger total and its steps per note (`notesteps.py report`, the notes rounds), against
 these; say plainly which held. Call films by their title (Sam, 27 Nov: "Open Wounds", not "Brexit").
+
+## Replay test 2: a film's opening (27 Nov)
+Kind: tool test. Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy
+(worktrees in the scratchpad; no film code pushed). Opus, medium. Film: Islamocommunism (finished; opening 4 Nov).
+
+**What was replayed.** On a copy at the commit before the film began, with touch/notesteps/still/page copied in:
+the staging plan (shots, timing, known/new estimate, Sam's questions, acting list) and cast sheet v1. Then the cast
+stage again on a copy of today's project (today's face tool and people kit). Not reached: the first animatic (the
+original needed three more chats for it: White House set, Oval Office redress, film code; far past this test's budget).
+
+| stage | steps now | then (no step counts survive: the 4 Nov chats are gone) | quality vs the original |
+|---|---|---|---|
+| brief checklist | 0 (Sam's own message is lost; the original checklist was the input) | in "planning about 0.5%" | not tested |
+| staging plan, estimate, questions, acting list | 7 (4 reading the Plan pack, 2 kit lookups, 1 write) | planning about 0.5% of a week | mine is fuller (9 shots with cameras, acting list, 9 questions); same estimate (~8-10%), same known/new rows |
+| cast v1, 4 Nov kit | 19 (6 reading three old cast files to find a head builder, 1 write, 4 likeness tuning, 4 sheets, 4 checking) | plan + both likenesses about 2% (incl. Sam's rounds) | **worse**: side and back views fell back to the default head (no beard, short brown hair on Alex); beard too heavy. Original had real side/back heads and a short trimmed beard. Scores 70% / 62%, first in line-up |
+| cast v1, today's kit | 14 (5 finding the route, 2 face-tool runs ~2 min each, 3 description, 2 looking) | - | likeness better (80-83% / 71-74%, first), every view turns; **3 look faults**: skin pale, beard pale stubble, Alex has a bob (no long straight hair piece exists) |
+Admin outside the stages: ~18 steps (pushing, picking a film, looking for old step counts that no longer exist), ~6
+comparing. Whole chat about 75 steps.
+
+**Biggest cost drivers of an opening (this test):**
+1. Finding the right kit route for a new famous person: 6 steps in the old kit, 5 today. Nothing in the Plan pack or
+   the finder points at it (the catalogue has it, in two long lines).
+2. Faults only seen by looking: the default head in turned views (old kit) and the colour/hair faults (today). No
+   check flagged either; each would have cost Sam a round.
+3. A missing piece found late: long straight hair is NEW (no hair piece), but the estimate called the person "known
+   once measured"; it would surface only on the cast sheet.
+4. Admin: no step count of an old opening survives (the chats are deleted after some weeks), so "then" can only be
+   given as a share of the week. The comparison is weak because of it.
+
+**Savings proposals (each: problem, steps, Lost/Added)**
+- S1. A famous person in one line of the Plan pack. Problem: 5-6 steps a person spent finding the route. Steps: (1)
+  Plan pack line "a real person: `facepick.py NAME OUT PHOTOS --says ...`, then a people-file block (copy may's)";
+  (2) page.SAME: "likeness, famous, cast, celebrity" -> facepick/facehouse; kit test that the finder returns facepick
+  for "Abdul's likeness". Lost: nothing. Added: one pack line, one word-list row.
+- S2. The cast sheet checks colours against the photo. Problem: skin, hair and beard colour came out wrong and no
+  check saw it (a Sam round each). Steps: (1) the likeness card already measures skin, hair colour and facial hair;
+  (2) people.sheet compares each person's drawn skin/hair/beard to the card and prints a fault line when far off;
+  (3) kit test with this replay's pale Abdul as the saved example. Lost: ~1 s a sheet. Added: one check.
+- S3. Hair shape in the estimate. Problem: a NEW build (long straight hair) hid inside a "known" person. Steps: the
+  card's "big shapes" hair line is matched to the hair pieces at plan time; no match = a NEW row with a price. Lost:
+  nothing. Added: one estimate line per new person.
+- S4. Step counts saved per stage, for good. Problem: old openings can't be compared because the chats are gone.
+  Steps: `ledger.py stage` also writes notesteps' report for that stage into the film's ledger. Lost: nothing.
+  Added: one line per stage in the ledger.
+
+**What this cannot show (honest):** no "then" step counts exist, only shares of the week; the brief stage could not
+be redone (Sam's own words are lost); I knew the satire guide names Islamocommunism's acting list as its example
+(did not read it); no Sam review; one chat; the first animatic was not reached, and the animatic stages (sets, film
+code) are where the original spent most (three of four chats).
