@@ -9,49 +9,55 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 0.05,
+   "model": "opus",
+   "cost": 0.37,
    "src": "estimate",
    "sid": "session_01J1JB7a1YRb6GtXn1AV2QTE",
-   "steps": 4,
-   "hist_k": 89,
+   "steps": 18,
+   "hist_k": 143,
    "kinds": {
-    "tool search": 16.0,
-    "other": 84.0
+    "tool search": 4.7,
+    "other": 95.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 4,
+    "tool search": 7,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 0
+    "other": 18
    },
    "split": {
-    "usd": 0.1855,
-    "total": 0.1855,
+    "usd": 1.3371,
+    "total": 1.3371,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 66.4,
-     "Claude's words": 19.2,
-     "new writes": 13.9,
-     "carried history": 0.5
+     "new writes": 54.2,
+     "start-up floor": 22.1,
+     "Claude's words": 19.0,
+     "carried history": 4.7
     },
     "origins": {
-     "start-up floor": 66.4,
-     "Claude's words": 21.9,
-     "messages and reminders": 8.6,
-     "result: tool search": 3.1
+     "result: other": 26.6,
+     "Claude's words": 24.1,
+     "cache re-write": 22.1,
+     "start-up floor": 22.1,
+     "messages and reminders": 3.0,
+     "result: tool search": 2.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 66.4,
-     "thinking": 8.7,
-     "messages and reminders": 8.6,
-     "commands": 8.5,
+     "memory lapses (re-paying for the whole chat)": 22.1,
+     "start-up reading (rules, tools, first files)": 22.1,
+     "reading chat records": 20.1,
+     "thinking": 10.8,
+     "reading notes": 8.5,
+     "commands": 5.0,
      "messages to Sam": 4.7,
-     "reading notes": 3.0
+     "messages and reminders": 3.0,
+     "writing notes": 2.7,
+     "writing code": 0.9
     },
     "leftover": 0.0
    },
@@ -61,17 +67,22 @@
     "work_pct": null,
     "reads": [
      [
+      "notes/ledger/brexit-is-done.md",
+      1.6,
+      0.0081
+     ],
+     [
       "notes/real-cost-answer.md",
       0.4,
-      0.0015
+      0.002
      ],
      [
       "notes/ledger/sam/n1av2qte.md",
       0.3,
-      0.0013
+      0.0017
      ]
     ],
-    "base_pct": 13.4
+    "base_pct": 10.6
    },
    "search": {
     "show": 0,
@@ -79,8 +90,9 @@
      "no show": 0
     },
     "other": {
-     "other": 2,
-     "film notes": 2
+     "other": 3,
+     "film notes": 3,
+     "guides": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -120,6 +132,33 @@
       "Ledger:.*% of a week",
       "",
       1291
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/ledger/brexit-is-done.md",
+      "brexit",
+      "",
+      6360
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git add -A && git commit -q -m \"Sam's message saved (",
+      "",
+      184
+     ],
+     [
+      24,
+      "other",
+      "guides",
+      "source/*.py guides/film-quality-rules.md",
+      "\\.py$",
+      "",
+      208
      ]
     ]
    },
