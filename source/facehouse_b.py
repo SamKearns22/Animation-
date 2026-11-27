@@ -339,11 +339,12 @@ def _head(img, p, sp, t, hx, hy):
     skin = sp['skin']
     hc = sp['hair_c']
     piece = kh['hair']
-    if piece == 'braids':
+    curtains = piece in ('braids', 'long')                # B2: long straight hair hangs as the plaits do
+    if curtains:
         braids_behind(p, f, L, hc, kh, sp)
-    if piece != 'braids':                                 # her plaits cover the ears
+    if not curtains:                                      # her plaits cover the ears
         ears(p, FF.ears, _ear_L(L), skin, kh.get('ear_k', 1.0))
-    o = curve(f.pts(face_outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
+    o = curve(f.pts(face_outline(L, -0.42 if not curtains else _hair(L, kh)['crown'] + 0.06)), 4)
     p.poly(o, skin, INK, 2.6)
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
         sockets(p, FF.eyes, L, skin, kh['eyes']['shade'])
@@ -358,7 +359,7 @@ def _head(img, p, sp, t, hx, hy):
     FA.nose(p, FF.nose, L, skin)
     age_lines(p, FF.lines, L, skin, kh['age'], lk)
     if kh.get('beard'):
-        stubble(p, f, L, skin, kh['beard'])
+        beard(p, f, L, skin, kh['beard'])
     fx, my = FF.mouth(0.0, L['lip13'])
     m = kh.get('mouth')
     if m:                                                 # the person's own resting mouth (chat 8: the likeness push)
@@ -374,14 +375,14 @@ def _head(img, p, sp, t, hx, hy):
         bob(p, f, L, hc, kh, lk)
     elif piece == 'back':
         back(p, f, L, hc, kh, lk)
-    elif piece == 'braids':
-        braids(p, f, L, hc, lk, kh)
+    elif piece in ('braids', 'long'):
+        (braids if piece == 'braids' else long_hair)(p, f, L, hc, lk, kh)
         if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
             FA.ears(p, FF.ears, _ear_L(L), skin)
     if kh.get('pearls'):
         earrings(p, f, L, dict(kh, _skin=skin))
     if kh.get('hat'):
-        cr = _hair(L, kh)['crown'] if piece == 'braids' else -0.46
+        cr = _hair(L, kh)['crown'] if curtains else -0.46
         hard_hat(p, f, L, kh, cr, max(_face_u(L, 0.0) + 0.1, L['fw'] * 0.5 + 0.08))
     if kh.get('glasses'):
         glasses(p, FF.lens, L, kh['glasses'])
@@ -460,6 +461,70 @@ def stubble(p, f, L, skin, bd, seed=61, ink=True):
     p.poly(f.pts(mo + FA.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), must, None)
     if ink:                                               # turned (turnhead's TurnFace): its own outline inks
         p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
+
+
+SHORT_BEARD = 0.4    # B1 (Sam's Y, 27 Nov): beardkit's coverage from which a new pick's beard is a solid short beard
+                     # (El-Sayed 0.48), not stubble (Walliams' grey stubble 0.285); facepick writes style 'short'
+
+
+def beard(p, f, L, skin, bd, ink=True):
+    """The pick's beard: a solid short full beard where its lines say style 'short' (new picks since B1), else the
+    house stubble (every face picked before keeps exactly its drawing)."""
+    (short_beard if bd.get('style') == 'short' else stubble)(p, f, L, skin, bd, ink=ink)
+
+
+def short_beard(p, f, L, skin, bd, seed=67, ink=True):
+    """B1 (replay test 2, Sam's Y, 27 Nov: El-Sayed's beard drawn as stubble with skin through it read grey-brown at
+    phone size even in black). A short, full, trimmed beard as one solid shape in the beard's own colour, no skin
+    mixed in: up each side from the jaw to a sideburn at the ear's middle, a cheek line running down and in to the
+    mouth's corners, the moustache joined over the lip, a little fuller than the jaw at the chin (front on), a few
+    short lighter strokes of grain falling down the face, an ink edge round its foot. Turned, the same shape inside
+    the face (turnhead's outline inks it). Lips are drawn over it."""
+    col = tuple(int(c) for c in bd['colour'])
+    must = tuple(int(c) for c in (bd.get('moustache') or col))
+    turned = hasattr(f, 'th')
+    ny, l0, l13, l17, mw, nw = L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
+    o = face_outline(L)
+    n = len(o)
+    vs = bd.get('side_top', 0.36)                         # the sideburn's top: meets the clipped sides (no skin
+                                                          # strip by the ear: a strap-on beard, this chat's own look)
+    i0 = next(i for i, q in enumerate(o) if q[0] > 0 and q[1] > vs)
+    i1 = next(i for i in range(n - 1, -1, -1) if o[i][0] < 0 and o[i][1] > vs)
+    low = o[i0:i1 + 1]
+    if not turned:                                        # the chin a little fuller than the jaw
+        low = FA.tufts(low, 0.004, 0.02, out=-1.0, seed=seed)   # critique r1: trimmed, following the jaw
+    else:                                                 # turned: round the side of the head to the ear and under
+        jw, fw = L['jw'], L['fw']                         # the jaw (people_famous.full_beard's way): no skin strip
+        low = ([(fw * 0.5 + 0.004, vs), (fw * 0.5 + 0.004, 0.62), (jw * 0.46, 0.84), (jw * 0.32, 0.985),
+                (0.12, 1.02), (0.0, 1.03), (-0.12, 1.02), (-jw * 0.32, 0.985)]
+               + [(f.wrap(v, -96), v) for v in (0.83, 0.62, 0.44)])
+    us = _face_u(L, vs)
+    mt = max(ny + 0.03, l0 - 0.055)                       # the moustache's top: a band over the lip
+    top = [(-us + 0.06, vs), (-us + 0.07, 0.52), (-us * 0.8, 0.66), (-mw * 0.95, ny + 0.07), (-mw * 0.62, mt + 0.01),
+           (-nw * 0.4, mt), (0.0, mt + 0.006), (nw * 0.4, mt), (mw * 0.62, mt + 0.01), (mw * 0.95, ny + 0.05),
+           (us * 0.8, 0.66), (us - 0.07, 0.52), (us - 0.06, vs)]
+    if turned:                                            # the near sideburn up to the ear's top, behind the edge
+        top = [(f.wrap(vs + 0.02, -92), vs)] + top[2:]
+    shape = low + FA.tufts(top, 0.005, 0.014, out=1.0, seed=seed + 1)
+    pts = f.pts(shape)
+    p.poly(pts, col, None)
+    mo = [(-mw * 0.66, l13 + 0.006), (-mw * 0.62, mt + 0.012), (-nw * 0.4, mt + 0.003), (0.0, mt + 0.008),
+          (nw * 0.4, mt + 0.003), (mw * 0.62, mt + 0.012), (mw * 0.66, l13 + 0.006)]
+    if must != col:
+        p.poly(f.pts(mo + [(0.0, l0 + 0.01)]), must, None)
+    rng = np.random.default_rng(seed)
+    grain = blend(col, (236, 232, 226), 0.2 if sum(col) < 300 else 0.12)
+    for v in np.arange(vs + 0.08, 1.0, 0.055):            # the grain: short strokes falling down and in
+        for u in np.arange(-0.5, 0.5, 0.05):
+            uu, vv = u + rng.uniform(-0.015, 0.015), v + rng.uniform(-0.015, 0.015)
+            if abs(uu) > _face_u(L, vv) - 0.035 or (abs(uu) < mw * 0.75 and l0 - 0.07 < vv < l17 + 0.03):
+                continue                                  # inside the edge; the mouth kept clear
+            if vv < ny + 0.06 + (abs(uu) - mw) * 0.6 or rng.random() < 0.45:
+                continue                                  # under the cheek line; a sparse grain
+            a, b = f.pts([(uu, vv), (uu - uu * 0.12, vv + 0.024)])
+            p.line([a, b], grain, 1.3)
+    if ink:                                               # front on: the beard's foot is the head's edge
+        p.line(f.pts(low), INK, 2.6)
 
 
 def lashes(p, f, L, sp, k, scale=1.0):

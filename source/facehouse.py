@@ -32,6 +32,13 @@ HAIR PIECES (named in the person's lines, `head: house NAME, hair PIECE`):
              was a head too tall and narrow: the face itself was the pick's, the head read long); dark behind the
              neck, the neck redrawn at the person's neck_w; `ears` in the lines draws the ears over the plaits
 
+    long     B2 (27 Nov, replay test 2: Ocasio-Cortez came out in May's bob): long straight hair, middle parting, past
+             the shoulders: the braids' measured shape as one smooth mass, a few long strands, a sheen, a straight cut;
+             turned through the braids' code (plaited False); facepick's hair_fit names it for long hair
+BEARD (B1, 27 Nov): a pick's beard with style 'short' (facepick: beardkit coverage SHORT_BEARD 0.4 up, in the hair's
+    colour; or `beard: short C` in the people file) is a solid short full beard (short_beard: sideburns to the clipped
+    sides, wrapped round the turned head); every other beard the house stubble, exactly as before (beard()).
+
 LIKENESS (chat 8): the person's lines may also name push/tune (caricature(): each measure moved further from real
     faces' middle; Sam: "careful, you're straying too hard into caricature territory": keep push near 1.15), lashes,
     eye_scale, iris_r/pupil_r/iris_c (the iris's colour), lid (a heavier upper lid: calm, not wide), brow_up/brow_arch/brow_taper, mouth (the house mouths, FA.house_mouth: soft, grin,

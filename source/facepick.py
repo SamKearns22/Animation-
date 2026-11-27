@@ -26,7 +26,7 @@ push changed, again. The steps that worked are now done by the tool:
     LINE-UP     every film's '*front*' photo, one per person (faces packs, likeness folders, each film's own).
 
     python3 source/facepick.py NAME OUT_DIR FRONT.jpg[:N] ... [--tq PHOTO[:N] ...] [--lineup "A,B,..."]
-                               [--gain 1.6] [--says "beard=yes|no, glasses=yes|no, age=N, hair=braids|plain"]
+                               [--gain 1.6] [--says "beard=yes|no|full|stubble|grey, glasses=yes|no, age=N, hair=braids|plain"]
         FRONT photos: straight on, close, not smiling, current (rule 49: 3+); ':N' picks face N (0 = leftmost).
         --tq: three-quarter photos, shown on the sheet only. --lineup: look-alike names for the name test.
         Writes OUT_DIR/NAME-sheet.jpg (Sam's sheet), NAME-A.png .. NAME-C.png (the heads, glasses and beard on),
@@ -148,17 +148,37 @@ def traced(fr, n_fronts=()):
                 temple_y=float(top[1] + 0.12 * (chin[1] - top[1])))
 
 
-def colours(fr, shapes):
-    """Flat house colours measured from the photo: skin, hair, brows, lips, clothes."""
+SKIN_BAND = (30, 90)  # B4: the face's skin pixels kept, by brightness percentile (beard, sockets, nostrils under; shine over)
+
+
+def face_skin(fr, whole=True):
+    """The photo's skin colour (raw): B4 (replay test 2, Sam's Y, 27 Nov: El-Sayed came out pale; the four small
+    patches under the eyes are the face's most lit skin) the median of the WHOLE face's skin, its darkest 30% (beard,
+    sockets, nostrils) and brightest 10% (shine) left out (SKIN_BAND). whole=False: the old four cheek patches (picks
+    made before B4 are redrawn with it, so their faces never change). Kittest skin_whole_face."""
     px = np.asarray(fr['crop']).astype(float)
     m = fr['mask']
+    if whole and (m == 3).sum() > 200:
+        sk = px[m == 3]
+        lum = sk @ np.array([0.3, 0.59, 0.11])
+        lo, hi = np.percentile(lum, SKIN_BAND)
+        return np.median(sk[(lum >= lo) & (lum <= hi)], 0)
     q = fr['q']
     cheek = np.zeros(m.shape, bool)
     for i in (50, 280, 101, 330):
         x, y = q(i).astype(int)
         cheek[y - 6:y + 6, x - 6:x + 6] = True
     sk = px[cheek & (m == 3)] if (cheek & (m == 3)).sum() > 20 else px[m == 3]
-    skin = _tone(np.median(sk, 0), 1.06, 0.82)          # photos run warm and ruddy: lighter, a little greyer
+    return np.median(sk, 0)
+
+
+def colours(fr, shapes, whole=True):
+    """Flat house colours measured from the photo: skin (face_skin: the whole face; whole=False the old cheek
+    patches), hair, brows, lips, clothes."""
+    px = np.asarray(fr['crop']).astype(float)
+    m = fr['mask']
+    q = fr['q']
+    skin = _tone(face_skin(fr, whole), 1.06, 0.82)      # photos run warm and ruddy: lighter, a little greyer
     hair, hair2 = _hair_tones(px, shapes)
     if hair is None:
         hair = LK._dk(skin, 0.5)
@@ -306,7 +326,19 @@ def braid_score(fr, shapes):
     if hm.sum() < 1500:
         return 0.0
     fine = g - ndimage.gaussian_filter(g, max(1.5, 0.04 * fr['ipd']))
+    fr['braid_fine'] = float(np.std(fine[hm]))
     return float(np.std(fine[hm]) / max(8.0, np.std(g[hm]) + 1e-6))
+
+
+BRAID_FINE = 9.0     # B2 (27 Nov): the ripple's own strength (grey levels) braids reach: Badenoch 14.2 and 10.1;
+                     # Ocasio-Cortez's long wavy dark hair 7.8, 6.7, 5.8 (its ratio, 0.76, passed as braids)
+
+
+def braided(fr, shapes):
+    """Braided hair: the ripple strong against the hair's brightness spread (braid_score over 0.45) AND strong in
+    itself (BRAID_FINE): long dark wavy hair has little spread, so its ratio alone read as braids (replay test 2's
+    Ocasio-Cortez photo 9797c588: 0.76). Kittest hair_piece_fits."""
+    return braid_score(fr, shapes) > 0.45 and fr.get('braid_fine', 0.0) >= BRAID_FINE
 
 
 def _braids(img, hair, face, f, L, light):
@@ -695,7 +727,7 @@ def house_heads(out_dir, name, meta, th, look='detail'):
     see, not the traced test. The hair piece: braids where the photo's hair is braided, else swept (the two pieces
     facehouse has); the house lines are the defaults until the person's lines name more."""
     import facehouse as FH
-    lines = dict(hair='braids' if meta.get('braids') else 'swept')
+    lines = dict(hair='braids' if meta.get('braids') else (meta.get('hair_piece') or 'swept'))   # B2: the piece that fits
     out = {}
     for v in 'ABC':
         png = os.path.join(out_dir, f'{name}-{v}-house.png')
@@ -822,13 +854,14 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
             beard = _beard(name, F, out_dir)                # keeps a beard over BEARD_MIN of the lower face
         except Exception as e:                                # the beard is drawn after; never stops the heads
             log(f'   beardkit skipped: {e}')
-        if beard and not (says.get('beard') == 'yes' or hint or beard.get('coverage', 0) >= BEARD_MIN):
+        if beard and not (says.get('beard') in ('yes', 'full', 'short', 'grey', 'stubble') or hint or beard.get('coverage', 0) >= BEARD_MIN):
             beard = None
         log(f'   beard: {"yes, coverage %.2f" % beard["coverage"] if beard else "no"}')
     ref = _devs(F[0][0]) if F[0][1] is None else {r['key']: r['dev'] for r in LK.analyse([F[0][0]], [F[0][1]])['diffs']}
     others = _others(name, fronts)
-    shapes['braids'] = says.get('hair') == 'braids' or (says.get('hair') is None and braid_score(fr, shapes) > 0.45)
-    log(f'   braids: {"yes" if shapes["braids"] else "no"} (ripple {braid_score(fr, shapes):.2f}; over 0.45 is braids)')
+    shapes['braids'] = says.get('hair') == 'braids' or (says.get('hair') is None and braided(fr, shapes))
+    log(f'   braids: {"yes" if shapes["braids"] else "no"} (ripple {braid_score(fr, shapes):.2f}, over 0.45, and '
+        f'{fr.get("braid_fine", 0):.1f} grey levels, {BRAID_FINE:.0f} up, is braids)')
     if says.get('age') != 'no':                               # the creases, measured from every front photo
         import agelines
         shapes['age'] = agelines.person([(p, n) for p, n in F], others, says.get('age'))
@@ -878,11 +911,12 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         draw_head(meas, fr, shapes, col, png, extras=True, beard=beard, glasses=g)
         heads[v] = dict(what=what[v], measures=meas, **res)
     meta = dict(title=name, fronts=[_rel(a) for a in fronts], tq=[_rel(a) for a in tq], unsure=unsure, gain=gain, glasses=g,
-                beard=_beard_word(beard), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
+                beard=_beard_word(beard, col['hair'], says), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
     import facehouse
     piece, why = facehouse.hair_fit(bs, bool(shapes['braids']))
-    meta.update(shapes_card=bs, hair_piece=piece)          # the card's big shapes, for the cast sheet's colour check
+    bs = dict(bs, skin_face=[int(v) for v in face_skin(fr)])   # B4: the whole face's skin, for the colour check
+    meta.update(shapes_card=bs, hair_piece=piece, skin_way='face')   # the card's big shapes, for the cast sheet's colour check
     log(f'{name}: hair piece: {piece}: {why}' if piece else
         f'{name}: NEW: {why}: price it as a new build in the estimate before the cast sheet')
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
@@ -915,14 +949,24 @@ def _find(p, out_dir):
 BEARD_MIN = 0.2      # beardkit's coverage of the lower face that counts as a beard without the face finder's hint
 
 
-def _beard_word(beard):
-    """What the pick keeps of the beard for the house head (facehouse.stubble): its colour, how much of the lower
-    face it covers, and whether the moustache is its own colour; False for none."""
+def _beard_word(beard, hair=None, says=None):
+    """What the pick keeps of the beard for the house head (facehouse.beard): its colour, how much of the lower
+    face it covers, and whether the moustache is its own colour; False for none. B1 (Sam's Y, 27 Nov): a beard
+    covering facehouse.SHORT_BEARD of the lower face or more (or `--says beard=full`) is a solid short beard,
+    style 'short', drawn in the head hair's colour (stubble's measured colour is the skin showing through: El-Sayed's
+    black beard measured grey); `beard=grey` keeps the measured colour, `beard=stubble` the stubble."""
     if not beard:
         return False
+    import facehouse
     rgb = lambda c: [int(round(255 * x)) for x in c]      # noqa: E731
-    return dict(colour=rgb(beard['base']), moustache=rgb(beard.get('moustache') or beard['base']),
-                coverage=round(float(beard.get('coverage', 0)), 3), word=beard.get('colour_word', ''))
+    w = (says or {}).get('beard')
+    out = dict(colour=rgb(beard['base']), moustache=rgb(beard.get('moustache') or beard['base']),
+               coverage=round(float(beard.get('coverage', 0)), 3), word=beard.get('colour_word', ''))
+    if w in ('full', 'short') or (w != 'stubble' and out['coverage'] >= facehouse.SHORT_BEARD):
+        out['style'] = 'short'
+        if hair is not None and w != 'grey':
+            out['colour'] = out['moustache'] = [int(c) for c in hair]
+    return out
 
 
 def _beard(name, F, out_dir):
@@ -946,7 +990,7 @@ def redraw(out_dir, name):
     F = [(_find(p, out_dir), n) for p, n in (_split(a) for a in meta['fronts'])]
     fr = photo_frame(*F[0])
     shapes = traced(fr)
-    col = colours(fr, shapes)
+    col = colours(fr, shapes, meta.get('skin_way') == 'face')   # B4: a pick made before keeps its cheek-measured skin
     shapes['braids'] = meta.get('braids', braid_score(fr, shapes) > 0.45)
     if meta.get('age'):
         shapes['age'] = meta['age']

@@ -208,7 +208,8 @@ def _words(t):
 def find(text, n=5):
     """The kit catalogue's rows that best match plain words: [(score, what it is, where it lives)]."""
     want = _words(text)
-    want |= _words(' '.join(SAME[w] for w in list(want) if w in SAME))
+    raw = set(re.findall(r'[a-z]{3,}', text.lower())) | want   # B3: 'likeness' trimmed to 'likenes' missed SAME
+    want |= _words(' '.join(SAME[w] for w in raw if w in SAME))
     rows = []
     for line in open(os.path.join(HERE, '..', 'guides', 'kit-catalogue.md'), encoding='utf-8'):
         if not line.startswith('| ') or line.startswith('| ---') or line.count('|') < 3:

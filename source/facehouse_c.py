@@ -277,6 +277,52 @@ def braids(p, f, L, hc, lk, kh):
            blend(hc, (200, 170, 150), 0.45), 1.8)                   # the parting
 
 
+def _strands(p, f, sgn, P, hc, n=3, w=1.6, a0=0.25, a1=0.8):
+    """Long straight hair's strands (B2): n long lines down a strip whose edges are P(0) and P(1) (P(a) a path from
+    the parting to the tips), alternating a sheen and a shadow of the hair's colour, stopping short of the tips."""
+    light, dark = _long_tones(hc)
+    for i, a in enumerate(np.linspace(a0, a1, n)):
+        path = P(a)
+        k = len(path)
+        q = [(sgn * u, v) for u, v in path[int(k * 0.06): int(k * 0.93)]]
+        p.line(open_curve(f.pts(q), 2), light if i % 2 == 0 else dark, w)
+
+
+def _long_tones(hc):
+    lum = sum(hc) / 3
+    return blend(hc, (250, 248, 242), 0.12 if lum < 90 else 0.2), dk(hc, 0.75 if lum < 90 else 0.82)   # critique r1:
+                                                                  # soft, not cords
+
+
+def _long_tips(a, b, seed=0):
+    """The straight cut across a curtain's foot, from its outer corner a to its inner corner b: a few short points."""
+    return FA.tufts([tuple(a), ((a[0] * 2 + b[0]) / 3, a[1] + 0.012), ((a[0] + b[0] * 2) / 3, a[1] + 0.006),
+                     tuple(b)], 0.008, 0.03, out=-1.0, seed=seed)[1:-1]
+
+
+def long_hair(p, f, L, hc, lk, kh):
+    """B2 (replay test 2, Sam's Y, 27 Nov: Ocasio-Cortez came out in May's bob; no piece for long straight hair).
+    Long straight hair parted in the middle, falling past the shoulders: the braids' measured shape (the pick's hair
+    outline, the hairline arch, the curtains from the face's edge to the hair's measured edge, the neck clear under
+    the chin) as one smooth mass, no plaits: a few long strands from the parting to the tips, the sheen over the
+    crown, a straight cut at the foot."""
+    hs = _hair(L, kh)
+    ci, co = _crown_paths(L, hs)
+    ti, to = _edges(L, hs)
+    inner = np.r_[ci, np.c_[ti, VS][1:]]
+    outer = np.r_[co, np.c_[to, VS][1:]]
+    right = [tuple(q) for q in outer] + _long_tips(outer[-1], inner[-1], 47) + [tuple(q) for q in inner[::-1]]
+    whole = right + [(-u, v) for u, v in right[::-1]]
+    p.poly(curve(f.pts(whole), 2), hc, INK, 2.4)
+    light, dark = _long_tones(hc)
+    for sgn in (-1, 1):
+        sheen = [(sgn * u, v) for u, v in (inner * 0.55 + outer * 0.45)[4:22]]
+        p.line(open_curve(f.pts(sheen), 2), blend(hc, light, 0.6), 7.0)   # the light across the crown
+        _strands(p, f, sgn, lambda a: inner * (1 - a) + outer * a, hc)
+    p.line(f.pts([(0.0, hs['crown'] + 0.02), (0.0, inner[0][1] - 0.005)]),
+           blend(hc, (200, 170, 150), 0.45), 1.8)                   # the parting
+
+
 # ---------------------------------------------------------------------------------------------- glasses
 def glasses(p, f, L, g):
     """The measured frames (face tool: each lens's centre, width, top and bottom in eye widths) in house ink: a
@@ -366,7 +412,7 @@ def age_lines(p, f, L, skin, age, lk):
 
 
 # ---------------------------------------------------------------------------------------------- turned views
-HAIR = ('swept', 'braids', 'bald', 'bob', 'back')
+HAIR = ('swept', 'braids', 'bald', 'bob', 'back', 'long')
 
 
 def hair_fit(shapes, braids=False):
@@ -378,8 +424,8 @@ def hair_fit(shapes, braids=False):
         return 'braids', 'braided'
     if top < 0.12 and below < 0.05:
         return 'bald', f'little hair on top ({top:.2f})'
-    if below > 0.55:
-        return None, f'long hair, falling well past the jaw ({below:.2f} below the ears): no hair piece fits'
+    if below > 0.55:                                     # B2 (27 Nov): the long straight piece
+        return 'long', f'long hair, falling well past the jaw ({below:.2f} below the ears)'
     if below > 0.08:
         return 'bob', f'hair to about the jaw ({below:.2f} below the ears)'
     return 'swept', f'short hair ({below:.2f} below the ears): swept, or back if combed straight back'
@@ -387,7 +433,8 @@ TURN_PROF = {'swept': dict(hair_low=0.36, nape=0.62, volume=0.015),         # cl
              'braids': dict(hair_low=0.5, nape=0.78, volume=0.05),
              'bald': dict(hair_low=0.3, nape=0.6, volume=0.0),
              'bob': dict(hair_low=0.5, nape=0.66, volume=0.06, shell_front=0.3),       # May: full, to the lobe, the nape covered
-             'back': dict(hair_low=0.3, nape=0.6, volume=0.03)}       # Blair: short at the back and sides               # bald: the skull is the head's own          # the plaits' bulk over the skull
+             'back': dict(hair_low=0.3, nape=0.6, volume=0.03),
+             'long': dict(hair_low=0.5, nape=0.78, volume=0.04)}   # B2: long straight, as the braids' mass       # Blair: short at the back and sides               # bald: the skull is the head's own          # the plaits' bulk over the skull
 
 
 class _Screen:
@@ -424,7 +471,7 @@ def _turn_face(pen, f, L, sp):
     kh = sp['kit_house']
     age_lines(pen, f, L, sp['skin'], kh['age'], LOOKS[kh['look']])
     if kh.get('beard'):                                   # chat 14: the stubble carried round (as Vance's goatee)
-        stubble(pen, f, L, sp['skin'], kh['beard'], ink=False)
+        beard(pen, f, L, sp['skin'], kh['beard'], ink=False)   # B1: the solid short beard where the pick says so
 
 
 def _turn_over(img, p, f, L, sp, view):
@@ -437,7 +484,7 @@ def _turn_hair(img, p, f, L, sp):
     _turn_hair0(img, p, f, L, sp)
     kh = sp['kit_house']
     if kh.get('hat'):
-        turned_hat(p, f, kh, _hair(L, kh)['crown'] if kh['hair'] == 'braids' else -0.46)
+        turned_hat(p, f, kh, _hair(L, kh)['crown'] if kh['hair'] in ('braids', 'long') else -0.46)
 
 
 def hair_shell(cap, step=0.02, upto=0.1):
@@ -492,7 +539,7 @@ def _turn_hair0(img, p, f, L, sp):
         mask = TH.hair(img, p, f, fronts, hc, top)
         if yaw <= 90:
             TH.clipped(img, p, mask, lambda pen: _swept_strokes(pen, f, hc, sh, lk))
-    else:
+    else:                                                        # braids, and long straight hair (B2)
         _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw)
 
 
@@ -502,6 +549,7 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
     front's (VS's foot), behind the near ear and, from behind, across the whole back; plaits down each curtain."""
     import turnhead as TH
     H = TH.H
+    plaited = kh['hair'] == 'braids'
     light, sep, n, step, w = _looks(hc, lk)
     k = kh.get('plait_k', 1.0)
     n, step = max(3, round(n / k)), step * k
@@ -540,6 +588,11 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
         A, B = _resample(a, 50), _resample(b, 50)
 
         def draw(pen, A=A, B=B):
+            if not plaited:                                      # B2: long straight hair, a straight cut at the foot
+                tips = [tuple(q) for q in _long_tips(A[-1] / H, B[-1] / H, 47 + yaw)]
+                pen.poly(curve([tuple(q) for q in A] + [(x * H, y * H) for x, y in tips] + [tuple(q) for q in B[::-1]], 2), hc, INK, 2.4)
+                _strands(pen, _Screen(), 1, lambda t: B * (1 - t) + A * t, hc, 4 if yaw >= 135 else 3)
+                return
             pen.poly(curve([tuple(q) for q in A] + [tuple(q) for q in B[::-1]], 2), hc, INK, 2.4)
             _band(pen, _Screen(), 1, lambda t: B * (1 - t) + A * t, light, sep,
                   max(3, round(n * (1.6 if yaw >= 135 else 1.0))), step * H, w)
@@ -565,7 +618,10 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
                 X, _ = f.view(float(x) * 1.04, float(z) * 1.04)
                 out.append((f.cx + X * H, f.top + v * H))
             return np.array(out)
-        _band(pen, _Screen(), 1, merid, light, sep, max(4, round(n * 1.4)), step * H, w)
+        if plaited:
+            _band(pen, _Screen(), 1, merid, light, sep, max(4, round(n * 1.4)), step * H, w)
+        else:                                                    # B2: strands from the parting back over the skull
+            _strands(pen, _Screen(), 1, merid, hc, 3, 1.6, 0.2, 0.8)
     TH.clipped(img, p, mask, plaits)
 
 
@@ -622,7 +678,7 @@ def install_turned():
         if kh and view in TH.YAW:
             key = _turn_person(sp)
             with PP._Big():
-                return TH.draw(img, p, dict(sp, who=key, ears_hidden=kh['hair'] == 'braids' and not kh.get('ears')),
+                return TH.draw(img, p, dict(sp, who=key, ears_hidden=kh['hair'] in ('braids', 'long') and not kh.get('ears')),
                                t, view, hx, PP._lift(hy) - kh.get('neck_up', 0.0) * 172.0)   # note 20, as the front
         return V.NOT_MINE
     V.TURNED_HEADS['kit_house'] = head_view     # one list of turned heads in views.py, newest tried first
@@ -671,7 +727,7 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     if kh['age'] and lk['age_k']:
         kh['age'] = dict(kh['age'], boost=kh.get('age_boost', 1.0))
     sp.update(kit_head='house', kit_house=kh, neck_shade=True)
-    if hair == 'braids':                                    # the plaits behind the neck repaint it and lay the
+    if hair in ('braids', 'long'):                          # the plaits behind the neck repaint it and lay the
         sp['neck_redrawn'] = True                           # collar again: the front torso leaves the collar to them
     return sp
 

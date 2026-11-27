@@ -81,20 +81,16 @@ The "before" trace count is a floor (one search per function on the path, none w
 
 ## Where things stand
 - Rules that bite next: 30 (a repeat note: find why first), 89 (new drawing: drawn alone and critiqued), 85 (cost watch).
-- Done: steps 1-7 and 5c (six shared kit files kept in parts; kit test parts_one_namespace); replay test 2 and its
-  savings S1-S4 built, kit-tested, verified end to end (sections below). Estimate check runs when the next film posts.
-- Next (Opus, high: building new things), Sam's Y to all four, 27 Nov: B1 a solid short full beard on the house head
-  (El-Sayed's read as stubble even black); B2 a long straight hair piece (middle parting, past the shoulders; the
-  replay's Ocasio-Cortez photos in references/islamocommunism) so hair_fit stops saying NEW for it; B3 at a film's
-  start (kitfilm begin) run catalogue find on each brief line and facepick on each named real person, results in the
-  film's notes; B4 facepick measures skin over the whole face (likeness card's way), not the lit cheek. Each with a
-  kit test from the replay's saved numbers; existing films' faces unchanged (new picks only).
-- Needs Sam: nothing until the builds are shown (a cast sheet of El-Sayed and Ocasio-Cortez before and after).
-- Read: Plan pack (a split module: its PARTS line, then `touch.py NAME`) in guides/job-packs.md; this file's "Replay test 2" and "Replay 2 savings" sections.
+- Done: steps 1-7, 5c, replay 2 and S1-S4 (earlier chats); B1-B4 built, kit-tested, verified end to end on the
+  replay's two people (section "B1-B4 built" below); before/after cast sheet sent to Sam.
+- Next (Opus, medium: a round of Sam's notes): Sam's words on the cast sheet; then the job ends (tool job, no film).
+- Needs Sam: his look at the sheet (the beard a little fuller than El-Sayed's own; a taste call).
+- Read: this file's "B1-B4 built" section; the Plan pack in guides/job-packs.md.
 - Open rule requests: none.
-- Locked by Sam: no film, shot, camera, framing or beat is touched by this job.
-- For Claude: facehouse.hair_fit/stubble/HAIR/TURN_PROF, facepick.make/colours, people._house/colour_faults,
-  catalogue.find, kitfilm.py begin; replay refs references/islamocommunism (9797c588, a7e25e61).
+- Locked by Sam: no film, shot, camera, framing or beat is touched by this job (notes and shared tools only).
+- For Claude: facehouse.beard/short_beard/SHORT_BEARD/long_hair/_strands, facepick._beard_word/face_skin/braided/
+  BRAID_FINE, people `beard: short C`, kitfilm.lookups/face_result, catalogue.find (raw words); throwaway picks in
+  the chat's scratchpad only (never pushed).
 
 ## Replay test (27 Nov)
 Kind: tool test. Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy (worktrees
@@ -248,3 +244,48 @@ the changed tools touch was run again after the last fix; no question for Sam. C
 cost figure (only "weekly limit: warning"); nothing recorded by guess. PUSH: sent at the handover. Branches the
 start listed: the same six as chat 1 (logs and one-off files), named in chat 1's lines above, not merged.
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.8% of a week (2026-11-27)
+
+## B1-B4 built (Sam's Y to all four, 27 Nov; cost tests chat 3)
+Kind: tool job. Locked by Sam: no film, shot, camera or beat touched. Replay people (El-Sayed: a7e25e61, 107e061d,
+4f71c922; Ocasio-Cortez: 9797c588, dcc85ec8) run through the face tool twice in the scratchpad (old code, new code);
+no pick folder or film code pushed.
+- B1 solid short beard: facepick marks a beard covering 0.4 of the lower face or more (El-Sayed 0.48; Walliams'
+  stubble 0.285) style 'short', in the head hair's colour (the measured 148 128 121 was skin through stubble);
+  `--says beard=stubble|full|grey`; people file `beard: short C`. facehouse.short_beard: one solid shape, sideburns
+  meeting the clipped sides, moustache joined, sparse grain, ink foot; turned it wraps to the ear and under the jaw
+  (people_famous.full_beard's way). Faults found by looking and fixed before Sam: a skin strip by the ear (a
+  strap-on look) and a bare jaw from the side. Kittest short_beard_solid.
+- B2 long straight hair: facehouse 'long' (the braids' measured shape, smooth, strands, sheen, straight cut; every
+  view). hair_fit now names 'long' instead of NEW. **Found on the way:** the face tool's braid detector called
+  Ocasio-Cortez's long dark wavy hair braids (ripple 0.76 against Badenoch's 0.6-0.86): it was only ever tuned on
+  one braided head. Now braids also need the ripple's own strength 9 grey levels up (Badenoch 14.2, 10.1; her hair
+  7.8, 6.7, 5.8). Margin thin, tested on two braided photos: more braided and long-haired photos would firm it.
+  Kittest long_hair_piece (also updates hair_piece_fits: long hair -> 'long').
+- B3 at a film's start: `kitfilm.py begin` (and `kitfilm.py lookups FILM`) writes "Kit found at the start": the
+  catalogue's two best rows per brief line, and the face tool started in the background for each person filed as
+  references/faces/NAME/NN-front-*.jpg whose folder name the brief names (one already picked: KNOWN); its hair piece,
+  beard and sheet are added when it ends (drafts in references/faces/NAME/draft, kept off GitHub). Fault found on
+  the way: catalogue.find trimmed "likeness" to "likenes" before its everyday-words list, so a brief line naming a
+  likeness found Satan's row first; fixed. Limit (honest): a person only filed under the film's own references
+  folder (hash names) is not found: file them under references/faces first. Kittest start_lookups.
+- B4 skin over the whole face: facepick.face_skin, the face's skin pixels with the darkest 30% and brightest 10% left
+  out; El-Sayed 231 181 159 -> 202 153 126, Ocasio-Cortez 242 172 132 -> 229 163 127. **Correction to chat 2:** the
+  likeness card does NOT measure the whole face; it reads the same four cheek patches (identical numbers). So the
+  new pick saves `skin_face` and the colour check uses it. Picks made before keep the old way on redraw
+  (`skin_way`). Kittest skin_whole_face.
+- Existing faces unchanged: the six house faces (Walliams, Badenoch, May, Blair, Burnham, McFadden) in five views
+  each drawn by the old and new code: 0 pixels differ.
+- Each new test run on the old code fails (the parts are missing), and each measures the old way inside itself and
+  requires it to show the fault (stubble 50+ from the beard colour; bob under a fifth of the long hair's mass below
+  the jaw; cheek patches brightness 194 against the whole face's 165; the lit card flags a skin the whole face passes).
+- Sheet: before/after cast sheet (photos, front, turned, side; phone size; full size beard and hair from behind),
+  sent to Sam. Lost: nothing on any existing face. Added: one beard style, one hair piece, a start-of-film lookup.
+- Hunt 1 critique (r1-p1) faults on the new drawings fixed: beard trimmed to the jaw, hair strands softer. Left for
+  hunt 2 in the next chat: the long hair from behind (a band across the crown, a step at the shoulders: reads as a
+  hood); white gaps between neck and hair at three-quarter. Not this job, named: the house head's sleepy lids,
+  the swept quiff and grey sides on a close crop, neck length turned, the closed collar's white bar, lip colour.
+
+Handover check answered (chat 3): NOT CARRIED "Y all, verify working, report back, make further suggestions" (Sam,
+chat 2's S1-S4): done in chat 2 (verified, reported); this chat's further suggestions are in its message to Sam.
+FREEZE (brexit-is-done-vertical.mp4 not in the freeze list): Open Wounds' / Brexit's chain, not this tool job.
+Branches the start listed: the same six (logs and one-off files), named in chat 1, not merged.

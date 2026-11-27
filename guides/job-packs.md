@@ -7,7 +7,7 @@ guides/kit-catalogue.md`), only when a note or a fault names it. The whole ruleb
 never read end to end in a film chat. Each pack's "Bite" rules are the ones its stage breaks most.
 
 ## Plan (Opus, high): the brief, staging, questions, the estimate
-- When Sam gives the screenplay and title: `python3 source/kitfilm.py begin FILM` (the film's start: the kit tests run in the background; rule 90).
+- When Sam gives the screenplay and title: `python3 source/kitfilm.py begin FILM` (the film's start: the kit tests run in the background; rule 90). It also writes "Kit found at the start" into the notes (B3, 27 Nov): the catalogue's rows per brief line, and the face tool started for each real person whose front photos are filed as `references/faces/NAME/NN-front-WHERE.jpg` and named in the brief (no brief yet: `kitfilm.py lookups FILM` once it is written). File a new person's photos there before `begin`.
 - When Sam asks for the film's lessons: `python3 source/kitfilm.py lessons FILM` first (the film's end: the kit tests; rule 90).
 - Read: `guides/preflight.md` Stage 1-2; `guides/satire.md` Start, Getting it right first time, The acting list;
   `guides/tiktok-design.md` Hook Text; the film's notes from `notes/_template.md`.
@@ -23,7 +23,9 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
   needs"` per person, set, prop and move: the catalogue's best rows. **A real person:** `facepick.py NAME OUT FRONT.jpg ...
   --says "beard=.., glasses=.., age=N"` (about 2 min), then a people-file block (`head: house NAME, hair PIECE, look
   detail`, copy May's in `story/brexit-is-done-people.txt`). facepick prints the hair piece that fits, or **NEW: no hair
-  piece fits**: that is a NEW row in the estimate, priced. `people.colour_faults(FILM)` names skin, hair or beard far from
+  piece fits**: that is a NEW row in the estimate, priced. Pieces: swept, back, bob, bald, braids, long (straight, middle
+  parting, past the shoulders; B2). A beard over 0.4 of the lower face is drawn solid and short in the hair's colour
+  (B1; `--says beard=stubble|full|grey` overrides; `beard: short C` in the people file). `people.colour_faults(FILM)` names skin, hair or beard far from
   the photo; put it right with the file's `skin:` / `beard: boxed C` lines.
 - Each stage's end: `ledger.py stage FILM NAME` also keeps that stage's steps (for comparing films later).
 - Bite: 24, 74, 1, 38, 8, 11. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`, `rough.py board` (then `sent --board`).

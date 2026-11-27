@@ -13,7 +13,7 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
                                        second colour through the first (the goth's blue in purple, Milburn note 1)
     face: jaw_wide +0.04, nose_long ++, size 0.86   (pushes on the average face; + is one step, ++ two: STEPS)
     eyes: 90 110 130 | lips: 190 122 112 | brows: 150 140 132, width 4.4, thick 0.06
-    beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes | piercings: brow, lip, nose
+    beard: stubble 0.82 | beard: boxed 46 40 38 | beard: short 30 26 26 | glasses: 40 36 34 | freckles | lashes | piercings: brow, lip, nose
     outfit: suit navy, shirt white, tie 120 30 40 (or 'no tie'), trousers 50 50 56, sleeves .., shoes .., dress ..
             (suit, jumper, dress, blouse); 'open collar': the shirt open at the neck (chat 15)
     extras: wig, robe, officer, open shirt, crucifix, scarf, zip, flowers, crest, skirt   (parts that sit on top: EXTRAS)
@@ -707,6 +707,9 @@ def _fact(d, key, val, people):
             d['stub'] = float(rest or 0.84)
         elif kind == 'boxed':
             d['beard'] = colour(rest)
+        elif kind == 'short':                      # B1 (27 Nov): a house head's solid short full beard, colour C
+            d['beard'] = colour(rest or 'black')
+            d['beard_style'] = 'short'
         elif kind == 'pencil':                     # Milburn (17 Nov): a thin pencil moustache, nothing else
             d['pencil'] = colour(rest or 'black')
         elif kind == 'full':                       # people_famous: moustache, cheeks, chin, grain colours
@@ -714,7 +717,7 @@ def _fact(d, key, val, people):
             if set(d['full_beard']) != {'moustache', 'cheeks', 'chin', 'grain'}:
                 raise DescriptionError('beard full: moustache C, cheeks C, chin C, grain C')
         else:
-            raise DescriptionError(f'beard {kind!r}: stubble, boxed, pencil or full')
+            raise DescriptionError(f'beard {kind!r}: stubble, boxed, short, pencil or full')
     elif key == 'glasses':
         d['glasses'] = colour(parts[0] if parts and parts[0] else 'black')
         if 'thick' in parts[1:]:                   # Milburn (17 Nov): thick rectangular frames, the first thing seen
@@ -892,8 +895,11 @@ def _house(d):
     if 'lips' in d:                               # El-Sayed could not be put right; they now win over the pick's
         sp['lips'] = tuple(d['lips'])
     kh = sp.get('kit_house') or {}
-    if d.get('beard') and kh.get('beard'):
-        sp['kit_house'] = dict(kh, beard=dict(kh['beard'], colour=list(d['beard']), moustache=list(d['beard'])))
+    if d.get('beard') and (kh.get('beard') or d.get('beard_style')):
+        bd = dict(kh.get('beard') or {}, colour=list(d['beard']), moustache=list(d['beard']))
+        if d.get('beard_style'):                  # B1: `beard: short C` (the solid short beard on a house head)
+            bd['style'] = d['beard_style']
+        sp['kit_house'] = dict(kh, beard=bd)
     return sp
 
 
@@ -922,8 +928,9 @@ def _colour_lines(name, skin, hair, beard, card, far=55):
     def dist(a, b):
         return sum(abs(int(x) - int(y)) for x, y in zip(a, b)) / 3
     out = []
-    if skin and card.get('skin_rgb') and dist(skin, card['skin_rgb']) > far * 0.6:
-        out.append(f"{name}: skin {tuple(skin)} is far from the photo's {tuple(card['skin_rgb'])}: set 'skin:' in the people file")
+    ref = card.get('skin_face') or card.get('skin_rgb')   # B4: the whole face's skin where the pick saved it
+    if skin and ref and dist(skin, ref) > far * 0.6:
+        out.append(f"{name}: skin {tuple(skin)} is far from the photo's {tuple(ref)}: set 'skin:' in the people file")
     if hair and card.get('hair_rgb') and dist(hair, card['hair_rgb']) > far:
         out.append(f"{name}: hair {tuple(hair)} is far from the photo's {tuple(card['hair_rgb'])}")
     if beard and card.get('hair_rgb') and (card.get('beard', 0) > 0.2 or card.get('moustache', 0) > 0.3) \

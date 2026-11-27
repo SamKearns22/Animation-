@@ -24,7 +24,9 @@ notes/proposals/kit-tests-per-film.md, the judged pick V2).
 The setup hook no longer starts any kit run (setup.sh); finish.py's gate before an animatic or final is unchanged
 (Change 2, keeping it before animatics: Sam's Y, 25 Nov; ANIMATIC_GATE).
 
-    python3 source/kitfilm.py begin FILM         Sam gave the screenplay and title: the film's start (run in that chat)
+    python3 source/kitfilm.py begin FILM         Sam gave the screenplay and title: the film's start (run in that chat);
+                                                 also the kit found for it (B3: lookups)
+    python3 source/kitfilm.py lookups FILM       the catalogue's rows per brief line, the face tool per filed person
     python3 source/kitfilm.py lessons FILM       Sam asked for the film's lessons: the film's end (the stale tests)
     python3 source/kitfilm.py status [FILM]      the films' start / end rows
 """
@@ -159,8 +161,115 @@ def begin(film, notes_dir=None, sid=None, path=None, launch_fn=None):
         (launch_fn or _launch)()
         if not launch_fn:
             print('\n'.join(_health(film)))
+            print('\n'.join(lookups(film, notes_dir)))   # B3: the kit looked up for the plan chat
         return f'kit tests: {film} starts (screenplay and title given): the kit check runs in the background; `handover.py end` waits for it'
     return f'kit tests: {film} already started (its start row is on record)'
+
+
+# B3 (replay test 2, Sam's Y, 27 Nov): the plan chat of Islamocommunism's replay spent 5-6 steps a real person
+# finding the face tool route, and found the missing hair piece only on the cast sheet. At the film's start the kit
+# is looked up for it: the catalogue's best rows for each brief line, and the face tool (background, ~2 min each)
+# for each real person whose photos are filed (references/faces/NAME/NN-front-WHERE.jpg) and named in the brief;
+# its hair piece (or NEW), beard and sheet are written into the film's notes when it ends. Kittest start_lookups.
+KIT_FOUND = '## Kit found at the start'
+FACES = os.path.join(ROOT, 'references', 'faces')
+
+
+def brief_lines(film, notes_dir=None):
+    """The film's brief checklist rows (its notes' section whose heading names the brief and a checklist: bullets
+    '- [ ] ...' or the template's table rows '| N | words | done? |')."""
+    p = os.path.join(notes_dir or os.path.join(ROOT, 'notes'), f'{_norm(film)}.md')
+    try:
+        text = open(p, encoding='utf-8').read().splitlines()
+    except OSError:
+        return []
+    out, inside = [], False
+    for ln in text:
+        if ln.startswith('## '):
+            low = ln.lower()
+            inside = 'brief' in low and 'checklist' in low
+            continue
+        if not inside:
+            continue
+        if ln.startswith('- '):
+            w = ln[2:].strip()
+            w = w[3:].strip() if w[:3] in ('[ ]', '[x]', '[X]') else w
+            out.append(w)
+        elif ln.startswith('|') and not ln.startswith('| #') and not ln.startswith('|--') and not ln.startswith('| ---'):
+            cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+            if len(cells) >= 2 and cells[1]:
+                out.append(cells[1])
+    return [w for w in out if len(w) > 3]
+
+
+def people_filed(text, faces=None):
+    """[(name, front photos, picked)] for each person filed under references/faces whose folder name is a word of the
+    brief: their front photos (*-front-*) and whether Sam's pick is on file (known: no face tool run)."""
+    import re
+    faces = faces or FACES
+    words = set(re.findall(r"[a-z][a-z'-]+", text.lower().replace("\u2019", "'")))
+    words = {w[:-2] if w.endswith("'s") else w for w in words}          # El-Sayed's -> el-sayed
+    words |= {w.replace("'", '').replace('-', '') for w in words} | {p for w in words for p in w.split('-')}
+    out = []
+    for name in sorted(os.listdir(faces)) if os.path.isdir(faces) else []:
+        d = os.path.join(faces, name)
+        if not os.path.isdir(d) or name.lower() not in words:
+            continue
+        fronts = sorted(os.path.join(d, f) for f in os.listdir(d) if '-front' in f.lower()
+                        and f.lower().endswith(('.jpg', '.jpeg', '.png', '.webp')))
+        if fronts:
+            out.append((name, fronts, os.path.exists(os.path.join(d, 'pick', f'{name}-pick.json'))))
+    return out
+
+
+def lookups(film, notes_dir=None, faces=None, launch_fn=None):
+    """The kit looked up for a new film (B3): written under KIT_FOUND in its notes; the face tool started in the
+    background for each new real person. Returns the lines written."""
+    sys.path.insert(0, HERE)
+    import catalogue
+    p = os.path.join(notes_dir or os.path.join(ROOT, 'notes'), f'{_norm(film)}.md')
+    brief = brief_lines(film, notes_dir)
+    out = ['', KIT_FOUND, f'(kitfilm begin, {datetime.now(timezone.utc):%d %b}: the catalogue\'s best rows per brief line; '
+           'the face tool per real person filed under references/faces; a row is KNOWN only once a person checks it)']
+    if not brief:
+        out.append(f'- no brief checklist in the notes yet: write it, then `python3 source/kitfilm.py lookups {film}`')
+    for w in brief:
+        rows = catalogue.find(w, 2)
+        found = '; '.join(f'{what[:80]} [{where[:60]}]' for _, what, where in rows) or 'nothing in the catalogue: NEW'
+        out.append(f'- "{w[:70]}": {found}')
+    for name, fronts, picked in people_filed(' '.join(brief), faces):
+        if picked:
+            out.append(f'- {name}: Sam\'s pick is on file (references/faces/{name}/pick): KNOWN')
+            continue
+        dst = os.path.join(faces or FACES, name, 'draft')
+        (launch_fn or _face_bg)(film, name, dst, fronts, p)
+        out.append(f'- {name}: the face tool started in the background on {len(fronts)} front photos (about 2 min); '
+                   f'its hair piece, beard and sheet are added here when it ends')
+    with open(p, 'a', encoding='utf-8') as f:
+        f.write('\n'.join(out) + '\n')
+    return out
+
+
+def _face_bg(film, name, dst, fronts, notes):
+    subprocess.Popen([sys.executable, os.path.join(HERE, 'kitfilm.py'), 'face', film, name, dst, notes] + list(fronts),
+                     cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+
+
+def face_result(film, name, dst, notes, fronts, run_fn=None):
+    """The background face tool run (B3): facepick on the person's front photos, then one line in the notes: the
+    hair piece that fits (or NEW: a priced row in the estimate), the beard, the sheet to send Sam."""
+    if run_fn is None:
+        r = subprocess.run([sys.executable, os.path.join(HERE, 'facepick.py'), name, dst] + list(fronts),
+                           cwd=ROOT, capture_output=True, text=True)
+        log = (r.stdout or '') + (r.stderr or '')
+    else:
+        log = run_fn()
+    keep = [ln.strip() for ln in log.splitlines()
+            if ln.strip().startswith((f'{name}: hair piece', f'{name}: NEW', 'beard:')) or ln.strip().endswith('-sheet.jpg')]
+    line = f'- {name} (face tool done): ' + ('; '.join(keep) if keep else 'FAILED, no result: run facepick.py by hand')
+    with open(notes, 'a', encoding='utf-8') as f:
+        f.write(line + '\n')
+    return line
 
 
 def lessons(film, sid=None, path=None, run_fn=None):
@@ -249,6 +358,12 @@ def main(argv):
         for r in rows():
             if not film or _norm(r[0]) == _norm(film):
                 print('\t'.join(r))
+        return 0
+    if argv[:1] == ['lookups'] and len(argv) > 1:
+        print('\n'.join(lookups(argv[1])))
+        return 0
+    if argv[:1] == ['face'] and len(argv) > 5:
+        print(face_result(argv[1], argv[2], argv[3], argv[4], argv[5:]))
         return 0
     if argv[:1] == ['begin'] and len(argv) > 1:
         print(begin(argv[1]))

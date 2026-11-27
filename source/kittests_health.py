@@ -1152,7 +1152,7 @@ def hair_piece_fits():
     out on the cast sheet (she came out in a bob). The likeness card's shapes, saved from the replay and Open Wounds'
     faces: long hair = NEW (no piece), May's to the jaw = bob, short = swept, braided = braids."""
     import facehouse as FH
-    cases = [(dict(hair_below_ears=0.73, hair_top=0.43), False, None),      # Ocasio-Cortez (replay ref 9797c588)
+    cases = [(dict(hair_below_ears=0.73, hair_top=0.43), False, 'long'),    # Ocasio-Cortez (replay ref 9797c588): B2
              (dict(hair_below_ears=0.41, hair_top=0.48), False, 'bob'),     # May
              (dict(hair_below_ears=0.02, hair_top=0.35), False, 'swept'),   # El-Sayed
              (dict(hair_below_ears=0.98, hair_top=0.36), True, 'braids')]   # Badenoch
@@ -1172,6 +1172,147 @@ def colour_against_photo():
     sp = people._house({'who': 'may', 'name': 'May', 'house': {'name': 'may', 'hair': 'bob'}, 'skin': (10, 20, 30)})
     ok = len(bad) == 2 and not good and tuple(sp['skin']) == (10, 20, 30)
     return ok, f'caught {len(bad)} of 2; corrected flagged {len(good)}; skin line reached: {tuple(sp["skin"])}'
+
+
+def _b_diff_colour(a, b):
+    """The median colour, in picture a, of the pixels where pictures a and b differ (what one drawing adds)."""
+    import numpy as np
+    from PIL import Image
+    A = np.asarray(Image.open(a).convert('RGB')).astype(int)
+    B = np.asarray(Image.open(b).convert('RGB')).astype(int)
+    m = np.abs(A - B).sum(2) > 30
+    return tuple(int(v) for v in np.median(A[m], 0)) if m.sum() > 50 else None
+
+
+@test
+def short_beard_solid():
+    """B1 (replay test 2, Sam's Y, 27 Nov): El-Sayed's black beard was drawn as stubble with skin through it and read
+    grey-brown at phone size. The replay's saved numbers (beardkit: coverage 0.481, measured 148 128 121 'ash'; head
+    hair 36 27 20) make a solid short beard in the hair's colour, Walliams' stubble (0.285) stays stubble; drawn on a
+    house head front on and turned, the beard's pixels read near its colour, where the stubble (the old fault) read far."""
+    import tempfile
+    import facepick as FP
+    import facehouse as FH
+    sayed = FP._beard_word(dict(base=(148 / 255, 128 / 255, 121 / 255), coverage=0.481, colour_word='ash'), (36, 27, 20))
+    wall = FP._beard_word(dict(base=(138 / 255, 139 / 255, 137 / 255), coverage=0.285, colour_word='dark'), (60, 50, 40))
+    bd = dict(colour=[36, 27, 20], moustache=[36, 27, 20], coverage=0.481)
+    d = tempfile.mkdtemp()
+    far = lambda c: sum(abs(x - y) for x, y in zip(c, (36, 27, 20))) / 3 if c else 999   # noqa: E731
+    out = {}
+    for name, b in (('none', False), ('stubble', bd), ('short', dict(bd, style='short'))):
+        FH.draw('walliams', 'detail', os.path.join(d, f'{name}.png'), lines=dict(FH.CAST['walliams'], beard=b))
+    out['front stubble'] = far(_b_diff_colour(os.path.join(d, 'stubble.png'), os.path.join(d, 'none.png')))
+    out['front short'] = far(_b_diff_colour(os.path.join(d, 'short.png'), os.path.join(d, 'none.png')))
+    import people
+    import views as V
+    import body as B
+    from PIL import Image
+    for yaw in (45, 90):
+        for name, b in (('none', False), ('short', dict(bd, style='short'))):
+            sp = people.person(dict(who='walliams', name='W', house=dict(name='walliams', hair='swept', look='detail'),
+                                    house_kw=dict(beard=b)))
+            people.install({'walliams': sp})
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, yaw)
+            tile.convert('RGB').save(os.path.join(d, f't{yaw}-{name}.png'))
+        out[f'turned {yaw}'] = far(_b_diff_colour(os.path.join(d, f't{yaw}-short.png'), os.path.join(d, f't{yaw}-none.png')))
+    ok = (sayed.get('style') == 'short' and sayed['colour'] == [36, 27, 20] and 'style' not in wall
+          and out['front stubble'] > 50 and out['front short'] < 30 and out['turned 45'] < 30 and out['turned 90'] < 30)
+    return ok, (f"El-Sayed: {sayed.get('style')} {sayed['colour']}; Walliams: {wall.get('style', 'stubble')}; "
+                f"distance from the beard's colour: " + ', '.join(f'{k} {v:.0f}' for k, v in out.items()))
+
+
+@test
+def long_hair_piece():
+    """B2 (replay test 2, Sam's Y, 27 Nov): Ocasio-Cortez came out in May's bob (no piece for long straight hair), and
+    the face tool's braid ripple called her long dark wavy hair braids (0.76 on 9797c588). Her saved photo must read
+    not braided while Badenoch's braids still do; the long piece drawn on a house head hangs past the jaw on both sides
+    front on and in every turned view, where the bob (the old fault) stops at the jaw."""
+    import tempfile
+    import numpy as np
+    import facepick as FP
+    import facehouse as FH
+    from PIL import Image
+    got = {}
+    for who, path in (('aoc', 'references/islamocommunism/9797c588-image.jpg'),
+                      ('badenoch', 'references/faces/badenoch/k01-front-parliament.jpg')):
+        fr = FP.photo_frame(os.path.join(FP.ROOT, path), None)
+        got[who] = FP.braided(fr, FP.traced(fr))
+    d = tempfile.mkdtemp()
+    low = {}
+    for piece in ('bob', 'long'):
+        png = os.path.join(d, f'{piece}.png')
+        lines = dict(FH.CAST['badenoch'], hair=piece)
+        FH.draw('badenoch', 'detail', png, lines=lines)
+        a = np.asarray(Image.open(png).convert('L'))
+        h, w = a.shape
+        band = a[int(h * 0.62):int(h * 0.72)]                  # under the jaw, over the shoulders
+        low[piece] = int(min((band[:, :int(w * 0.3)] < 70).sum(), (band[:, int(w * 0.7):] < 70).sum()))
+    import people
+    import views as V
+    import body as B
+    sp = people.person(dict(who='badenoch', name='K', house=dict(name='badenoch', hair='long', look='detail')))
+    people.install({'badenoch': sp})
+    views = {}
+    for yaw in (45, 90, 135, 180):
+        tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, yaw)
+        a = np.asarray(tile.convert('L'))[230:1010, 150:930]
+        views[yaw] = int((a[int(780 * 0.62):int(780 * 0.8)] < 70).sum())
+    ok = (not got['aoc'] and got['badenoch'] and low['long'] > 5 * max(low['bob'], 200)
+          and all(v > 400 for v in views.values()))
+    return ok, (f"braided: Ocasio-Cortez {got['aoc']} (False), Badenoch {got['badenoch']} (True); hair below the jaw "
+                f"(dark pixels, the thinner side): long {low['long']}, bob {low['bob']}; turned: {views}")
+
+
+@test
+def start_lookups():
+    """B3 (replay test 2, Sam's Y, 27 Nov): the plan chat spent 5-6 steps a real person finding the face tool, and the
+    missing hair piece showed only on the cast sheet. `kitfilm.py begin` writes the catalogue's rows per brief line
+    and starts the face tool for a named person whose photos are filed (not one already picked); the background run
+    writes its hair piece line (the replay's saved log lines) into the notes."""
+    import tempfile
+    import kitfilm
+    d = tempfile.mkdtemp()
+    faces = os.path.join(d, 'faces')
+    for n, picked in (('elsayed', False), ('may', True)):
+        os.makedirs(os.path.join(faces, n, 'pick'))
+        open(os.path.join(faces, n, f'{n[0]}01-front-test.jpg'), 'w').close()
+        if picked:
+            open(os.path.join(faces, n, 'pick', f'{n}-pick.json'), 'w').close()
+    with open(os.path.join(d, 'replay.md'), 'w') as f:
+        f.write('# Replay\n\n## The brief as a checklist\n| # | from the brief | done? |\n|---|---|---|\n'
+                "| 1 | Abdul El-Sayed's likeness, short black beard | |\n| 2 | May at a podium | |\n\n## Open\n")
+    started = []
+    lines = kitfilm.lookups('replay', d, faces, launch_fn=lambda *a: started.append(a[1]))
+    notes = os.path.join(d, 'replay.md')
+    res = kitfilm.face_result('replay', 'elsayed', '/tmp/x', notes, [], run_fn=lambda: (
+        '   beard: yes, coverage 0.48\nelsayed: hair piece: swept: short hair (0.02 below the ears)\n/x/elsayed-sheet.jpg\n'))
+    text = open(notes).read()
+    ok = (kitfilm.KIT_FOUND in text and started == ['elsayed'] and 'facepick' in lines[3].lower()
+          and "may: Sam's pick is on file" in text and 'hair piece: swept' in res and res in text)
+    return ok, f'face tool started for {started}; brief row 1: {lines[3][:90]}; result: {res[:80]}'
+
+
+@test
+def skin_whole_face():
+    """B4 (replay test 2, Sam's Y, 27 Nov): El-Sayed came out pale: the face tool read his skin off four small patches
+    under the eyes, the face's most lit skin (231 181 159 on the replay's photo a7e25e61). The whole face's skin (its
+    darkest 30% and brightest 10% left out) reads darker; a pick made before keeps the old way (redraw), and the colour
+    check compares with the whole face's skin when the pick saved it."""
+    import facepick as FP
+    import people
+    fr = FP.photo_frame(os.path.join(FP.ROOT, 'references/islamocommunism/a7e25e61-image.jpg'), None)
+    lum = lambda c: 0.3 * c[0] + 0.59 * c[1] + 0.11 * c[2]   # noqa: E731
+    old, new = FP.face_skin(fr, whole=False), FP.face_skin(fr)
+    drawn = (198, 150, 124)                                   # a skin drawn near the whole face's
+    card = dict(skin_rgb=[252, 236, 228])                     # a lit card (the replay's third photo's cheeks)
+    before = people._colour_lines('Abdul', drawn, None, None, card)
+    after = people._colour_lines('Abdul', drawn, None, None, dict(card, skin_face=[int(v) for v in new]))
+    ok = lum(old) > 185 and lum(new) < 175 and len(before) == 1 and not after
+    return ok, (f'cheek patches {tuple(int(v) for v in old)} (brightness {lum(old):.0f}), whole face '
+                f'{tuple(int(v) for v in new)} ({lum(new):.0f}); colour check against the lit card {len(before)} '
+                f'line, against the whole face {len(after)}')
 
 
 @test
