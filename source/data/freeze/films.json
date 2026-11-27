@@ -495,5 +495,15 @@
    "grand-theft-autism-story.mp4": "a56d40f7"
   },
   "save": "801f074a"
+ },
+ "brexit-is-done": {
+  "module": "brexit_is_done",
+  "videos": [
+   "brexit-is-done-vertical.mp4"
+  ],
+  "saves": {
+   "brexit-is-done-vertical.mp4": "2c00a7b8"
+  },
+  "save": "2c00a7b8"
  }
 }

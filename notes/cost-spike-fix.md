@@ -44,18 +44,18 @@ Kind: tool job (shared, every film). No film, shot, camera or beat touched.
 - move to shared: nothing (all of this is shared).
 
 ## Where things stand
-- Rules that bite next: 30 (a repeat note: find why first), 89 (new drawing: drawn alone and critiqued), 85 (cost watch).
-- Done: steps 1-7, 5c, replay 2 and S1-S4 (earlier chats); B1-B4 built, kit-tested, verified end to end on the
-  replay's two people (section "B1-B4 built" below); before/after cast sheet sent to Sam.
-- Next (Opus, high: a new drawing's fixes, rule 89 hunt 2; chat 4): the long hair from behind (crown band, shoulder
-  step) and the three-quarter neck gaps; critique hunt 2 (`critique.py pack`); resend the sheet; then Sam's words.
-- Needs Sam: his look at the sheet (the beard a little fuller than El-Sayed's own; a taste call).
-- Read: guides/fix-pack.md (a fixing chat's one page); this file's "B1-B4 built" section.
+- Rules that bite next: 30 (a repeat note: find why first), 89 (critique: this stage has had its two hunts), 85 (cost watch).
+- Done (chat 4): long hair one piece turned (crown, curtains and hair behind the neck joined, inked once; outer edge falls
+  from the head's widest point with a gentle curve round the neck; three-quarter behind shows a slice of cheek); neck
+  gaps closed; kit test long_hair_one_piece (fails old: band 1.00, step 12 px, 5,870 gap px); six house faces 0 px
+  differ; short_beard_solid, long_hair_piece pass; critique hunts 2 and 3 recorded, `fixed`; sheet rebuilt and sent.
+- Next: none until Sam's words on the sheet (Opus, medium for any notes on it).
+- Needs Sam: his look at the sheet (beard fullness, a taste call).
+- Read: guides/fix-pack.md; this file's "B1-B4 built" section and "Chat 4" below.
 - Open rule requests: none.
 - Locked by Sam: no film, shot, camera, framing or beat is touched by this job (notes and shared tools only).
-- For Claude: facehouse.beard/short_beard/SHORT_BEARD/long_hair/_strands, facepick._beard_word/face_skin/braided/
-  BRAID_FINE, people `beard: short C`, kitfilm.lookups/face_result, catalogue.find (raw words); throwaway picks in
-  the chat's scratchpad only (never pushed).
+- For Claude: facehouse._long_turned (NECKS, falls, waist), _turned_braids returns to it when not plaited;
+  kittests_health.long_hair_one_piece; throwaway picks in the chat's scratchpad only (never pushed).
 
 ## Estimate to check (said to Sam, 27 Nov)
 Sam: "The next time I say a film is posted and closed (not Open Wounds) check back in on what you just said and ensure
@@ -204,7 +204,6 @@ chat 2's S1-S4): done in chat 2 (verified, reported); this chat's further sugges
 FREEZE (brexit-is-done-vertical.mp4 not in the freeze list): Open Wounds' / Brexit's chain, not this tool job.
 Branches the start listed: the same six (logs and one-off files), named in chat 1, not merged.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 7.89% of a week (2026-11-27)
 COST (chat 3): get_session gives no cost figure (no usage in its record; "weekly limit: warning"); the step hook said
 about 1.7% of a week at step 90. Nothing recorded by guess. NOTES trimmed to 3,220 words (finished sections to
 notes/archive/cost-spike-fix-notes.md). MAPS and the who-uses-this index remade. story/status.md left as Brexit Is
@@ -212,3 +211,25 @@ Done's (a live chain; this tool job has no film line there).
 Kit tests (chat 3): `--changed` 59 run, 56 passed; head_moves_not_comic, early_move_size: the same two chat 2 named
 (Brexit's live nod sizes); places_from_a_description failed in the run (sets ~1% pixels) but passes alone on both old
 and new code: the main line was merged into this copy mid-run. The 4 new tests pass.
+
+## Chat 4 (27 Nov, cost tests): hunt 2 on the long hair
+- Why nobody saw it: no check looked at long hair turned; long_hair_piece only counted dark pixels below the jaw.
+  Check: long_hair_one_piece now catches the band (ink across the back), the step (edge stepping in), gaps (background
+  between hair under the jaw) and three-quarter behind reading as straight behind (no cheek shown). It found a crash
+  (hair past the picture's foot) and white hairlines down the neck, both fixed.
+- Slipped: chat 3's hunt 1 was never recorded in the ledger (its pack folder is not kept), so the tool counted
+  chat 4's first pack as hunt 1; renamed r1-p2, then a third pack r1-p3 the gate asked for. Move to shared: critique
+  `record` should run in the same step as reading result.md (one command), so a pack can't be read and left unrecorded.
+- Named, not this job (older house-head parts, in both hunts): sleepy lids, glum resting mouth, swept crop's grey
+  sides, neck length turned (long thin from behind), the collar between views. B1's beard at three-quarter behind
+  shows as a strip beside the neck (the neck is drawn over the jaw from behind): open, for a beard chat.
+- Taste calls for Sam: beard fuller than El-Sayed's own; her hair symmetric (her photos tuck it behind one ear).
+- Branches named (not merged: logs and one-off files from other films' chats): claude/jolly-ramanujan-2lcl2o,
+  claude/upbeat-dirac-w16tn9, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz,
+  claude/gta-chat31.
+- FREEZE: brexit-is-done added to the freeze list (save 2c00a7b8), bookmarks pushed. Branches the start listed: the same six
+  (logs, one-off files), named in chat 1, not merged.
+- Kit run `--touching facehouse._turned_braids` (37 tests) started mid-chat; see the commit for its result line.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.92% of a week (2026-11-27)
+- COST (chat 4): get_session gives no cost figure (no usage in its record; weekly limit: warning); the step hook said about 2.2% of a week at step 140. Nothing recorded by guess.

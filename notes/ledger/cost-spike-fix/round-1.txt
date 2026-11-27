@@ -32,3 +32,66 @@ look.md against brief.md (line A1): I named the beard and the long hair, but cal
 - Back-of-head views have no reference, so nothing checks them. Suggested line: "back views read as the same hair piece as the front, with no band or step."
 - Collar and neck-gap artefacts at the shoulders (white bars, gaps). Suggested line: "no background shows through between neck, collar and hair."
 
+== critique, round 1 pass 2 (2026-11-27): 7 fault(s), 2 can't tell
+-- look.md --
+1: Five head turnarounds of a bearded man with dark hair, dark suit, front to back; no text.
+2: Five turnarounds of a woman with long dark hair, front to back; no text.
+3: Three large views of the long-haired woman: front with red lips, two backs; no text.
+-- result.md --
+## Faults
+FAULT P4 A2 [1]: front, three-quarter and side heads - the beard is a big full block covering mouth and chin; the references show a short, trimmed beard with a visible mouth. Hair at the sides is grey-brown, not the black of the references. Skin is paler and greyer than the olive references.
+FAULT P4 P14 A2 [1, 2, 3]: front and three-quarter faces - eyes are half-closed, heavy-lidded and tired (man) or flat and stern (woman). References are open-eyed and smiling. Pupils sit against the upper lid.
+FAULT P2 [1, 2, 3]: every face - the expression is sad or stern on all views, with a drooping mouth and heavy brows. No view reads as the neutral or pleasant look the references show. At phone size the faces read as glum.
+FAULT A1 [1]: back views (panels 4 and 5) - the hair is a two-tone cap with a hard grey lower block, like a helmet or a hat. The back of the head reads as a separate grey slab, not hair.
+FAULT A1 P8 [2, 3]: from-behind views - the woman's hair is one flat black tombstone shape with no shoulders, neck or collar showing. Without the face it does not read as a person. The two back views look identical, so the three-quarter-behind and straight-behind views cannot be told apart.
+FAULT P11 [1]: back views - the neck is a long thin rectangle, much longer than the short or absent neck in the front view. It is inconsistent between views.
+FAULT P4 [2, 3]: hair - the references show hair tucked behind one ear and falling forward over the shoulder on one side. Ours is a stiff, symmetric sheet. The face looks narrow and long beside the references.
+CAN'T TELL P13 [1, 2, 3]: sleeves and cuffs - only head and shoulders are shown, so sleeve and wrist fit cannot be judged.
+CAN'T TELL P12 [1, 2, 3]: mouths - no speech frames; a picture of a speaking frame would show it.
+
+## Checked
+1-3 (P1, P3, P5, P6, P7, P10: no hands, arms, feet or contact are shown, so nothing to find. P2, P4, P8, P11, P14 are checked above.)
+
+## Cold look
+look.md named a bearded man, a long-haired woman, and the turns correctly. It missed that panel 3 is not "full size" in any meaningful way (the views are barely larger than panel 2 and cropped at the shoulders), and that the lone red lips was the only detail I named for the woman. I did not name the sad faces or the half-closed eyes on first look, nor the helmet-like grey block on the man's back views. I wrote the woman's three-quarter view as "front with red lips"; panel 3 first view is actually a three-quarter, so the cold look mislabelled it. The faces read as glum, which look.md missed entirely (P2).
+
+## Not on the list
+- The reference photos are of real people: the likeness is the goal, but the sheet gives no check that the likeness reads in the flat style. Suggested line: "A person drawn from a reference is recognisable at phone size beside it."
+- Panel 3 has only one reference for three views. Suggested line: "Every view shown has a reference or a stated reason it has none."
+- Two-tone hair shading (grey block) with no source in the references. Suggested line: "Colours not in any reference are named and approved."
+- Panels 4 and 5 of the woman are indistinguishable. Suggested line: "Each turned view differs visibly from its neighbours."
+- Facial lines (nose, nostrils, moustache marks) are thin, scratchy and may vanish at phone size. Suggested line: "Fine face lines are still visible at phone size."
+
+== critique, round 1 pass 3 (2026-11-27): 8 fault(s), 2 can't tell
+-- look.md --
+1: Five heads of a bearded man in dark suit turning from front to back; no text.
+2: Five heads of a long-haired woman turning front to back; no text.
+3: Three large views of the long-haired woman: front, three-quarter, back; no text.
+-- result.md --
+## Faults
+FAULT P4 [1]: hair - the man's hair has a grey/brown patch on the side and back in views 2-5. The references show solid black hair, and the front view has none of it, so the views disagree.
+FAULT P4 [1]: beard - ours is a thick, bushy full beard that covers the mouth. The references show a short, trimmed beard with the lips visible.
+FAULT P8 [1, 2, 3]: three-quarter-from-behind view (panel 1 view 4, panel 2 view 4, panel 3 view 2) - a thin strip of face or beard sits on the edge of the head like a stray tick and does not join the jaw or ear. Panel 1's beard strip hangs beside the neck, unattached.
+FAULT P11 [1]: back and three-quarter-back views - the neck is a long thin column under a wide, boxy, flat-topped head. It reads as a different head from the front view.
+FAULT P2 [1, 2, 3]: faces - heavy lids and low brows make both people look tired, sad or stern. The references smile. The same blank frown shows in every view, front to side.
+FAULT P4 [2, 3]: face - the references show a smiling, soft face with a warm mouth. Ours has a thick flat brow, a long narrow nose and a downturned mouth, so it reads as a different, older person. Hair also lacks the volume at the crown seen in the reference.
+FAULT P13 [1, 2, 3]: clothes - the collar changes between views (open white V in front, a different fold in three-quarter, a thin white line at the back) and the jacket shoulders are cut short in the back views. In panel 3 the jacket barely shows, so the body does not read.
+FAULT P8 [2, 3]: back views - the hair is one flat rectangular block with no shoulders or arms showing. It reads as a hood or a slab, not hair falling past shoulders.
+CAN'T TELL P14 [1, 2, 3]: eyes at phone size - a picture of each eye at full size would show whether pupil, iris and shine stay inside the outline.
+CAN'T TELL P12 [1]: man's mouth - hidden by the beard, so a mouth-open frame would be needed to show there is one mouth.
+
+## Checked
+1-3
+
+## Cold look
+My look.md named the right things (five turning heads, a bearded man, a long-haired woman, three large views) and no text. It missed the two-tone grey patch in the man's hair, the sad and stern expressions, the thick beard against the references, and the odd strip on the back-three-quarter edge. I called panel 3's views "front, three-quarter, back", but they are three-quarter, three-quarter-back and back. The hair reads as one piece only in panel 3's back views.
+
+## Not on the list
+- The references do not show the same angle as ours (all are front-facing and smiling), so match is hard to judge. suggested line: A5 a reference for each view, or say which views have none.
+- Both people look like slightly different people between views (nose, brow). suggested line: P15 one face stays the same person across all views.
+- Panel 3 repeats panel 2's drawings larger, with nothing new. suggested line: A6 a larger view must show more detail than the small one.
+- Back views show no shoulders and no body. suggested line: P16 the back view shows head, neck and shoulders as in the brief.
+- The crop cuts the figure at the base in panel 3. suggested line: A7 nothing cut by the frame edge unless the brief says so.
+
+critique, pass 3: faults fixed as one list: Hunt 2: long hair straight behind now curves in gently round the neck and out over the shoulders (no slab); three-quarter behind shows a wider slice of cheek and jaw. Older house-head parts (lids, resting mouth, swept crop's grey sides, neck length turned, collar) and Sam's taste calls (beard fullness, hair symmetry) named in the notes.
+

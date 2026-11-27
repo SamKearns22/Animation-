@@ -29,3 +29,20 @@
 - For Claude: facehouse.hair_fit/stubble/HAIR/TURN_PROF, facepick.make/colours, people._house/colour_faults,
   catalogue.find, kitfilm.py begin; replay refs references/islamocommunism (9797c588, a7e25e61).
 
+
+
+# Handover replaced by chat 4 (27 Nov)
+## Where things stand
+- Rules that bite next: 30 (a repeat note: find why first), 89 (new drawing: drawn alone and critiqued), 85 (cost watch).
+- Done: steps 1-7, 5c, replay 2 and S1-S4 (earlier chats); B1-B4 built, kit-tested, verified end to end on the
+  replay's two people (section "B1-B4 built" below); before/after cast sheet sent to Sam.
+- Next (Opus, high: a new drawing's fixes, rule 89 hunt 2; chat 4): the long hair from behind (crown band, shoulder
+  step) and the three-quarter neck gaps; critique hunt 2 (`critique.py pack`); resend the sheet; then Sam's words.
+- Needs Sam: his look at the sheet (the beard a little fuller than El-Sayed's own; a taste call).
+- Read: guides/fix-pack.md (a fixing chat's one page); this file's "B1-B4 built" section.
+- Open rule requests: none.
+- Locked by Sam: no film, shot, camera, framing or beat is touched by this job (notes and shared tools only).
+- For Claude: facehouse.beard/short_beard/SHORT_BEARD/long_hair/_strands, facepick._beard_word/face_skin/braided/
+  BRAID_FINE, people `beard: short C`, kitfilm.lookups/face_result, catalogue.find (raw words); throwaway picks in
+  the chat's scratchpad only (never pushed).
+
