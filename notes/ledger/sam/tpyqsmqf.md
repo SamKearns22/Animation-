@@ -20,3 +20,8 @@ On 1. Why do you redraw the still rather than taking the one you had already dra
 ### 2026-11-27T12:41:04
 Go
 
+### 2026-11-27T13:28:58
+You're doing really important work. 
+
+Are your fixes universal throughout the project? Do they apply to any conceivable action we take?
+
