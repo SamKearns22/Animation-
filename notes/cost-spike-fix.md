@@ -49,8 +49,10 @@ Kind: tool job (shared, every film). No film, shot, camera or beat touched.
   from the head's widest point with a gentle curve round the neck; three-quarter behind shows a slice of cheek); neck
   gaps closed; kit test long_hair_one_piece (fails old: band 1.00, step 12 px, 5,870 gap px); six house faces 0 px
   differ; short_beard_solid, long_hair_piece pass; critique hunts 2 and 3 recorded, `fixed`; sheet rebuilt and sent.
-- Next: none until Sam's words on the sheet (Opus, medium for any notes on it).
-- Needs Sam: his look at the sheet (beard fullness, a taste call).
+- Next (chat 5, Opus medium: a round of Sam's notes): Sam's beard note (27 Nov, below: "a big black shape on his
+  face": give it form, edge and grain so it reads as hair on a face, not a patch; check it catches the note first),
+  then his Y: gather more braided and long-hair photos for the braids check; resend the sheet.
+- Needs Sam: his look at the long hair from behind (the rebuilt sheet, sent by chat 4).
 - Read: guides/fix-pack.md; this file's "B1-B4 built" section and "Chat 4" below.
 - Open rule requests: none.
 - Locked by Sam: no film, shot, camera, framing or beat is touched by this job (notes and shared tools only).
@@ -211,6 +213,9 @@ Done's (a live chain; this tool job has no film line there).
 Kit tests (chat 3): `--changed` 59 run, 56 passed; head_moves_not_comic, early_move_size: the same two chat 2 named
 (Brexit's live nod sizes); places_from_a_description failed in the run (sets ~1% pixels) but passes alone on both old
 and new code: the main line was merged into this copy mid-run. The 4 new tests pass.
+Sam, 27 Nov, on the sheet: "Y. The main problem with the beard is that it's a big black shape on his face. The final
+beard in the real Islamocommunism film looked better but yours was way better for a first try." Y = gather more
+braided and long-hair photos for the braids check. Both passed to chat 4 (session_01J1JB7Y1BHkjtYN6FKWQLTr).
 
 ## Chat 4 (27 Nov, cost tests): hunt 2 on the long hair
 - Why nobody saw it: no check looked at long hair turned; long_hair_piece only counted dark pixels below the jaw.
