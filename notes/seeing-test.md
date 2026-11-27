@@ -47,10 +47,11 @@ re-drawn in throwaway copies); rule 93: every view is advice, never a lock.
 - Done: blind scoring (notes/seeing-test/scores.md). Of 14 notes Sam gave: plain frames 2, pose 2, movement 2 (with
   6 false alarms), who-is-where 1, cut-out 1. Every arm caught GTA note 8 (door); none caught the other 11. No
   tool beats the plain frames, so no winner is adopted.
-- Next: none until Sam answers (Opus, medium on his answer). Plan if he says Y: the faults all arms missed are
-  hands-on-things, through-the-scenery and too-quick moves; the next try is the model watching the actual clip
-  (motion, not stills) with each person's outline, tested on these same 16 cases.
-- Needs Sam: Y/N on dropping the four views as Sam-facing checks and trying the watch-the-clip idea.
+- Next: chat 3, Opus, high effort (building something new). Sam said Y (27 Nov): drop the four views as checks; build
+  the watch-the-clip test. Honest limit: the model sees pictures, not video, so "watching" means short runs of
+  consecutive frames side by side (every frame, a few seconds), each person outlined; scored blind on the same 16
+  cases against plain frames, same scorer method (scores.md). Also settle c10 (posted GTA, door) on a real frame.
+- Needs Sam: nothing until chat 3 scores the new test.
 - Open, unverified: all five arms flag Jason through the door in c10 (posted GTA final); not matched to a frame.
 - Read: this file; notes/seeing-test/scores.md; key.md.
 - Open rule requests: none.
