@@ -1313,6 +1313,662 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "2ba38a1f",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.35,
+   "src": "estimate",
+   "sid": "session_01J1JB7Y8nBpXiPqQzRCy7gL",
+   "steps": 75,
+   "hist_k": 196,
+   "kinds": {
+    "tool search": 20.2,
+    "page.py": 0.3,
+    "renders": 1.2,
+    "pictures": 2.2,
+    "other": 76.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 52,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 7,
+    "other": 10
+   },
+   "split": {
+    "usd": 4.9433,
+    "total": 4.9433,
+    "floor_k": 85,
+    "blocks": {
+     "new writes": 38.4,
+     "start-up floor": 22.5,
+     "Claude's words": 20.1,
+     "carried history": 19.0
+    },
+    "origins": {
+     "messages and reminders": 29.0,
+     "Claude's words": 28.6,
+     "start-up floor": 22.7,
+     "result: tool search": 15.5,
+     "result: pictures": 1.8,
+     "Claude's edits": 1.4,
+     "result: renders": 0.5,
+     "result: page.py": 0.4,
+     "result: other": 0.1
+    },
+    "named": {
+     "messages and reminders": 29.0,
+     "start-up reading (rules, tools, first files)": 22.7,
+     "writing code": 10.0,
+     "thinking": 7.4,
+     "commands": 7.4,
+     "running checks and tools": 5.0,
+     "reading kit code": 3.2,
+     "reading guides": 3.2,
+     "messages to Sam": 3.0,
+     "reading notes": 2.8,
+     "writing notes": 2.3,
+     "looking at pictures": 1.8,
+     "other commands": 1.3,
+     "renders": 0.5,
+     "start-up and handover tools": 0.4,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 39,
+    "work_pct": 0.59,
+    "reads": [
+     [
+      "source/patriots4_cast.py",
+      6.2,
+      0.082
+     ],
+     [
+      "notes/cost-spike-fix.md",
+      1.5,
+      0.0272
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scratchpad/refs/sheet.jpg",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scratchpad/out/lk/pair.jpg",
+      1.6,
+      0.0194
+     ],
+     [
+      "guides/kit-catalogue.md",
+      1.2,
+      0.019
+     ],
+     [
+      "source/satire_template.py",
+      1.3,
+      0.0187
+     ],
+     [
+      "source/notesteps.py",
+      0.9,
+      0.0158
+     ],
+     [
+      "guides/preflight.md",
+      1.0,
+      0.0152
+     ],
+     [
+      "guides/satire.md",
+      1.0,
+      0.0152
+     ],
+     [
+      "guides/tiktok-design.md",
+      1.0,
+      0.0152
+     ],
+     [
+      "guides/job-packs.md",
+      0.7,
+      0.012
+     ],
+     [
+      "source/likeness.py",
+      0.7,
+      0.0106
+     ],
+     [
+      "source/traitors_cast.py",
+      0.8,
+      0.0102
+     ],
+     [
+      "source/netanyahu_cast.py",
+      0.7,
+      0.0092
+     ],
+     [
+      "story/status.md",
+      0.3,
+      0.0057
+     ],
+     [
+      "notes/ledger/islamocommunism.md",
+      0.2,
+      0.0027
+     ]
+    ],
+    "base_pct": 23.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 8,
+     "film notes": 13,
+     "shared:notesteps.py": 5,
+     "guides": 5,
+     "shared:people.py": 3,
+     "shared:likeness.py": 2,
+     "shared:satire_template.py": 1,
+     "shared:netanyahu_cast.py": 1,
+     "shared:patriots4_cast.py": 4,
+     "shared:traitors_cast.py": 1,
+     "shared:islamo_cast.py": 3,
+     "shared:islamocommunism_cast.py": 1,
+     "shared:people_famous.py": 1,
+     "shared:facepick.py": 2,
+     "shared:facehouse.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch -q origin claude/create-claude-md-oe8z4g ",
+      "",
+      207
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md guides/job-packs.md",
+      "^## ",
+      "",
+      379
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md guides/job-packs.md",
+      "^## \\|^### ",
+      "",
+      5893
+     ],
+     [
+      4,
+      "other",
+      "shared:notesteps.py",
+      "source/notesteps.py notes/archive/",
+      "^import",
+      "",
+      3488
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/archive/ notes/*.md",
+      "for f in brexit-is-done elder-swindon cry-minister halo-no-no; do echo \"== $f\"; ",
+      "",
+      1728
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "story/status.md",
+      "cat story/status.md | head -20; ls animations | grep -i brexit; git show --stat ",
+      "",
+      1287
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "",
+      "$(echo $f | sed 's/-/ /g')",
+      "",
+      1646
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "islamocommunism",
+      "",
+      3372
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "notes/ledger/ notes/logs/ notes/ledger/*.md",
+      "islamo",
+      "",
+      876
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/ledger/islamocommunism.md notes/ledger/islamocommunism.json",
+      "head -40 notes/ledger/islamocommunism.md; python3 -c \" import json;d=json.load(o",
+      "",
+      650
+     ],
+     [
+      12,
+      "other",
+      "film notes",
+      "notes/archive/islamocommunism-handovers.md notes/steps-breakdown.md notes/real-c",
+      "usage\\|%\\|steps\\|tool calls",
+      "",
+      229
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/islamocommunism.md",
+      "^#",
+      "",
+      1193
+     ],
+     [
+      15,
+      "other",
+      "shared:notesteps.py",
+      "source/notesteps.py notes/islamocommunism.md",
+      "python3 source/notesteps.py note \"stage: brief checklist (input = original check",
+      "",
+      2226
+     ],
+     [
+      16,
+      "other",
+      "shared:notesteps.py",
+      "source/notesteps.py guides/preflight.md guides/satire.md guides/tiktok-design.md",
+      "^## \\|^### ",
+      "",
+      1039
+     ],
+     [
+      17,
+      "other",
+      "guides",
+      "guides/preflight.md guides/satire.md guides/tiktok-design.md",
+      "sed -n 10,39p guides/preflight.md; sed -n 12,81p guides/satire.md; sed -n 258,27",
+      "",
+      11606
+     ],
+     [
+      18,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "white house\\|oval\\|flag\\|dome\\|spire\\|kremlin\\|car\\b\\|cars\\|child\\|kid\\|family\\|",
+      "",
+      3611
+     ],
+     [
+      19,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "sitting\\|seated\\|walk\\|hold\\|drink\\|sip\\|clink\\|crowd\\|extras\\|sky\\|exterior\\|bu",
+      "",
+      4950
+     ],
+     [
+      22,
+      "other",
+      "shared:people.py",
+      "guides/pose-gallery.md guides/kit-catalogue.md source/crowd*.py source/people.py",
+      "stand up\\|stands up\\|rise\\|sip\\|drink\\|hand over\\|hands over\\|pass\\|clink\\|toast",
+      "",
+      1722
+     ],
+     [
+      25,
+      "other",
+      "shared:likeness.py",
+      "/home/user/Animation-/source/models source/models source/likeness.py",
+      "S=/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scrat",
+      "",
+      2223
+     ],
+     [
+      26,
+      "other",
+      "shared:likeness.py",
+      "source/likeness.py source/satire_template.py source/midterminal_cast.py",
+      "def cast\\|'cast'\\|CAST\\b\\|CAST =",
+      "",
+      2321
+     ],
+     [
+      27,
+      "other",
+      "shared:satire_template.py",
+      "source/satire_template.py",
+      "S=/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scrat",
+      "",
+      5359
+     ],
+     [
+      28,
+      "other",
+      "shared:netanyahu_cast.py",
+      "source/netanyahu_cast.py",
+      "^def \\|^[A-Z_]* = \\|AVG",
+      "",
+      2675
+     ],
+     [
+      29,
+      "other",
+      "shared:patriots4_cast.py",
+      "source/patriots4_cast.py source/midterminal_cast.py",
+      "^AVG\\|^def \\|^[A-Z_]* = dict",
+      "",
+      2867
+     ],
+     [
+      30,
+      "other",
+      "shared:patriots4_cast.py",
+      "source/patriots4_cast.py",
+      "S=/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scrat",
+      "",
+      10110
+     ],
+     [
+      31,
+      "other",
+      "shared:patriots4_cast.py",
+      "source/patriots4_cast.py",
+      "S=/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scrat",
+      "",
+      14578
+     ],
+     [
+      32,
+      "other",
+      "shared:patriots4_cast.py",
+      "source/patriots4_cast.py source/traitors_cast.py",
+      "romesh_head\\|romesh_torso\\|claudia_head\\|HEADS\\|TORSOS\\|_hair_back =\\|^CL_\\|^R_\\",
+      "",
+      1921
+     ],
+     [
+      33,
+      "other",
+      "shared:traitors_cast.py",
+      "source/traitors_cast.py source/patriots4_cast.py",
+      "def eyes\\|def brows\\|def lips",
+      "",
+      3183
+     ],
+     [
+      35,
+      "other",
+      "shared:islamo_cast.py",
+      "source/islamo_cast.py",
+      "S=/tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/scrat",
+      "",
+      1032
+     ],
+     [
+      38,
+      "other",
+      "shared:islamo_cast.py",
+      "source/islamo_cast.py",
+      "0.99), (0.0, 1.01)\\|fw \\* 0.5 + 0.07\\|jaw_wide=4.0\\|-0.36), (0.16, -0.35)",
+      "",
+      673
+     ],
+     [
+      39,
+      "other",
+      "shared:islamo_cast.py",
+      "source/islamo_cast.py",
+      "^ *[+-][0-9]*%  [0-9a-z]",
+      "",
+      757
+     ],
+     [
+      43,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "def head_faults",
+      "",
+      1543
+     ],
+     [
+      44,
+      "other",
+      "shared:notesteps.py",
+      "source/notesteps.py notes/islamocommunism.md",
+      "python3 source/notesteps.py done >/dev/null; python3 source/notesteps.py report ",
+      "",
+      3231
+     ],
+     [
+      45,
+      "other",
+      "shared:islamocommunism_cast.py",
+      "source/islamocommunism_cast.py",
+      "SCORES\\|%\\|180\\|side\\|back",
+      "",
+      2852
+     ],
+     [
+      48,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py guides/kit-catalogue.md",
+      "famous\\|new person\\|likeness",
+      "",
+      3138
+     ],
+     [
+      50,
+      "other",
+      "shared:people.py",
+      "source/people.py story/*-people.txt story/brexit-is-done-people.txt",
+      "famous\\|card",
+      "",
+      4360
+     ],
+     [
+      51,
+      "other",
+      "film notes",
+      "story/brexit-is-done-people.txt",
+      "awk '/^# /{n++} n>=1 && n<=3' story/brexit-is-done-people.txt | head -45",
+      "",
+      785
+     ],
+     [
+      52,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md guides/job-packs.md",
+      "house NAME\\|references/faces\\|facetool.py\\|facehouse.py",
+      "",
+      827
+     ],
+     [
+      53,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "sed -n 69,70p guides/kit-catalogue.md | cut -c1-1400",
+      "",
+      1811
+     ],
+     [
+      54,
+      "other",
+      "shared:facepick.py",
+      "/home/user/Animation-/source/models S/today/source/models source/fonts S/today/s",
+      "usage\\|python3\\|--tq\\|--says\\|--lineup",
+      "",
+      858
+     ],
+     [
+      55,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "WARN\\|W0000\\|I0000\\|INFO",
+      "",
+      1705
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "WARN\\|W0000\\|I0000\\|INFO\\|Traceback\\|File \\|TypeError\\|Exception ignored",
+      "",
+      3827
+     ],
+     [
+      59,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/people.py",
+      "^HAIR_PIECES\\|^PIECES\\|'bob':\\|'back':\\|'long'\\|def hair_\\w*(",
+      "",
+      1223
+     ],
+     [
+      60,
+      "other",
+      "shared:facehouse.py",
+      "/home/user/Animation-/source/facehouse.py",
+      "pick/\\|'pick'",
+      "",
+      510
+     ],
+     [
+      61,
+      "other",
+      "film notes",
+      "story/islamoreplay-people.txt",
+      "\nimport sys;sys.path.insert(0,'source');import people;people.sheet('islamoreplay",
+      "",
+      1311
+     ],
+     [
+      62,
+      "other",
+      "film notes",
+      "story/islamoreplay-people.txt",
+      "WARN\\|W0000\\|I0000",
+      "",
+      56
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "ls -la /tmp/claude-0/-home-user-Animation-/2ba38a1f-e9fb-50a1-8f95-188f11475c8c/",
+      "",
+      192
+     ],
+     [
+      65,
+      "other",
+      "shared:notesteps.py",
+      "source/notesteps.py",
+      "python3 source/notesteps.py done >/dev/null; python3 source/notesteps.py report ",
+      "",
+      264
+     ],
+     [
+      66,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md notes/logs/notesteps.log",
+      "a real person: `facepick.py NAME OUT PHOTOS --says ...`, then a people-file bloc",
+      "",
+      349
+     ],
+     [
+      67,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      "",
+      102
+     ],
+     [
+      68,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md",
+      "sed -n 179,188p notes/cost-spike-fix.md",
+      "",
+      820
+     ],
+     [
+      69,
+      "other",
+      "film notes",
+      "notes/cost-spike-fix.md",
+      "^<<<<<<<\\|^>>>>>>>",
+      "",
+      316
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "for i in 1 2 3; do git fetch -q origin claude/create-claude-md-oe8z4g && git mer",
+      "",
+      108
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
