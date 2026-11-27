@@ -1059,25 +1059,19 @@ def joins_at_24():
 
 @test
 def seated_r7_switch():
-    """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
-    seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These
-    fixes were built specifically for Open Wounds ... Implement."): May and Kemi on the seated body tool (mode
-    'body', people.SEAT_BODY); Blair and the crowds stay on the house drawing until their poses are learned (rule
-    91); with the tool taken off, all three still draw exactly the old frames."""
-    import hashlib
+    """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film. Open
+    Wounds (Sam, 26 Nov: "These fixes were built specifically for Open Wounds ... Implement."): its cast on the seated
+    body tool (mode 'body', people.SEAT_BODY); the crowds stay on the house drawing until their poses are learned
+    (rule 91); with the tool taken off, all three still draw the old legs.
+    R8 chat 5 (Sam's Y, 27 Nov): it compared whole pictures, so every shared fix to faces, sleeves, line weight or the
+    chair turned it red with the legs unchanged (re-held by hand twice). Now it compares only the legs' outline: the
+    trousers drawn in a test red, read in 8 px squares, against source/data/seated-legs-ref.json (held 27 Nov). Tool
+    off: under 10% of the squares may differ (the redrawn chair seat hides up to 6%); tool on: every view differs by
+    more (29-79% measured)."""
     import people
     import castsheet as CS
-    import sitting as S
-    from PIL import Image
-    # R8 chat 5: re-held again: Open Wounds chats 30-40's shared fixes (line weight, sleeves the jacket's colour, a
-    #   man's 3/4 suit front, May's jacket) moved all nine; looked at side by side: below the seat every shape is
-    #   the same, only the line weight differs. Was 13d5c648a6ed / 24f16e2873e6 / 3732d689f2ab, c736ac4bb567 / aa63685bd955 /
-    #   cc0826ec4d61, 97cbfbe3e550 / 5e504d91a956 / dbeb1214140e
-    saved = {('blair', 0): '8517144ea05b', ('blair', 45): '96c2266a32f0', ('blair', 90): 'e85555ad3cb4',   # re-held 26 Nov, chat 30: notes 20-21 changed the heads (neck, brows, lines), nothing below them   # 45/90: Open
-             #   Wounds' own chain moved them (3d10d4c7, its shared sleeve lift in turned views), proven with R7's
-             #   chat 2 changes taken out (still moved); was 5e30e187e32c / 397e4b53c71f
-             ('kemi', 0): '22acf835e528', ('kemi', 45): 'fee893d702f9', ('kemi', 90): 'f230626dbda3',
-             ('may', 0): '4bc5b8f4a9c8', ('may', 45): '4df2dcdf3882', ('may', 90): 'a6bd046f2425'}
+    import numpy as np
+    ref = json.load(open(os.path.join(HERE, 'data', 'seated-legs-ref.json')))
     off = [f for f in people.BEFORE_SEATED if people.seat_r7(f) and f != 'brexit-is-done']
     new_on = people.seat_r7('a-new-film')
     cast, PP = CS._setup('brexit-is-done', None)
@@ -1086,25 +1080,40 @@ def seated_r7_switch():
     body = {w for w, sp in cast.items() if sp.get('seat_solid') == 'body'}
     crowd_on = [w for w, d in people.crowds('brexit-is-done').items() if d.get('seat_r7')]
     moved, changed = [], 0
-    for (who, yaw), h in saved.items():
-        for on in (False, True):
-            sp = dict(cast[who])
-            for k in ('seat_r7', 'seat_solid', 'turned_curves', 'turned_bust'):
-                sp.pop(k, None)
-            if on:
-                people.seat_body(sp)
-            s = 0.5 * sp['height'] / 1.75
-            img = Image.new('RGBA', (1080, 1920), (235, 235, 230, 255))
-            PP.V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0, yaw, S.pose(sp, 'upright'))
-            got = hashlib.md5(img.tobytes()).hexdigest()[:12]
-            if not on and got != h:
-                moved.append(f'{who} {yaw}')
-            changed += on and got != h
+    for key, h in ref.items():
+        who, yaw = key.split()
+        old = _legs_cells(PP, cast[who], int(yaw), False)
+        was = np.unpackbits(np.frombuffer(bytes.fromhex(h), np.uint8))[:old.size]
+        share = lambda c: float((c != was).sum()) / max(1, int(was.sum()))
+        if share(old) >= 0.10:
+            moved.append(f'{key} {share(old):.0%}')
+        changed += share(_legs_cells(PP, cast[who], int(yaw), True)) >= 0.10
     ok = (not off and new_on and marked == want and body == want and not crowd_on and not moved
-          and changed == len(saved))
+          and changed == len(ref))
     return ok, (f'posted films switched on: {off or "none"}; a new film on: {new_on}; Open Wounds on the body tool: '
-                f'{sorted(body)} (want {sorted(want)}); crowds on: {crowd_on or "none"}; old frames moved with the '
-                f'tool off: {moved or "none"}; body tool changes {changed}/9')
+                f'{sorted(body)} (want {sorted(want)}); crowds on: {crowd_on or "none"}; old legs moved with the '
+                f'tool off: {moved or "none"}; body tool changes {changed}/{len(ref)}')
+
+
+def _legs_cells(PP, sp0, yaw, on):
+    import numpy as np
+    """seated_r7_switch: one person seated upright, trousers in a test red, read in 8 px squares (a square is legs
+    when over half of it is that red): the legs' outline, whatever the face, sleeves, line or chair."""
+    import people
+    import sitting as S
+    from PIL import Image
+    sp = dict(sp0, trousers=(220, 20, 20))
+    for k in ('seat_r7', 'seat_solid', 'turned_curves', 'turned_bust'):
+        sp.pop(k, None)
+    if on:
+        people.seat_body(sp)
+    s = 0.5 * sp['height'] / 1.75
+    img = Image.new('RGBA', (1080, 1920), (235, 235, 230, 255))
+    PP.V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0, yaw, S.pose(sp, 'upright'))
+    a = np.asarray(img.convert('RGB'), np.int16)
+    m = (a[..., 0] > 90) & (a[..., 0] > a[..., 1] + 60) & (a[..., 0] > a[..., 2] + 60)
+    h, w = m.shape
+    return (m[:h // 8 * 8, :w // 8 * 8].reshape(h // 8, 8, w // 8, 8).mean(axis=(1, 3)) > 0.5).ravel().astype(np.uint8)
 
 
 @test
