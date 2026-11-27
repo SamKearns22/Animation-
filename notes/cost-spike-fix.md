@@ -122,7 +122,6 @@ the parent chat, 27 Nov).
 - Not yet measured: the next real notes round is the test (`notesteps.py report`). Cost watch went amber at 160 steps
   (2.3% of the week) in this chat; handed over at the end of this build, nothing left mid-way.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.34% of a week (2026-11-27)
 - Handover check answered: finder reach: handover.py, page.py, still.py (tool job: the finder was run on Brexit to
   test the word list, never to find these tools' own code). COST: get_session gives this chat no cost figure (only
   "weekly limit: warning"); the cost watch said about 2.3% of the week at 160 steps. Nothing recorded by guess.
@@ -199,3 +198,18 @@ code) are where the original spent most (three of four chats).
   `hair_piece_fits`.
 - S4 every step counts toward the chat's total (notesteps); `ledger.py stage` keeps the steps since the last stage
   mark in the ledger's stage row and table. Kittest `stage_steps_saved`.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 6.5% of a week (2026-11-27)
+- Verified end to end on the replay (throwaway copy of today's project): facepick printed "El-Sayed: hair piece:
+  swept" and "aoc: NEW: long hair ... no hair piece fits"; the cast sheet printed the COLOUR line for the grey beard,
+  quiet once `beard: boxed 30 26 26` was in the file. Skin not flagged: on this bright studio photo the face tool's
+  skin is near the photo's (the "pale" look is partly the photo). **Look gap (Statement Two):** the beard drawn is
+  still stubble with skin through it, so a black value reads only a little darker; a solid short full beard on the
+  house head is a new build, offered to Sam, not started.
+- Kit tests: the 4 new pass; `--touching people._house` 43 of 46 pass; 3 fail outside this change
+  (people_from_a_description: no `film/blessed` branch in this copy; head_moves_not_comic, early_move_size: Open
+  Wounds' nod sizes, which the live notes round is changing). Not re-run on the old code.
+- Branches named, not merged: claude/cost-5c-split (another chat working on it now, 0 h old; it changes page.py's word
+  list too, which this chat left alone). FREEZE line (animations/brexit-is-done-vertical.mp4 not in the freeze list)
+  belongs to Open Wounds' chain, not this tool job.
+- Locked by Sam: no film, shot, camera or beat is touched; the replay is on a throwaway copy.
