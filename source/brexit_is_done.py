@@ -468,6 +468,9 @@ def frame_image(t):
 # underneath people talking"; the loud one (alice_soundz, peaks near full scale) brought down further than the other.
 GROWLS = [('freesound_community-doggrowlingsnarlinggrumbling-77634.mp3', 0.0, -34.0),     # (file, from s, loudness)
           ('alice_soundz-scary-wolf-growling-224086.mp3', 7.0, -38.0)]
+# Sam, 27 Nov: "disable the wolf sound effect from the start of the Tony scene to the moment the door is burst open":
+# silent from the cut to Blair (24.0 s) until the doors open, 0.3 s into the chase (26.4 s).
+GROWL_MUTES = [(SHOTS[2][1], SHOTS[2][1] + CHASE_DELAY + 0.3)]
 BED_DIP_DB = 9.0                               # how far the growls drop while someone speaks
 VOICE_OVER_BED_DB = 12.0                       # the voice at least this far above the growls wherever anyone speaks
 
@@ -484,7 +487,7 @@ def soundtrack(stems=False):
         seg = ln['_voice'][:max(0, n - i)]
         voice[i:i + len(seg)] += seg
     bed = AK.bed(voice, [(TK.read(os.path.join(SOUNDS, f)), off, lu) for f, off, lu in GROWLS], SHOTS[1][1],
-                 dip_db=BED_DIP_DB, sr=SR)
+                 dip_db=BED_DIP_DB, sr=SR, mutes=GROWL_MUTES)
     mix, g = AK.master(voice + bed, n)
     return (mix, voice * g, bed * g) if stems else mix
 
