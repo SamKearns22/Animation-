@@ -85,6 +85,9 @@ at session start (`.claude/hooks/setup.sh`).
   before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
 - **Every animatic carries the Hook Text and the CranbriJoos sign-off**, made as the final is (`finish.py` on its
   clean render); a check sheet, when I ask for one, shows the Hook Text frame.
+- **The Hook Text is mine (Sam, 27 Nov):** "You never need to suggest hook texts to me. Leave that blank until I
+  provide it." Never offer a wording; if none is given by the first animatic, ask for it (checked: the plain-words
+  check stops a suggested one; kittest `hook_text_never_suggested`).
 - **Frame-by-frame line checks only when I ask (Sam, 26 Nov):** "please no longer do this automatically. Please suggest
   when you think it's needed." Suggest one in a line when it's needed; run it only on my word.
 - **Checks are advised, not automatic (Sam, 26 Nov):** "sometimes I just need an animatic or a clip to see how

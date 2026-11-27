@@ -9,11 +9,11 @@ The joke (Sam): The Patriot and his crew of balaclava'd PP men try to break Tomm
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
 - **Locked by Sam:** all 11 shots as the screenplay sets them: cell dead ahead at the cot; side angle; close-up of the grate from inside; side-on outside with the tower; close-up through the grate at Danny; from behind Danny's head; the entrance with the two officers; the four 180s (boat, officers, Patriot, officers).
-- **Rules that bite next:** 24 (the estimate), 74 (acting list), 38 (front, side and back on the cast sheet).
-- **Done:** redesign chat 1: the Patriot on the new house head and balaclava, sheet sent (Sam's look pending). Plan chat 1 (Opus high): brief checklist, estimate 15.4%, shots and acting list; sister chat asked to carry on the Patriot redesign. Redesign chat (Sam's sheet notes): belly lines fixed (shared 'stout' build), collar, zip, hem and chin fixed, sheet v2 sent; the grey sleeve fade answered, its fix waits for Sam's Y. Check not built yet: stray ink lines inside a jacket's fill (until then, every body looked at full size before a sheet goes).
-- **Next:** chat 2 (Opus, high, opened 27 Nov): learn the shoulder tower, a grey practice clip (Kind: practice). This chat: Sam's answers, then the cast sheet (Opus high).
-- **Needs Sam:** Y or N on the shoulder-seam fix for the grey sleeve fade (redesign chat); his look at the Patriot's sheet v2; Danny's face (A, B or C); the religious clothes (redone to be accurate); the Hook Text rule's wording.
-- **Read:** guides/job-packs.md, Build; guides/figure-rig.md 2-4, 5c.
+- **Rules that bite next:** 38 (front, side and back on the cast sheet), 89 (each new piece drawn alone and critiqued before the cast sheet), 49 (likeness: Danny checked against his photos).
+- **Done:** redesign chat 1: the Patriot (sheet v2, Sam's look pending). Plan chat 1: brief checklist, shots, acting list, estimate 15.4%; Danny's photos and face tool (pick B); Sam's answers (orange boat, 8-man tower, clothes from the small-boat news photos with at least two niqabs, tones); rule: the Hook Text is Sam's (plain-words check, kittest hook_text_never_suggested). Chat 2 opened: the shoulder tower practice.
+- **Next:** chat 3 (Opus, high: new people and clothes): the cast sheet: Danny Tommo (face B, fixing the boxy hair with long sides to his short faded sides, ginger-brown stubble; prison grey tracksuit), the 7 crew (house heads + balaclava=True, varied heights and builds), the crew's disguise per brief row 17, the 2 officers (Blessed's), the orange boat; each new piece drawn alone and critiqued first. Then send the sheet.
+- **Needs Sam:** Y or N on the shoulder-seam fix for the grey sleeve fade (redesign chat); his look at the Patriot's sheet v2; Danny's face (going with B, my pick, unless Sam says otherwise); the Hook Text (blank until he gives it).
+- **Read:** guides/job-packs.md, Build; guides/figure-rig.md 2-4, 5c; brief rows 1-22 and References in this file.
 - **Open rule requests:** none.
 - **For Claude:** film name patriots5; boat = patriots2.shot_dinghy; cell, gates and officers = story/blessed-places.txt / blessed-people.txt; Patriot = patriots5_cast.patriot(mood) (`patriots5_cast.py sheet OUT.jpg`; balaclava facehouse_d). Open Wounds (brexit-is-done) notes stay in place: acting.py reads its acting list (move to shared: repoint, then archive).
 
@@ -109,7 +109,7 @@ rule 14)
 | 14 | Shot 8 (180): "The patriot platform boys are walking from left to right, eight of them, in a small boat (see patriots 2)." Sam (27 Nov): the Patriots 2 inflatable, "but let's make it orange." | |
 | 15 | Shot 8: "They have clearly cut holes in the boat so their legs can come through and they can pilot it with their legs." | |
 | 16 | Shot 8: "They are sheepishly coming up towards the guards." | |
-| 17 | Shot 8: "They have a variety of Islamic religious gear wrapped over their usual stupid balaclava fascist outfits." Sam (27 Nov, N to my first mix): "The joke is that they are clueless fascists and most of patriot platform's hatred is directed towards Muslims. This needs to be accurate for the joke to land. It is a joke that targets them, not the Muslims" | |
+| 17 | Shot 8: "They have a variety of Islamic religious gear wrapped over their usual stupid balaclava fascist outfits." Sam (27 Nov, N to my first mix): "The joke is that they are clueless fascists and most of patriot platform's hatred is directed towards Muslims. This needs to be accurate for the joke to land. It is a joke that targets them, not the Muslims". Sam (27 Nov, on the mosque-wear list): "Please base these clothes on migrants/small boat people rather than locals"; "Absolutely, yes. At least two of them" (black face veils, niqabs, over the balaclavas). Plan from the news photos (references/patriots-5/migrants): orange life jackets over dark puffer jackets and hoodies; a red-and-white patterned blanket round the shoulders on some; white knitted prayer caps on top of the balaclavas on some; at least two in black niqabs; prayer beads in one hand; no writing anywhere | |
 | 18 | Shot 9 (180): "The guards stare. The one on the left goes: uuuh, what are you doing?" | |
 | 19 | Shot 10 (180): "The Patriot startles, clearly not expecting to be seen." Line: "Oh, uh. Allahu Akbar." | |
 | 20 | Shot 11 (180): "The guards just stare at each other in baffled shock." | |
@@ -119,7 +119,12 @@ rule 14)
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 | reference | what it shows (count, colours, positions, facing, brands, proportions) | ours matches? |
 |---|------|------|
-|   |      |      |
+| migrants/01 (Mirror) | a man wading, white knitted prayer cap, orange life jacket over dark clothes | |
+| migrants/02, 04 (Mirror) | long dark-grey inflatables crowded side-on; people sit on the tubes facing in, orange life jackets on most, dark jackets and hoods | (our boat is orange: Sam) |
+| migrants/03 (Mirror) | landing: red-and-white patterned blankets wrapped round shoulders, hoodies, tracksuit bottoms | |
+| migrants/05 (Mirror) | close: orange life jackets (collar behind the head, straps), black puffer jackets, hoods up | |
+| tower/01-06 (Openverse) | see notes/learn/shoulder-tower/lesson.md | |
+| faces/tommo m01, m02 (Mirror) | Danny Tommo's model, front; m04 three-quarter; m05 smiling | face tool 72-78% |
 
 ## Exceptions (rule 13): anyone or anything left out of a check, one row each (a pattern like Journalist* is fine); pre-flight refuses a film setting's exception (HANDS_OK, LINE_OK, any *_OK, ALLOWED_POPS) with no row here; a code comment is never a reason. check: the setting's name, or 'house look', 'lap', 'drawing checks', 'camera feel' (who: the shot)
 | check | who | why | looked at full size (sheet, panel) |
@@ -179,3 +184,5 @@ Screenplay and title: given 27 Nov 2026 (the film's start: kit tests, rule 90)
 - "Shot 11 (180): "The guards just stare at each other in baffled shock."": Offshore oil rig (Jackdaw-style) in 31 breakable pieces at real size, painted fl [`source/flying_whales_rig.py` (`draw(base, t, xf, gone, extr]; A car chase through a stand-in junction from a low kerb camera: a route with a s [`source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `]
 - "Every video: Hook Text and the CranbriJoos sign-off; no title by defau": Hook Text beside a person, three rows (`--w`); 😅 emoji [`source/hook_text.py`, `1f605.png`]; Word times from Sam's takes (speech-to-text; Open Wounds chat 29, 26 Nov, Sam's  [`source/words.py` (`times`, `text`, `track`, `at_word`); in ]
 - "Sound: voices only (the script names no sound effects)": The proposal route (Sam, 15 Nov): any change to rules, tools, checks, kits or ho [`source/propose.py` (`new`, `pack`, `judge`, `record`, `show]; Any measured-face person's head turned (three-quarter, side, three-quarter behin [`source/turnhead.py`: `register(Person(...))` + `install(vie]
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.98% of a week (2026-11-27)

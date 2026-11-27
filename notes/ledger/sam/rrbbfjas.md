@@ -58,3 +58,10 @@ In the meantime, send a message to the other film chat to continue the Patriot c
 
 7. Make the Allahu Akbar stumbling yet sincere. Like he's trying to play a role he's not used to, all of a sudden
 
+### 2026-11-27T21:36:05
+1. Please base these clothes on migrants/small boat people rather than locals
+
+2. Absolutely, yes. At least two of them.
+
+3. Y
+
