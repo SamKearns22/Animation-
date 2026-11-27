@@ -10,3 +10,9 @@ There are strange vertical lines in the belly area.
 
 Fix your notes.
 
+### 2026-11-27T22:09:00
+The shoulder is fine but what is the grey box at the neck? It isn't on the front pose but it is with all the others.
+
+### 2026-11-27T22:11:42
+1. Y
+

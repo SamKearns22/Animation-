@@ -117,7 +117,9 @@ def balaclava_front(img, p, f, L, kh, sp):
     right += [(W + 0.02, 0.24), (ear, 0.38), (ear - 0.005, 0.52), (_face_u(L, 0.66) + 0.035, 0.66),
               (_face_u(L, 0.8) + 0.03, 0.8), (_face_u(L, 0.9) + 0.03, 0.9)]
     nk = kh.get('bala_neck', 0.24) * sp.get('neck_w', 1.0)                                    # down into the neck (the torso's neck: neck_c)
-    right += [(max(nk, 0.3), 1.0), (nk, 1.1), (nk + 0.01, 1.3)]
+    nv = 1.12 if sp.get('collar') == 'band' else 1.3                  # a band collar shows round the neck (note 4)
+    right += ([(max(nk, 0.3), 1.0), (nk, 1.06), (nk, nv - 0.02), (nk, nv), (nk * 0.5, nv)] if nv < 1.3 else
+              [(max(nk, 0.3), 1.0), (nk, 1.1), (nk + 0.01, 1.3)])   # band: a square foot, no flare at the corners
     outer = curve(f.pts([(0.0, top)] + right + [(-u, v) for u, v in right[::-1]]), 4)
     slot = curve(f.pts(_slot_uv(L, kh)), 3)
     lv = _talk_level(sp)

@@ -26,7 +26,8 @@ import people_parts as PP                     # noqa: E402
 LINES = dict(hair='bald', outfit=('jumper', P3.JACKET), height=1.78, dome=-0.33, dome_wide=0.42, head=False,
              balaclava=True, eye_scale=1.2, liner=3.0)
 BODY = dict(sleeve=P3.SLEEVE, trousers=P3.COMBAT, shoe=(22, 20, 22), shoulders=168, bottom=500, patches=True,
-            belly=True, cargo=True, neck_c=F.BALA, neck_w=1.2, figure='stout', name='Patriot')
+            belly=True, cargo=True, neck_c=F.BALA, neck_w=1.2, figure='stout', name='Patriot',
+            collar='band')   # the stand collar a band in the jacket's black, every view (note 4)
 MOODS = {   # the house moods (the old sheet's rest, talking, cross, scared), in the house face's own keys
     'rest': dict(),
     'talking': dict(mouth='v:AI'),

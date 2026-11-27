@@ -1,3 +1,3 @@
-patriots5 (The Patriot 5): plan done (estimate 15.4% of a week); Sam's answers in; tower practice running (chat 2).
-Done: plan chat 1: checklist, shots, acting list, Danny's photos and face, clothes from small-boat news photos, Hook Text rule.
-Next: chat 3 (Opus high): the cast sheet.
+patriots5 (The Patriot 5): plan done (estimate 15.4%, 6.65% spent); tower practice clip sent, two notes fixed; boat practice running.
+Done: plan chat 1 (checklist, shots, faces, clothes, Hook Text rule); chat 2: 8-man shoulder tower clip, clipping and neck checks. Patriot redesign chat 2: collar note fixed, sheet v3 sent.
+Next: tower notes chat (Opus medium): Sam's "hand thrusting" note, short clip; boat chat learning the walking boat; cast chat (Opus high).
