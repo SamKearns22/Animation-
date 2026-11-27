@@ -393,7 +393,13 @@ def patriot_jacket(p, view, sp):
         # the balaclava's neck in his collar, then the stand collar (lighter) and the zip
         nk = 40 if view == 'front' else 34
         p.poly([(o * 0.3 - nk, -92), (o * 0.3 + nk, -92), (o * 0.3 + nk + 4, 6), (o * 0.3 - nk - 4, 6)], BALA, INK, 2.4)
-        if view == 'side':
+        edge_x = lambda yy: max(x for x, y_ in edge if abs(y_ - yy) < 40) - 8 if view == 'side' and sp.get('figure') == 'stout' else o
+        if sp.get('collar') == 'band':                 # Patriots 5 on (Sam, 27 Nov): the band in the jacket's black
+            import collars
+            collars.stand_band(p, view, o * 0.3, nk, JACKET,
+                               opening=(edge_x(30) if view == 'side' and sp.get('figure') == 'stout' else
+                                        None if view in ('front', 'side') else o))
+        elif view == 'side':
             p.poly([(-30, -26), (o - 2, -24), (o + 4, 30), (-34, 26)], B.lt(JACKET, 1.35), INK, 2.4)
         else:
             w = 64 if view == 'front' else 56
@@ -408,7 +414,11 @@ def patriot_jacket(p, view, sp):
     else:                                               # from behind: the collar and the back seam
         o = -0.22 * sw if view == 'three_back' else 0.0
         p.poly([(-44, -92), (44, -92), (48, 6), (-48, 6)], BALA, INK, 2.4)
-        p.poly([(-70, -20), (70, -20), (78, 26), (-78, 26)], B.lt(JACKET, 1.35), INK, 2.4)
+        if sp.get('collar') == 'band':
+            import collars
+            collars.stand_band(p, view, 0.0, 44, JACKET)
+        else:
+            p.poly([(-70, -20), (70, -20), (78, 26), (-78, 26)], B.lt(JACKET, 1.35), INK, 2.4)
         p.line([(o, 30), (o, bottom - 26)], jd, 2.0)
     l, r = _box(view, sp, bottom - 13)
     if sp.get('figure') == 'stout':                    # Patriots 5: the hem as wide as the stout body's own outline
