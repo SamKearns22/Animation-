@@ -577,22 +577,6 @@
 - 933: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
 - 949: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
 
-## checkaudit.py (222 lines)
-- 27: HERE (data)
-- 28: ROOT (data)
-- 29: REPEAT_RUNS (data)
-- 32: `_doc` 
-- 37: `_parse` 
-- 44: `film_modules` A film's own code: a module with a top-level SHOTS (or a name starting with a film's).
-- 59: CHECK_NAME (data)
-- 60: KIND_BY_MODULE (data)
-- 66: `inventory` 
-- 106: `_norm` 
-- 110: `evidence` {check: {'runs', 'faults', 'distinct', 'repeats', 'films'}} from every film's checks.jsonl.
-- 141: `should_have_caught` Counter of the 'should have caught' column across the films' notes (current and archived).
-- 165: `critique_saw` Counter of the 'critique saw it?' column (Sam's Y, 26 Nov): yes / no / no critique, across the films' notes.
-- 191: `main` 
-
 ## checkreplay.py (315 lines)
 - 27: ROOT (data)
 - 28: OUT (data)
@@ -1141,7 +1125,7 @@
 - 167: `bust` One person in a medium shot, drawn the way films draw them, at this focus; the head-and-shoulders box,
 - 180: `sheet` Each person at focus left, 0, right, at about the size a medium shot shows on a phone (the sheet is a
 
-## freeze.py (470 lines)
+## freeze.py (471 lines)
 - 52: HERE (data)
 - 53: ROOT (data)
 - 54: REG (data)
@@ -1168,13 +1152,13 @@
 - 266: `cmd_check` 
 - 300: MEASURE_SWAPS (data)
 - 319: `static_loads` Kit files that load a finished film's file directly (imports and named strings), and the old films the people
-- 363: `measure` 
-- 374: `count_faults` For the handover check: a rise in any count is a fault; a fall is welcome (use --lower to keep it).
-- 391: `bookmark_faults` Every film in the registry has its bookmark, on the save the registry names; a finished video in animations/
-- 413: SHELVED (data)
-- 416: `drift_baseline` How far live code is from a posted film (a share of pixels). The first reading becomes the line it may not cro
-- 426: `cmd_count` 
-- 445: `main` 
+- 364: `measure` 
+- 375: `count_faults` For the handover check: a rise in any count is a fault; a fall is welcome (use --lower to keep it).
+- 392: `bookmark_faults` Every film in the registry has its bookmark, on the save the registry names; a finished video in animations/
+- 414: SHELVED (data)
+- 417: `drift_baseline` How far live code is from a posted film (a share of pixels). The first reading becomes the line it may not cro
+- 427: `cmd_count` 
+- 446: `main` 
 
 ## grips.py (251 lines)
 - 40: HERE (data)
@@ -1373,7 +1357,7 @@
 - 719: `run` Every Nth frame of the film (or of span), on all processor cores; returns the summary rows.
 - 740: `main` 
 
-## handover.py (1351 lines)
+## handover.py (1370 lines)
 - 49: ROOT (data)
 - 50: LOGDIR (data)
 - 51: NOT_SAM (data)
@@ -1455,8 +1439,9 @@
 - 1207: `appcost_faults` Cost-spike fix 7: the app's own cost figure for this chat is on record (ledger.py appcost).
 - 1213: FIXING (data)
 - 1216: `fixpack_faults` Cost-spike fix 4 (Sam's Y, 27 Nov): a handover whose Next is a fixing chat names the one-page fix pack
-- 1233: `touch_faults` Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read ever
-- 1241: `main` 
+- 1233: `nocheck_faults` Fix pack step 4 (Sam's Y, 27 Nov: "find why nobody saw it, and fix or add the test", on every note): a row of
+- 1252: `touch_faults` Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read ever
+- 1260: `main` 
 
 ## hands3d.py (563 lines)
 - 55: INK (data)
@@ -2410,38 +2395,6 @@
 - 38: `_helper_dir` 
 - 43: `pack` 
 - 78: `score` 
-
-## page.py (467 lines)
-- 46: HERE (data)
-- 47: ROOT (data)
-- 50: `names` (code name, story name): code files are protest_tiers*.py, story files protest-tiers-*.txt; either works.
-- 55: `own_files` The film's own files (source/FILM*.py): what the page opens with and what a tie goes to.
-- 61: `_film_mods` Every film's own modules (source/NAME*.py for each notes/NAME.md, as finderwarn.film_re): another film's code 
-- 74: `_imports` The source/ modules one file imports, at the top or inside a def (the kit imports lazily: `import people`).
-- 89: `files` R12 (Sam, 26 Nov: "It should cover everything in the project that we use!!"): the film's own files, then every
-- 103: `tokens` 
-- 107: `build` 
-- 143: `_codemap` codemap.py's lines, made here (one process for ~110 files): every top-level def and class with its line and
-- 157: `_group` Rows (line, text) as '### head' once, then '- line: rest' under it: the shared start of neighbouring lines is
-- 169: `_bare` A person's line without its numbers (sizes, colours, seeds): the words a note would name stay.
-- 174: `_words` 
-- 178: STOP (data)
-- 184: `page_path` 
-- 188: `shared_path` R12: the shared code's map, kept apart so a round that reads the page pays only for the film's own code.
-- 193: `stale` True when the page is missing or older than any film file or story list it is made from.
-- 202: `find` 
-- 221: _CACHE (data)
-- 224: `_parsed` (lines, defs, blocks, line words) for a file, kept until it changes. blocks: the module-level statements outsi
-- 244: `_defs` {start line: (end line, name)} for the file's top-level defs and classes (and methods inside classes); with
-- 252: SIZE (data)
-- 256: `_deep` Change 2: every def and table, scored by its best single line (the note's words met on one line: a comment
-- 276: `_line_score` The best single line's count of the note's words (change 2), and its line number.
-- 282: `shots` [(name, start, end)] from the film's SHOTS list, cached in story/FILM-shots.json until a code file is newer.
-- 310: `_shot_of` The code's shot names the notes table's shot text means: ([names], message or '').
-- 328: `_at` The notes table's time column ('49.45-53.6', '36.8', 'all', '-') -> one second or None.
-- 334: `_log` 
-- 346: `show` A note's words -> the code to read: [(header, [(line number, text)])], at most ~budget code lines in all.
-- 433: `main` 
 
 ## peepee.py (813 lines)
 - 67: HERE (data)
@@ -3824,7 +3777,7 @@
 - 676: `report` 
 - 685: `at_start` A film's start (kitfilm.at_start / begin): the report beside the kit tests, saved for handover start.
 
-## touch.py (721 lines)
+## touch.py (723 lines)
 - 40: HERE (data)
 - 41: ROOT (data)
 - 42: CACHE (data)
@@ -3839,24 +3792,24 @@
 - 140: `_imports` `import x as y` -> {y: x}; `from x import a as b` -> {b: (x, a)}; only modules in the index.
 - 160: `parse_file` One file -> its defs, its uses and its name-only maybes (plain data, kept in the cache).
 - 233: `film_modules` A film's own code: a module with a top-level SHOTS (or its stem's sibling), as checkaudit counts it.
-- 243: `build` Every file parsed (or taken from the cache when unchanged) and joined into one index; written to the cache.
-- 336: `load` The index, rebuilt first for any file changed since (only those are parsed again).
-- 347: `_changed` 
-- 355: `stale_faults` For handover.py end: the index is missing or older than the code, or a file cannot be parsed.
-- 375: `lookup` NAME -> (exact defs, near defs). Exact: the whole id, its tail (`head_faults`, `Class.m`) or `mod.name`.
-- 388: HUBS (data)
-- 391: `reach` Every def whose calls lead to target, nearest first: {caller: (depth, via)}. A command's main() (a dispatcher:
-- 411: `tests_for` The kit tests whose calls reach any of targets (a target that is a kit test is its own).
-- 424: `_secs` 
-- 432: `rerun_line` One line: how many kit tests, about how long, and the command (long lists by --touching / --changed).
-- 446: `_where` 
-- 451: `report` The ~20-line answer for one NAME.
-- 516: `module_report` A whole file: its size, which files use it (film and shared apart), its most-used defs, the kit tests reaching
-- 544: `changed_defs` The defs whose lines a diff touched (working tree against `since`), from the diff's own line numbers.
-- 572: `rerun` 
-- 585: `test` The fault it catches, saved as an example: a hand trace of `people.head_faults` (the crowd-head check, Sam
-- 662: `hook` PostToolUse on Edit/Write: after an edit to code, the one RERUN line for everything changed since HEAD, said
-- 684: `main` 
+- 245: `build` Every file parsed (or taken from the cache when unchanged) and joined into one index; written to the cache.
+- 338: `load` The index, rebuilt first for any file changed since (only those are parsed again).
+- 349: `_changed` 
+- 357: `stale_faults` For handover.py end: the index is missing or older than the code, or a file cannot be parsed.
+- 377: `lookup` NAME -> (exact defs, near defs). Exact: the whole id, its tail (`head_faults`, `Class.m`) or `mod.name`.
+- 390: HUBS (data)
+- 393: `reach` Every def whose calls lead to target, nearest first: {caller: (depth, via)}. A command's main() (a dispatcher:
+- 413: `tests_for` The kit tests whose calls reach any of targets (a target that is a kit test is its own).
+- 426: `_secs` 
+- 434: `rerun_line` One line: how many kit tests, about how long, and the command (long lists by --touching / --changed).
+- 448: `_where` 
+- 453: `report` The ~20-line answer for one NAME.
+- 518: `module_report` A whole file: its size, which files use it (film and shared apart), its most-used defs, the kit tests reaching
+- 546: `changed_defs` The defs whose lines a diff touched (working tree against `since`), from the diff's own line numbers.
+- 574: `rerun` 
+- 587: `test` The fault it catches, saved as an example: a hand trace of `people.head_faults` (the crowd-head check, Sam
+- 664: `hook` PostToolUse on Edit/Write: after an edit to code, the one RERUN line for everything changed since HEAD, said
+- 686: `main` 
 
 ## turnhead.py (739 lines)
 - 35: H (data)
@@ -4141,7 +4094,7 @@
 - 289: `release` A render held for its picture checks (film_engine) goes under its own name once every line saved beside it
 - 308: `main` 
 
-## watcher.py (486 lines)
+## watcher.py (494 lines)
 - 38: ROOT (data)
 - 41: LOGS (data)
 - 42: BROKEN (data)
@@ -4149,23 +4102,23 @@
 - 44: KITLOG (data)
 - 45: STATE (data)
 - 47: PROMISES (data)
-- 111: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
-- 137: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
-- 151: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
-- 168: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
-- 174: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
-- 203: OFF (data)
-- 207: SWITCHES (data)
-- 210: `_read` 
-- 219: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
-- 238: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
-- 265: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
-- 318: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
-- 324: `check` 
-- 339: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
-- 358: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
-- 368: `standing` The open faults on the standing list (main line).
-- 373: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
-- 384: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
-- 431: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
-- 445: `main` 
+- 119: `systems` Every system that exists now, found by reading (so a new one is seen without anyone listing it).
+- 145: `unlisted` Systems with no promise, and promises whose proof names a kittest that does not exist.
+- 159: `kit_faults` The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
+- 176: `wiring_faults` check audit C5 (Sam's Y, 26 Nov): one check that every switched-on step is wired, points at a real file, and
+- 182: `hook_faults` Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
+- 211: OFF (data)
+- 215: SWITCHES (data)
+- 218: `_read` 
+- 227: `built_tools` Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
+- 246: `unwired` Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
+- 273: `ran_faults` A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
+- 326: `_rule_faults` Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none.
+- 332: `check` 
+- 347: `_put_broken` Add faults to / remove one from notes/logs/broken.md on the main line (in the background).
+- 366: `_main_text` A file as it stands on the main line (fetched by setup.sh at chat start; falls back to this copy).
+- 376: `standing` The open faults on the standing list (main line).
+- 381: `owned` Fault ids already on the list or named in the last 7 days: a later chat is not stopped for them again
+- 392: `stop` Stop hook. Quiet when all holds (but once a day asks for the alive line).
+- 439: `start_lines` For handover.py start: the standing list, systems with no promise, the last kit-test FAILs.
+- 453: `main` 

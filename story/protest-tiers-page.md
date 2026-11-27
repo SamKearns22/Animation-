@@ -576,4 +576,4 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 66: granny (Albanian granny (Glimpse: side-on, the overarm throw)): body: , shoulders , head x ; skin: olive hair: bun, ; face: jaw_wide , chin_long ; eyes: brows: , width ; outfit: dress, dress , sleeves , shirt , no tie, shoes
 - 73: seller (Molotov seller (Glimpse: front, behind his cart)): body: , shoulders , head x ; skin: olive hair: short, ; face: jaw_wide , face_wide ; eyes: brows: , width ; outfit: jumper , shirt , no tie, trousers , shoes
 
-(The shared code this film uses, 117 files, is mapped in story/protest-tiers-page-shared.md: show and find search it too; do not read it whole.)
+(The shared code this film uses, 115 files, is mapped in story/protest-tiers-page-shared.md: show and find search it too; do not read it whole.)
