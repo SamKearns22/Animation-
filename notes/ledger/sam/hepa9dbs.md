@@ -21,3 +21,6 @@ Can you set up another job alongside this please?
 ### 2026-11-27T22:04:37
 I meant another job for this film.
 
+### 2026-11-27T22:05:41
+I don't like the hand thrusting the lower characters are doing.
+
