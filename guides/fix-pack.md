@@ -32,10 +32,11 @@ need to learn to draw it, before asking Sam.
    note, then fix that check or add one (with its kit test) so it catches this note on its own. Every note, not only
    a repeat: the replay test (27 Nov) fixed five pictures as well as the originals but left no check, so the same
    fault could come back. Say it in the close line ("Check: X now catches it").
-5. **Edit** (1-3 steps). After an edit to code the chat is told one line: `After this edit: ... RERUN (N kit tests,
+5. **Edit** (1-3 steps). A RERUN line over about a minute runs in the background: start the next note and read the
+   result once when it ends (savings 3; no step spent waiting or checking on it). Only failures print (savings 4). After an edit to code the chat is told one line: `After this edit: ... RERUN (N kit tests,
    about T): python3 source/kittests.py --names ...` (or `--changed`). Run that line, not the whole suite.
-6. **Look** (1-2 steps): a short clip of just those seconds (`final OUT --small --span T0 T1`) or one cropped sheet of
-   the changed frames; as a viewer at phone size first, then every point where two things meet at full size.
+6. **Look** (1-2 steps): Sam's own frame from the last render with the new one beside it, in one step: the LOOK
+   line `page.py show --at` prints (`still.py FILM T --box ... --after`); or a short clip (`final OUT --small --span T0 T1`); as a viewer at phone size first, then every point where two things meet at full size.
 7. **Close it**: one line in the notes table ("8: fixed - the whale now knocks the helideck away. Check: X now catches it. Clip sent."), plus
    "Lost:" / "Added:" lines for anything taken away or added.
 

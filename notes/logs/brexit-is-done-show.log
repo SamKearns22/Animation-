@@ -20,3 +20,13 @@
 2026-11-26T22:45:43	2	12.0	brexit_is_done.py:391	Move Kemi a bit closer to the action so that everything isn't so distant	JB5FmWzH
 2026-11-26T23:17:19	-	-	acting.py:122	It's not a nod, it's a head-bob.	skafaBnP	acting.py,moves.py,people_parts.py,views.py,movesize.py
 2026-11-27T07:10:19	2	14.3	brexit_is_done.py:391	Kemi's point twists her arm	y9mHfxsp	brexit_is_done.py,arm3d_film.py,sitting.py,views.py,brexit_is_done_action.py
+2026-11-27T12:41:19	2	-	facehouse.py:1859	the lines around her mouth and eyes make her look less like the real life Kemi	tpyQsMqf	facehouse.py,brexit_is_done.py,ed.py,peepee.py,people_walliams.py
+2026-11-27T12:41:25	2	-	facepick.py:685	too many wrinkles on her face, she looks older	tpyQsMqf	facepick.py,brexit_is_done.py,acting.py,facehouse.py,filmkit.py,leanout.py,likeness.py,people.py
+2026-11-27T12:41:28	2	-	brexit_is_done.py:397	crow's feet and smile folds look wrong on Kemi	tpyQsMqf	brexit_is_done.py,people_walliams.py,facehouse.py,agelines.py
+2026-11-27T12:41:48	-	-	page.py:176	too many wrinkles on her face, she looks older	tpyQsMqf	page.py,agelines.py,people.py,brexit_is_done.py,facepick.py,places_outside.py
+2026-11-27T12:41:51	-	-	sitting.py:396	his hands hover rather than resting on the chair arms	tpyQsMqf	sitting.py,brexit_is_done.py,kitchecks.py,lying.py,cover.py,grips.py
+2026-11-27T12:41:54	-	-	page.py:176	a head dip that is very sharp	tpyQsMqf	page.py,acting.py,brexit_is_done.py,moves.py,viewchecks.py,freeze.py,lying.py,camfeel.py,facehouse.py
+2026-11-27T12:41:57	-	-	brexit_is_done_action.py:936	the wolves and guests are clipping over each other	tpyQsMqf	brexit_is_done_action.py,audit.py,humancheck.py,brexit_is_done.py,page.py
+2026-11-27T12:42:08	-	-	agelines.py:238	too many wrinkles on her face, she looks older	tpyQsMqf	agelines.py,people.py,brexit_is_done.py,facepick.py,places_outside.py
+2026-11-27T12:42:11	-	-	acting.py:242	a head dip that is very sharp	tpyQsMqf	acting.py,brexit_is_done.py,moves.py,viewchecks.py,freeze.py,lying.py,camfeel.py,facehouse.py
+2026-11-27T12:44:34	-	30.0	sitting.py:396	hands hover on the chair arms	tpyQsMqf	sitting.py,brexit_is_done.py,kitchecks.py,grips.py,lying.py,figure.py

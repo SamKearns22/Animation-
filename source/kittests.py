@@ -553,7 +553,7 @@ def main():
                 targets = touch.changed_defs(idx, since)
             names = (names or set()) | {t.split('.', 1)[1] for t in touch.tests_for(idx, targets)}
             print(f'kittests: {len(names)} kit tests touch {", ".join(targets[:4]) or "nothing"}', flush=True)
-    args = [a for a in args if a != '--stale']
+    args = [a for a in args if a not in ('--stale', '--verbose')]
     only = args[0] if args else ''
     os.environ['KITTESTS_RUNNING'] = '1'           # finish.py's kit gate stands aside for tests that call finish
     pick = [fn for fn in TESTS if (not only or only in fn.__name__) and (names is None or fn.__name__ in names)]
@@ -569,6 +569,8 @@ def main():
         pick = [fn for fn in pick if fn.__name__ in st]
         print(f'kittests: {len(pick)} stale to run, {fresh} fresh (their files unchanged since a green run); '
               f'about {kitstamps.say_minutes(kitstamps.estimate(st, secs))}', flush=True)
+    verbose = '--verbose' in sys.argv or os.environ.get('KITTESTS_VERBOSE') == '1'
+    passed = []
     tr = kitstamps.tracer()
     bad = 0
     t_all = time.time()
@@ -584,14 +586,19 @@ def main():
         finally:
             reads = tr.stop()
         bad += not ok
-        print(f"{'PASS' if ok else 'FAIL'} {fn.__name__}: {detail}")
-        print(f"     ({(fn.__doc__ or '').strip().splitlines()[0]})", flush=True)
+        if ok and not verbose:                      # savings 4 (Sam's go, 27 Nov): a pass costs no lines in the chat;
+            passed.append(fn.__name__)              # every later step re-reads what is printed. --verbose: as before
+        else:
+            print(f"{'PASS' if ok else 'FAIL'} {fn.__name__}: {detail}")
+            print(f"     ({(fn.__doc__ or '').strip().splitlines()[0]})", flush=True)
         if ok and reads is not None:
             kitstamps.write_green([(fn.__name__, reads, time.time() - t0)])
         elif ok:
             print(f'     (no stamp: a file it read changed while it ran, or this Python cannot trace)')
     took = kitstamps.say_minutes(time.time() - t_all)
     tail = f' ({len(pick)} run in {took}, {fresh} fresh)' if only_stale else f' ({len(pick)} run in {took})'
+    if passed:
+        print(f'kittests: {len(passed)} passed' + (f' ({", ".join(passed)})' if len(passed) <= 8 else ''))
     print('kittests:', ('all passed' if not bad else f'{bad} failed') + tail)
     sys.exit(1 if bad else 0)
 

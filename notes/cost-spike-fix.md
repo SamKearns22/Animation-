@@ -109,3 +109,20 @@ the parent chat, 27 Nov).
   its check `handover.nocheck_faults` (a fixed note's row must name its check: "Check:", "prevention" or a kittest,
   or "No check: why"), run by `handover.py end`; kit test `fix_names_its_check` (example: the replay's own close
   line). No live film notes flagged.
+
+## Savings 1-4 (Sam's go, 27 Nov), built after the replay
+- 1. `source/still.py FILM T [--box] [--after]`: the look cut from the last clean render (the animatic runs on another
+  clock: 33.9 s against 35.5 s, its first cut landed 1.9 s off), the code's new frame beside it; `page.py show --at`
+  prints the LOOK line. Kit test `still_from_last_render`.
+- 2. `page.SAME`: Sam's everyday words -> the code's ("wrinkles" now finds agelines.draw second; it found nothing).
+  Kit test `finder_knows_sams_words`. The list grows from notes the finder misses.
+- 3. Fix pack step 5: long test runs in the background, the next note started meanwhile.
+- 4. `kittests.py`: a pass prints nothing (a count, names if 8 or fewer), failures as before (handover reads them);
+  `--verbose` for the old form.
+- Not yet measured: the next real notes round is the test (`notesteps.py report`). Cost watch went amber at 160 steps
+  (2.3% of the week) in this chat; handed over at the end of this build, nothing left mid-way.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.34% of a week (2026-11-27)
+- Handover check answered: finder reach: handover.py, page.py, still.py (tool job: the finder was run on Brexit to
+  test the word list, never to find these tools' own code). COST: get_session gives this chat no cost figure (only
+  "weekly limit: warning"); the cost watch said about 2.3% of the week at 160 steps. Nothing recorded by guess.
