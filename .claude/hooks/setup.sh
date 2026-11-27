@@ -32,6 +32,9 @@ command -v ldconfig >/dev/null && (ldconfig -p | grep -q libEGL.so.1 || timeout 
  # startup-fixes 2 (Sam's Y, 16 Nov): only the branches holding work the main line lacks (was: chats read all ~254)
  timeout 90 python3 source/branches.py start 2>/dev/null || echo "BRANCHES: the scan did not finish; run: python3 source/branches.py scan")
 (cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."; python3 -c "import sys; sys.path.insert(0, 'source'); import likeness as K; [K._model(n) for n in K.URLS]" >/dev/null 2>&1) &
+# cost-spike fix 1 (Sam's Y, 27 Nov): the exact who-uses-this index (source/touch.py), ~8 s, in the background so a chat
+# never waits; a query rebuilds only changed files, and handover.py end flags an index older than the code
+(cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."; timeout 120 python3 source/touch.py build >/dev/null 2>&1) &
 # rule 90 (Sam, 25 Nov, kit-tests-per-film): no kit run at machine start any more (was: the stale kit tests here, in
 # every chat); a film's first chat starts it (handover.py start -> kitfilm.at_start); the film's final runs the rest
 exit 0

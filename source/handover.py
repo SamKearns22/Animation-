@@ -1172,6 +1172,15 @@ def learn_first_lines(film=None, text=None):
                         + (f"; grey practice clip: {clip}" if clip else ''))
     return [LEARN_FIRST] + need if need else []
 
+
+def touch_faults():
+    """Cost-spike fix 1 and 5 (Sam's Y, 27 Nov): the who-uses-this index (source/touch.py) is fresh and can read every
+    file, and every big code file opens with a MAP that matches it (source/maps.py)."""
+    import maps
+    import touch
+    return touch.stale_faults() + maps.faults()
+
+
 def main(argv):
     if not argv or argv[0] in ('-h', '--help'):
         print(__doc__)
@@ -1202,7 +1211,7 @@ def main(argv):
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
                   ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
                   ('rule', rule_faults), ('shared', shared_faults), ('reach', reach_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
-                  ('castsheet', lambda: castsheet_faults(film))]
+                  ('castsheet', lambda: castsheet_faults(film)), ('touch', touch_faults)]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
         return report(faults, f'(end of chat, {film})')
