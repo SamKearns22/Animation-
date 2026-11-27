@@ -19134,6 +19134,775 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "c93e33d5",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.06,
+   "src": "estimate",
+   "sid": "session_01J1JB7Zr2Be4ywUt9BAa9pC",
+   "steps": 105,
+   "hist_k": 262,
+   "kinds": {
+    "tool search": 22.6,
+    "page.py": 1.4,
+    "renders": 3.5,
+    "other": 72.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 67,
+    "whole-file .py read": 0,
+    "page.py": 4,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 0,
+    "other": 35
+   },
+   "split": {
+    "usd": 7.5392,
+    "total": 7.5392,
+    "floor_k": 85,
+    "blocks": {
+     "Claude's words": 33.9,
+     "start-up floor": 24.0,
+     "carried history": 23.3,
+     "new writes": 18.8
+    },
+    "origins": {
+     "Claude's words": 53.4,
+     "start-up floor": 24.0,
+     "result: tool search": 11.8,
+     "Claude's edits": 4.5,
+     "messages and reminders": 2.4,
+     "result: other": 2.3,
+     "result: page.py": 1.3,
+     "result: renders": 0.4
+    },
+    "named": {
+     "writing code": 30.8,
+     "start-up reading (rules, tools, first files)": 24.0,
+     "thinking": 17.8,
+     "start-up and handover tools": 5.7,
+     "commands": 5.4,
+     "reading kit code": 4.6,
+     "running checks and tools": 2.8,
+     "messages and reminders": 2.4,
+     "messages to Sam": 2.2,
+     "writing notes": 1.6,
+     "other commands": 0.9,
+     "reading chat records": 0.6,
+     "reading guides": 0.5,
+     "reading notes": 0.4,
+     "git and saving": 0.1,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 14,
+    "work_pct": 0.33,
+    "reads": [
+     [
+      ".claude/hooks/finderwarn.py",
+      1.5,
+      0.0382
+     ],
+     [
+      ".claude/hooks/modelguard.py",
+      1.4,
+      0.0337
+     ],
+     [
+      "source/kittests.py",
+      1.2,
+      0.0321
+     ],
+     [
+      ".claude/settings.json",
+      1.2,
+      0.0316
+     ],
+     [
+      "source/ledger.py",
+      1.0,
+      0.0246
+     ],
+     [
+      "source/stepcost.py",
+      0.9,
+      0.0218
+     ],
+     [
+      "source/codemap.py",
+      0.7,
+      0.0168
+     ],
+     [
+      "source/page.py",
+      0.7,
+      0.0168
+     ],
+     [
+      ".claude/hooks/setup.sh",
+      0.6,
+      0.0161
+     ],
+     [
+      "source/kitstamps.py",
+      0.6,
+      0.0145
+     ],
+     [
+      "source/checkaudit.py",
+      0.4,
+      0.0103
+     ]
+    ],
+    "base_pct": 21.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 12,
+     "shared:finderwarn.py": 2,
+     "shared:stepcost.py": 1,
+     "shared:checkaudit.py": 3,
+     "shared:modelguard.py": 2,
+     "shared:ledger.py": 4,
+     "shared:kitstamps.py": 4,
+     "shared:kittests.py": 7,
+     "shared:touch.py": 5,
+     "shared:faces.py": 2,
+     "shared:facehouse.py": 2,
+     "shared:watcher.py": 1,
+     "shared:handover.py": 6,
+     "shared:preflight.py": 1,
+     "shared:maps.py": 6,
+     "shared:bayeux.py": 1,
+     "guides": 2,
+     "shared:triggerguard.py": 2,
+     "film notes": 2,
+     "shared:costwatch.py": 2
+    },
+    "ticked": 8,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git branch --show-current && git remote -v | head -2 && ",
+      "",
+      592
+     ],
+     [
+      2,
+      "other",
+      "other",
+      ".claude/hooks .claude/settings.json",
+      "git branch -a | head; ls; ls source | wc -l; ls .claude .claude/hooks; cat .clau",
+      "",
+      2349
+     ],
+     [
+      3,
+      "other",
+      "other",
+      ".claude/settings.json .claude/hooks/setup.sh .claude/hooks/*.py",
+      "sed -n 60,200p .claude/settings.json; cat .claude/hooks/setup.sh | head -80; wc ",
+      "",
+      4925
+     ],
+     [
+      6,
+      "other",
+      "shared:finderwarn.py",
+      "source/*.py .claude/hooks/finderwarn.py",
+      "^@test\\|^@kit",
+      "",
+      2299
+     ],
+     [
+      7,
+      "other",
+      "shared:finderwarn.py",
+      ".claude/hooks/finderwarn.py",
+      "step|cost|note",
+      "",
+      3679
+     ],
+     [
+      8,
+      "other",
+      "shared:stepcost.py",
+      "source/*.py source/stepcost.py",
+      "^def \\(film\\|films\\|is_film\\|film_files\\|film_names\\)",
+      "",
+      3455
+     ],
+     [
+      9,
+      "other",
+      "shared:checkaudit.py",
+      "source/checkaudit.py",
+      "sed -n 35,75p source/checkaudit.py",
+      "",
+      1645
+     ],
+     [
+      10,
+      "other",
+      "shared:modelguard.py",
+      ".claude/hooks/modelguard.py source/ledger.py source/*.py",
+      "app\\b\\|app's\\|app_cost\\|real bill\\|bill",
+      "",
+      5416
+     ],
+     [
+      12,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/*.py .claude/hooks/*.py",
+      "app-costs\\|cost_usd",
+      "",
+      4007
+     ],
+     [
+      13,
+      "other",
+      "shared:kitstamps.py",
+      "source/kitstamps.py",
+      "^def \\|^[A-Z_]* = ",
+      "",
+      2385
+     ],
+     [
+      16,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/*.py source/people.py",
+      "^@test",
+      "",
+      1118
+     ],
+     [
+      17,
+      "other",
+      "shared:touch.py",
+      "source/touch.py",
+      "visit_Constant",
+      "",
+      1020
+     ],
+     [
+      21,
+      "other",
+      "shared:faces.py",
+      "source/faces.py source/people.py source/views.py .claude/hooks",
+      "^def .*face\\|^def .*mouth",
+      "",
+      541
+     ],
+     [
+      23,
+      "other",
+      "shared:faces.py",
+      "source/faces.py",
+      "^source/faces.py:320",
+      "",
+      566
+     ],
+     [
+      24,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "import faces\\|FA =\\|FA=",
+      "",
+      226
+     ],
+     [
+      25,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "\\bFA\\b",
+      "",
+      1231
+     ],
+     [
+      29,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/touch.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() old=\"\"\" args = [a for ",
+      "",
+      760
+     ],
+     [
+      31,
+      "other",
+      "shared:touch.py",
+      "source/touch.py source/hookran.py",
+      "python3 - <<'EOF' p='source/touch.py' s=open(p).read() old=\"\"\"def main(argv):\"\"\"",
+      "",
+      1219
+     ],
+     [
+      32,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "def systems",
+      "",
+      1163
+     ],
+     [
+      33,
+      "other",
+      "shared:touch.py",
+      "source/touch.py notes/logs source/stepcost.py",
+      "SHOW = ",
+      "",
+      579
+     ],
+     [
+      37,
+      "other",
+      "shared:touch.py",
+      "source/touch.py source/handover.py",
+      "_faults(",
+      "",
+      217
+     ],
+     [
+      38,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 1175,1282p source/handover.py",
+      "",
+      6923
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/c93e33d5-669b-5fe3-8bb9-c10b758d7a45/scra",
+      "",
+      82
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "source/*.py .claude/hooks/*.py",
+      "__doc__",
+      "",
+      860
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "source/*.py",
+      "get_docstring\\|'MAP'\\|\\",
+      "",
+      55
+     ],
+     [
+      50,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/checkaudit.py",
+      "sed -n 320,345p source/preflight.py; sed -n 25,34p source/checkaudit.py",
+      "",
+      1953
+     ],
+     [
+      51,
+      "other",
+      "shared:maps.py",
+      "source/maps.py /source/c.py /source/e.py /source/g.py",
+      "python3 - <<'EOF' p='source/maps.py' s=open(p).read() a=s.index(\"def add(rel, ro",
+      "",
+      829
+     ],
+     [
+      52,
+      "other",
+      "shared:maps.py",
+      "source/maps.py",
+      "^PASS\\|^FAIL",
+      "",
+      333
+     ],
+     [
+      53,
+      "other",
+      "shared:bayeux.py",
+      "source/bayeux.py source/*.py",
+      "\\.py$",
+      "",
+      1133
+     ],
+     [
+      54,
+      "other",
+      "shared:maps.py",
+      "source/maps.py source/kittests.py source/*.py .claude/hooks/*.py source/bayeux.p",
+      "\\.py$",
+      "",
+      3993
+     ],
+     [
+      56,
+      "other",
+      "shared:maps.py",
+      "source/maps.py",
+      "\\.py$",
+      "",
+      41
+     ],
+     [
+      57,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/touch.py source/handover.py source/maps.py",
+      " chain.\"\"\"\n    import touch\n    return touch.test()\n\n\n@test\ndef notes_step_count",
+      "",
+      572
+     ],
+     [
+      58,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/maps.py",
+      "python3 - <<'EOF' import re p='source/handover.py' s=open(p).read() i=s.index('M",
+      "",
+      1600
+     ],
+     [
+      59,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^PASS\\|^FAIL",
+      "",
+      2
+     ],
+     [
+      60,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "^#",
+      "",
+      623
+     ],
+     [
+      61,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "sed -n 1,60p guides/job-packs.md",
+      "",
+      5656
+     ],
+     [
+      65,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "Read",
+      "",
+      244
+     ],
+     [
+      66,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "Where things stand\\|Rules that bite\\|Next",
+      "",
+      3697
+     ],
+     [
+      67,
+      "other",
+      "shared:modelguard.py",
+      ".claude/hooks/modelguard.py source/handover.py",
+      "^def served_model",
+      "",
+      1717
+     ],
+     [
+      68,
+      "other",
+      "shared:triggerguard.py",
+      ".claude/hooks/triggerguard.py source/kittests.py",
+      "triggerguard",
+      "",
+      2329
+     ],
+     [
+      69,
+      "other",
+      "shared:triggerguard.py",
+      ".claude/hooks/triggerguard.py source/kittests.py",
+      "sed -n 40,90p .claude/hooks/triggerguard.py; sed -n 5425,5460p source/kittests.p",
+      "",
+      4157
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "chat 36",
+      "",
+      1514
+     ],
+     [
+      71,
+      "other",
+      "film notes",
+      "notes/ledger/sam/dmaqxf5d.md",
+      "sed -n 1,40p notes/ledger/sam/dmaqxf5d.md | cut -c1-400",
+      "",
+      3975
+     ],
+     [
+      76,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/app-costs.tsv source/ledger.py .claude/hooks/costwatch.py",
+      "^def ",
+      "",
+      2054
+     ],
+     [
+      77,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "sed -n 264,312p source/ledger.py; sed -n 942,1000p source/ledger.py",
+      "",
+      6068
+     ],
+     [
+      78,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py /.claude/projects/*/",
+      "sidechain\\|subagent\\|def read_usage\\|def level\\|def fam",
+      "",
+      158
+     ],
+     [
+      79,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py",
+      "sed -n 37,115p .claude/hooks/costwatch.py",
+      "",
+      3089
+     ],
+     [
+      80,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/ledger/app-costs.tsv",
+      "^import\\|^from\\|MAP\\|  app \\.\\.\\.",
+      "",
+      316
+     ],
+     [
+      82,
+      "other",
+      "shared:checkaudit.py",
+      "source/checkaudit.py source/handover.py source/houseline.py source/kitfilm.py so",
+      "kittests",
+      "",
+      5962
+     ],
+     [
+      83,
+      "other",
+      "shared:kitstamps.py",
+      "source/kitstamps.py",
+      "sed -n 130,160p source/kitstamps.py; sed -n 225,300p source/kitstamps.py",
+      "",
+      4789
+     ],
+     [
+      84,
+      "other",
+      "shared:kitstamps.py",
+      "source/kitstamps.py",
+      "KITTESTS\\|kittests.py::",
+      "",
+      5014
+     ],
+     [
+      85,
+      "other",
+      "shared:kitstamps.py",
+      "source/kitstamps.py source/kittests.py",
+      "kittests.py",
+      "",
+      3088
+     ],
+     [
+      86,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^# ---",
+      "",
+      3829
+     ],
+     [
+      88,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/handover.py",
+      "python3 - <<'EOF' import ast src=open('source/kittests.py').read(); tree=ast.par",
+      "",
+      1396
+     ],
+     [
+      89,
+      "other",
+      "shared:kittests.py",
+      "source/*.py source/kittests.py",
+      "import kittests\\|kittests\\.TESTS\\|\\bTESTS\\b",
+      "",
+      1211
+     ],
+     [
+      90,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "awk 'NR>=5554 && NR<=7529 && /^def [a-z]/ {print NR\": \"$2}' source/kittests.py |",
+      "",
+      1582
+     ],
+     [
+      96,
+      "other",
+      "shared:checkaudit.py",
+      "source/checkaudit.py source/handover.py source/touch.py",
+      "kittests\\.'\\|'kittests\\.\\|startswith('kittests",
+      "",
+      928
+     ],
+     [
+      97,
+      "other",
+      "shared:touch.py",
+      "source/touch.py source/*.py source/kitstamps.py",
+      "kittests\\.",
+      "",
+      933
+     ],
+     [
+      98,
+      "other",
+      "shared:maps.py",
+      "source/maps.py",
+      "^PASS\\|^FAIL",
+      "",
+      1611
+     ],
+     [
+      99,
+      "other",
+      "shared:maps.py",
+      "source/maps.py source/kittests*.py source/kitstamps.py source/*.py source/kittes",
+      "python3 source/maps.py add source/kittests*.py source/kitstamps.py | cut -c1-120",
+      "",
+      192
+     ],
+     [
+      100,
+      "other",
+      "film notes",
+      "story/status.md notes/*.md",
+      "git add -A && git commit -qm \"Cost-spike fix steps 4-7 and 5b: fix pack, chain m",
+      "",
+      930
+     ],
+     [
+      104,
+      "other",
+      "shared:handover.py",
+      "notes/proposals/cost-spike-fix.md source/handover.py",
+      "sed -i 's/^Status: PROPOSED, nothing built. Waiting for Sam.s numbers (bottom)./",
+      "",
+      698
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..or",
+      "",
+      847
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "git diff --name-only HEAD...origin/claude/create-claude-md-oe8z4g; git merge -q ",
+      "",
+      706
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "",
+      "source/\\|\\.claude\\|guides",
+      "",
+      408
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "",
+      "^kittests: ",
+      "",
+      267
+     ],
+     [
+      109,
+      "other",
+      "other",
+      "",
+      "sleep 5; cat /tmp/claude-0/-home-user-Animation-/c93e33d5-669b-5fe3-8bb9-c10b758",
+      "",
+      174
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
