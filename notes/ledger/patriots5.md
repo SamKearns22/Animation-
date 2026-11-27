@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 15.4% of a week; spent 10.83% (-4.57); 6 chats, 0 rounds, 3 notes, 0 repeated.**
+**Estimate 15.4% of a week; spent 11.1% (-4.30); 6 chats, 0 rounds, 3 notes, 0 repeated.**
 
 **Stages (tracked quietly):**
 
@@ -21,7 +21,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | date | chat | source | model | stage | round | cost % | $ | notes | repeated |
 |---|---|---|---|---|---|---|---|---|---|
 | 2026-11-27 | 4e93d9da | est | opus | auto |  | 3.22 |  | 0 | 0 |
-| 2026-11-27 | 345bd082 | est | opus | auto |  | 2.6 |  | 0 | 0 |
+| 2026-11-27 | 345bd082 | est | opus | auto |  | 2.87 |  | 0 | 0 |
 | 2026-11-27 | 22904d63 | est | opus | practice |  | 2.77 |  | 3 | 0 |
 | 2026-11-27 | 0b4b259a | est | opus | auto |  | 0.21 |  | 0 | 0 |
 | 2026-11-27 | 105b46bb | est | opus | auto |  | 0.7 |  | 0 | 0 |
@@ -29,7 +29,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-27 4e93d9da (auto): 140 steps, history 296k at the end; other 79.7%, tool search 16.7%, pictures 2.9%, renders 0.7%
-- 2026-11-27 345bd082 (auto): 166 steps, history 278k at the end; Claude's words (thinking and writing) 34.9%, start-up reading 25.8%, tool search 23.7%, renders 3.7%, messages and reminders 3.1%, app tools (chats, files sent) 2.6%, pictures 2%, small shell commands (listing, moving, copying) 2%, reading chat records 1.9%, git and saving 0.1%, reading kit code 0.1%, start-up and handover tools 0.1%
+- 2026-11-27 345bd082 (auto): 179 steps, history 303k at the end; Claude's words (thinking and writing) 35.4%, start-up reading 25.5%, tool search 22.6%, renders 3.4%, messages and reminders 3.2%, app tools (chats, files sent) 3.1%, reading chat records 2.6%, pictures 2%, small shell commands (listing, moving, copying) 1.8%, git and saving 0.1%, reading kit code 0.1%, start-up and handover tools 0.1%
 - 2026-11-27 22904d63 (practice): 113 steps, history 295k at the end; other 63.3%, tool search 29.1%, pictures 5.9%, renders 1.4%, film-file search 0.2%
 - 2026-11-27 0b4b259a (auto): 19 steps, history 103k at the end; start-up reading 47.7%, Claude's words (thinking and writing) 22.7%, tool search 14.8%, renders 3.8%, reading notes 3.8%, pictures 2.8%, app tools (chats, files sent) 1.7%, running checks and tools 1.1%, messages and reminders 0.8%, small shell commands (listing, moving, copying) 0.7%
 - 2026-11-27 105b46bb (auto): 59 steps, history 147k at the end; start-up reading 31.4%, Claude's words (thinking and writing) 28.5%, tool search 14%, renders 9.4%, pictures 5.7%, messages and reminders 3%, edit results 2.7%, film-file search 2.6%, small shell commands (listing, moving, copying) 1.5%, app tools (chats, files sent) 0.8%, reading chat records 0.3%, tool lookups 0.1%
@@ -37,14 +37,14 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-27 4e93d9da (auto): new writes 41.3%, carried history 33%, Claude's words 15%, start-up floor 10.7%. Biggest origins: messages and reminders 33.6%, Claude's words 22.5%, cache re-write 16%. Leftover 0%
-- 2026-11-27 345bd082 (auto): carried history 35.6%, start-up floor 28.4%, Claude's words 19.6%, new writes 16.3%. Biggest origins: Claude's words 38.4%, start-up floor 28.4%, result: tool search 19.1%. Leftover 0%
+- 2026-11-27 345bd082 (auto): carried history 36.7%, start-up floor 27.5%, Claude's words 19%, new writes 16.7%. Biggest origins: Claude's words 38.2%, start-up floor 27.5%, result: tool search 18.7%. Leftover 0%
 - 2026-11-27 22904d63 (practice): Claude's words 30%, carried history 29.1%, start-up floor 21.9%, new writes 19%. Biggest origins: Claude's words 51.7%, start-up floor 21.9%, result: tool search 14.5%. Leftover 0%
 - 2026-11-27 0b4b259a (auto): start-up floor 57.8%, Claude's words 20.3%, new writes 17.8%, carried history 4.1%. Biggest origins: start-up floor 57.8%, Claude's words 27.5%, result: tool search 11.2%. Leftover 0%
 - 2026-11-27 105b46bb (auto): start-up floor 41.5%, Claude's words 25%, new writes 19.4%, carried history 14.1%. Biggest origins: start-up floor 41.5%, Claude's words 37.7%, result: tool search 6.5%. Leftover 0%
 - 2026-11-27 b4eecb27 (auto): Claude's words 34.3%, start-up floor 25.7%, new writes 20.4%, carried history 19.6%. Biggest origins: Claude's words 53.6%, start-up floor 25.7%, result: tool search 14.3%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 22% of the film (2.33% of a week over 6 chats: start 2.31, re-learning 0.02; 0.39% a chat; step-1 context re-read is 26% of a chat on average).
+A new chat's start and re-learning cost 21% of the film (2.34% of a week over 6 chats: start 2.31, re-learning 0.03; 0.39% a chat; step-1 context re-read is 26% of a chat on average).
 - 2026-11-27 4e93d9da: step-1 context 83k; first real work at step 52 (0.8% of a week); read before it: source/patriots3_cast.py 3k, source/facehouse_c.py 2.2k, source/facehouse_b.py 1.8k, guides/job-packs.md 1.7k, /tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scratchpad/p3.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/4e93d9da-64f8-5a9a-be65-cdb7928dda9f/scratchpad/turns.jpg 1.6k
 - 2026-11-27 345bd082: step-1 context 83k; first real work at step 5 (0.1% of a week); read before it: guides/job-packs.md 1.7k, story/status.md 0.5k
 - 2026-11-27 22904d63: step-1 context 85k; first real work at step 27 (0.59% of a week); read before it: source/mounts.py 2.7k, guides/figure-rig.md 2.4k, source/views.py 2.4k, guides/pose-kits.md 2k, notes/learn/shoulder-tower/refs-sheet.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/22904d63-b565-5dcb-85d6-40d773d90546/scratchpad/tw/pair.png 1.6k
