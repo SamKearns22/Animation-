@@ -1,0 +1,296 @@
+{
+ "film": "seeing-test",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-27",
+   "chat": "8cad9ea9",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.47,
+   "src": "estimate",
+   "sid": "session_01J1JB7WZWv8ezvvZPKGH4pf",
+   "steps": 24,
+   "hist_k": 107,
+   "kinds": {
+    "tool search": 19.6,
+    "renders": 3.0,
+    "pictures": 1.9,
+    "other": 75.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 18,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 1,
+    "other": 4
+   },
+   "split": {
+    "usd": 0.9911,
+    "total": 0.9911,
+    "floor_k": 83,
+    "blocks": {
+     "start-up floor": 54.9,
+     "Claude's words": 20.4,
+     "new writes": 19.4,
+     "carried history": 5.4
+    },
+    "origins": {
+     "start-up floor": 54.9,
+     "Claude's words": 27.7,
+     "result: tool search": 10.9,
+     "messages and reminders": 3.6,
+     "result: pictures": 2.6,
+     "result: other": 0.2,
+     "result: renders": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 54.9,
+     "commands": 11.7,
+     "thinking": 7.2,
+     "other commands": 4.9,
+     "messages and reminders": 3.6,
+     "reading notes": 3.4,
+     "writing notes": 3.1,
+     "start-up and handover tools": 2.6,
+     "looking at pictures": 2.6,
+     "helper and chat prompts": 2.5,
+     "messages to Sam": 2.1,
+     "writing code": 1.2,
+     "running checks and tools": 0.1,
+     "helper results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "/tmp/claude-0/-home-user-Animation-/8cad9ea9-0602-503b-a4fc-1c432923acb6/scratchpad/gta_21.3.png",
+      1.6,
+      0.0151
+     ],
+     [
+      "notes/seeing-test.md",
+      0.5,
+      0.0065
+     ],
+     [
+      "notes/seeing-test/key.md",
+      0.3,
+      0.0039
+     ],
+     [
+      "notes/seeing-test/findings/plain.md",
+      0.3,
+      0.0039
+     ],
+     [
+      "notes/seeing-test/cases.tsv",
+      0.3,
+      0.0039
+     ],
+     [
+      "story/status.md",
+      0.1,
+      0.0011
+     ],
+     [
+      "notes/seeing-test/printouts/c10-truth.json",
+      0.0,
+      0.0002
+     ]
+    ],
+    "base_pct": 34.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 4,
+     "shared:handover.py": 4,
+     "other": 9,
+     "shared:plainwords.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "notes/seeing-test.md",
+      "git status --short | head && git fetch -q origin claude/create-claude-md-oe8z4g ",
+      "",
+      2176
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/seeing-test/ notes/seeing-test/findings/ notes/seeing-t",
+      "python3 source/handover.py start session_01J1JB7Vrny18WkjhSqkatGT --film seeing-",
+      "",
+      3510
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/rule_proofs.json source/*proof* notes/*proof*",
+      "STOP|REFUSED|RULE|fault",
+      "",
+      1221
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py end --film seeing-test 2>&1 | tail -20",
+      "",
+      433
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/seeing-test/key.md notes/seeing-test/findings/plain.md notes/seeing-test/c",
+      "head -30 notes/seeing-test/key.md; echo ----; head -15 notes/seeing-test/finding",
+      "",
+      4173
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/seeing-test/findings",
+      "cutout|motion|pose|where|plain|tool|view",
+      "",
+      156
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "cutout|motion trail|pose|where-is|whereis|plain|view|overlay|skeleton|trail|tool",
+      "",
+      6598
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "",
+      "^- ",
+      "",
+      324
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "c1[0-6]\\|c0",
+      "",
+      1666
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "false alarm",
+      "",
+      2389
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "notes/seeing-test/printouts",
+      "ls notes/seeing-test/printouts | head; ls /scratch 2>/dev/null | head; find / -p",
+      "",
+      147
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "gta|theft|autism",
+      "",
+      120
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/seeing-test/scores.md notes/seeing-test.md",
+      "Brief checklist",
+      "",
+      516
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "notes/seeing-test/printouts/c10-truth.json notes/seeing-test/printouts/c10-where",
+      "door|jason|rear",
+      "",
+      92
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/seeing-test.md",
+      "sed -n '20,43p;58,63p' notes/seeing-test.md",
+      "",
+      2439
+     ],
+     [
+      22,
+      "other",
+      "shared:handover.py",
+      "notes/seeing-test.md notes/seeing-test/scores.md notes/archive/seeing-test-hando",
+      "git add notes/seeing-test.md notes/seeing-test/scores.md notes/archive/seeing-te",
+      "",
+      377
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:refs/heads/claude/seeing-test-chat-2-d3di27 2>&1|tail -1",
+      "",
+      59
+     ],
+     [
+      24,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py",
+      "seeing-test-chat-2|create-claude-md",
+      "",
+      428
+     ]
+    ]
+   },
+   "notes_auto": 0
+  }
+ ],
+ "checks": {}
+}
