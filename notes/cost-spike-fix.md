@@ -252,3 +252,4 @@ braided and long-hair photos for the braids check. Both passed to chat 4 (sessio
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 12.78% of a week (2026-11-27)
 - COST (chat 5): get_session gives no cost figure (no usage in its record; weekly limit: warning). Nothing recorded by guess.
+- Kit run (step 1): chat 4's own 37-test run finished: 35 passed; head_moves_not_comic, early_move_size failed (Brexit's nods, named before; not the hair). This chat's rerun stopped (redundant). beard_has_form, short_beard_solid pass.
