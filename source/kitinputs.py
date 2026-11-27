@@ -349,7 +349,12 @@ def prop_sizes(film):
             w, h = _span(it['raw'].get('x')), _span(it['raw'].get('z'))
             if it['kind'] in sizes.SIZES and w and h and it['name'] not in done:
                 done.add(it['name'])
-                out.append((it['name'], it['kind'], w, h, None))
+                try:                                    # check audit B3: 'bays N' is a row of N, each judged alone
+                    bays = max(1, int(float(it['raw'].get('bays', 1))))
+                except (TypeError, ValueError):
+                    bays = 1
+                out.append((it['name'] + (f' (one of {bays} in a row)' if bays > 1 else ''), it['kind'], w / bays, h,
+                            None))
     return out
 
 
