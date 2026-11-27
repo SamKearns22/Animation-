@@ -659,11 +659,15 @@ WCELL = (300, 533)              # each frame on a watch sheet: big enough to see
 WCOLS, WROWS = 4, 2             # 8 frames a sheet, read left to right, top to bottom
 
 
+VEHICLE = ('tulip', 'car', 'cruiser', 'truck', 'van ', 'bus')
+
+
 def _owners(meta):
-    """Each person's layers grouped: owner -> [layer index]."""
+    """Each person's layers grouped: owner -> [layer index]. A vehicle with a person in its name (GTA's 'tulip and
+    jason') is not a person: outlining it drew a stray line along the road."""
     by = {}
     for k, L in enumerate(meta):
-        if _is_person(L):
+        if _is_person(L) and not any(v in L['owner'].lower() for v in VEHICLE):
             by.setdefault(L['owner'], []).append(k)
     return by
 
