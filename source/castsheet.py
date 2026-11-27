@@ -806,6 +806,9 @@ def seated_faults(film, who=None, cast=None, raw=False):
                 continue
             for yaw in (45, -45):
                 sp = dict(sp0)
+                if raw:                           # R8 chat 5: the old drawing has no seated body tool (Open Wounds
+                    for k in ('seat_r7', 'seat_solid', 'turned_curves', 'turned_bust'):   # put its cast on it, so
+                        sp.pop(k, None)           # the replay drew no knee at all and the test went red)
                 s_ = 0.5 * sp['height'] / 1.75
                 j = S.pose(sp, 'upright')
                 rings.clear()

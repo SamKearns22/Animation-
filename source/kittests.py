@@ -1069,11 +1069,15 @@ def seated_r7_switch():
     import castsheet as CS
     import sitting as S
     from PIL import Image
-    saved = {('blair', 0): '13d5c648a6ed', ('blair', 45): '24f16e2873e6', ('blair', 90): '3732d689f2ab',   # re-held 26 Nov, chat 30: notes 20-21 changed the heads (neck, brows, lines), nothing below them   # 45/90: Open
+    # R8 chat 5: re-held again: Open Wounds chats 30-40's shared fixes (line weight, sleeves the jacket's colour, a
+    #   man's 3/4 suit front, May's jacket) moved all nine; looked at side by side: below the seat every shape is
+    #   the same, only the line weight differs. Was 13d5c648a6ed / 24f16e2873e6 / 3732d689f2ab, c736ac4bb567 / aa63685bd955 /
+    #   cc0826ec4d61, 97cbfbe3e550 / 5e504d91a956 / dbeb1214140e
+    saved = {('blair', 0): '8517144ea05b', ('blair', 45): '96c2266a32f0', ('blair', 90): 'e85555ad3cb4',   # re-held 26 Nov, chat 30: notes 20-21 changed the heads (neck, brows, lines), nothing below them   # 45/90: Open
              #   Wounds' own chain moved them (3d10d4c7, its shared sleeve lift in turned views), proven with R7's
              #   chat 2 changes taken out (still moved); was 5e30e187e32c / 397e4b53c71f
-             ('kemi', 0): 'c736ac4bb567', ('kemi', 45): 'aa63685bd955', ('kemi', 90): 'cc0826ec4d61',
-             ('may', 0): '97cbfbe3e550', ('may', 45): '5e504d91a956', ('may', 90): 'dbeb1214140e'}
+             ('kemi', 0): '22acf835e528', ('kemi', 45): 'fee893d702f9', ('kemi', 90): 'f230626dbda3',
+             ('may', 0): '4bc5b8f4a9c8', ('may', 45): '4df2dcdf3882', ('may', 90): 'a6bd046f2425'}
     off = [f for f in people.BEFORE_SEATED if people.seat_r7(f) and f != 'brexit-is-done']
     new_on = people.seat_r7('a-new-film')
     cast, PP = CS._setup('brexit-is-done', None)
@@ -1117,11 +1121,13 @@ def seated_r7_look():
     # chat 4: R7 chat 3's own drawing, as its blind judges saw it ("one dark mass", "no visible knees")
     tone = all(any('one flat tone' in f for f in exs[n]) for n in ('one-tone-c3-may-34', 'one-tone-c3-kemi-front'))
     raw = CS.seated_look_faults('brexit-is-done', raw=True)
-    old = any('ball' in f for f in raw) and any('bottom' in f and ' 45:' in f for f in raw)
+    # R8 chat 5: Sam, 26 Nov (Open Wounds chat 38): the bottom check deleted ("it no longer serves a function"), so
+    # the old drawing is caught by its ball knees alone
+    old = any('ball' in f for f in raw)
     new = CS.seated_look_faults('brexit-is-done', force=True)
     return sam and tone and old and not new, (
         f"Sam's frame caught (ball and bottom): {sam}; chat 3's one dark mass caught (3/4 and front): {tone}; the old "
-        f"drawing caught (ball and bottom): {old}; faults on R7: {len(new)} {new[:2]}")
+        f"drawing caught (ball knees): {old}; faults on R7: {len(new)} {new[:2]}")
 
 
 @test
