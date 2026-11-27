@@ -1,0 +1,18 @@
+9.58 s  jump: the fastest part moved 27 px in one frame (span usual 7)
+9.67 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 11x30 px at (258,546) of 540x960
+10.17 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 24x14 px at (255,442) of 540x960
+10.50 s  jump: the fastest part moved 25 px in one frame (span usual 7)
+10.50 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 33x88 px at (433,649) of 540x960
+10.58 s  jump: the fastest part moved 26 px in one frame (span usual 7)
+10.58 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 34x31 px at (376,719) of 540x960
+10.67 s  jump: the fastest part moved 22 px in one frame (span usual 7)
+10.67 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 22x13 px at (406,705) of 540x960
+10.75 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 29x38 px at (398,634) of 540x960
+10.83 s  jump: the fastest part moved 23 px in one frame (span usual 7)
+10.83 s  4 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 33x22 px at (433,638) of 540x960
+10.92 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 32x18 px at (420,582) of 540x960
+11.00 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 35x107 px at (434,597) of 540x960
+11.08 s  1 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 55x48 px at (455,465) of 540x960
+11.75 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 47x109 px at (441,554) of 540x960
+11.83 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 49x121 px at (447,602) of 540x960
+11.92 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 28x33 px at (438,558) of 540x960

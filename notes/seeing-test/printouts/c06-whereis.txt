@@ -1,0 +1,5 @@
+21.33 s  person 54 vanished mid-frame (had 212 px, not at the edge)
+21.67 s  person 54 appeared mid-frame (152 px, not from the edge)
+22.42 s  person 139 vanished mid-frame (had 301 px, not at the edge)
+23.00 s  person 62 appeared mid-frame (321 px, not from the edge)
+23.25 s  person 57 and person 63 swap front/behind while overlapping (150 px)

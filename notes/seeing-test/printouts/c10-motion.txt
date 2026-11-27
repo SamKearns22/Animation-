@@ -1,0 +1,30 @@
+19.68 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 7x74 px at (3,243) of 540x960
+19.77 s  4 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 34x39 px at (250,436) of 540x960
+19.85 s  5 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 40x141 px at (20,613) of 540x960
+19.93 s  6 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 101x136 px at (50,593) of 540x960
+20.02 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 14x114 px at (21,441) of 540x960
+20.10 s  9 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 50x51 px at (187,541) of 540x960
+20.18 s  5 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 58x40 px at (121,527) of 540x960
+20.27 s  jump: the fastest part moved 223 px in one frame (span usual 59)
+20.27 s  7 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 49x310 px at (24,532) of 540x960
+20.35 s  cut
+20.43 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 105x128 px at (85,486) of 540x960
+20.52 s  8 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 92x204 px at (59,441) of 540x960
+20.60 s  7 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 24x125 px at (528,623) of 540x960
+20.68 s  12 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 49x144 px at (515,571) of 540x960
+20.77 s  13 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 63x116 px at (448,562) of 540x960
+20.85 s  7 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 44x132 px at (518,791) of 540x960
+20.93 s  6 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 29x135 px at (14,140) of 540x960
+21.02 s  9 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 24x110 px at (21,161) of 540x960
+21.10 s  4 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 24x131 px at (12,133) of 540x960
+21.18 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 27x95 px at (13,146) of 540x960
+21.27 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 100x74 px at (160,369) of 540x960
+21.35 s  7 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 18x164 px at (23,429) of 540x960
+21.43 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 20x31 px at (10,187) of 540x960
+21.52 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 18x95 px at (23,137) of 540x960
+21.60 s  6 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 47x32 px at (38,16) of 540x960
+21.68 s  6 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 27x151 px at (13,450) of 540x960
+21.77 s  3 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 9x50 px at (4,101) of 540x960
+21.85 s  2 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 24x145 px at (12,472) of 540x960
+21.93 s  6 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 31x98 px at (15,110) of 540x960
+22.02 s  9 unexplained change(s) (appeared, vanished or changed shape faster than it moved); largest 33x70 px at (16,380) of 540x960
