@@ -87,3 +87,6 @@ Stop the one that started second
 ### 2026-11-27T22:27:17
 Are you 'the planning chat'
 
+### 2026-11-27T22:27:36
+You can run the tests in the background, no reason to stop
+
