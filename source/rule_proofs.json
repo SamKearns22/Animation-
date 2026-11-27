@@ -1257,6 +1257,17 @@
    "example": "Sam, 26 Nov (Open Wounds chat 39): \"Stop telling me chats are long unless you are admitting that your own tool is broken.\" kittest never_blame_long_chats: chat 39's own reply (long chats as a cause of cost) is stopped by the plain-words check; a sentence owning the handover tool's failure passes.",
    "notes": "Entry written by R8 chat 3 (the handover check found the rule with none; the rule, check and test came from Open Wounds chat 39).",
    "kind_before": "new"
+  },
+  "W16": {
+   "rule": "The Hook Text is Sam's: never suggest one; leave it blank until he gives it.",
+   "status": "proven",
+   "tests": [
+    "hook_text_never_suggested"
+   ],
+   "anchor": "The Hook Text is mine (Sam, 27 Nov):",
+   "example": "notes/learn/plain-words/bad-7-hook-suggest-27nov.md: the Patriot 5 plan chat's two sentences offering \"Danny Tommo is behind bars\" (Sam, 27 Nov: \"You never need to suggest hook texts to me. Leave that blank until I provide it.\")",
+   "notes": "Sam's Y, 27 Nov; check: plainwords.hook_suggested",
+   "kind_before": "code"
   }
  },
  "_baseline": {
