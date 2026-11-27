@@ -16,3 +16,5 @@
 {"chat": "68229d56", "event": "block", "faults": [["word", "hook"], ["file", "animations/drafts"]], "t": "2026-11-27 05:09"}
 {"chat": "e5800d1f", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-27 05:32"}
 {"chat": "6b06e870", "event": "block", "faults": [["word", "drawing tools"]], "t": "2026-11-27 07:04"}
+{"chat": "77eaa7d6", "event": "block", "faults": [["word", "chain"]], "t": "2026-11-27 07:12"}
+{"chat": "77eaa7d6", "event": "block", "faults": [["word", "pre-flight"]], "t": "2026-11-27 07:13"}
