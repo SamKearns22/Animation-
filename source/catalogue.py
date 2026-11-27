@@ -16,8 +16,12 @@ crash. When a film's building stage ends, add its new sets, people, props and ef
 tables (one line each below: section, name, how to draw it).
 
     python3 source/catalogue.py OUT.jpg [SECTION ...]      the sheet (Sets, People, Creatures, Props, Effects)
+    python3 source/catalogue.py find "WHAT THE FILM NEEDS"   the kit catalogue's best rows for those plain words
+        (replay test 2, Sam's Y 27 Nov: a new film's chat spent 5-6 steps a famous person finding the face tool;
+        SAME turns everyday words into the catalogue's own; kittest catalogue_find_famous_face)
 """
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -183,8 +187,44 @@ def faults():
             if not os.path.exists(os.path.join(HERE, path))]
 
 
+# Everyday words -> the catalogue's words for the same thing (grows from every plan that finds nothing).
+SAME = {'famous': 'famous likeness face tool facepick facehouse', 'celebrity': 'famous likeness facepick',
+        'politician': 'famous likeness facepick', 'real': 'famous likeness', 'likeness': 'facepick facehouse famous',
+        'face': 'facepick facehouse', 'lookalike': 'likeness facepick', 'caricature': 'likeness facepick',
+        'hair': 'hair piece swept braids bob back', 'hairstyle': 'hair piece swept braids bob back',
+        'crowd': 'crowd people kit', 'extras': 'crowd people kit', 'background': 'crowd',
+        'children': 'child kid crowd', 'kids': 'child kid crowd', 'walk': 'walk walking', 'sit': 'seated sitting',
+        'drink': 'glass held prop hold', 'glass': 'held prop hold', 'phone': 'held prop phone'}
+STOP = {'the', 'and', 'with', 'for', 'from', 'that', 'this', 'into', 'any', 'one', 'two', 'its', 'his', 'her', 'their',
+        'new', 'film', 'person', 'people', 'who', 'what', 'has', 'are', 'was', 'not', 'all', 'each', 'every'}
+
+
+def _words(t):
+    return {w[:-1] if w.endswith('s') and len(w) > 4 else w for w in re.findall(r'[a-z]{3,}', t.lower())} - STOP
+
+
+def find(text, n=5):
+    """The kit catalogue's rows that best match plain words: [(score, what it is, where it lives)]."""
+    want = _words(text)
+    want |= _words(' '.join(SAME[w] for w in list(want) if w in SAME))
+    rows = []
+    for line in open(os.path.join(HERE, '..', 'guides', 'kit-catalogue.md'), encoding='utf-8'):
+        if not line.startswith('| ') or line.startswith('| ---') or line.count('|') < 3:
+            continue
+        cells = [c.strip() for c in line.strip().strip('|').split('|')]
+        have = _words(line)
+        score = len(want & have) + 2 * len(want & _words(cells[1] if len(cells) > 1 else ''))
+        if score:
+            rows.append((score, re.sub(r'\*\*', '', cells[0])[:150], (cells[1] if len(cells) > 1 else '')[:110]))
+    return sorted(rows, key=lambda r: -r[0])[:n]
+
+
 if __name__ == '__main__':
     a = sys.argv[1:]
+    if a and a[0] == 'find':
+        for sc, what, where in find(' '.join(a[1:])) or [(0, 'nothing in the catalogue: build new, and say so', '')]:
+            print(f'{sc:>3}  {what}\n     {where}')
+        sys.exit(0)
     if a and a[0] == '--one':
         draw_one(int(a[1]), a[2])
     elif a:

@@ -1501,6 +1501,22 @@ def age_lines(p, f, L, skin, age, lk):
 
 # ---------------------------------------------------------------------------------------------- turned views
 HAIR = ('swept', 'braids', 'bald', 'bob', 'back')
+
+
+def hair_fit(shapes, braids=False):
+    """Replay test 2 (Sam's Y, 27 Nov): Ocasio-Cortez's long straight hair has no piece, and the plan only found out on
+    the cast sheet (she came out in May's bob). From the likeness card's big shapes: (piece, why) for a piece in HAIR,
+    or (None, why) when none fits: a NEW row in the estimate, priced, before anything is drawn. Kittest hair_piece_fits."""
+    below, top = shapes.get('hair_below_ears', 0.0), shapes.get('hair_top', 1.0)
+    if braids:
+        return 'braids', 'braided'
+    if top < 0.12 and below < 0.05:
+        return 'bald', f'little hair on top ({top:.2f})'
+    if below > 0.55:
+        return None, f'long hair, falling well past the jaw ({below:.2f} below the ears): no hair piece fits'
+    if below > 0.08:
+        return 'bob', f'hair to about the jaw ({below:.2f} below the ears)'
+    return 'swept', f'short hair ({below:.2f} below the ears): swept, or back if combed straight back'
 TURN_PROF = {'swept': dict(hair_low=0.36, nape=0.62, volume=0.015),         # clipped short at the back
              'braids': dict(hair_low=0.5, nape=0.78, volume=0.05),
              'bald': dict(hair_low=0.3, nape=0.6, volume=0.0),

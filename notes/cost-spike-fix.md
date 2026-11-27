@@ -184,3 +184,18 @@ comparing. Whole chat about 75 steps.
 be redone (Sam's own words are lost); I knew the satire guide names Islamocommunism's acting list as its example
 (did not read it); no Sam review; one chat; the first animatic was not reached, and the animatic stages (sets, film
 code) are where the original spent most (three of four chats).
+
+## Replay 2 savings S1-S4 built (Sam's "Y all", 27 Nov)
+- S1 `catalogue.py find "plain words"`: the kit catalogue's best rows (everyday words list `catalogue.SAME`); "a real
+  politician's likeness" -> facepick first, people kit second. Plan pack line added (find first; a real person's
+  route; NEW hair; colour lines). Kittest `catalogue_find_famous_face`.
+- S2 `people.colour_faults(FILM)`, run by every people-kit cast sheet (`COLOUR:` lines): skin, hair, beard against
+  the likeness card's whole-face colours (facepick now saves them, `shapes_card`). Root fault found: a face tool
+  person's `skin:`, `lips:`, `beard: boxed C` lines were silently dropped; they now win over the pick's colours (no
+  posted film used them). Picks made before today have no card colours: passed over. Kittest `colour_against_photo`
+  (the replay's pale El-Sayed and grey beard caught; corrected passes; May's pick takes a skin line).
+- S3 `facehouse.hair_fit`: facepick prints the hair piece that fits or "NEW: no hair piece fits" (long hair past the
+  jaw). Tested on 5 real faces (Ocasio-Cortez NEW, El-Sayed swept, Blair swept, May bob, Badenoch braids). Kittest
+  `hair_piece_fits`.
+- S4 every step counts toward the chat's total (notesteps); `ledger.py stage` keeps the steps since the last stage
+  mark in the ledger's stage row and table. Kittest `stage_steps_saved`.

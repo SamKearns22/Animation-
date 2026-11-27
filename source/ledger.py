@@ -816,6 +816,13 @@ def mark_stage(d, name):
         last = max([i for i, x in enumerate(st) if x['done'] is not None], default=-1)
         st.insert(last + 1, s)
     s['done'] = {'date': str(date.today()), 'spent': spent}
+    try:                                           # replay test 2: the stage's own steps, kept for later comparison
+        import notesteps
+        n = notesteps.stage_steps()
+        if n is not None:
+            s['done']['steps'] = n
+    except Exception:
+        pass
     return s
 
 
@@ -895,10 +902,11 @@ def render(d):
            f"{notes} notes, {len(reps)} repeated.**", '',
            ]
     if d.get('stages'):
-        out += ['**Stages (tracked quietly):**', '', '| stage | planned % | done | spent at its end |',
-                '|---|---|---|---|']
+        out += ['**Stages (tracked quietly):**', '', '| stage | planned % | done | spent at its end | steps |',
+                '|---|---|---|---|---|']
         out += [f"| {x['name']}{' (unplanned)' if x.get('unplanned') else ''} | {x['pct']:g} | "
-                f"{x['done']['date'] if x['done'] else ''} | {x['done']['spent'] if x['done'] else ''} |"
+                f"{x['done']['date'] if x['done'] else ''} | {x['done']['spent'] if x['done'] else ''} | "
+                f"{x['done'].get('steps', '') if x['done'] else ''} |"
                 for x in d['stages']]
         out += ['']
     out += ["Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate "

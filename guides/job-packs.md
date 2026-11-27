@@ -19,6 +19,13 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Estimate costs come from the ledgers' real costs per thing and per round (`notes/ledger/`), no padding, no
   multipliers; the plan's stages go in with `ledger.py estimate FILM PCT --stages`, and each stage's end runs
   `ledger.py stage FILM NAME`, whose forecast line opens that reply (rule 24).
+- **Find the kit by words first** (replay test 2, Sam's Y, 27 Nov): `python3 source/catalogue.py find "what the film
+  needs"` per person, set, prop and move: the catalogue's best rows. **A real person:** `facepick.py NAME OUT FRONT.jpg ...
+  --says "beard=.., glasses=.., age=N"` (about 2 min), then a people-file block (`head: house NAME, hair PIECE, look
+  detail`, copy May's in `story/brexit-is-done-people.txt`). facepick prints the hair piece that fits, or **NEW: no hair
+  piece fits**: that is a NEW row in the estimate, priced. `people.colour_faults(FILM)` names skin, hair or beard far from
+  the photo; put it right with the file's `skin:` / `beard: boxed C` lines.
+- Each stage's end: `ledger.py stage FILM NAME` also keeps that stage's steps (for comparing films later).
 - Bite: 24, 74, 1, 38, 8, 11. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`, `rough.py board` (then `sent --board`).
 - Moved from CLAUDE.md word for word (startup fixes 4, 16 Nov): **Reference photos and reporting (full network access since 12 Nov):** I send 2-3 when I have them; otherwise search
   once, slowly, 3 per place at most: **news pages and press photo galleries first** (Al Jazeera galleries, AP, Reuters,

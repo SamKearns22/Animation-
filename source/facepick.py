@@ -880,6 +880,11 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
     meta = dict(title=name, fronts=[_rel(a) for a in fronts], tq=[_rel(a) for a in tq], unsure=unsure, gain=gain, glasses=g,
                 beard=_beard_word(beard), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
+    import facehouse
+    piece, why = facehouse.hair_fit(bs, bool(shapes['braids']))
+    meta.update(shapes_card=bs, hair_piece=piece)          # the card's big shapes, for the cast sheet's colour check
+    log(f'{name}: hair piece: {piece}: {why}' if piece else
+        f'{name}: NEW: {why}: price it as a new build in the estimate before the cast sheet')
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
     if lineup:
         import nametest
