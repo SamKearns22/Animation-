@@ -581,7 +581,7 @@
 - 936: `_n5_picture` The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
 - 952: `build_selftest` Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man).
 
-## catalogue.py (238 lines)
+## catalogue.py (246 lines)
 - 34: HERE (data)
 - 36: FONT (data)
 - 37: TILE (data)
@@ -593,8 +593,8 @@
 - 186: `faults` Each entry's file exists (a catalogue that points at nothing is worse than none).
 - 193: SAME (data)
 - 200: STOP (data)
-- 204: `_words` 
-- 208: `find` The kit catalogue's rows that best match plain words: [(score, what it is, where it lives)].
+- 211: `_words` 
+- 215: `find` The kit catalogue's rows that best match plain words: [(score, what it is, where it lives)]; only rows scoring
 
 ## checkreplay.py (315 lines)
 - 27: ROOT (data)
@@ -652,13 +652,16 @@
 - 470: `in_shot_faults` 
 - 489: `run` 
 
-## costline.py (55 lines)
-- 14: DIR (data)
-- 15: ROOT (data)
-- 17: MARK (data)
-- 19: `line` 'film so far X% of a week'.
-- 26: `record` Record the line (ledger + notes), quietly. Returns None (nothing is ever shown).
-- 44: `faults` For handover.py end: the line is recorded here, so the only fault is a film that cannot record it.
+## costline.py (100 lines)
+- 24: DIR (data)
+- 25: ROOT (data)
+- 27: MARK (data)
+- 29: `line` 'film so far X% of a week'.
+- 36: `record` Record the line (ledger + notes), quietly. Returns None (nothing is ever shown).
+- 54: SHOW_FILE (data)
+- 57: `shown` Films Sam asked to see the cost line for after every chat (one name a line in notes/cost-line-to-sam.txt).
+- 66: `for_sam` The plain line for Sam: the film's cost so far against the plan, the last chat's cost, where most of it went.
+- 81: `faults` For handover.py end: the line is recorded here; for a film Sam asked to see (Sam's Y, 28 Nov), the line to put
 
 ## cover.py (583 lines)
 - 32: HERE (data)
@@ -946,13 +949,13 @@
 - 1198: KEPT (data)
 - 1208: `_fit` 
 
-## facehouse_d.py (182 lines)
+## facehouse_d.py (184 lines)
 - 20: `_talk_level` How far his jaw is open behind the knit (0 shut .. 1 wide), from the mouth shape the film gives him.
 - 29: `_slot_uv` The eye opening in face units: a soft-cornered band from above the brows to under the eyes, out past the
 - 46: `_knit` outer, slot: polygons in pen units (slot may be None); ribs(pen) draws the ribs; mouth: a polygon of the jaw
 - 104: `_mouth_uv` The jaw working under the knit: a soft dark hollow over the mouth, taller as it opens.
 - 111: `balaclava_front` 
-- 134: `balaclava_turned` 
+- 136: `balaclava_turned` 
 
 ## facepick.py (1053 lines)
 - 58: HERE (data)
@@ -3864,7 +3867,7 @@
 - 250: `_film_shots` 
 - 259: `main` 
 
-## stepcost.py (936 lines)
+## stepcost.py (953 lines)
 - 39: ROOT (data)
 - 43: KINDS (data)
 - 47: SEARCH_CMDS (data)
@@ -3882,33 +3885,34 @@
 - 190: `_result_tokens` Rough tokens a tool result adds: text at 4 characters a token, a picture ~1,600.
 - 204: `_has_image` 
 - 209: `measure` steps, history at the end (tokens), total $ (main chat + helpers) and each kind's share (% of that total).
-- 305: EDIT_TOOLS (data)
-- 306: BLOCKS (data)
-- 309: `_msg_tokens` Rough tokens a non-tool line adds to the chat (Sam's message, a reminder, a hook's output): 4 characters each.
-- 322: NAMED_COARSE (data)
-- 326: `_words_parts` One step's output by what it was: thinking (exact, from the usage), then the visible output shared by the
-- 346: `_shares` Spread an amount over named parts: {'coarse|part': amount x share}.
-- 356: `_helper_name` A helper's kind (critic, namer, general-purpose...) from the record beside it, else 'helpers'.
-- 381: `split` cost-other change 1 (Sam's Y, 19 Nov): every dollar of the main chat by block AND by origin, exactly.
-- 536: `split_line` One line: blocks, then the three biggest origins, then the leftover.
-- 545: FILE_RE (data)
-- 546: CHECK_RE (data)
-- 549: `_real_work` cold-start, figure 2: the chat's first real work: an edit or write outside notes/ (and outside the scratchpad)
-- 566: `_read_files` The files one call reads in (a Read, or a shell cat / sed -n / head / tail): repo paths, short.
-- 583: `start` cold-start change (Sam's Y, 19 Nov): what it cost this chat to get going.
-- 654: SHOW (data)
-- 655: WHY (data)
-- 656: MISS (data)
-- 657: NOTES_RE (data)
-- 660: `_target` Where a search that is not on the film's code looks: 'shared:FILE.py', 'film notes', 'guides', 'other'.
-- 673: `_what` finder-first Learn, step 4 (Sam's Option 1, 18 Nov): the file and the pattern one search asked about, short
-- 688: `_edits_film` 
-- 696: `_ticked` '[x]' lines a call adds to a notes file (approximate: Edit new vs old text; a shell line naming notes/).
-- 707: `search_record` finder-use Learn (Sam's 1, 17 Nov): per chat, in call order: show calls; film-code searches split into before
-- 766: `line` One line for the ledger page.
-- 774: `test` Checks on a real transcript (trimmed) and on this chat's own, when there is one.
-- 902: `_watch_usd` 
-- 916: `_load_fixture_facts` 
+- 316: EDIT_TOOLS (data)
+- 319: OTHER_NAMES (data)
+- 322: BLOCKS (data)
+- 325: `_msg_tokens` Rough tokens a non-tool line adds to the chat (Sam's message, a reminder, a hook's output): 4 characters each.
+- 338: NAMED_COARSE (data)
+- 342: `_words_parts` One step's output by what it was: thinking (exact, from the usage), then the visible output shared by the
+- 362: `_shares` Spread an amount over named parts: {'coarse|part': amount x share}.
+- 372: `_helper_name` A helper's kind (critic, namer, general-purpose...) from the record beside it, else 'helpers'.
+- 397: `split` cost-other change 1 (Sam's Y, 19 Nov): every dollar of the main chat by block AND by origin, exactly.
+- 552: `split_line` One line: blocks, then the three biggest origins, then the leftover.
+- 561: FILE_RE (data)
+- 562: CHECK_RE (data)
+- 565: `_real_work` cold-start, figure 2: the chat's first real work: an edit or write outside notes/ (and outside the scratchpad)
+- 582: `_read_files` The files one call reads in (a Read, or a shell cat / sed -n / head / tail): repo paths, short.
+- 599: `start` cold-start change (Sam's Y, 19 Nov): what it cost this chat to get going.
+- 670: SHOW (data)
+- 671: WHY (data)
+- 672: MISS (data)
+- 673: NOTES_RE (data)
+- 676: `_target` Where a search that is not on the film's code looks: 'shared:FILE.py', 'film notes', 'guides', 'other'.
+- 689: `_what` finder-first Learn, step 4 (Sam's Option 1, 18 Nov): the file and the pattern one search asked about, short
+- 704: `_edits_film` 
+- 712: `_ticked` '[x]' lines a call adds to a notes file (approximate: Edit new vs old text; a shell line naming notes/).
+- 723: `search_record` finder-use Learn (Sam's 1, 17 Nov): per chat, in call order: show calls; film-code searches split into before
+- 782: `line` One line for the ledger page.
+- 790: `test` Checks on a real transcript (trimmed) and on this chat's own, when there is one.
+- 919: `_watch_usd` 
+- 933: `_load_fixture_facts` 
 
 ## subtitles.py (310 lines)
 - 41: _CACHE (data)
@@ -4245,17 +4249,21 @@
 - 610: `_span` The outline's left and right edges at height y (None above or below it).
 - 619: `class WrapPen` A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
 
-## views_d.py (580 lines)
-- 16: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.
-- 25: `_beard_col` 
-- 31: `_sits` Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in fron
-- 39: TURNED_HEADS (data)
-- 40: NOT_MINE (data)
-- 43: `head_view` The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head.
-- 54: `plain_head_view` The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
-- 254: TAP (data)
-- 257: `person` Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
-- 274: `_person` 
+## views_d.py (654 lines)
+- 19: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.
+- 28: `_beard_col` 
+- 34: `_sits` Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in fron
+- 42: TURNED_HEADS (data)
+- 43: NOT_MINE (data)
+- 46: `head_view` The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head.
+- 57: `plain_head_view` The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
+- 257: TAP (data)
+- 260: `person` Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
+- 283: BENT_NECK (data)
+- 287: `class _Px` A pen frame for points already on the canvas.
+- 299: `_bent_neck` 
+- 311: `bent_neck_fault` The check for Sam's 27 Nov note ("the neck is separated from the head"): one person side-on with the head tipp
+- 345: `_person` 
 
 ## voices.py (709 lines)
 - 97: `syllables_in` A rough count of spoken syllables (vowel groups per word, silent final e, numbers as words).
