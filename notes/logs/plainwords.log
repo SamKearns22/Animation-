@@ -19,3 +19,5 @@
 {"chat": "cb29989e", "event": "block", "faults": [["word", "finder"], ["code", "`--max-turns`"], ["code", "`--model`"], ["code", "`total_cost_usd`"], ["word", "handover"], ["file", "notes/proposals/cost-spike-fix.md"], ["code", "`claude/lucid-pasteur-qol4oi`"], ["word", "main line"]], "t": "2026-11-27 10:41"}
 {"chat": "d4bf191c", "event": "block", "faults": [["word", "hook"], ["word", "main line"]], "t": "2026-11-27 11:00"}
 {"chat": "8b239ec0", "event": "block", "faults": [["word", "helpers"]], "t": "2026-11-27 12:22"}
+{"chat": "8b239ec0", "event": "block", "faults": [["word", "hook"]], "t": "2026-11-27 12:46"}
+{"chat": "8b239ec0", "event": "block", "faults": [["word", "handover"], ["word", "finder"]], "t": "2026-11-27 13:29"}
