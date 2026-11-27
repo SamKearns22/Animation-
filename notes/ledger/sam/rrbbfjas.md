@@ -81,3 +81,6 @@ You don't have to pause them, just schedule the continuation
 ### 2026-11-27T22:25:51
 Do we have two chats running the same checks right now
 
+### 2026-11-27T22:26:32
+Stop the one that started second
+
