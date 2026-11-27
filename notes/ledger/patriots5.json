@@ -1122,66 +1122,75 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.63,
+   "cost": 2.0,
    "src": "estimate",
    "sid": "session_01J1JB7VmBNix1SpRrBBfJas",
-   "steps": 105,
-   "hist_k": 236,
+   "steps": 129,
+   "hist_k": 254,
    "kinds": {
-    "tool search": 26.4,
-    "renders": 5.2,
-    "pictures": 1.7,
-    "other": 66.7
+    "tool search": 25.4,
+    "renders": 4.6,
+    "pictures": 1.9,
+    "reading chat records": 1.8,
+    "app tools (chats, files sent)": 2.0,
+    "small shell commands (listing, moving, copying)": 2.4,
+    "running checks and tools": 0.1,
+    "tool lookups": 0.1,
+    "git and saving": 0.1,
+    "reading kit code": 0.1,
+    "Claude's words (thinking and writing)": 34.0,
+    "start-up reading": 25.3,
+    "messages and reminders": 2.4
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 68,
+    "tool search": 83,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 7,
+    "renders": 8,
     "pictures": 5,
-    "other": 22
+    "other": 26
    },
    "split": {
-    "usd": 5.9789,
-    "total": 5.9789,
+    "usd": 7.3109,
+    "total": 7.3109,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 29.7,
-     "carried history": 24.9,
-     "Claude's words": 24.9,
-     "new writes": 20.5
+     "carried history": 29.9,
+     "start-up floor": 29.2,
+     "Claude's words": 22.2,
+     "new writes": 18.6
     },
     "origins": {
-     "Claude's words": 40.6,
-     "start-up floor": 29.7,
-     "result: tool search": 18.2,
-     "result: other": 5.0,
-     "result: pictures": 2.5,
-     "messages and reminders": 2.3,
-     "result: renders": 1.7
+     "Claude's words": 39.2,
+     "start-up floor": 29.2,
+     "result: tool search": 19.0,
+     "result: other": 5.3,
+     "result: pictures": 2.8,
+     "messages and reminders": 2.8,
+     "result: renders": 1.6
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 29.7,
-     "thinking": 12.2,
-     "writing notes": 9.6,
-     "commands": 8.0,
-     "reading notes": 7.8,
-     "writing code": 7.0,
-     "reading guides": 4.5,
-     "other commands": 3.3,
-     "reading chat records": 3.0,
-     "looking at pictures": 2.5,
+     "start-up reading (rules, tools, first files)": 29.2,
+     "thinking": 11.3,
+     "writing notes": 9.2,
+     "commands": 8.2,
+     "reading notes": 7.7,
+     "writing code": 6.8,
+     "reading guides": 4.4,
+     "small shell commands (listing, moving, copying)": 3.5,
+     "reading chat records": 2.8,
+     "looking at pictures": 2.8,
+     "messages and reminders": 2.8,
      "messages to Sam": 2.3,
-     "messages and reminders": 2.3,
-     "reading kit code": 1.8,
+     "reading kit code": 2.0,
      "renders": 1.6,
-     "helper and chat prompts": 1.5,
-     "app tools (chats, files sent)": 1.0,
-     "running checks and tools": 0.7,
-     "start-up and handover tools": 0.7,
-     "git and saving": 0.4
+     "helper and chat prompts": 1.4,
+     "app tools (chats, files sent)": 1.3,
+     "start-up and handover tools": 1.3,
+     "running checks and tools": 0.8,
+     "git and saving": 0.5
     },
     "leftover": 0.0
    },
@@ -1193,15 +1202,15 @@
      [
       "guides/job-packs.md",
       1.7,
-      0.0447
+      0.0521
      ],
      [
       "story/status.md",
       0.5,
-      0.013
+      0.0151
      ]
     ],
-    "base_pct": 26.3
+    "base_pct": 26.5
    },
    "search": {
     "show": 0,
@@ -1209,11 +1218,11 @@
      "no show": 0
     },
     "other": {
-     "film notes": 20,
+     "film notes": 23,
      "guides": 7,
-     "other": 22,
+     "other": 28,
      "shared:kitfilm.py": 1,
-     "shared:handover.py": 1,
+     "shared:handover.py": 3,
      "shared:patriots2.py": 2,
      "shared:patriots3_bunker.py": 1,
      "shared:catalogue.py": 1,
@@ -1221,7 +1230,10 @@
      "shared:plainwords.py": 5,
      "shared:facepick.py": 4,
      "shared:maps.py": 1,
-     "shared:kittests_proposals.py": 1
+     "shared:kittests_proposals.py": 1,
+     "shared:rule_proofs.py": 1,
+     "shared:ruleproofs.py": 2,
+     "shared:kittests.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -1837,6 +1849,141 @@
       "\n     ",
       "",
       174
+     ],
+     [
+      102,
+      "other",
+      "film notes",
+      "notes/patriots5.md story/status.md notes/kittest-stamps.tsv notes/logs",
+      "git add -A notes/patriots5.md story/status.md references/patriots-5 notes/kittes",
+      "",
+      27
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/345bd082-1f87-5516-878c-330826bf9bf4/tas",
+      "",
+      31
+     ],
+     [
+      105,
+      "other",
+      "film notes",
+      "notes/kittest-stamps.tsv notes/patriots5.md",
+      "Ask permission for big uk",
+      "",
+      441
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git merge --no-edit FETCH_HEAD 2>&1 | tail -5",
+      "",
+      385
+     ],
+     [
+      107,
+      "other",
+      "film notes",
+      "",
+      "handover.py|kittests|watcher",
+      "",
+      6632
+     ],
+     [
+      109,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
+      "",
+      86
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:claude/create-claude-md-oe8z4g 2>&1|tail -1; git push -q",
+      "",
+      210
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      73
+     ],
+     [
+      114,
+      "other",
+      "other",
+      "notes/logs/kittest-reds.log notes/logs",
+      "kittests|handover.py",
+      "",
+      389
+     ],
+     [
+      115,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py",
+      "how long\\|seconds\\|wait",
+      "",
+      2389
+     ],
+     [
+      117,
+      "other",
+      "shared:rule_proofs.py",
+      "source/rule_proofs.json source/rule_proofs.py",
+      "def .*claude_md\\|anchor",
+      "",
+      755
+     ],
+     [
+      118,
+      "other",
+      "shared:ruleproofs.py",
+      "source/rule_proofs.json source/ruleproofs.py",
+      "anchor",
+      "",
+      1226
+     ],
+     [
+      119,
+      "other",
+      "shared:ruleproofs.py",
+      "source/ruleproofs.py",
+      "sed -n 70,100p source/ruleproofs.py",
+      "",
+      1933
+     ],
+     [
+      120,
+      "other",
+      "shared:kittests.py",
+      "source/rule_proofs.json notes/learn/plain-words/bad-7-hook-suggest-27nov.md sour",
+      "python3 - <<'EOF' import json, sys sys.path.insert(0,'source'); import ruleproof",
+      "",
+      234
+     ],
+     [
+      121,
+      "other",
+      "shared:handover.py",
+      "source/rule_proofs.json notes/kittest-stamps.tsv source/handover.py",
+      "git add source/rule_proofs.json notes/kittest-stamps.tsv && git commit -qm \"Rule",
+      "",
+      267
      ]
     ]
    },
@@ -1850,7 +1997,327 @@
    "round": null,
    "cost": 2.77,
    "notes": 3,
-   "repeats": []
+   "repeats": [],
+   "steps": 113,
+   "hist_k": 295,
+   "kinds": {
+    "film-file search": 0.2,
+    "tool search": 29.1,
+    "renders": 1.4,
+    "pictures": 5.9,
+    "other": 63.3
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 71,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 19,
+    "other": 18
+   },
+   "split": {
+    "usd": 8.8595,
+    "total": 8.8595,
+    "floor_k": 85,
+    "blocks": {
+     "Claude's words": 30.0,
+     "carried history": 29.1,
+     "start-up floor": 21.9,
+     "new writes": 19.0
+    },
+    "origins": {
+     "Claude's words": 51.7,
+     "start-up floor": 21.9,
+     "result: tool search": 14.5,
+     "result: pictures": 7.7,
+     "messages and reminders": 2.1,
+     "Claude's edits": 1.2,
+     "result: other": 0.4,
+     "result: film-file search": 0.2,
+     "result: renders": 0.2
+    },
+    "named": {
+     "thinking": 29.9,
+     "start-up reading (rules, tools, first files)": 21.9,
+     "writing code": 16.6,
+     "looking at pictures": 7.7,
+     "reading kit code": 6.9,
+     "reading guides": 4.4,
+     "commands": 4.3,
+     "reading notes": 2.2,
+     "messages to Sam": 2.2,
+     "messages and reminders": 2.1,
+     "start-up and handover tools": 1.3,
+     "renders": 0.2,
+     "running checks and tools": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 27,
+    "work_pct": 0.59,
+    "reads": [
+     [
+      "source/mounts.py",
+      2.7,
+      0.0685
+     ],
+     [
+      "guides/figure-rig.md",
+      2.4,
+      0.0642
+     ],
+     [
+      "source/views.py",
+      2.4,
+      0.0615
+     ],
+     [
+      "guides/pose-kits.md",
+      2.0,
+      0.0533
+     ],
+     [
+      "notes/learn/shoulder-tower/refs-sheet.jpg",
+      1.6,
+      0.0433
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/22904d63-b565-5dcb-85d6-40d773d90546/scratchpad/tw/pair.png",
+      1.6,
+      0.0384
+     ],
+     [
+      "source/views_d.py",
+      1.4,
+      0.0335
+     ],
+     [
+      "source/pose_test.py",
+      0.9,
+      0.022
+     ],
+     [
+      "notes/learn/shoulder-tower/lesson.md",
+      0.8,
+      0.0213
+     ],
+     [
+      "source/bench_move_c.py",
+      0.3,
+      0.0085
+     ],
+     [
+      "source/people.py",
+      0.3,
+      0.0085
+     ]
+    ],
+    "base_pct": 19.6
+   }
+  },
+  {
+   "date": "2026-11-27",
+   "chat": "0b4b259a",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.21,
+   "src": "estimate",
+   "sid": "session_01J1JB7XBkFnh8wsjoozo2sD",
+   "steps": 19,
+   "hist_k": 103,
+   "kinds": {
+    "tool search": 14.8,
+    "renders": 3.8,
+    "pictures": 2.8,
+    "small shell commands (listing, moving, copying)": 0.7,
+    "reading notes": 3.8,
+    "running checks and tools": 1.1,
+    "app tools (chats, files sent)": 1.7,
+    "start-up reading": 47.7,
+    "Claude's words (thinking and writing)": 22.7,
+    "messages and reminders": 0.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 2,
+    "other": 6
+   },
+   "split": {
+    "usd": 0.7838,
+    "total": 0.7838,
+    "floor_k": 85,
+    "blocks": {
+     "start-up floor": 57.8,
+     "Claude's words": 20.3,
+     "new writes": 17.8,
+     "carried history": 4.1
+    },
+    "origins": {
+     "start-up floor": 57.8,
+     "Claude's words": 27.5,
+     "result: tool search": 11.2,
+     "result: pictures": 1.5,
+     "messages and reminders": 1.0,
+     "result: renders": 0.7,
+     "result: other": 0.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 57.8,
+     "commands": 8.5,
+     "writing code": 6.7,
+     "start-up and handover tools": 4.7,
+     "thinking": 4.2,
+     "writing notes": 4.1,
+     "reading notes": 3.6,
+     "reading kit code": 2.5,
+     "messages to Sam": 2.2,
+     "helper and chat prompts": 1.8,
+     "looking at pictures": 1.5,
+     "messages and reminders": 1.0,
+     "renders": 0.8,
+     "git and saving": 0.2,
+     "app tools (chats, files sent)": 0.2,
+     "small shell commands (listing, moving, copying)": 0.1,
+     "running checks and tools": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 85,
+    "work_step": 7,
+    "work_pct": 0.11,
+    "reads": [
+     [
+      "source/shoulder_tower.py",
+      1.7,
+      0.0176
+     ],
+     [
+      "notes/learn/shoulder-tower/lesson.md",
+      0.9,
+      0.0095
+     ]
+    ],
+    "base_pct": 35.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 3,
+     "shared:handover.py": 1,
+     "shared:shoulder_tower.py": 6
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -3 && git branch --show-current && git log --oneline -1",
+      "",
+      165
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git checkout -b claude/patriots5-tower-notes && git push -u origin claude/patrio",
+      "",
+      389
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01J1JB7ZkMsnBGVghepa9DBs --film patriot",
+      "",
+      8573
+     ],
+     [
+      3,
+      "other",
+      "shared:shoulder_tower.py",
+      "notes/learn/shoulder-tower/lesson.md source/shoulder_tower.py",
+      "BALANCE_ARMS",
+      "",
+      7232
+     ],
+     [
+      4,
+      "other",
+      "shared:shoulder_tower.py",
+      "source/shoulder_tower.py",
+      "def balance\\|balance(",
+      "",
+      3148
+     ],
+     [
+      5,
+      "other",
+      "shared:shoulder_tower.py",
+      "source/shoulder_tower.py",
+      "BALANCE_ARMS\\|balance(",
+      "",
+      942
+     ],
+     [
+      6,
+      "other",
+      "shared:shoulder_tower.py",
+      "source/shoulder_tower.py",
+      "python3 - <<'EOF' p='source/shoulder_tower.py' s=open(p).read() old=\"BALANCE_ARM",
+      "",
+      16
+     ],
+     [
+      7,
+      "other",
+      "shared:shoulder_tower.py",
+      "source/shoulder_tower.py notes/learn/shoulder-tower/tower-practice-v2.mp4",
+      "time python3 source/shoulder_tower.py clip notes/learn/shoulder-tower/tower-prac",
+      "",
+      152
+     ],
+     [
+      9,
+      "other",
+      "shared:shoulder_tower.py",
+      "source/shoulder_tower.py",
+      "sed -n 480,520p source/shoulder_tower.py",
+      "",
+      599
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"patriots5 tower notes: take out the middle men's a",
+      "",
+      305
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
@@ -1907,6 +2374,10 @@
   {
    "date": "2026-11-27",
    "spent": 7.0
+  },
+  {
+   "date": "2026-11-27",
+   "spent": 7.99
   }
  ],
  "notes_tags": {

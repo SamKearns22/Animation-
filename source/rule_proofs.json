@@ -1267,6 +1267,17 @@
    ],
    "example": "Sam, 27 Nov (The Patriot 5 plan chat): \"You never need to suggest hook texts to me. Leave that blank until I provide it.\" Saved example notes/learn/plain-words/bad-7-hook-suggest-27nov.md; kittest hook_text_never_suggested runs the plain-words check on it.",
    "notes": "Entry written by patriots5 chat 2 (the handover check found the rule with none; the rule, check and test came from the plan chat)."
+  },
+  "W16": {
+   "rule": "The Hook Text is Sam's: never suggest one; leave it blank until he gives it.",
+   "status": "proven",
+   "tests": [
+    "hook_text_never_suggested"
+   ],
+   "anchor": "The Hook Text is mine (Sam, 27 Nov):",
+   "example": "notes/learn/plain-words/bad-7-hook-suggest-27nov.md: the Patriot 5 plan chat's two sentences offering \"Danny Tommo is behind bars\" (Sam, 27 Nov: \"You never need to suggest hook texts to me. Leave that blank until I provide it.\")",
+   "notes": "Sam's Y, 27 Nov; check: plainwords.hook_suggested",
+   "kind_before": "code"
   }
  },
  "_baseline": {

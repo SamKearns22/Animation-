@@ -54,10 +54,16 @@ size downloads, 403 and 429).
 - **Sway:** 0.011 rad at the base, growing 22% a tier, each tier 0.07 s later: the top man moves 0.23 m in all.
 
 ## Still open
-- Sam (27 Nov, on v1): "I don't like the hand thrusting the lower characters are doing." The two middle men
-  (BALANCE_ARMS) throw the near hand out at each end of the sway. Plan: take it out (both hands stay on the shins;
-  the sway reads from the column and the top man's free arm). Lost: the arms-out balance from photos 04-05.
+- Sam (27 Nov, on v1): "I don't like the hand thrusting the lower characters are doing." Fixed in v2
+  (`tower-practice-v2.mp4`, BALANCE_ARMS empty): both hands stay on the shins; the sway reads from the column and the
+  top man. Lost: the arms-out balance from photos 04-05. Awaiting Sam's look.
+  **Why no check saw it:** "arms out for balance" came from the lesson's photos, not Sam, and the throw passed every
+  joins check. What would have caught it: an arm move must read as balance (out to the side and back, slowly, eased
+  over most of the sway), never a quick straight jab at the wall or lens. No check built: a fast-hand limit could
+  catch the jab, but Sam may dislike the gesture itself; it is a taste call, so a new gesture not in Sam's brief is
+  shown to him in a clip before it is kept.
 - The top man's head is near, not in, the window (the wall is set clear of every knee and hat brim through the sway):
   the film's shot will need his face at the bars.
 - Peaked caps are left out: a bowed head turned the cap into a black blob (the film's men wear balaclavas).
 - The feet check did not flag a shoe that looked close to a head in an enlarged crop; at 1:1 there was a gap.
+  v2 (27 Nov), full size at both sway ends: every shoe at the side of the chest, a clear gap above the head below.

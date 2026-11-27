@@ -49,7 +49,8 @@ LEG_OUT = 150.0           # sitter's feet apart: the shins round the outside of 
 GRIP = 0.8               # where the lower man holds the shin (0 knee .. 1 ankle)
 BEND = 46.0               # the base's knees bent (soles this far up from a straight stand): the weight shows
 HEAD_TIP = 25.0            # a lower man's head tipped forward by the seat pressing it (degrees)
-BALANCE_ARMS = (4, 5)     # tiers that let go with the near hand at the sway's far ends and throw it out to balance
+BALANCE_ARMS = ()        # tiers that let go with the near hand at the sway's ends (none: Sam, 27 Nov, "I don't like the
+#                           hand thrusting"; both hands stay on the shins, the sway reads from the column and the top man)
 TOP_LEAN = 30.0           # the top man leans in to look through the window
 LEAN = 18.0                # every man tipped a little forward at the hips, so the seat (behind his neck) comes back over
 #                           his own hips: the column stays straight over the base's feet (SEAT x = -450 sin LEAN)
