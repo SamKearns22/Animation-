@@ -368,7 +368,13 @@ def patriot_jacket(p, view, sp):
     jd = B.dk(JACKET, 0.7)
     if view in ('front', 'three', 'side'):
         o = {'front': 0.0, 'three': sp.get('v_at', 0.32 * sw), 'side': 0.62 * sw}[view]
-        if view != 'front':                            # the belly pushes the front of the jacket out
+        if sp.get('figure') == 'stout' and view == 'side':   # Patriots 5: the zip on the stout body's own front edge
+            VC = V                                             # (the old 0.62 left it hanging in the air)
+            edge = VC.torso_outline(sp, 'side', bottom)
+            o = max(x for x, y in edge if 0 <= y <= 60) - 8
+        if sp.get('figure') == 'stout':               # Patriots 5: the body's own outline carries the belly
+            pass
+        elif view != 'front':                            # the belly pushes the front of the jacket out
             if view == 'three':
                 pts = [(sw * 0.84, 200), (sw * 0.98, 300), (sw * 0.96, 400), (sw * 0.78 * B.HEM, bottom), (sw * 0.6, bottom),
                        (sw * 0.6, 200)]
@@ -393,7 +399,10 @@ def patriot_jacket(p, view, sp):
             w = 64 if view == 'front' else 56
             p.poly([(o - w, -24), (o + w * (1 if view == 'front' else 0.8), -24), (o + w * (1.18 if view == 'front' else 0.9), 30),
                     (o - w * 1.18, 30)], B.lt(JACKET, 1.35), INK, 2.4)
-        p.line([(o, 30), (o + 6, 200), (o + 12, 340), (o + 6, bottom - 26)], (96, 96, 104), 2.2)
+        zp = [(o, 30), (o + 6, 200), (o + 12, 340), (o + 6, bottom - 26)]
+        if sp.get('figure') == 'stout' and view == 'side':   # the zip round the belly, just in from its edge
+            zp = [(max(x for x, y_ in edge if abs(y_ - y) < 40) - 8, y) for y in (30, 120, 200, 300, 400, bottom - 26)]
+        p.line(curve(zp, 3) if len(zp) > 4 else zp, (96, 96, 104), 2.2)
         if view in ('front', 'three'):                 # the poppy on his left breast (Sam, 27 Oct: yes)
             poppy(p, o + sw * (0.48 if view == 'front' else 0.3), 108)   # 24 units: readable on a phone in shot 9
     else:                                               # from behind: the collar and the back seam
@@ -402,6 +411,12 @@ def patriot_jacket(p, view, sp):
         p.poly([(-70, -20), (70, -20), (78, 26), (-78, 26)], B.lt(JACKET, 1.35), INK, 2.4)
         p.line([(o, 30), (o, bottom - 26)], jd, 2.0)
     l, r = _box(view, sp, bottom - 13)
+    if sp.get('figure') == 'stout':                    # Patriots 5: the hem as wide as the stout body's own outline
+        xs = [x0 + (x1 - x0) * (bottom - 13 - y0) / (y1 - y0) for (x0, y0), (x1, y1) in
+              zip(*(lambda q: (q, q[1:] + q[:1]))(V.torso_outline(sp, view, bottom)))
+              if (y0 - bottom + 13) * (y1 - bottom + 13) <= 0 and y0 != y1]
+        if xs:
+            l, r = min(xs), max(xs)
     p.poly([(l + 2, bottom - 26), (r - 2, bottom - 26), (r, bottom), (l, bottom)], B.dk(JACKET, 0.8), INK, 2.0)
     for x in np.linspace(l + 14, r - 14, 12):          # the ribbed hem
         p.line([(x, bottom - 22), (x, bottom - 4)], (24, 24, 28), 1.2)

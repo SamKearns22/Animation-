@@ -471,6 +471,9 @@ def _built_outline(sp, view, bottom, o, fig):
             pts = [(-34, -8), (-d * 0.88, 22), (-d * 0.93, 120), (-d * 0.84, 275), (-d * 1.1, 400), (-d * 1.04, bottom),
                    (d * 0.96, bottom), (d * 0.94, 340), (d * 0.9, 260), (d * 1.26, 165), (d * 1.04, 80), (d * 0.86, 30),
                    (30, -6)]
+        elif fig == 'stout':                      # Patriots 5: the belly out in front, round under the chest
+            pts = [(-34, -8), (-d * 0.96, 22), (-d * 1.06, 130), (-d * 0.94, 320), (-d * 0.94, bottom), (d * 1.12, bottom),
+                   (d * 1.38, 400), (d * 1.42, 300), (d * 1.26, 190), (d * 1.16, 120), (d * 0.92, 30), (30, -6)]
         else:
             pts = [(-34, -8), (-d * 0.96, 22), (-d * 1.06, 130), (-d * 0.92, 320), (-d * 0.92, bottom), (d * 0.94, bottom),
                    (d * 0.94, 300), (d * 1.18, 150), (d * 0.92, 30), (30, -6)]
@@ -571,15 +574,15 @@ def _seat_into_thighs(sp, out, view, bottom):
             x = x + ((te[0] if x < mid else te[1]) - x) * f
         res.append((x, y))
     return res
-TURNED_SIDE = {'female': 0.7, 'straight': 0.7}
+TURNED_SIDE = {'female': 0.7, 'straight': 0.7, 'stout': 0.8}
 # Open Wounds chat 7 (the blind judge, Kemi three-quarter: "straight side-on body with no waist"; measured: her
 # turned front edge ran straight in from the shoulder, 124 to 90, under the near arm, which covers 89-116 there:
 # the side shape's bust is barely deeper than the house man's chest, d 1.20 against 1.18, so turned it never showed).
 # Turned, a woman's bust stands out in front of the near arm (her walking photo, a little turned: the white top's
 # curve ahead of her arm): a bump on the front edge only, at the bust's height. Units: the body's.
-TURNED_BUST = {'female': 27.0, 'straight': 30.0}
-TURNED_BUST_Y = {'female': 145.0, 'straight': 170.0}   # at each build's own bust (the side shapes': 'female' 140,
-TURNED_BUST_SD = {'female': 52.0, 'straight': 42.0}    # 'straight' 165); at 170 May's waist already narrowed behind the arm.
+TURNED_BUST = {'female': 27.0, 'straight': 30.0, 'stout': 0.0}
+TURNED_BUST_Y = {'female': 145.0, 'straight': 170.0, 'stout': 170.0}   # at each build's own bust (the side shapes': 'female' 140,
+TURNED_BUST_SD = {'female': 52.0, 'straight': 42.0, 'stout': 42.0}    # 'straight' 165); at 170 May's waist already narrowed behind the arm.
 # Chat 9 (handover's known fault: May turned, the bump 28 at 140 over SD 42 read pointed, a cone): 'female' wider,
 # 27 over SD 52 at 145, so the front edge swells and eases back into the waist. 22 over SD 62 (softer still) lost her
 # to the blind judges (three-quarter woman 2: "neutral"); 27/52 brought it back to 3 from all three (record v6b)    # how much of the side's shape a three-quarter edge carries

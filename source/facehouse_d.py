@@ -141,8 +141,8 @@ def balaclava_turned(img, p, f, L, sp, view):
     # the crown rounded and the neck carried down into the collar (the torso's neck is the knit's colour: neck_c)
     n0, n1 = TH.NECK.get(view, (-32, 32))
     yb = f.top + f.v1 * H
-    outer.append([(f.hx + n0 - 6, yb - 0.25 * H), (f.hx + n1 + 6, yb - 0.25 * H), (f.hx + n1 + 8, yb + 0.3 * H),
-                  (f.hx + n0 - 8, yb + 0.3 * H)])
+    outer.append([(f.hx + n0 - 6, yb - 0.25 * H), (f.hx + n1 + 6, yb - 0.25 * H), (f.hx + n1 + 6, yb + 0.06 * H),
+                  (f.hx + n0 - 6, yb + 0.06 * H)])   # to the collar's top: the collar shows round it (Sam, 27 Nov)
     if view in ('three', 'side'):                                       # the knit over the nose: a bump, not a cut
         ny, ey, tip = L['nose_y'], L['eye_y'], f.prof.get('nose_tip', 0.2)
         outer.append([f.at(0.0, ey + 0.03, 0.0), f.at(0.0, (ey + ny) / 2, tip * 0.6), f.at(0.0, ny - 0.04, tip * 0.95),
@@ -160,7 +160,7 @@ def balaclava_turned(img, p, f, L, sp, view):
     ps = np.arange(-180, 180, 8.0)
 
     def ribs(pen):
-        vs = np.linspace(top_v, f.v1 + 0.02, 30)
+        vs = np.linspace(top_v, f.v1 - 0.1, 30)          # not the bottom rings: the meridians crowd there
         for psi in ps:
             seg = []
             for v in vs:
@@ -176,7 +176,7 @@ def balaclava_turned(img, p, f, L, sp, view):
             if len(seg) > 1:
                 pen.line(seg, BALA_RIB, 1.3)
         for x in np.arange(f.hx + n0 - 4, f.hx + n1 + 6, 0.045 * H):    # the neck's ribs, straight down
-            pen.line([(x, yb - 0.2 * H), (x, yb + 0.3 * H)], BALA_RIB, 1.3)
+            pen.line([(x, yb - 0.2 * H), (x, yb + 0.06 * H)], BALA_RIB, 1.3)
     base = p.pen if hasattr(p, 'pen') else p
     _knit(img, p, outer, slot, ribs, mouth, dilate=max(2, int(round(base.cam.S(0.022 * H)))),
           soften=max(2, int(round(base.cam.S(0.08 * H)))) if view in ('three_back', 'back') else 0)

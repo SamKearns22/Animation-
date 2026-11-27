@@ -7,10 +7,11 @@
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/patriots5-handovers.md)
 - **Rules that bite next:** 89 (critique before the cast sheet goes back), 30 (a repeat note: find why the first fix failed), 24 (the estimate, once the screenplay is in).
-- **Done (chat 1, 27 Nov):** the Patriot on the new house head (made by hand, no photos: references/faces/patriot/pick) under a new house balaclava (facehouse_d, every turn); his Patriots 3 clothes kept; kit test balaclava_every_view written and passing (it fails on the first sheet's missing three-quarter eye opening); sheet sent to Sam.
+- **Done (chat 1, 27 Nov):** the Patriot on the new house head (made by hand, no photos: references/faces/patriot/pick) under a new house balaclava (facehouse_d, every turn); his Patriots 3 clothes kept; kit test balaclava_every_view (fails on the first sheet's missing three-quarter eye opening); sheet v1 sent; notes 1 and 3 fixed, sheet v2 sent; note 2 answered.
+- **Check not built yet (note 1):** a check that finds stray ink lines inside a jacket's fill; needs a way to tell the drawing's own seams (zip, hem) from stray ones. Until then: every body looked at full size before a sheet goes.
 - **Spent against the estimate:** no estimate yet (Sam is still writing the screenplay).
 - **Next:** Sam's notes on the Patriot's sheet (Opus, medium); then, when Sam gives the screenplay and title, the plan (Opus, high): kitfilm.py begin patriots5.
-- **Needs Sam:** his look at the sheet (Y, or notes).
+- **Needs Sam:** Y or N on the shoulder-seam fix (note 2); his look at sheet v2.
 - **Read:** guides/job-packs.md Notes round (for sheet notes), Plan (when the screenplay comes).
 - **Lost / Added:** Lost: his old big cartoon eyes and boxy head. Added: house eyes and brows, a rounded knit hood fitted to the head, the knit moving over the mouth.
 - **Open rule requests:** none.
@@ -74,7 +75,9 @@ the handover check refuses a blank one.
 
 | # | shot | time | note | line | should have caught | critique saw it? | status |
 |---|------|------|------|------|--------------------|------------------|--------|
-| - |      |      | (none yet) |      |                    |                  |        |
+| 1 | cast sheet | front | "strange vertical lines in the belly area" | new | none: I looked at the sheet at phone size only, not each body at full size (Seeing like Sam, 1); no check sees pieces drawn for an old body landing inside a new one | no critique | fixed: Patriots 3's belly-swell edges no longer drawn; the shared body has a 'stout' build (belly in its own outline, side and three-quarter too) |
+| 2 | cast sheet | back, 3/4 back | "explain the greying out of the sleeves? You did that with Blair too" | seen before (Blair) | none: the shoulder join (limbs.py, the arm fading into the body near the shoulder) assumes the sleeve is the jacket's cloth; a grey sleeve on a black body fades as a smear | no critique | answered; fix waits for Sam's Y (a hard shoulder seam where the sleeve's colour differs from the body's) |
+| 3 | cast sheet | side, three-quarter | "Fix your notes": my named faults (collar a box beside the neck with a zip in the air; the chin's dark V) | new | none (I named them myself, unfixed) | no critique | fixed: the knit's neck stops at the collar so the collar wraps round it; zip and hem fitted to the stout body; ribs stop above the chin's bottom rings |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi).
