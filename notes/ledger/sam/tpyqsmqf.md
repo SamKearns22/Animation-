@@ -38,3 +38,6 @@ Y to all.
 
 Estimated saving on our latest 3 films if all work suggested today is implemented?
 
+### 2026-11-27T13:39:16
+The next time I say a film is posted and closed (not this film, Open Wounds -- call it by its title please) check back in on what you just said and ensure that it is true.
+
