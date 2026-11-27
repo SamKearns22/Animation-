@@ -345,9 +345,9 @@ def slurp_track(path):
 
 
 def add(film, out, fps=None, crf=None, follow=None):
-    """Join the sign-off onto the end of a finished film (1080 x 1920), its sound kept. The film's own frame rate is
-    kept (12 for most; DLC is 24: joining it at 12 halved its smoothness, 19 Oct); crf 20 unless the film's own
-    encoding was lighter (then about the same size as it was)."""
+    """Join the sign-off onto the end of a finished film (1080 x 1920), its sound kept, through join.py at 24 a
+    second (R8 A8; joining DLC at 12 halved its smoothness, 19 Oct); crf 20 unless the film's own encoding was lighter
+    (a film at over 12 a second: then about the same size as it was). The film's own rate only picks the crf."""
     probe = subprocess.run([FF, '-i', film], capture_output=True, text=True).stderr
     if fps is None:
         import re
@@ -359,20 +359,13 @@ def add(film, out, fps=None, crf=None, follow=None):
         so = os.path.join(tmp, 'signoff.mp4')
         clip(so, follow)
         import re
-        wh = re.search(r'Video:.*?, (\d{3,5})x(\d{3,5})', probe)       # the film's own size: a small animatic's sign-off
-        size = f'scale={wh.group(1)}:{wh.group(2)},' if wh else ''        # is scaled to match (scale2ref cut it to 0.75 s)
-        subprocess.run([FF, '-y', '-loglevel', 'error', '-i', film, '-i', so, '-filter_complex',
-                        f'[0:v]fps={fps},format=yuv420p[a];[1:v]{size}fps={fps},format=yuv420p[b];[0:a]aresample=48000[x];'
-                        '[1:a]aresample=48000[y];[a][x][b][y]concat=n=2:v=1:a=1[v][s]',
-                        '-map', '[v]', '-map', '[s]', '-c:v', 'libx264', '-crf', str(crf), '-preset', 'slow',
-                        '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
-    def frames(f):
-        return int(subprocess.run([FF.replace('ffmpeg', 'ffprobe') if os.path.exists(FF.replace('ffmpeg', 'ffprobe')) else 'ffprobe',
-                                   '-v', 'error', '-select_streams', 'v', '-count_frames', '-show_entries',
-                                   'stream=nb_read_frames', '-of', 'csv=p=0', f], capture_output=True, text=True).stdout.strip())
-    n0, n1 = frames(film), frames(out)
-    if n1 != n0 + int(round(OUT_DUR * fps)):   # the sign-off must be its full length (Sam, 28 Oct: it was 0.75 s)
-        raise SystemExit(f'sign-off wrong length: film {n0} frames + sign-off should be {n0 + int(round(OUT_DUR * fps))}, got {n1}')
+        import join as J                    # one join tool, always 24 a second (R8 A8, rulebook S4): a 12 a second
+        J.join([film, so], out, crf=crf)    # film shows each drawing twice, nothing lost; the sign-off its full 24
+    d0, d1 = J.duration(film), J.duration(out)
+    if abs(d1 - d0 - OUT_DUR) > 1.5 / J.FPS:   # the sign-off must be its full length (Sam, 28 Oct: it was 0.75 s)
+        raise SystemExit(f'sign-off wrong length: film {d0:.2f} s + sign-off {OUT_DUR} s should be {d0 + OUT_DUR:.2f} s, '
+                         f'got {d1:.2f} s')
+    fps = J.FPS
     print(f'{out}: {os.path.getsize(out) / 1e6:.1f} MB at {fps} fps')
 
 

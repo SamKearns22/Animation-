@@ -135,6 +135,65 @@ BODY = {
     'head shake': dict(roll=3.5, head_dx=8.4),               # one slow shake of the head, dying away ('from A over D')
 }
 SHAKES = {'head shake'}                                      # moves that swing once each way over their 'over'
+# Head move sizes from the camera's distance (R8 A3, Sam's Y, 27 Nov: "The acting tool turns the words ('small nod',
+# 'curt') into a size that reads at that camera's distance, so a move too small to see can't be written"). A head move
+# written with a size word instead of a number ('nod small from A to B', 'lean in house from ...') moves the eyes this
+# many pixels on the 1080 x 1920 frame, whatever the person's size on screen: the amount is worked out at draw time
+# from film['screen_s'](shot, who, t), the views.person scale the film draws that person at. Inside movesize's window
+# (MIN_PX 10 to MAX_PX: 18 for nods, 40 bow, 70 leans): 'curt' is the house size (quick, never small: Sam, 26 Nov).
+SIZE_PX = {'small': 12.0, 'slight': 12.0, 'house': 14.0, 'curt': 14.0, 'big': 17.0}
+SIZE_PX_BIG = {'small': 12.0, 'slight': 12.0, 'house': 25.0, 'curt': 25.0, 'big': 35.0}   # bow, lean in, lean
+BIG_MOVES = {'bow', 'lean in', 'lean'}
+SIZED = {'nod', 'nod by', 'chin up', 'preen', 'peer', 'bow', 'lean in', 'lean'}   # movesize.HEAD_MOVES
+_PX_CURVE = {}
+_KS = [0.05 * 1.25 ** n for n in range(26)]                # 0.05 to about 13 times the table amount
+
+
+def px_curve(move, sp, yaw=0.0, table=None):
+    """[(k, px)]: how far (px on the 1080 x 1920 frame) the eyes move for k times the move's table amount on a person
+    drawn at views.person scale 1. Exactly in proportion to the scale, but not to k (a deeper lean tips the head
+    further), so measured at many k: once per move, build and side."""
+    base = dict((table or BODY)[move])
+    deg, _ = V.snap(yaw)
+    key = (move, tuple(sorted((c, v[0] if isinstance(v, tuple) else v) for c, v in base.items())),
+           round(sp.get('height', 1.75), 2), sp.get('kit_house') is not None, deg)
+    if key not in _PX_CURVE:
+        from PIL import Image
+        B = V.B                                         # the people engine (body), as views draws with
+
+        def eyes(k):
+            j = V.standing(sp)
+            for c, v in base.items():
+                c = 'head_roll' if c == 'roll' else c
+                j[c] = j.get(c, 0.0) + k * (v[0] if isinstance(v, tuple) else v)
+            ss, B.SS = B.SS, 1
+            try:
+                jj = V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 1200, 1.0, dict(sp), 0.0,
+                              yaw, j)
+            finally:
+                B.SS = ss
+            d = jj.get('_drawn') or {}
+            e = d.get('eyes') or []
+            if e:
+                return (sum(x['white'][0] for x in e) / len(e), sum(x['white'][1] for x in e) / len(e))
+            return d.get('head_at')
+        p0 = eyes(0.0)
+        _PX_CURVE[key] = [(k, math.dist(p0, eyes(k))) for k in _KS]
+    return _PX_CURVE[key]
+
+
+def screen_amount(move, size, sp, s, yaw=0.0, table=None):
+    """The amount (the move's first channel's units, as a moves file writes it) that moves the eyes SIZE_PX[size]
+    pixels on a person drawn at views.person scale s."""
+    base = dict((table or BODY)[move])
+    f0 = next(iter(base.values()))
+    f0 = abs(f0[0] if isinstance(f0, tuple) else f0)
+    want = (SIZE_PX_BIG if move in BIG_MOVES else SIZE_PX)[size] / max(1e-6, abs(s))
+    cur = px_curve(move, sp, yaw, table)
+    for (k0, p0), (k1, p1) in zip(cur, cur[1:]):
+        if p0 <= want <= p1:
+            return f0 * (k0 + (k1 - k0) * (want - p0) / max(1e-9, p1 - p0))
+    return f0 * (cur[0][0] if want < cur[0][1] else cur[-1][0])
 CHANNELS = ('lean', 'nod', 'roll', 'dip', 'bob', 'head_dy')
 SWAY = 3.5                     # the swagger's head roll towards each planted foot (degrees)
 
@@ -393,6 +452,10 @@ def _body(rest):
     h = re.match(r'([a-z][a-z ]*?)(?: ([-\d.]+))?(?: with (.+))?$', head.strip())
     w['move'], amt, extra = h.groups()
     w['amount'] = float(amt) if amt else None
+    w['size'] = None
+    mv = w['move'].rsplit(' ', 1)
+    if len(mv) == 2 and mv[1] in SIZE_PX:              # 'nod small', 'lean in house': sized at draw time (R8 A3)
+        w['move'], w['size'] = mv
     w['with'] = _channels(extra) if extra else {}
     parts = [p.strip() for p in tail.split(',')]
     m2 = re.match(r'(.+) over ([\d.]+)$', parts[0])
@@ -764,6 +827,14 @@ def pose(desc, film, shot, sp, t):
     st = b['stance'] or dict(kind='standing', seat=None, lap=None)
     landed = start + walk_time(w) if w else None
     clock = Clock(film, b, b['shot'], landed)
+    if any(m.get('size') for m in b['body']):           # head moves sized from the camera's distance (R8 A3)
+        if 'screen_s' not in film:
+            raise ValueError(f"{b['shot']}: a head move is written with a size word ('small', 'house', 'curt', 'big'), "
+                             f"so the film must say how big each person is on screen: film['screen_s'](shot, who, t)")
+        s_now = film['screen_s'](b['shot'], b.get('who'), t)
+        yaw0 = (b['stance'] or {}).get('yaw', 0.0)
+        b = dict(b, body=[dict(m, amount=screen_amount(m['move'], m['size'], sp, s_now, yaw0, table))
+                          if m.get('size') else m for m in b['body']])
     put, add, curve = channels(b, clock, t, table)
     if w:
         dur = walk_time(w)

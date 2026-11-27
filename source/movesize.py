@@ -79,8 +79,8 @@ def faults(film_name, shots=None, only=None):
         start, cut = film['span'](b['shot'])
         clock = A.Clock(film, b, b['shot'], None)
         for m in b['body']:
-            if m['move'] not in HEAD_MOVES or m['curve'] == 'except':
-                continue
+            if m['move'] not in HEAD_MOVES or m['curve'] == 'except' or m.get('size'):
+                continue                  # a sized move ('nod small') is made to read by the acting kit (R8 A3)
             if only is not None and _sig(b['shot'], who, m) not in only:
                 continue
             a = clock(m['a'])
@@ -156,7 +156,7 @@ def early(film_name, seen=None, save=True):
     for key in desc['shots']:
         b = A.block_for(desc, key)
         for m in b['body']:
-            if m['move'] in HEAD_MOVES and m['curve'] != 'except':
+            if m['move'] in HEAD_MOVES and m['curve'] != 'except' and not m.get('size'):
                 now.add(_sig(b['shot'], b.get('who') or key, m))
     new = now - set(seen)
     out = faults(film_name, only=new) if new else []

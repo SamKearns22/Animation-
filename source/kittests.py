@@ -906,6 +906,96 @@ def standing_legs_part_in_the_kit():
 
 
 @test
+def head_moves_sized_from_distance():
+    """R8 A3 (Sam's Y, 27 Nov: "The acting tool turns the words ('small nod', 'curt') into a size that reads at that
+    camera's distance, so a move too small to see can't be written. The size check becomes a kit test."). Round 27
+    (Open Wounds): a nod of 1 dropped May's head 7 px, "no nod reads"; chat 37: nods of 22-34 px, "comically large".
+    A head move written with a size word gets its amount from the person's size on screen (acting.screen_amount).
+    Measured by drawing the person at each size: every sized move lands inside movesize's window near, mid and far;
+    red with the old fixed table amount (a far nod too small to see, a near peer past the ceiling)."""
+    import math
+    import sys
+    sys.path.insert(0, 'source')
+    from PIL import Image
+    import acting as A
+    import movesize as MS
+    import castsheet as C
+    cast, PP = C._setup('brexit-is-done', None)
+    V, B = PP.V, PP.B
+    sp = dict(cast['may'])
+
+    def eyes(s, ch):
+        j = V.standing(sp)
+        for c, v in ch.items():
+            c = 'head_roll' if c == 'roll' else c
+            j[c] = j.get(c, 0.0) + v
+        B.SS = 1
+        jj = V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 900, s, dict(sp), 0.0, 0, j)
+        e = jj['_drawn'].get('eyes') or []
+        if e:
+            return (sum(x['white'][0] for x in e) / len(e), sum(x['white'][1] for x in e) / len(e))
+        return jj['_drawn']['head_at']               # the mid-face point (movesize's own fallback)
+
+    def moved(move, amount, s):
+        base = A.BODY[move]
+        f0 = next(iter(base.values()))
+        k = abs(amount / f0)
+        return math.dist(eyes(s, {}), eyes(s, {c: v * k for c, v in base.items()}))
+    bad_now, bad_old, rows = [], [], []
+    for move in ('nod', 'chin up', 'preen', 'peer', 'bow', 'lean in'):
+        lo, hi = MS.MIN_PX, MS.MAX_PX.get(move, 18.0)
+        for s in (1.0, 0.5, 0.25):
+            for size in ('small', 'house', 'big'):
+                px = moved(move, A.screen_amount(move, size, sp, s), s)
+                if not lo <= px <= hi:
+                    bad_now.append(f'{move} {size} at {s}: {px:.0f} px')
+            old = moved(move, abs(next(iter(A.BODY[move].values()))), s)
+            if not lo <= old <= hi:
+                bad_old.append(f'{move} at {s}: {old:.0f} px')
+        rows.append(f"{move} house {moved(move, A.screen_amount(move, 'house', sp, 0.25), 0.25):.0f} px far")
+    parsed = A._body('nod small from 1.0 to 1.5')
+    ok = not bad_now and len(bad_old) >= 2 and parsed['move'] == 'nod' and parsed['size'] == 'small'
+    return ok, (f'old fixed amounts out of the window: {len(bad_old)} ({", ".join(bad_old[:3])}); sized now: '
+                + ('; '.join(bad_now[:4]) if bad_now else 'all inside') + '; ' + ', '.join(rows[:3]))
+
+
+@test
+def joins_at_24():
+    """R8 A8 (Sam's Y, 27 Nov): one join tool, always at 24 a second (rulebook S4, by hand until now). Ad-Vanced
+    Notice, 19 Oct: DLC (24 a second) joined at 12 lost every other drawing. join.join fits every piece to 24: a 12 a
+    second piece with sound plus a 24 a second silent piece whose every frame differs come out 3 s long, 72 frames,
+    the 24 a second piece's 24 different pictures all kept. Red with the old join at the first piece's rate (12)."""
+    import hashlib
+    import subprocess
+    import tempfile
+    import sys
+    sys.path.insert(0, 'source')
+    import join as J
+    tmp = tempfile.mkdtemp()
+    a, b = f'{tmp}/a.mp4', f'{tmp}/b.mp4'
+    run = lambda *x: subprocess.run([J.FF, '-y', '-loglevel', 'error', *x], check=True)   # noqa: E731
+    run('-f', 'lavfi', '-i', 'testsrc=size=270x480:rate=12:d=2', '-f', 'lavfi', '-i', 'sine=f=440:d=2', '-shortest',
+        '-c:v', 'libx264', '-crf', '10', '-pix_fmt', 'yuv420p', '-c:a', 'aac', a)
+    run('-f', 'lavfi', '-i', 'testsrc=size=270x480:rate=24:d=1', '-c:v', 'libx264', '-crf', '10', '-pix_fmt', 'yuv420p', b)
+
+    def distinct_last_second(path):
+        raw = subprocess.run([J.FF, '-loglevel', 'error', '-sseof', '-1', '-i', path, '-f', 'rawvideo', '-pix_fmt',
+                              'gray', '-s', '54x96', '-'], capture_output=True).stdout
+        n = 54 * 96
+        return len({hashlib.md5(raw[i:i + n]).hexdigest() for i in range(0, len(raw) - n + 1, n)})
+    out = J.join([a, b], f'{tmp}/out.mp4', crf=18, preset='veryfast')
+    old = f'{tmp}/old.mp4'
+    run('-i', a, '-i', b, '-filter_complex', '[0:v]fps=12[x];[1:v]fps=12[y];[x][y]concat=n=2:v=1:a=0[v]', '-map', '[v]',
+        '-c:v', 'libx264', '-crf', '18', old)
+    n_new, n_old = distinct_last_second(out), distinct_last_second(old)
+    ok = (J.rate(out) == 24 and J.frames(out) == 72 and abs(J.duration(out) - 3.0) < 0.05 and J.has_sound(out)
+          and n_new >= 23 and n_old <= 13)
+    return ok, (f'joined: {J.rate(out):g} a second, {J.frames(out)} frames, {J.duration(out):.2f} s, sound '
+                f'{J.has_sound(out)}; the 24 a second piece keeps {n_new} different pictures a second (the old join '
+                f'at 12: {n_old})')
+
+
+@test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
     seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These
