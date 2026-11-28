@@ -277,7 +277,9 @@ class Piece:
         c = view['camera']
         # a turned camera (at X D, facing A): a kind marked plan=True is written in the PLAN's metres and turned into
         # the camera's here; every other piece stays in the camera's own frame. No turn: the plan is the camera's.
-        self.turned = bool(self.kind.get('plan')) and ('at' in c or 'facing' in c)
+        # Chat 9: a plan kind takes this one true-depth path for EVERY camera, turned or not (a second, square-on
+        # path drifted: shot 1's cot lacked its legs' inner sides and the pillow's end, which the lens does see).
+        self.turned = bool(self.kind.get('plan'))
         ax, ad = c.get('at', (0.0, 0.0)) if self.turned else (0.0, 0.0)
         fa = math.radians(c.get('facing', 0.0)) if self.turned else 0.0
         self.cam_at = (ax, ad, c['up'])                # the lens on the plan: x, depth, height (m)

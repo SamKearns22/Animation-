@@ -1207,8 +1207,13 @@ def turned_camera_same_plan():
     win = [p for p in PL.pieces(D3, 'cell_front') if p.it['kind'] == 'grated window'][0]
     away = not win.sees(win.x0, win.z0, win.d0, 0, 0, -1)
     drawn = int((a.min(-1) < 250).sum())             # chat 8: the picture compared is not empty
-    ok = diff == 0 and pcs and pcs[0].turned and away and drawn > 500000
-    return ok, f'{diff} pixels differ of {drawn} drawn; turned {bool(pcs and pcs[0].turned)}; window hidden from behind {away}'
+    # chat 9 (saved example notes/learn/turned-cot/: shot 1's cot drawn by a second, square-on path lacked its legs'
+    # inner sides and the pillow's end; 3,081 px off): every plan piece takes the one true-depth path, even under
+    # shot 1's own camera with no 'at' or 'facing'
+    one = all(p.turned for p in PL.pieces(D, 'cell_front') if p.kind.get('plan'))
+    ok = diff == 0 and pcs and pcs[0].turned and away and drawn > 500000 and one
+    return ok, (f'{diff} pixels differ of {drawn} drawn; turned {bool(pcs and pcs[0].turned)}; window hidden from '
+                f'behind {away}; one path for every camera {one}')
 
 
 @test
