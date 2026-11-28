@@ -518,12 +518,29 @@ MOON = (214, 228, 255)                       # moonlight
 
 def _D(a):
     pc = a['piece']
-    return pc, (lambda x, z, d: pc.P(x, z, d)), (lambda d: pc.L.ppm(d) / pc.k)
+    xm = (pc.x0 + pc.x1) / 2                           # a turned camera: sizes at the camera's depth of the point
+    return pc, (lambda x, z, d: pc.P(x, z, d)), (lambda d: pc.L.ppm(max(0.1, pc.cam_d(xm, d))) / pc.k)
 
 
-def _box(p, P, x0, x1, z0, z1, d0, d1, col, lw=2.0, faces='front top'):
+def _box(p, P, x0, x1, z0, z1, d0, d1, col, lw=2.0, faces='front top', pc=None):
     """A box in metres (x across, z up, d from the lens: d0 near, d1 far): its front face and, where the camera sees
-    them, its top (camera above it), its left or right side (the box beside the lens's line)."""
+    them, its top (camera above it), its left or right side (the box beside the lens's line). With a turned camera
+    (pc.turned, chat 7) each face listed is drawn only where the lens is on its outer side, and 'back' (the d1 face)
+    may be listed too; drawn far faces first."""
+    if pc is not None and pc.turned:
+        F = {'top': ([(x0, z1, d0), (x1, z1, d0), (x1, z1, d1), (x0, z1, d1)], (0, 1, 0), mix(col, (255, 255, 255), 0.12)),
+             'bottom': ([(x0, z0, d0), (x1, z0, d0), (x1, z0, d1), (x0, z0, d1)], (0, -1, 0), dk(col, 0.7)),
+             'left': ([(x0, z0, d0), (x0, z1, d0), (x0, z1, d1), (x0, z0, d1)], (-1, 0, 0), dk(col, 0.8)),
+             'right': ([(x1, z0, d0), (x1, z1, d0), (x1, z1, d1), (x1, z0, d1)], (1, 0, 0), dk(col, 0.8)),
+             'back': ([(x0, z0, d1), (x1, z0, d1), (x1, z1, d1), (x0, z1, d1)], (0, 0, 1), dk(col, 0.9)),
+             'front': ([(x0, z0, d0), (x1, z0, d0), (x1, z1, d0), (x0, z1, d0)], (0, 0, -1), col)}
+        for name in ('bottom', 'back', 'left', 'right', 'top', 'front'):
+            pts, (nx, nz, nd), c = F[name]
+            if name in faces.split() and pc.sees(*pts[0], nx, nz, nd):
+                q = pc.poly3(pts)
+                if q:
+                    p.poly(q, c, INK, lw)
+        return
     if 'top' in faces:
         p.poly([P(x0, z1, d0), P(x1, z1, d0), P(x1, z1, d1), P(x0, z1, d1)], mix(col, (255, 255, 255), 0.12), INK, lw)
     if 'left' in faces:
@@ -537,7 +554,7 @@ def _box(p, P, x0, x1, z0, z1, d0, d1, col, lw=2.0, faces='front top'):
 @kind('cot along wall', params={'frame': 'c', 'mattress': 'c', 'blanket': 'c', 'pillow': 'c', 'rail': 'n',
                                 'pillow end': 's', 'blanket from': 'n'},
       defaults={'frame': STEEL, 'mattress': (64, 96, 70), 'blanket': (70, 110, 76), 'pillow': (228, 228, 222),
-                'rail': 0.05, 'pillow end': 'left', 'blanket from': 0.45})
+                'rail': 0.05, 'pillow end': 'left', 'blanket from': 0.45}, plan=True)
 def cot_along_wall(p, img, cam, a, t):
     """A prison cot standing along a wall, seen in true depth from anywhere in the room (x: its ends, z: the floor to
     the mattress top, depth: its near side to its far side, against the wall). A steel tube frame on four legs, a
@@ -548,14 +565,25 @@ def cot_along_wall(p, img, cam, a, t):
     mt = 0.11                                          # the mattress's thickness
     zr = z1 - mt                                       # the frame's top rail
     tube = a['rail']
-    left_seen, right_seen = x0 > 0, x1 < 0             # the lens (at x 0) sees an end only from beyond it
-    for x in (x0 + 0.02, x1 - 0.02 - tube):            # the far legs (behind the mattress, against the wall)
-        _box(p, P, x, x + tube, z0, zr, d1 - tube - 0.02, d1 - 0.02, dk(a['frame'], 0.75), 1.4, 'front')
-    for x in (x0 + 0.02, x1 - 0.02 - tube):            # the near legs
-        _box(p, P, x, x + tube, z0, zr, d0 + 0.02, d0 + 0.02 + tube, a['frame'], 1.6, 'front')
-    _box(p, P, x0, x1, zr - 0.07, zr, d0 + 0.02, d0 + 0.02 + tube, a['frame'], 1.8, 'front')     # the side rail
-    side = ('left' if left_seen else '') + (' right' if right_seen else '')
-    _box(p, P, x0, x1, zr, z1, d0, d1, a['mattress'], 2.2, 'top front ' + side)                 # the mattress
+    if pc.turned:                                      # a turned camera (chat 7): the four legs far to near from
+        cx_, cd_, _ = pc.cam_at                        # it, every side it sees; the rails on both long sides
+        legs = [(x, d, dk(a['frame'], 0.75) if d > (d0 + d1) / 2 else a['frame'])
+                for x in (x0 + 0.02, x1 - 0.02 - tube) for d in (d1 - tube - 0.02, d0 + 0.02)]
+        legs.sort(key=lambda q: -pc.cam_d(q[0] + tube / 2, q[1] + tube / 2))
+        for x, d, col in legs:
+            _box(p, P, x, x + tube, z0, zr, d, d + tube, col, 1.5, 'front back left right', pc)
+        for d in sorted((d0 + 0.02, d1 - tube - 0.02), key=lambda d: -pc.cam_d((x0 + x1) / 2, d)):
+            _box(p, P, x0, x1, zr - 0.07, zr, d, d + tube, a['frame'], 1.8, 'front back left right top', pc)
+        _box(p, P, x0, x1, zr, z1, d0, d1, a['mattress'], 2.2, 'top front back left right', pc)
+    else:
+        left_seen, right_seen = x0 > 0, x1 < 0         # the lens (at x 0) sees an end only from beyond it
+        for x in (x0 + 0.02, x1 - 0.02 - tube):        # the far legs (behind the mattress, against the wall)
+            _box(p, P, x, x + tube, z0, zr, d1 - tube - 0.02, d1 - 0.02, dk(a['frame'], 0.75), 1.4, 'front')
+        for x in (x0 + 0.02, x1 - 0.02 - tube):        # the near legs
+            _box(p, P, x, x + tube, z0, zr, d0 + 0.02, d0 + 0.02 + tube, a['frame'], 1.6, 'front')
+        _box(p, P, x0, x1, zr - 0.07, zr, d0 + 0.02, d0 + 0.02 + tube, a['frame'], 1.8, 'front')  # the side rail
+        side = ('left' if left_seen else '') + (' right' if right_seen else '')
+        _box(p, P, x0, x1, zr, z1, d0, d1, a['mattress'], 2.2, 'top front ' + side)             # the mattress
     # the pillow: a soft slab at one end, its top a little rounded
     pe = a['pillow end']
     px0, px1 = (x0 + 0.04, x0 + 0.5) if pe == 'left' else (x1 - 0.5, x1 - 0.04)
@@ -567,6 +595,12 @@ def cot_along_wall(p, img, cam, a, t):
     face = [P(px0, z1, pf), P(px0 + 0.02, z1 + 0.07, pf - 0.005), P(px0 + 0.06, pz, pf + 0.05),
             P(px1 - 0.06, pz, pf + 0.05), P(px1 - 0.02, z1 + 0.07, pf - 0.005), P(px1, z1, pf)]
     p.poly(curve(face, 3), dk(a['pillow'], 0.86), INK, 1.8)
+    if pc.turned:                                      # its end, where a turned camera sees it (chat 7)
+        for ex, sg in ((px0, -1), (px1, 1)):
+            if pc.sees(ex, z1, (pf + pb) / 2, sg, 0, 0):
+                end = [P(ex, z1, pf), P(ex - sg * 0.03, pz - 0.02, pf + 0.06), P(ex - sg * 0.03, z1 + 0.06, pb),
+                       P(ex, z1, pb)]
+                p.poly(curve(end, 3), dk(a['pillow'], 0.8), INK, 1.8)
     p.line(curve([P(px0 + 0.16, z1 + 0.09, pf + 0.02), P((px0 + px1) / 2, z1 + 0.1, pf + 0.06),
                   P(px1 - 0.18, z1 + 0.09, pf + 0.03)], 3), dk(a['pillow'], 0.75), 1.4)
     # the blanket: folded over the far part, hanging over the near side a little
@@ -586,8 +620,28 @@ def cot_along_wall(p, img, cam, a, t):
                                'mesh': 'c', 'deep': 'n', 'mesh pitch': 'n', 'moon': 'n'},
       defaults={'frame': (150, 156, 164), 'sky': (40, 58, 110), 'reveal': (226, 216, 190), 'sill': (206, 196, 170),
                 'bars': 3, 'bar': (70, 74, 80), 'mesh': (120, 126, 134), 'deep': 0.45, 'mesh pitch': 0.045,
-                'moon': 1})
+                'moon': 1}, plan=True)
 def grated_window(p, img, cam, a, t):
+    """(A turned camera, chat 7: drawn on its own layer, cut to the opening's room face, so the sky and bars seen at
+    an angle never paint over the wall beside it; nothing when the lens is behind the wall.)"""
+    pc = a['piece']
+    if not pc.turned:
+        return _grated_window(p, img, cam, a, t)
+    if not pc.sees(pc.x0, pc.z0, pc.d0, 0, 0, -1):
+        return
+    import body as B
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    _grated_window(B.Pen(lay, cam), lay, cam, a, t)
+    hole = pc.poly3([(pc.x0, pc.z0, pc.d0), (pc.x1, pc.z0, pc.d0), (pc.x1, pc.z1, pc.d0), (pc.x0, pc.z1, pc.d0)])
+    m = Image.new('L', img.size, 0)
+    ImageDraw.Draw(m).polygon([cam.P(*q) for q in hole], fill=255)
+    m = m.filter(ImageFilter.MaxFilter(5))             # its ink outline stays
+    al = np.minimum(np.asarray(lay)[..., 3], np.asarray(m))
+    lay.putalpha(Image.fromarray(al))
+    img.alpha_composite(lay)
+
+
+def _grated_window(p, img, cam, a, t):
     """A small cell window high in a thick wall, in true depth (x, z: the opening on the room's face of the wall,
     depth: that face; `deep`: the wall's thickness). The sky at the outer face (night blue, the moon's glow), steel
     bars at the outer face, a steel mesh grille just inside them, the reveal's sides, top and sloping sill running back
@@ -640,10 +694,15 @@ def grated_window(p, img, cam, a, t):
     p.poly(out, None, INK, 1.8)
     # the reveal: top, sides and the sloping sill, from the room's face back to the outer face
     rv = a['reveal']
-    p.poly([P(x0, z1, d), P(x1, z1, d), P(x1, z1, D), P(x0, z1, D)], dk(rv, 0.72), INK, 2.0)
-    p.poly([P(x0, z0, d), P(x0, z1, d), P(x0, z1, D), P(x0, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
-    p.poly([P(x1, z0, d), P(x1, z1, d), P(x1, z1, D), P(x1, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
-    p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z0 + 0.06, D), P(x0, z0 + 0.06, D)], a['sill'], INK, 2.0)
+    see = (lambda x, z, dd, n: pc.sees(x, z, dd, *n)) if pc.turned else (lambda *q: True)   # turned: faces it sees
+    if see(x0, z1, d, (0, -1, 0)):
+        p.poly([P(x0, z1, d), P(x1, z1, d), P(x1, z1, D), P(x0, z1, D)], dk(rv, 0.72), INK, 2.0)
+    if see(x0, z0, d, (1, 0, 0)):
+        p.poly([P(x0, z0, d), P(x0, z1, d), P(x0, z1, D), P(x0, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
+    if see(x1, z0, d, (-1, 0, 0)):
+        p.poly([P(x1, z0, d), P(x1, z1, d), P(x1, z1, D), P(x1, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
+    if see(x0, z0, d, (0, 1, 0)):
+        p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z0 + 0.06, D), P(x0, z0 + 0.06, D)], a['sill'], INK, 2.0)
 
 
 @kind('night', params={'colour': 'nums'}, defaults={'colour': NIGHT}, overall=True)
@@ -658,7 +717,7 @@ def night(p, img, cam, a, t):
 @kind('moonbeam', params={'travel': 'nums', 'floor': 'n', 'strength': 'n', 'haze': 'n', 'bars': 'n', 'blur': 'n',
                           'pool': 'n', 'lit': 'n'},
       defaults={'travel': (0.0, -0.5, -1.0), 'floor': 0.0, 'strength': 0.55, 'haze': 0.16, 'bars': 3, 'blur': 0.03,
-                'pool': 1.0, 'lit': 0.0}, overall=True)
+                'pool': 1.0, 'lit': 0.0}, overall=True, plan=True)
 def moonbeam(p, img, cam, a, t):
     """One shaft of moonlight through a window (x, z: the window's opening, depth: its outer face), in true depth:
     the light travels `travel` (x, depth, z per metre) until it meets the level `floor` (m: the cot's top, the floor).
@@ -729,6 +788,8 @@ def _cast_shadow(alpha, bd, pc, cam, travel, fl, size, blur):
     x = (X - L.cx) * bd / L.f
     z = L.h - (Y - L.hz) * bd / L.f
     tx, td, tz = travel
+    if pc.turned:                                                   # the light's way in the camera's frame (chat 7)
+        tx, td = tx * pc._r[0] + td * pc._r[1], tx * pc._f[0] + td * pc._f[1]
     k = np.maximum(0.0, (z - fl) / -tz)
     lx, ld = x + tx * k, bd + td * k
     ok = ld > 0.3
@@ -766,3 +827,81 @@ def moon_on(layer, piece, cam, t=0.0, lit=0.3, rim=0.95, rim_px=12):
     out = dim.copy()
     out[..., :3] = dim[..., :3] + (full[..., :3] - dim[..., :3]) * w
     layer.paste(Image.fromarray(out.clip(0, 255).astype(np.uint8), 'RGBA'))
+
+
+# ================================================================================================ rooms in true depth
+# Patriots 5 chat 7: the cell's other views (the side, behind the cot) stand the camera anywhere on the plan and face
+# it any way (camera: at X D, facing A). 'room' draws a back wall square to the lens; this draws every surface of a
+# box room in true depth, so a turned camera sees the same room. A wall the lens stands behind (outside the room: the
+# set's removed wall) is not drawn, as a film set leaves it out.
+@kind('plan room', params={'back': 'c', 'front': 'c', 'left': 'c', 'right': 'c', 'floor': 'c', 'ceiling': 'c',
+                           'line': 'n', 'courses': 's', 'first': 'n', 'every': 'n', 'course colour': 'c',
+                           'bricks': 'n', 'brick': 'nums', 'brick colour': 'c'},
+      defaults={'back': None, 'front': None, 'left': None, 'right': None, 'floor': None, 'ceiling': None, 'line': 2.4,
+                'courses': '', 'first': 0.128, 'every': 0.2816, 'course colour': (198, 186, 160), 'bricks': 0,
+                'brick': (0.128, 0.0704), 'brick colour': (226, 216, 190)}, plan=True)
+def plan_room(p, img, cam, a, t):
+    """A box room seen from inside, in the plan's metres (x: its left and right walls, z: floor to ceiling, depth: its
+    front and back walls). Each surface with a colour is drawn where the lens is inside it; `courses` names the walls
+    ruled with brick courses (`first` m down from the ceiling, `every` m apart), and `bricks` scatters that many
+    painted bricks over each of them (the house's brick patches)."""
+    import random
+    pc = a['piece']
+    x0, x1, z0, z1, d0, d1 = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0, pc.d1
+    walls = {'floor': ([(x0, z0, d0), (x1, z0, d0), (x1, z0, d1), (x0, z0, d1)], (0, 1, 0)),
+             'ceiling': ([(x0, z1, d0), (x1, z1, d0), (x1, z1, d1), (x0, z1, d1)], (0, -1, 0)),
+             'back': ([(x0, z0, d1), (x1, z0, d1), (x1, z1, d1), (x0, z1, d1)], (0, 0, -1)),
+             'front': ([(x0, z0, d0), (x1, z0, d0), (x1, z1, d0), (x0, z1, d0)], (0, 0, 1)),
+             'left': ([(x0, z0, d0), (x0, z0, d1), (x0, z1, d1), (x0, z1, d0)], (1, 0, 0)),
+             'right': ([(x1, z0, d0), (x1, z0, d1), (x1, z1, d1), (x1, z1, d0)], (-1, 0, 0))}
+
+    def on(name, u, z):
+        """A point on a wall: u 0-1 along it (left to right as seen from inside), z its height."""
+        if name == 'back':
+            return (x0 + (x1 - x0) * u, z, d1)
+        if name == 'front':
+            return (x1 - (x1 - x0) * u, z, d0)
+        if name == 'left':
+            return (x0, z, d0 + (d1 - d0) * u)
+        return (x1, z, d1 - (d1 - d0) * u)
+    for name in ('floor', 'ceiling', 'left', 'right', 'front', 'back'):
+        col = a[name]
+        pts, n = walls[name]
+        if col is None or not pc.sees(*pts[0], *n):
+            continue
+        q = pc.poly3(pts)
+        if q:
+            p.poly(q, col, INK, a['line'])
+        if name not in a['courses'].split():
+            continue
+        z = z1 - a['first']
+        while z > z0 + 0.05:
+            seg = pc.poly3([on(name, 0, z), on(name, 1, z), on(name, 1, z - 0.004), on(name, 0, z - 0.004)])
+            if seg:
+                p.poly(seg, a['course colour'], a['course colour'], 1.2)
+            z -= a['every']
+        rnd = random.Random(int(a['seed']) + len(name))
+        bw, bh = a['brick'][:2]
+        span = (x1 - x0) if name in ('back', 'front') else (d1 - d0)
+        for _ in range(int(a['bricks'])):
+            u, zz = rnd.uniform(0.04, 0.96), rnd.uniform(z0 + 0.25, z1 - 0.2)
+            for k in range(rnd.randint(1, 3)):            # a patch: one to three bricks, offset like courses
+                uu = u + (k % 2) * bw / 2 / span
+                z_ = zz - k * bh
+                du = bw / span
+                b = pc.poly3([on(name, uu, z_), on(name, uu + du, z_), on(name, uu + du, z_ - bh), on(name, uu, z_ - bh)])
+                if b:
+                    p.poly(b, None, a['course colour'], 0.8)
+
+
+@kind('solid', params={'colour': 'c', 'line': 'n', 'faces': 's'},
+      defaults={'colour': (176, 182, 188), 'line': 1.6, 'faces': 'front back left right top bottom'}, plan=True)
+def solid(p, img, cam, a, t):
+    """A plain box in true depth (a shelf, a mug, a paperback, a step): every face the lens sees, far ones first."""
+    pc, P, _ = _D(a)
+    if pc.turned:
+        return _box(p, P, pc.x0, pc.x1, pc.z0, pc.z1, pc.d0, pc.d1, a['colour'], a['line'], a['faces'], pc)
+    cx, cd, cz = pc.cam_at
+    f = [n for n, ok in (('front', cd < pc.d0), ('top', cz > pc.z1), ('left', cx < pc.x0), ('right', cx > pc.x1))
+         if ok and n in a['faces']]
+    _box(p, P, pc.x0, pc.x1, pc.z0, pc.z1, pc.d0, pc.d1, a['colour'], a['line'], ' '.join(f))

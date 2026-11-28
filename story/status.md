@@ -1,3 +1,3 @@
-patriots5 (The Patriot 5): sets chat 6: the new night cell (shot 1) built and sent; cast checks settled but one (officer 2 build, asked Sam).
-Done: blind judge on the cast; shot 1 cell with moonlight; downcast pose on the cot.
-Next: chat 7 (Opus high): Danny's seated band fix, the cell's other views, the gatehouse, the film file, the shot board.
+patriots5 (The Patriot 5): sets chat 7: Danny's band fixed; turned cameras built (any angle on one plan); shot 2's side view in progress.
+Done: band fix + test; officer 2 photo search (asked Sam); turned camera, true-depth room and box pieces + test.
+Next: chat 8 (Opus high): fix the side view's three faults, then the other cell views, the gatehouse, the film file, the shot board.

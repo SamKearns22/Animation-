@@ -22,3 +22,21 @@ block: x -0.9 to -0.74, z 1.36 to 1.6, depth 4.16, colour 150 60 50, line 1.2, o
 cot along wall: x -0.95 to 0.95, z 0 to 0.45, depth 3.45 to 4.18, frame steel, mattress mattress, blanket blanket, layer back (the cot)
 night: layer over (the night)
 moonbeam: x -0.3 to 0.3, z 2.11 to 2.55, depth 4.65, travel 0.02 -0.88 -1, floor 0, strength 0.7, layer over (the moonlight)
+
+## view: cell_side (shot 2: from a side angle, Danny looks up, reacts, climbs atop the bunk; chat 7)
+# The same cell plan in metres (the plan's x, depth from shot 1's lens, z up); the camera stands at plan x -3.09,
+# depth 3.02 (beyond the cell's left wall: the set's removed wall) and faces 75 degrees round from shot 1's (towards
+# the cot wall and the right wall), so Danny is seen three-quarters from the side, the window above and behind him.
+# The door wall stands at depth 0.6 (the cell 3.6 m long, as a real single cell).
+camera: up 1.3, horizon 1000, lens 1500, at -3.09 3.02, facing 75
+people: danny 3.2
+plan room: x -1.2 to 1.2, z 0 to 2.9, depth 0.6 to 4.2, back cell, left cell dark, right cell dark * 0.95, front cell dark * 0.9, floor cell floor, ceiling cell / 255 255 255 0.2, courses back right left front, course colour cell dark, bricks 14, brick colour cell dark, seed 51, layer back (the cell)
+solid: x -1.2 to 1.2, z 0 to 0.12, depth 4.17 to 4.2, colour cell / 52 92 150 0.35, layer back (the skirting, back)
+solid: x 1.17 to 1.2, z 0 to 0.12, depth 0.6 to 4.17, colour cell / 52 92 150 0.35, layer back (the skirting, right)
+grated window: x -0.3 to 0.3, z 2.05 to 2.55, depth 4.2, deep 0.45, layer back (the window)
+solid: x -1.19 to -0.62, z 1.32 to 1.36, depth 3.97 to 4.19, colour steel, layer back (the shelf)
+solid: x -1.1 to -0.98, z 1.36 to 1.46, depth 4.04 to 4.14, colour 230 230 226, line 1.2, layer back (a plastic mug)
+solid: x -0.9 to -0.74, z 1.36 to 1.6, depth 4.0 to 4.16, colour 150 60 50, line 1.2, layer back (a paperback)
+cot along wall: x -0.95 to 0.95, z 0 to 0.45, depth 3.45 to 4.18, frame steel, mattress mattress, blanket blanket, layer back (the cot)
+night: layer over (the night)
+moonbeam: x -0.3 to 0.3, z 2.11 to 2.55, depth 4.65, travel 0.02 -0.88 -1, floor 0, strength 0.7, layer over (the moonlight)

@@ -34,6 +34,7 @@ THE LANGUAGE (one piece per line; params split by ', '; colours are 'R G B', a w
 Map: parse 60 | colours 175 | the camera and layers 195 | draw (Piece) 245 | boxes for the checks 380 | replicate 435 |
      the catalogue tile (picture) 490 | lines for the page 505 | main 525
 """
+import math
 import os
 import re
 import sys
@@ -101,8 +102,12 @@ def parse(text):
             cam = {}
             for part in val.split(','):
                 k, _, v = part.strip().partition(' ')
-                if k not in ('up', 'horizon', 'lens', 'centre') or _nums(v) is None:
-                    raise DescriptionError(f'line {n}: camera takes up, horizon, lens, centre: {part.strip()}')
+                if k == 'at' and _nums(v) is not None and len(_nums(v)) == 2:   # Patriots 5 chat 7: a camera stood
+                    cam['at'] = _nums(v)                   # anywhere on the plan (x, depth), facing any way (degrees,
+                    continue                               # 0 the plan's +depth, 90 its +x): plan pieces turn with it
+                if k not in ('up', 'horizon', 'lens', 'centre', 'facing') or _nums(v) is None:
+                    raise DescriptionError(f'line {n}: camera takes up, horizon, lens, centre, at X D, facing A: '
+                                           f'{part.strip()}')
                 cam[k] = float(v)
             if not {'up', 'horizon', 'lens'} <= set(cam):
                 raise DescriptionError(f'line {n}: a camera needs up, horizon and lens')
@@ -269,16 +274,60 @@ class Piece:
         else:
             self.x0, self.x1 = _range(raw['x']) if 'x' in raw else (0.0, 0.0)
             self.z0, self.z1 = _range(raw['z']) if 'z' in raw else (0.0, 0.0)
-        if self.d0 is not None:
-            self.ox, self.oy = self.L.p(self.x0, self.d0, self.z1)
+        c = view['camera']
+        # a turned camera (at X D, facing A): a kind marked plan=True is written in the PLAN's metres and turned into
+        # the camera's here; every other piece stays in the camera's own frame. No turn: the plan is the camera's.
+        self.turned = bool(self.kind.get('plan')) and ('at' in c or 'facing' in c)
+        ax, ad = c.get('at', (0.0, 0.0)) if self.turned else (0.0, 0.0)
+        fa = math.radians(c.get('facing', 0.0)) if self.turned else 0.0
+        self.cam_at = (ax, ad, c['up'])                # the lens on the plan: x, depth, height (m)
+        self._f, self._r = (math.sin(fa), math.cos(fa)), (math.cos(fa), -math.sin(fa))
+        if self.d0 is not None and (not self.turned or self.cam_d(self.x0, self.d0) > 0.05):
+            self.ox, self.oy = self.L.p(*self.cam_xd(self.x0, self.d0), self.z1)
         else:
             self.ox, self.oy = 0.0, 0.0
         self.args = self._args()
 
+    def cam_xd(self, x, d):
+        """A plan point (x, depth) as the camera's (across, depth)."""
+        if not self.turned:
+            return x, d
+        rx, rd = x - self.cam_at[0], d - self.cam_at[1]
+        return rx * self._r[0] + rd * self._r[1], rx * self._f[0] + rd * self._f[1]
+
+    def cam_d(self, x, d):
+        return self.cam_xd(x, d)[1]
+
     def P(self, x, z, d=None):
         """A point in metres, in the piece's own drawing units (from its anchor, at its scale)."""
-        X, Y = self.L.p(x, self.d0 if d is None else d, z)
+        cx, cd = self.cam_xd(x, self.d0 if d is None else d)
+        X, Y = self.L.p(cx, cd, z)
         return (round((X - self.ox) / self.k, 6), round((Y - self.oy) / self.k, 6))
+
+    def poly3(self, pts, near=0.08):
+        """A flat polygon of plan points (x, z, d), cut where it passes behind the lens (camera depth < near), in
+        the piece's own units; [] when none of it is in front."""
+        q = [(self.cam_xd(x, d), z) for x, z, d in pts]
+        out = []
+        for i in range(len(q)):
+            (a, za), (b, zb) = q[i], q[(i + 1) % len(q)]
+            ina, inb = a[1] >= near, b[1] >= near
+            if ina:
+                out.append((a[0], za, a[1]))
+            if ina != inb:
+                u = (near - a[1]) / (b[1] - a[1])
+                out.append((a[0] + (b[0] - a[0]) * u, za + (zb - za) * u, near))
+        res = []
+        for cx, z, cd in out:
+            X, Y = self.L.p(cx, cd, z)
+            res.append((round((X - self.ox) / self.k, 6), round((Y - self.oy) / self.k, 6)))
+        return res if len(res) >= 3 else []
+
+    def sees(self, x, z, d, nx, nz, nd):
+        """Whether the lens is on the outer side of a face through plan point (x, z, d) with outward normal
+        (nx, nz, nd)."""
+        cx, cd, cz = self.cam_at
+        return (cx - x) * nx + (cz - z) * nz + (cd - d) * nd > 0
 
     def screen(self, X, Y):
         """A point on the screen (world px at zoom 1: the picture's edges, the canvas's corners) in own units."""

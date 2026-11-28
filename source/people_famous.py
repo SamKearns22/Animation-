@@ -525,10 +525,25 @@ def zip_top(img, p, sp, t):
 def _rib_hem(p, sp):
     """A tracksuit top's ribbed waistband: a darker band across the hem with a few ribs (Patriots 5, Danny)."""
     top, b = sp['jacket'], sp.get('bottom', 505)
-    sw = sp.get('shoulders', 150) * 0.98
-    p.poly([(-sw, b - 26), (sw, b - 26), (sw, b), (-sw, b)], dk(top, 0.82), INK, 2.0)
+    # the band is the hem of this top: exactly as wide as the top's own outline there (Patriots 5 chat 7, note 11:
+    # a fixed 0.98 of the shoulders stuck out past both sides as a bar, most of all seated, where the hem rises to
+    # the narrow lap; kittest rib_hem_inside_top)
+    w0, w1 = hem_half(sp, b - 26), hem_half(sp, b)
+    p.poly([(-w0, b - 26), (w0, b - 26), (w1, b), (-w1, b)], dk(top, 0.82), INK, 2.0)
     for k in range(-6, 7):
-        p.line([(k * sw / 7, b - 22), (k * sw / 7, b - 3)], dk(top, 0.7), 1.2)
+        p.line([(k * w0 / 7, b - 22), (k * w1 / 7, b - 3)], dk(top, 0.7), 1.2)
+
+
+def hem_half(sp, y):
+    """Half the width of the front torso's outline at height y (person units), as body.plain_torso draws it."""
+    B = PP.B
+    b = sp.get('bottom', 505)
+    body = B.front_outline(sp.get('shoulders', 150), b, 2.0, sp.get('figure'), sp.get('arm_w', 30.0), B.seat_hem(sp))
+    xs = []
+    for (x1, y1), (x2, y2) in zip(body, body[1:] + body[:1]):
+        if (y1 - y) * (y2 - y) <= 0 and y1 != y2:
+            xs.append(x1 + (x2 - x1) * (y - y1) / (y2 - y1))
+    return max(abs(x) for x in xs) if xs else sp.get('shoulders', 150) * B.HEM
 
 
 def tracksuit_top(img, p, sp, t):
