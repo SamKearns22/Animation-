@@ -502,3 +502,267 @@ def wall_tv(p, img, cam, a, t):
     B.Pen(lay, cam).poly([(sx0, sy0), (sx0 + 300, sy0), (sx0 + 120, sy1), (sx0, sy1)], (255, 255, 255, 26), None)
     img.alpha_composite(lay)
     p.ell(w - 70, h - 16, 6, 4, (220, 60, 50), None)
+
+
+# ================================================================================================ the night cell
+# Patriots 5 chat 6 (Sam, 28 Nov, note 10: "we will need a different cell due to the scene layout/mood of the opening
+# moment"): a cell seen dead ahead, the cot along its back wall, a small grated window high above it, the room night
+# blue, one shaft of moonlight on the man on the cot. Every piece here has ref None and draws in TRUE DEPTH through
+# a['piece'].P(x, z, d) (as places_site.py does), so the same plan in metres serves the side view, the grate close-ups
+# and the view from behind the cot. References: references/blessed/13-cell-bunk-bbc.jpg (steel bed frame with rails,
+# a thin mattress, a green prison blanket; a window with bars and a steel mesh grille); a Victorian cell's window
+# is small, high and set deep in a thick wall.
+NIGHT = (92, 112, 170)                       # the night's colour: every colour multiplied by it (moonless room light)
+MOON = (214, 228, 255)                       # moonlight
+
+
+def _D(a):
+    pc = a['piece']
+    return pc, (lambda x, z, d: pc.P(x, z, d)), (lambda d: pc.L.ppm(d) / pc.k)
+
+
+def _box(p, P, x0, x1, z0, z1, d0, d1, col, lw=2.0, faces='front top'):
+    """A box in metres (x across, z up, d from the lens: d0 near, d1 far): its front face and, where the camera sees
+    them, its top (camera above it), its left or right side (the box beside the lens's line)."""
+    if 'top' in faces:
+        p.poly([P(x0, z1, d0), P(x1, z1, d0), P(x1, z1, d1), P(x0, z1, d1)], mix(col, (255, 255, 255), 0.12), INK, lw)
+    if 'left' in faces:
+        p.poly([P(x0, z0, d0), P(x0, z1, d0), P(x0, z1, d1), P(x0, z0, d1)], dk(col, 0.8), INK, lw)
+    if 'right' in faces:
+        p.poly([P(x1, z0, d0), P(x1, z1, d0), P(x1, z1, d1), P(x1, z0, d1)], dk(col, 0.8), INK, lw)
+    if 'front' in faces:
+        p.poly([P(x0, z0, d0), P(x1, z0, d0), P(x1, z1, d0), P(x0, z1, d0)], col, INK, lw)
+
+
+@kind('cot along wall', params={'frame': 'c', 'mattress': 'c', 'blanket': 'c', 'pillow': 'c', 'rail': 'n',
+                                'pillow end': 's', 'blanket from': 'n'},
+      defaults={'frame': STEEL, 'mattress': (64, 96, 70), 'blanket': (70, 110, 76), 'pillow': (228, 228, 222),
+                'rail': 0.05, 'pillow end': 'left', 'blanket from': 0.45})
+def cot_along_wall(p, img, cam, a, t):
+    """A prison cot standing along a wall, seen in true depth from anywhere in the room (x: its ends, z: the floor to
+    the mattress top, depth: its near side to its far side, against the wall). A steel tube frame on four legs, a
+    side rail under the mattress, a thin green mattress, a flat pillow at `pillow end`, a green blanket folded over
+    the other part of the mattress from `blanket from` (0 the pillow end, 1 the far end)."""
+    pc, P, ppm = _D(a)
+    x0, x1, z0, z1, d0, d1 = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0, pc.d1
+    mt = 0.11                                          # the mattress's thickness
+    zr = z1 - mt                                       # the frame's top rail
+    tube = a['rail']
+    left_seen, right_seen = x0 > 0, x1 < 0             # the lens (at x 0) sees an end only from beyond it
+    for x in (x0 + 0.02, x1 - 0.02 - tube):            # the far legs (behind the mattress, against the wall)
+        _box(p, P, x, x + tube, z0, zr, d1 - tube - 0.02, d1 - 0.02, dk(a['frame'], 0.75), 1.4, 'front')
+    for x in (x0 + 0.02, x1 - 0.02 - tube):            # the near legs
+        _box(p, P, x, x + tube, z0, zr, d0 + 0.02, d0 + 0.02 + tube, a['frame'], 1.6, 'front')
+    _box(p, P, x0, x1, zr - 0.07, zr, d0 + 0.02, d0 + 0.02 + tube, a['frame'], 1.8, 'front')     # the side rail
+    side = ('left' if left_seen else '') + (' right' if right_seen else '')
+    _box(p, P, x0, x1, zr, z1, d0, d1, a['mattress'], 2.2, 'top front ' + side)                 # the mattress
+    # the pillow: a soft slab at one end, its top a little rounded
+    pe = a['pillow end']
+    px0, px1 = (x0 + 0.04, x0 + 0.5) if pe == 'left' else (x1 - 0.5, x1 - 0.04)
+    pz = z1 + 0.13
+    pf, pb = d0 + 0.1, d1 - 0.08
+    top = [P(px0 + 0.02, z1 + 0.02, pf), P(px0 + 0.06, pz, pf + 0.05), P(px1 - 0.06, pz, pf + 0.05),
+           P(px1 - 0.02, z1 + 0.02, pf), P(px1 - 0.03, z1 + 0.06, pb), P(px0 + 0.03, z1 + 0.06, pb)]
+    p.poly(curve(top, 3), a['pillow'], INK, 1.8)
+    face = [P(px0, z1, pf), P(px0 + 0.02, z1 + 0.07, pf - 0.005), P(px0 + 0.06, pz, pf + 0.05),
+            P(px1 - 0.06, pz, pf + 0.05), P(px1 - 0.02, z1 + 0.07, pf - 0.005), P(px1, z1, pf)]
+    p.poly(curve(face, 3), dk(a['pillow'], 0.86), INK, 1.8)
+    p.line(curve([P(px0 + 0.16, z1 + 0.09, pf + 0.02), P((px0 + px1) / 2, z1 + 0.1, pf + 0.06),
+                  P(px1 - 0.18, z1 + 0.09, pf + 0.03)], 3), dk(a['pillow'], 0.75), 1.4)
+    # the blanket: folded over the far part, hanging over the near side a little
+    u = a['blanket from']
+    bx0, bx1 = (x0 + (x1 - x0) * u, x1) if pe == 'left' else (x0, x1 - (x1 - x0) * u)
+    bz = z1 + 0.035
+    top = [P(bx0, bz, d0 - 0.01), P(bx1 + 0.01, bz, d0 - 0.01), P(bx1 + 0.01, bz, d1 - 0.02), P(bx0, bz, d1 - 0.02)]
+    p.poly(top, a['blanket'], INK, 2.0)
+    hang = [P(bx0, bz, d0 - 0.01), P(bx1 + 0.01, bz, d0 - 0.01), P(bx1 + 0.01, zr - 0.06, d0 - 0.015),
+            P((bx0 + bx1) / 2, zr - 0.09, d0 - 0.015), P(bx0, zr - 0.05, d0 - 0.015)]
+    p.poly(hang, dk(a['blanket'], 0.8), INK, 2.0)
+    fx = bx0 + 0.09 if pe == 'left' else bx1 - 0.09                       # the fold's turned-back edge
+    p.line([P(fx, bz, d0), P(fx + 0.02, bz, d1 - 0.04)], mix(a['blanket'], (255, 255, 255), 0.3), 2.0)
+
+
+@kind('grated window', params={'frame': 'c', 'sky': 'c', 'reveal': 'c', 'sill': 'c', 'bars': 'n', 'bar': 'c',
+                               'mesh': 'c', 'deep': 'n', 'mesh pitch': 'n', 'moon': 'n'},
+      defaults={'frame': (150, 156, 164), 'sky': (40, 58, 110), 'reveal': (226, 216, 190), 'sill': (206, 196, 170),
+                'bars': 3, 'bar': (70, 74, 80), 'mesh': (120, 126, 134), 'deep': 0.45, 'mesh pitch': 0.045,
+                'moon': 1})
+def grated_window(p, img, cam, a, t):
+    """A small cell window high in a thick wall, in true depth (x, z: the opening on the room's face of the wall,
+    depth: that face; `deep`: the wall's thickness). The sky at the outer face (night blue, the moon's glow), steel
+    bars at the outer face, a steel mesh grille just inside them, the reveal's sides, top and sloping sill running back
+    to it in perspective (the lens sees the sides it faces)."""
+    pc, P, ppm = _D(a)
+    x0, x1, z0, z1, d = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0
+    D = d + a['deep']
+    out = [P(x0, z0 + 0.06, D), P(x1, z0 + 0.06, D), P(x1, z1, D), P(x0, z1, D)]
+    p.poly(out, a['sky'], None)
+    if a['moon']:                                      # the moon's glow in the top corner of the sky
+        _soft(img, cam, (P(x1 - 0.25, z1 + 0.1, D)[0], P(x1, z1 + 0.1, D)[1], P(x1 + 0.15, z1 - 0.15, D)[0],
+                         P(x1, z1 - 0.15, D)[1]), MOON, 0.55, 30)
+    # the mesh grille: a fine diamond lattice across the opening, just inside the bars
+    dm = D - 0.04
+    pitch = a['mesh pitch']
+    n = int((x1 - x0 + z1 - z0) / pitch) + 2
+    for k in range(n):
+        s = k * pitch
+        for sg in (1, -1):
+            pts = []
+            for u in (0.0, 1.0):
+                xx = x0 + s - u * (z1 - z0) if sg > 0 else x1 - s + u * (z1 - z0)
+                zz = z0 + u * (z1 - z0)
+                pts.append((xx, zz))
+            (ax, az), (bx, bz) = pts
+            # clip to the opening
+            def clip(ax, az, bx, bz):
+                tl, th = 0.0, 1.0
+                for v0, dv, lo, hi in ((ax, bx - ax, x0, x1), (az, bz - az, z0 + 0.06, z1)):
+                    if abs(dv) < 1e-9:
+                        if v0 < lo or v0 > hi:
+                            return None
+                        continue
+                    t0, t1 = (lo - v0) / dv, (hi - v0) / dv
+                    if t0 > t1:
+                        t0, t1 = t1, t0
+                    tl, th = max(tl, t0), min(th, t1)
+                return (tl, th) if tl < th else None
+            c = clip(ax, az, bx, bz)
+            if c:
+                q0 = (ax + (bx - ax) * c[0], az + (bz - az) * c[0])
+                q1 = (ax + (bx - ax) * c[1], az + (bz - az) * c[1])
+                p.line([P(q0[0], q0[1], dm), P(q1[0], q1[1], dm)], a['mesh'], max(1.0, 0.008 * ppm(dm)))
+    nb = int(a['bars'])                                # the bars, upright at the outer face
+    for k in range(nb):
+        xx = x0 + (x1 - x0) * (k + 1) / (nb + 1)
+        p.poly([P(xx - 0.012, z0 + 0.06, D), P(xx + 0.012, z0 + 0.06, D), P(xx + 0.012, z1, D),
+                P(xx - 0.012, z1, D)], a['bar'], INK, 1.2)
+    p.poly([P(x0, z1 - 0.03, D), P(x1, z1 - 0.03, D), P(x1, z1, D), P(x0, z1, D)], a['bar'], INK, 1.2)
+    p.poly(out, None, INK, 1.8)
+    # the reveal: top, sides and the sloping sill, from the room's face back to the outer face
+    rv = a['reveal']
+    p.poly([P(x0, z1, d), P(x1, z1, d), P(x1, z1, D), P(x0, z1, D)], dk(rv, 0.72), INK, 2.0)
+    p.poly([P(x0, z0, d), P(x0, z1, d), P(x0, z1, D), P(x0, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
+    p.poly([P(x1, z0, d), P(x1, z1, d), P(x1, z1, D), P(x1, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
+    p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z0 + 0.06, D), P(x0, z0 + 0.06, D)], a['sill'], INK, 2.0)
+
+
+@kind('night', params={'colour': 'nums'}, defaults={'colour': NIGHT}, overall=True)
+def night(p, img, cam, a, t):
+    """Night over the whole picture (over the cast too, so set and people share one light): every colour multiplied
+    by `colour` (R G B), the dark blue of a room lit only from outside."""
+    arr = np.asarray(img).astype(np.float32)
+    arr[..., :3] *= np.array(a['colour'][:3], np.float32) / 255.0
+    img.paste(Image.fromarray(arr.clip(0, 255).astype(np.uint8), 'RGBA'))
+
+
+@kind('moonbeam', params={'travel': 'nums', 'floor': 'n', 'strength': 'n', 'haze': 'n', 'bars': 'n', 'blur': 'n',
+                          'pool': 'n', 'lit': 'n'},
+      defaults={'travel': (0.0, -0.5, -1.0), 'floor': 0.0, 'strength': 0.55, 'haze': 0.16, 'bars': 3, 'blur': 0.03,
+                'pool': 1.0, 'lit': 0.0}, overall=True)
+def moonbeam(p, img, cam, a, t):
+    """One shaft of moonlight through a window (x, z: the window's opening, depth: its outer face), in true depth:
+    the light travels `travel` (x, depth, z per metre) until it meets the level `floor` (m: the cot's top, the floor).
+    A faint haze fills the shaft; where it lands (the pool) it lifts what it falls on back towards full colour, with
+    the bars' shadows across it. On the set the shaft's own screen shape is mostly air (the wall behind it is not
+    lit), so `lit` is 0 there; a film paints the people standing IN the shaft on their own layer and calls
+    moon_on(layer, piece) to light them by the shaft (lit, no haze, no pool). Drawn over the night (layer over)."""
+    pc, P, ppm = _D(a)
+    x0, x1, z0, z1, d = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0
+    tx, td, tz = a['travel']
+    fl = a['floor']
+
+    def land(x, z):
+        k = (z - fl) / -tz
+        return x + tx * k, z + tz * k, d + td * k
+    win = [(x0, z0), (x1, z0), (x1, z1), (x0, z1)]
+    near = [land(x, z) for x, z in win]
+    scr = lambda x, z, dd: cam.P(*P(x, z, dd))
+    W, H = img.size
+    shaft = Image.new('L', (W, H), 0)
+    dr = ImageDraw.Draw(shaft)
+    pts = [scr(x, z, d) for x, z in win] + [scr(*q) for q in near]
+    from scipy.spatial import ConvexHull
+    hull = ConvexHull(np.array(pts))
+    dr.polygon([tuple(pts[i]) for i in hull.vertices], fill=255)
+    pool = Image.new('L', (W, H), 0)
+    ImageDraw.Draw(pool).polygon([scr(*q) for q in near], fill=255)
+    nb = int(a['bars'])                                 # the bars' shadows across the light
+    bars = Image.new('L', (W, H), 255)
+    bd = ImageDraw.Draw(bars)
+    for k in range(nb):
+        xx = x0 + (x1 - x0) * (k + 1) / (nb + 1)
+        q = [(xx - 0.014, z0), (xx + 0.014, z0), (xx + 0.014, z1), (xx - 0.014, z1)]
+        bd.polygon([scr(x, z, d) for x, z in q] + [scr(*land(x, z)) for x, z in q[::-1]], fill=70)
+    blur = max(1.0, a['blur'] * ppm(d) * cam.k if hasattr(cam, 'k') else a['blur'] * ppm(d))
+    sh = np.asarray(shaft.filter(ImageFilter.GaussianBlur(blur * 3))).astype(np.float32) / 255
+    po = np.asarray(pool.filter(ImageFilter.GaussianBlur(blur * 6))).astype(np.float32) / 255
+    ba = np.asarray(bars.filter(ImageFilter.GaussianBlur(blur))).astype(np.float32) / 255
+    for alpha, bd in a.get('blockers') or []:           # people in the shaft cast their shadow into the pool (and
+        shade = 1.0 - _cast_shadow(alpha, bd, pc, cam, (tx, td, tz), fl, img.size, blur)   # the air under them)
+        po, sh = po * shade, sh * (0.35 + 0.65 * shade)
+    arr = np.asarray(img).astype(np.float32)
+    rgb = arr[..., :3]
+    moon = np.array(MOON, np.float32)
+    lift = (a['strength'] * np.maximum(a['lit'] * sh, a['pool'] * po) * ba)[..., None]
+    # light falling on a thing lifts it back towards its own day colour (undoing the night), tinted by the moon
+    night = np.array(NIGHT, np.float32) / 255
+    day = np.clip(rgb / night * (moon / 255), 0, 255)
+    rgb = rgb + (day - rgb) * lift
+    rgb = rgb + (moon - rgb) * (a['haze'] * sh * ba)[..., None]                  # the haze in the air
+    arr[..., :3] = rgb
+    img.paste(Image.fromarray(arr.clip(0, 255).astype(np.uint8), 'RGBA'))
+
+
+def _cast_shadow(alpha, bd, pc, cam, travel, fl, size, blur):
+    """Where a person (their layer's alpha, standing at depth bd) blocks the moonlight on the level `fl`: each of
+    their pixels taken back to the world (a flat figure at depth bd), carried along the light down to the level,
+    and put back on the screen; filled and softened. 0-1 per pixel."""
+    W, H = size
+    ys, xs = np.nonzero(np.asarray(alpha) > 128)
+    if not len(xs):
+        return np.zeros((H, W), np.float32)
+    step = max(1, len(xs) // 40000)
+    xs, ys = xs[::step], ys[::step]
+    zoom = W / 1080.0
+    L = pc.L                                                        # remakes_sets.Level: h, hz, f, cx
+    X, Y = xs / zoom, ys / zoom                                     # world px
+    x = (X - L.cx) * bd / L.f
+    z = L.h - (Y - L.hz) * bd / L.f
+    tx, td, tz = travel
+    k = np.maximum(0.0, (z - fl) / -tz)
+    lx, ld = x + tx * k, bd + td * k
+    ok = ld > 0.3
+    SX = L.cx + lx[ok] * L.f / ld[ok]
+    SY = L.hz - (fl - L.h) * L.f / ld[ok]
+    m = np.zeros((H, W), np.float32)
+    ix, iy = (SX * zoom).astype(int), (SY * zoom).astype(int)
+    keep = (ix >= 0) & (ix < W) & (iy >= 0) & (iy < H)
+    m[iy[keep], ix[keep]] = 1.0
+    im = Image.fromarray((m * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(5))
+    return np.asarray(im.filter(ImageFilter.GaussianBlur(blur * 2))).astype(np.float32) / 255
+
+
+def moon_on(layer, piece, cam, t=0.0, lit=0.3, rim=0.95, rim_px=12):
+    """Light a layer of people standing in a moonbeam piece's shaft (their own layer, already under the night). The
+    light comes from the window BEHIND and above them, so it falls on what faces up and back: a rim along the tops of
+    the head, shoulders, arms and lap (`rim`, `rim_px` deep at full size), the side facing us only faintly (`lit`,
+    light bounced off the room); the bars' shadows across both; no haze and no pool (those are the set's)."""
+    import body as B
+    al = np.asarray(layer)[..., 3].astype(np.float32) / 255
+    n = max(2, int(rim_px * layer.size[0] / 1080.0))
+    above = np.zeros_like(al)
+    for k in range(1, n + 1):                         # pixels with open air within n px above them: the top edges
+        sh = np.zeros_like(al)
+        sh[k:] = al[:-k]
+        above = np.maximum(above, 1.0 - sh)
+    edge = Image.fromarray((np.clip(above * al, 0, 1) * 255).astype(np.uint8)).filter(ImageFilter.GaussianBlur(n / 3))
+    edge = np.asarray(edge).astype(np.float32) / 255 * al
+    base = layer.copy()
+    a = dict(piece.args, lit=1.0, haze=0.0, pool=0.0, strength=1.0)
+    lc = B.Local(cam, piece.ox, piece.oy, piece.k)
+    moonbeam(B.Pen(base, lc), base, lc, a, t)        # fully lit by the shaft (bars' shadows too)
+    full, dim = np.asarray(base).astype(np.float32), np.asarray(layer).astype(np.float32)
+    w = np.clip(lit + (rim - lit) * edge, 0, 1)[..., None]
+    out = dim.copy()
+    out[..., :3] = dim[..., :3] + (full[..., :3] - dim[..., :3]) * w
+    layer.paste(Image.fromarray(out.clip(0, 255).astype(np.uint8), 'RGBA'))

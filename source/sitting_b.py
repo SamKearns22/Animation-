@@ -184,6 +184,8 @@ def realize(sp, seat, spec, lap=True):
     j['bob'], j['lean'], j['dz'], j['lift'], j['roll'] = bob, lean, dz + roll, lift, roll
     j['head_dy'] = spec.get('head_dy', 0.0)
     j['head_lean'] = spec.get('head_lean', 0.0)
+    if spec.get('nod'):                             # Patriots 5 chat 6: a hung head reads front-on only as a nod
+        j['nod'] = spec['nod']
     j['give'] = spec.get('give', 1.0)
     j['cross'] = spec.get('cross')
     j['swivel'] = spec.get('swivel')
@@ -574,7 +576,20 @@ POSES.update({
     'perch, chair edge': (spec_perch, 'office'),
     'perch, desk corner': (spec_perch_desk, 'desk'),
     'slump': (spec_slump, 'office'),
+    'downcast': (lambda sp, seat: spec_downcast(sp, seat), 'cot'),
 })
+
+
+def spec_downcast(sp, seat, sag=1.0):
+    """Downcast on a bed's edge (Patriots 5 shot 1, Danny in his cell: "sighing deeply, downcast"): no back to lean
+    on, so the trunk folds forward over the thighs, forearms resting along them, hands hanging loose between the
+    knees, the head hung forward and down, the feet flat and a little apart under the knees. `sag` 0-1 eases from
+    sitting up to the full slump (the sigh's breath out)."""
+    lean = 10.0 + 20.0 * sag
+    base = _spec(lean=lean, head_lean=12.0 + 20.0 * sag, head_dy=10.0 + 34.0 * sag,
+                 feet={'L': (-74, 215.0), 'R': (76, 200.0)}, nod=5.0 * sag)
+    base['arms'] = {s: arm_free((16.0, 470.0, 250.0), (0.9, 0.5, -0.4), 'palm') for s in 'LR'}
+    return base
 
 
 # ------------------------------------------------------------------------------------------------ moves

@@ -117,6 +117,9 @@ class Seat:
         # perched on a desk's corner (part 2): he stands beside the desk's front end, his left thigh up along its
         # top, the knee over its end and the shin hanging in front of it; the right leg stands. The desk runs away
         # from him on his left (its side at side_x).
+        # a prison cot (Patriots 5 chat 6): 0.45 m high, deep, no back; the sitter near its front edge
+        'cot': dict(h=292, front=80, rear=-380, width=600, back_top=None, arms=None, cushion=6, swivel=False,
+                    col=(64, 96, 70), top=(80, 116, 86)),
         'desk': dict(h=500, front=200, rear=-680, width=440, back_top=None, arms=None, cushion=0, swivel=False,
                      col=(122, 88, 58), top=(150, 112, 76), side_x=-20.0),
     }
