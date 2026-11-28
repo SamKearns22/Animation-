@@ -11,3 +11,10 @@ The other people in the boat and tower need to be Patriot Platform members just 
 ### 2026-11-28T07:14:48
 Forgive me, you just uploaded a character sheet with all the PP people. I hadn't seen that. Give them all the black outfit used in the protests and remove the scarf. Keep life jacket. Otherwise good work there.
 
+### 2026-11-28T07:30:06
+1. There is no reason you shouldn't be able to find the photos of Danny. They will be widely available. Google images?
+
+2. Y
+
+You can use the prison gate but we will need a different cell due to the scene layout/mood of the opening moment
+
