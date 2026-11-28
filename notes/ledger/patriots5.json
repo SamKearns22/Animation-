@@ -7729,11 +7729,18 @@
   {
    "date": "2026-11-28",
    "spent": 24.8
+  },
+  {
+   "date": "2026-11-28",
+   "spent": 24.8
+  },
+  {
+   "date": "2026-11-28",
+   "spent": 24.8
   }
  ],
  "notes_tags": {
   "2": "none: the shoulder join (limbs.py, the arm fading into the body near the shoulder) assumes the sleeve is the jacket's cloth; a grey sleeve on a black body fades as a smear",
-  "10": "-",
   "12": "-"
  },
  "critique": {
