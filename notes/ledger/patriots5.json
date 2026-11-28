@@ -1115,1150 +1115,6 @@
    "notes_auto": 0
   },
   {
-   "date": "2026-11-28",
-   "chat": "345bd082",
-   "model": "opus",
-   "stage": "plan",
-   "round": null,
-   "cost": 3.84,
-   "notes": 0,
-   "repeats": [],
-   "src": "estimate",
-   "sid": "session_01J1JB7VmBNix1SpRrBBfJas",
-   "steps": 204,
-   "hist_k": 326,
-   "kinds": {
-    "tool search": 17.8,
-    "renders": 2.6,
-    "pictures": 1.6,
-    "reading chat records": 2.2,
-    "app tools (chats, files sent)": 2.8,
-    "small shell commands (listing, moving, copying)": 1.4,
-    "git and saving": 0.1,
-    "reading kit code": 0.1,
-    "start-up and handover tools": 0.1,
-    "Claude's words (thinking and writing)": 29.0,
-    "messages and reminders": 22.3,
-    "start-up reading": 20.1
-   },
-   "calls": {
-    "film-file search": 0,
-    "tool search": 113,
-    "whole-file .py read": 0,
-    "page.py": 0,
-    "routine": 0,
-    "renders": 8,
-    "pictures": 5,
-    "other": 52
-   },
-   "split": {
-    "usd": 14.046,
-    "total": 14.046,
-    "floor_k": 83,
-    "blocks": {
-     "carried history": 35.5,
-     "new writes": 27.8,
-     "start-up floor": 21.3,
-     "Claude's words": 15.4
-    },
-    "origins": {
-     "Claude's words": 30.7,
-     "messages and reminders": 23.6,
-     "start-up floor": 21.3,
-     "result: tool search": 14.5,
-     "result: other": 6.2,
-     "result: pictures": 2.4,
-     "result: renders": 1.2
-    },
-    "named": {
-     "messages and reminders": 23.6,
-     "start-up reading (rules, tools, first files)": 21.3,
-     "thinking": 8.4,
-     "commands": 7.3,
-     "writing notes": 6.6,
-     "reading notes": 5.8,
-     "writing code": 4.7,
-     "reading chat records": 3.5,
-     "reading guides": 3.1,
-     "small shell commands (listing, moving, copying)": 2.8,
-     "looking at pictures": 2.4,
-     "messages to Sam": 2.2,
-     "app tools (chats, files sent)": 1.8,
-     "reading kit code": 1.6,
-     "helper and chat prompts": 1.6,
-     "start-up and handover tools": 1.2,
-     "renders": 1.1,
-     "running checks and tools": 0.6,
-     "git and saving": 0.4
-    },
-    "leftover": 0.0
-   },
-   "start": {
-    "floor_k": 83,
-    "work_step": 5,
-    "work_pct": 0.1,
-    "reads": [
-     [
-      "guides/job-packs.md",
-      1.7,
-      0.0692
-     ],
-     [
-      "story/status.md",
-      0.5,
-      0.0201
-     ]
-    ],
-    "base_pct": 21.8
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 0
-    },
-    "other": {
-     "film notes": 31,
-     "guides": 7,
-     "other": 48,
-     "shared:kitfilm.py": 1,
-     "shared:handover.py": 3,
-     "shared:patriots2.py": 2,
-     "shared:patriots3_bunker.py": 1,
-     "shared:catalogue.py": 1,
-     "shared:ledger.py": 3,
-     "shared:plainwords.py": 5,
-     "shared:facepick.py": 4,
-     "shared:maps.py": 1,
-     "shared:kittests_proposals.py": 1,
-     "shared:rule_proofs.py": 1,
-     "shared:ruleproofs.py": 2,
-     "shared:kittests.py": 2
-    },
-    "ticked": 0,
-    "edited film code": false,
-    "list": [
-     [
-      0,
-      "other",
-      "film notes",
-      "story/status.md guides/job-packs.md",
-      "^#",
-      "",
-      1961
-     ],
-     [
-      1,
-      "other",
-      "guides",
-      "guides/job-packs.md",
-      "sed -n 1,45p guides/job-packs.md && sed -n 105,200p guides/job-packs.md && ls no",
-      "",
-      6790
-     ],
-     [
-      2,
-      "other",
-      "other",
-      "",
-      "patriot",
-      "",
-      1169
-     ],
-     [
-      7,
-      "other",
-      "film notes",
-      "notes/ledger/sam/twyb2ony.md notes/ledger/sam/rrbbfjas.md",
-      "git show FETCH_HEAD:notes/ledger/sam/twyb2ony.md 2>/dev/null | head -60 || cat n",
-      "",
-      433
-     ],
-     [
-      8,
-      "other",
-      "other",
-      "notes/ledger notes/archive",
-      "patriot|twyb|redesign",
-      "",
-      650
-     ],
-     [
-      10,
-      "other",
-      "shared:kitfilm.py",
-      "source/kitfilm.py notes/_template.md",
-      "sed -n 1,40p source/kitfilm.py | head -40; cat notes/_template.md | head -80; wc",
-      "",
-      8810
-     ],
-     [
-      11,
-      "other",
-      "guides",
-      "notes/kittest-films.tsv guides/kit-catalogue.md",
-      "patriot",
-      "",
-      4732
-     ],
-     [
-      12,
-      "other",
-      "shared:handover.py",
-      "notes/ledger/patriots4.md source/handover.py source/kitfilm.py source/ledger.py",
-      "def notes_path\\|notes', f\\|f'{film}.md'\\|film + '.md'",
-      "",
-      1486
-     ],
-     [
-      13,
-      "other",
-      "guides",
-      "guides/kit-catalogue.md",
-      "tommy\\|robinson\\|tommo\\|prison\\|guard\\|officer\\|boat\\|cell\\|bunk\\|balaclava\\|tow",
-      "",
-      13333
-     ],
-     [
-      14,
-      "other",
-      "guides",
-      "guides/satire.md guides/preflight.md guides/tiktok-design.md",
-      "^## \\|^### ",
-      "",
-      1039
-     ],
-     [
-      15,
-      "other",
-      "guides",
-      "guides/satire.md guides/preflight.md guides/tiktok-design.md",
-      "sed -n 12,81p guides/satire.md; sed -n 258,272p guides/satire.md; sed -n 10,39p ",
-      "",
-      11606
-     ],
-     [
-      16,
-      "other",
-      "shared:patriots2.py",
-      "guides/kit-catalogue.md source/patriots2.py",
-      "patriots2\\|dinghy\\|small boat",
-      "",
-      2494
-     ],
-     [
-      17,
-      "other",
-      "shared:patriots2.py",
-      "source/patriots2.py",
-      "boat\\|leg",
-      "",
-      2596
-     ],
-     [
-      18,
-      "other",
-      "other",
-      "",
-      "ls prompts | head -30; sed -n 1,60p prompts/_brief-skeleton.md 2>/dev/null | hea",
-      "",
-      1496
-     ],
-     [
-      19,
-      "other",
-      "shared:patriots3_bunker.py",
-      "source/patriots3_bunker.py source/patriots3_cast.py",
-      "balaclava\\|crew\\|badge\\|outfit\\|jacket\\|look",
-      "",
-      3731
-     ],
-     [
-      21,
-      "other",
-      "shared:catalogue.py",
-      "source/catalogue.py",
-      "for q in \"prison cell bed barred window night\" \"prison gatehouse entrance\" \"pris",
-      "",
-      4111
-     ],
-     [
-      22,
-      "other",
-      "film notes",
-      "story/blessed-people.txt story/blessed-places.txt",
-      "guard\\|officer",
-      "",
-      1757
-     ],
-     [
-      23,
-      "other",
-      "film notes",
-      "story/blessed-places.txt",
-      "sed -n 102,184p story/blessed-places.txt",
-      "",
-      6977
-     ],
-     [
-      24,
-      "other",
-      "other",
-      "",
-      "https://www.aljazeera.com/wp-content/uploads/[^\" ?]*\\.jpg",
-      "",
-      95
-     ],
-     [
-      25,
-      "other",
-      "other",
-      "",
-      "<img[^>]*>",
-      "",
-      44
-     ],
-     [
-      26,
-      "other",
-      "other",
-      "",
-      "wp-content/uploads/[^\"?]*",
-      "",
-      742
-     ],
-     [
-      28,
-      "other",
-      "other",
-      "",
-      "cd /tmp/claude-0/refs && curl -s -m 30 -w \"\\nHTTP %{http_code}\\n\" -A \"AnimationR",
-      "",
-      328
-     ],
-     [
-      30,
-      "other",
-      "shared:ledger.py",
-      "notes/ledger/*.md source/ledger.py",
-      "ls notes/ledger/*.md | head -40; python3 source/ledger.py 2>&1 | head -30",
-      "",
-      1334
-     ],
-     [
-      31,
-      "other",
-      "film notes",
-      "notes/ledger/ notes/ledger/brexit-is-done.md",
-      "stage",
-      "",
-      705
-     ],
-     [
-      32,
-      "other",
-      "film notes",
-      "notes/ledger/brexit-is-done.md notes/ledger/milburn.md notes/archive/brexit-is-d",
-      "^## \\|Estimate\\|estimate",
-      "",
-      3483
-     ],
-     [
-      33,
-      "other",
-      "film notes",
-      "notes/brexit-is-done.md",
-      "^| .*| \\(KNOWN\\|NEW\\|known\\|new\\)",
-      "",
-      1043
-     ],
-     [
-      34,
-      "other",
-      "film notes",
-      "notes/proposals/estimates.md notes/*.md notes/archive/*.md",
-      "option 1\\|option 2\\|^## \\|^1\\.\\|^2\\.",
-      "",
-      807
-     ],
-     [
-      35,
-      "other",
-      "shared:ledger.py",
-      "source/ledger.py guides/pose-gallery.md guides/kit-catalogue.md",
-      "sitting on\\|shoulders",
-      "",
-      1174
-     ],
-     [
-      37,
-      "other",
-      "film notes",
-      "notes/patriots-5.md notes/archive/FILM-handovers.md guides/job-packs.md guides/f",
-      "python3 - <<'EOF' p='notes/patriots-5.md'; t=open(p).read() a=t.index('## Where ",
-      "",
-      294
-     ],
-     [
-      38,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
-      "",
-      373
-     ],
-     [
-      39,
-      "other",
-      "other",
-      "notes/ledger notes/logs",
-      "git status --short | head; git add -A notes/ledger notes/logs 2>/dev/null; git s",
-      "",
-      113
-     ],
-     [
-      40,
-      "other",
-      "other",
-      "",
-      "git commit -qm \"Tool health log (film start) Co-Authored-By: Claude Opus 5.5 <no",
-      "",
-      602
-     ],
-     [
-      41,
-      "other",
-      "film notes",
-      "story/status.md",
-      "git diff --name-only --cached | head -30; git show FETCH_HEAD:story/status.md | ",
-      "",
-      903
-     ],
-     [
-      42,
-      "other",
-      "film notes",
-      "notes/patriots5.md",
-      "^## \\|^# ",
-      "",
-      3323
-     ],
-     [
-      43,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/kittest-films.tsv notes/ledger",
-      "^$",
-      "",
-      2277
-     ],
-     [
-      44,
-      "other",
-      "film notes",
-      "notes/patriots-5.md notes/patriots5.md notes/kittest-films.tsv notes/ledger/patr",
-      "estimate\\|stage",
-      "",
-      86
-     ],
-     [
-      48,
-      "other",
-      "shared:plainwords.py",
-      "source/plainwords.py",
-      "usage\\|python3",
-      "",
-      280
-     ],
-     [
-      53,
-      "other",
-      "other",
-      "",
-      "git status --short | head; git add -A notes source story 2>/dev/null; git commit",
-      "",
-      27
-     ],
-     [
-      55,
-      "other",
-      "film notes",
-      "notes/patriots5.md",
-      "git show 084c9f30:notes/patriots5.md | sed -n '/## The brief as a checklist/,/##",
-      "",
-      242
-     ],
-     [
-      56,
-      "other",
-      "film notes",
-      "notes/patriots5.md",
-      "python3 - <<'EOF' p='notes/patriots5.md'; t=open(p).read() old='|---|------|----",
-      "",
-      31
-     ],
-     [
-      58,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
-      "",
-      174
-     ],
-     [
-      59,
-      "other",
-      "film notes",
-      "notes/kittest-stamps.tsv notes/patriots5.md",
-      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit test stamps Co-Authored-",
-      "",
-      177
-     ],
-     [
-      61,
-      "other",
-      "other",
-      "",
-      "git status --short | head -3; git fetch -q origin claude/create-claude-md-oe8z4g",
-      "",
-      450
-     ],
-     [
-      62,
-      "other",
-      "other",
-      "",
-      "https://ichef.bbci.co.uk/[^\" ]*\\.\\(jpg\\|png\\|webp\\)",
-      "",
-      44
-     ],
-     [
-      63,
-      "other",
-      "other",
-      "",
-      "ichef.bbci.co.uk/[^\" ,]*",
-      "",
-      2887
-     ],
-     [
-      64,
-      "other",
-      "other",
-      "",
-      "https://i2-prod.mirror.co.uk/[^\" ]*\\.jpg",
-      "",
-      1954
-     ],
-     [
-      65,
-      "other",
-      "other",
-      "",
-      "https://i2-prod.mirror.co.uk/[^\" ]*\\.jpg",
-      "",
-      344
-     ],
-     [
-      67,
-      "other",
-      "shared:facepick.py",
-      "source/facepick.py",
-      "python3\\|usage",
-      "",
-      129
-     ],
-     [
-      68,
-      "other",
-      "shared:facepick.py",
-      "source/facepick.py",
-      "facepick.py\\|argv\\|add_argument",
-      "",
-      478
-     ],
-     [
-      69,
-      "other",
-      "shared:facepick.py",
-      "source/facepick.py",
-      "sed -n 20,40p source/facepick.py; cd references/faces/tommo && for f in 0[1-3]*.",
-      "",
-      2366
-     ],
-     [
-      70,
-      "other",
-      "shared:facepick.py",
-      "source/facepick.py",
-      "cd /home/user/Animation- && mv references/faces/tommo/05-smiling-mirror.jpg refe",
-      "",
-      2600
-     ],
-     [
-      72,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/kittest-stamps.tsv",
-      "S=/tmp/claude-0/-home-user-Animation-/345bd082-1f87-5516-878c-330826bf9bf4/scrat",
-      "",
-      51
-     ],
-     [
-      75,
-      "other",
-      "other",
-      "",
-      "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))",
-      "",
-      7524
-     ],
-     [
-      77,
-      "other",
-      "other",
-      "",
-      "cd /tmp/claude-0/refs && head -c 300 tower/t1.jpg; echo; curl -s -m 20 -o /dev/n",
-      "",
-      52
-     ],
-     [
-      81,
-      "other",
-      "other",
-      "",
-      "cd /tmp/claude-0/refs && curl -s -m 30 -w \"\\n%{http_code}\\n\" \"https://api.openve",
-      "",
-      344
-     ],
-     [
-      85,
-      "other",
-      "film notes",
-      "notes/learn/shoulder-tower notes/learn/shoulder-tower/refs-sheet.jpg notes/learn",
-      "s weight must stay over the base man",
-      "",
-      219
-     ],
-     [
-      86,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/learn/shoulder-tower notes/kittest-stamps.tsv",
-      "python3 - <<'EOF' p='notes/patriots5.md'; t=open(p).read() old=[l for l in t.spl",
-      "",
-      45
-     ],
-     [
-      87,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin && git log --oneline -1 && git rev-parse --short origin/clau",
-      "",
-      144
-     ],
-     [
-      90,
-      "other",
-      "shared:plainwords.py",
-      "source/plainwords.py notes/learn/plain-words/ source/kittests*.py",
-      "^def \\|^[A-Z_]* = \\|blame\\|long chat",
-      "",
-      6612
-     ],
-     [
-      91,
-      "other",
-      "shared:plainwords.py",
-      "source/plainwords.py",
-      "sed -n 89,142p source/plainwords.py",
-      "",
-      3089
-     ],
-     [
-      92,
-      "other",
-      "shared:plainwords.py",
-      "source/plainwords.py notes/learn/plain-words/bad-7-hook-suggest-27nov.md source/",
-      "python3 - <<'EOF' p='source/plainwords.py'; t=open(p).read() t=t.replace(\"\"\" if ",
-      "",
-      285
-     ],
-     [
-      93,
-      "other",
-      "guides",
-      "guides/tiktok-design.md",
-      "Hook Text is mine",
-      "",
-      216
-     ],
-     [
-      94,
-      "other",
-      "guides",
-      "guides/film-quality-rules.md",
-      "tail -8 guides/film-quality-rules.md | cut -c1-250",
-      "",
-      1199
-     ],
-     [
-      95,
-      "other",
-      "shared:maps.py",
-      "guides/film-quality-rules.md notes/learn/plain-words/bad-7-hook-suggest-27nov.md",
-      "python3 - <<'EOF' p='guides/film-quality-rules.md'; t=open(p).read() i=t.index('",
-      "",
-      161
-     ],
-     [
-      96,
-      "other",
-      "shared:kittests_proposals.py",
-      "source/kittests_proposals.py source/plainwords.py source/maps.py",
-      "hook_text_never_suggested\\|hook_suggested",
-      "",
-      365
-     ],
-     [
-      97,
-      "other",
-      "shared:plainwords.py",
-      "source/plainwords.py source/kittests_proposals.py notes/learn/plain-words notes/",
-      "https://(i2-prod\\.mirror\\.co\\.uk|static\\.standard\\.co\\.uk)/[^\" ]*\\.(jpg|jpeg)",
-      "",
-      1745
-     ],
-     [
-      98,
-      "other",
-      "other",
-      "",
-      "https://i2-prod\\.mirror\\.co\\.uk/[^\" ]*\\.jpg",
-      "",
-      46
-     ],
-     [
-      100,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/learn/shoulder-tower/lesson.md",
-      "\n     ",
-      "",
-      174
-     ],
-     [
-      102,
-      "other",
-      "film notes",
-      "notes/patriots5.md story/status.md notes/kittest-stamps.tsv notes/logs",
-      "git add -A notes/patriots5.md story/status.md references/patriots-5 notes/kittes",
-      "",
-      27
-     ],
-     [
-      104,
-      "other",
-      "other",
-      "",
-      "cat /tmp/claude-0/-home-user-Animation-/345bd082-1f87-5516-878c-330826bf9bf4/tas",
-      "",
-      31
-     ],
-     [
-      105,
-      "other",
-      "film notes",
-      "notes/kittest-stamps.tsv notes/patriots5.md",
-      "Ask permission for big uk",
-      "",
-      441
-     ],
-     [
-      106,
-      "other",
-      "other",
-      "",
-      "git status --short | head; git merge --no-edit FETCH_HEAD 2>&1 | tail -5",
-      "",
-      385
-     ],
-     [
-      107,
-      "other",
-      "film notes",
-      "",
-      "handover.py|kittests|watcher",
-      "",
-      6632
-     ],
-     [
-      109,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs",
-      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
-      "",
-      86
-     ],
-     [
-      110,
-      "other",
-      "other",
-      "",
-      "git push -q origin HEAD:claude/create-claude-md-oe8z4g 2>&1|tail -1; git push -q",
-      "",
-      210
-     ],
-     [
-      111,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
-      "",
-      73
-     ],
-     [
-      114,
-      "other",
-      "other",
-      "notes/logs/kittest-reds.log notes/logs",
-      "kittests|handover.py",
-      "",
-      389
-     ],
-     [
-      115,
-      "other",
-      "shared:handover.py",
-      "notes/logs/kittests-last.log source/handover.py",
-      "how long\\|seconds\\|wait",
-      "",
-      2389
-     ],
-     [
-      117,
-      "other",
-      "shared:rule_proofs.py",
-      "source/rule_proofs.json source/rule_proofs.py",
-      "def .*claude_md\\|anchor",
-      "",
-      755
-     ],
-     [
-      118,
-      "other",
-      "shared:ruleproofs.py",
-      "source/rule_proofs.json source/ruleproofs.py",
-      "anchor",
-      "",
-      1226
-     ],
-     [
-      119,
-      "other",
-      "shared:ruleproofs.py",
-      "source/ruleproofs.py",
-      "sed -n 70,100p source/ruleproofs.py",
-      "",
-      1933
-     ],
-     [
-      120,
-      "other",
-      "shared:kittests.py",
-      "source/rule_proofs.json notes/learn/plain-words/bad-7-hook-suggest-27nov.md sour",
-      "python3 - <<'EOF' import json, sys sys.path.insert(0,'source'); import ruleproof",
-      "",
-      234
-     ],
-     [
-      121,
-      "other",
-      "shared:handover.py",
-      "source/rule_proofs.json notes/kittest-stamps.tsv source/handover.py",
-      "git add source/rule_proofs.json notes/kittest-stamps.tsv && git commit -qm \"Rule",
-      "",
-      267
-     ],
-     [
-      122,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin claude/create-claude-md-oe8z4g; git stash -q 2>/dev/null; gi",
-      "",
-      271
-     ],
-     [
-      123,
-      "other",
-      "shared:kittests.py",
-      "source/rule_proofs.json notes/learn/plain-words/bad-7-hook-suggest-27nov.md sour",
-      "^M \\|^A ",
-      "",
-      247
-     ],
-     [
-      124,
-      "other",
-      "other",
-      "",
-      "git status --short | head -5; git stash list | head -3; git push -q origin HEAD:",
-      "",
-      234
-     ],
-     [
-      125,
-      "other",
-      "film notes",
-      "notes/patriots5.md",
-      "git diff notes/patriots5.md | head -40",
-      "",
-      1133
-     ],
-     [
-      126,
-      "other",
-      "film notes",
-      "notes/patriots5.md",
-      "python3 - <<'EOF' import re p='notes/patriots5.md'; t=open(p).read() t=re.sub(r'",
-      "",
-      540
-     ],
-     [
-      127,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv",
-      "git add notes/kittest-stamps.tsv && git commit -qm \"Handover cost line and ledge",
-      "",
-      27
-     ],
-     [
-      129,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs notes/ledger",
-      "git add -A notes/kittest-stamps.tsv notes/logs notes/ledger 2>/dev/null; git com",
-      "",
-      115
-     ],
-     [
-      130,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs",
-      "git add -A notes/kittest-stamps.tsv notes/logs story 2>/dev/null; git commit -qm",
-      "",
-      31
-     ],
-     [
-      131,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs",
-      "git add -A notes/kittest-stamps.tsv notes/logs story 2>/dev/null; git commit -qm",
-      "",
-      74
-     ],
-     [
-      132,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
-      "",
-      27
-     ],
-     [
-      134,
-      "other",
-      "film notes",
-      "notes/kittest-stamps.tsv notes/patriots5.md notes/archive/patriots5-kit-found.md",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git add -A notes/kittest-s",
-      "",
-      102
-     ],
-     [
-      136,
-      "other",
-      "film notes",
-      "notes/patriots5.md",
-      "^## \\|^Rehearsal clips sent\\|^Shot board sent\\|^\\",
-      "",
-      1702
-     ],
-     [
-      137,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/learn/shoulder-tower/ notes/_template.md",
-      "python3 - <<'EOF' import re p='notes/patriots5.md'; t=open(p).read() t=re.sub(r'",
-      "",
-      715
-     ],
-     [
-      138,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/archive/patriots5-kit-found.md notes/kittest-stamps.tsv",
-      "git add notes/patriots5.md notes/archive/patriots5-kit-found.md notes/kittest-st",
-      "",
-      74
-     ],
-     [
-      139,
-      "other",
-      "other",
-      "",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
-      "",
-      68
-     ],
-     [
-      140,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv",
-      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit stamps (test run in prog",
-      "",
-      31
-     ],
-     [
-      142,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs/kittests-last.log",
-      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit stamps (test run in prog",
-      "",
-      65
-     ],
-     [
-      148,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv",
-      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit stamps (test run in prog",
-      "",
-      176
-     ],
-     [
-      154,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv",
-      "git add -A story notes/kittest-stamps.tsv && git commit -qm \"Pages and kit stamp",
-      "",
-      120
-     ],
-     [
-      155,
-      "other",
-      "other",
-      "",
-      "git status --short | head -5; git fetch -q origin claude/create-claude-md-oe8z4g",
-      "",
-      26
-     ],
-     [
-      159,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs",
-      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
-      "",
-      31
-     ],
-     [
-      160,
-      "other",
-      "other",
-      "",
-      "kittests.py --names",
-      "",
-      182
-     ],
-     [
-      163,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs",
-      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
-      "",
-      27
-     ],
-     [
-      164,
-      "other",
-      "other",
-      "notes/kittest-stamps.tsv notes/logs",
-      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
-      "",
-      31
-     ],
-     [
-      166,
-      "other",
-      "other",
-      "",
-      "git status --short | head -5; tail -25 /tmp/claude-0/hend.txt 2>/dev/null | cut ",
-      "",
-      2413
-     ],
-     [
-      168,
-      "other",
-      "shared:ledger.py",
-      "source/ledger.py notes/patriots5.md",
-      "Branches the start listed",
-      "",
-      288
-     ],
-     [
-      169,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/archive",
-      "^## Kit found\\|^Moved to notes/archive",
-      "",
-      162
-     ],
-     [
-      170,
-      "other",
-      "film notes",
-      "notes/patriots5.md notes/archive/patriots5-kit-found.md",
-      "python3 - <<'EOF' import re p='notes/patriots5.md'; t=open(p).read() t=re.sub(r'",
-      "",
-      23
-     ],
-     [
-      175,
-      "other",
-      "other",
-      "",
-      "git status --short | head -5; git add -A notes story 2>/dev/null; git commit -qm",
-      "",
-      229
-     ],
-     [
-      177,
-      "other",
-      "other",
-      "notes/logs/plainwords.log",
-      "python3 - <<'EOF' import re p='notes/logs/plainwords.log'; t=open(p).read() t=re",
-      "",
-      31
-     ]
-    ]
-   },
-   "notes_auto": 0
-  },
-  {
    "date": "2026-11-27",
    "chat": "22904d63",
    "model": "opus",
@@ -3663,6 +2519,2292 @@
       "git status --short | head -5; git fetch -q origin claude/patriots5-walking-boat ",
       "",
       229
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-28",
+   "chat": "345bd082",
+   "model": "opus",
+   "stage": "plan",
+   "round": null,
+   "cost": 3.84,
+   "notes": 0,
+   "repeats": [],
+   "src": "estimate",
+   "sid": "session_01J1JB7VmBNix1SpRrBBfJas",
+   "steps": 204,
+   "hist_k": 326,
+   "kinds": {
+    "tool search": 17.8,
+    "renders": 2.6,
+    "pictures": 1.6,
+    "reading chat records": 2.2,
+    "app tools (chats, files sent)": 2.8,
+    "small shell commands (listing, moving, copying)": 1.4,
+    "git and saving": 0.1,
+    "reading kit code": 0.1,
+    "start-up and handover tools": 0.1,
+    "Claude's words (thinking and writing)": 29.0,
+    "messages and reminders": 22.3,
+    "start-up reading": 20.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 113,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 8,
+    "pictures": 5,
+    "other": 52
+   },
+   "split": {
+    "usd": 14.046,
+    "total": 14.046,
+    "floor_k": 83,
+    "blocks": {
+     "carried history": 35.5,
+     "new writes": 27.8,
+     "start-up floor": 21.3,
+     "Claude's words": 15.4
+    },
+    "origins": {
+     "Claude's words": 30.7,
+     "messages and reminders": 23.6,
+     "start-up floor": 21.3,
+     "result: tool search": 14.5,
+     "result: other": 6.2,
+     "result: pictures": 2.4,
+     "result: renders": 1.2
+    },
+    "named": {
+     "messages and reminders": 23.6,
+     "start-up reading (rules, tools, first files)": 21.3,
+     "thinking": 8.4,
+     "commands": 7.3,
+     "writing notes": 6.6,
+     "reading notes": 5.8,
+     "writing code": 4.7,
+     "reading chat records": 3.5,
+     "reading guides": 3.1,
+     "small shell commands (listing, moving, copying)": 2.8,
+     "looking at pictures": 2.4,
+     "messages to Sam": 2.2,
+     "app tools (chats, files sent)": 1.8,
+     "reading kit code": 1.6,
+     "helper and chat prompts": 1.6,
+     "start-up and handover tools": 1.2,
+     "renders": 1.1,
+     "running checks and tools": 0.6,
+     "git and saving": 0.4
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": 5,
+    "work_pct": 0.1,
+    "reads": [
+     [
+      "guides/job-packs.md",
+      1.7,
+      0.0692
+     ],
+     [
+      "story/status.md",
+      0.5,
+      0.0201
+     ]
+    ],
+    "base_pct": 21.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 31,
+     "guides": 7,
+     "other": 48,
+     "shared:kitfilm.py": 1,
+     "shared:handover.py": 3,
+     "shared:patriots2.py": 2,
+     "shared:patriots3_bunker.py": 1,
+     "shared:catalogue.py": 1,
+     "shared:ledger.py": 3,
+     "shared:plainwords.py": 5,
+     "shared:facepick.py": 4,
+     "shared:maps.py": 1,
+     "shared:kittests_proposals.py": 1,
+     "shared:rule_proofs.py": 1,
+     "shared:ruleproofs.py": 2,
+     "shared:kittests.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md guides/job-packs.md",
+      "^#",
+      "",
+      1961
+     ],
+     [
+      1,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "sed -n 1,45p guides/job-packs.md && sed -n 105,200p guides/job-packs.md && ls no",
+      "",
+      6790
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "patriot",
+      "",
+      1169
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/ledger/sam/twyb2ony.md notes/ledger/sam/rrbbfjas.md",
+      "git show FETCH_HEAD:notes/ledger/sam/twyb2ony.md 2>/dev/null | head -60 || cat n",
+      "",
+      433
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "notes/ledger notes/archive",
+      "patriot|twyb|redesign",
+      "",
+      650
+     ],
+     [
+      10,
+      "other",
+      "shared:kitfilm.py",
+      "source/kitfilm.py notes/_template.md",
+      "sed -n 1,40p source/kitfilm.py | head -40; cat notes/_template.md | head -80; wc",
+      "",
+      8810
+     ],
+     [
+      11,
+      "other",
+      "guides",
+      "notes/kittest-films.tsv guides/kit-catalogue.md",
+      "patriot",
+      "",
+      4732
+     ],
+     [
+      12,
+      "other",
+      "shared:handover.py",
+      "notes/ledger/patriots4.md source/handover.py source/kitfilm.py source/ledger.py",
+      "def notes_path\\|notes', f\\|f'{film}.md'\\|film + '.md'",
+      "",
+      1486
+     ],
+     [
+      13,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "tommy\\|robinson\\|tommo\\|prison\\|guard\\|officer\\|boat\\|cell\\|bunk\\|balaclava\\|tow",
+      "",
+      13333
+     ],
+     [
+      14,
+      "other",
+      "guides",
+      "guides/satire.md guides/preflight.md guides/tiktok-design.md",
+      "^## \\|^### ",
+      "",
+      1039
+     ],
+     [
+      15,
+      "other",
+      "guides",
+      "guides/satire.md guides/preflight.md guides/tiktok-design.md",
+      "sed -n 12,81p guides/satire.md; sed -n 258,272p guides/satire.md; sed -n 10,39p ",
+      "",
+      11606
+     ],
+     [
+      16,
+      "other",
+      "shared:patriots2.py",
+      "guides/kit-catalogue.md source/patriots2.py",
+      "patriots2\\|dinghy\\|small boat",
+      "",
+      2494
+     ],
+     [
+      17,
+      "other",
+      "shared:patriots2.py",
+      "source/patriots2.py",
+      "boat\\|leg",
+      "",
+      2596
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "",
+      "ls prompts | head -30; sed -n 1,60p prompts/_brief-skeleton.md 2>/dev/null | hea",
+      "",
+      1496
+     ],
+     [
+      19,
+      "other",
+      "shared:patriots3_bunker.py",
+      "source/patriots3_bunker.py source/patriots3_cast.py",
+      "balaclava\\|crew\\|badge\\|outfit\\|jacket\\|look",
+      "",
+      3731
+     ],
+     [
+      21,
+      "other",
+      "shared:catalogue.py",
+      "source/catalogue.py",
+      "for q in \"prison cell bed barred window night\" \"prison gatehouse entrance\" \"pris",
+      "",
+      4111
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "story/blessed-people.txt story/blessed-places.txt",
+      "guard\\|officer",
+      "",
+      1757
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "story/blessed-places.txt",
+      "sed -n 102,184p story/blessed-places.txt",
+      "",
+      6977
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "https://www.aljazeera.com/wp-content/uploads/[^\" ?]*\\.jpg",
+      "",
+      95
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "<img[^>]*>",
+      "",
+      44
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "wp-content/uploads/[^\"?]*",
+      "",
+      742
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/refs && curl -s -m 30 -w \"\\nHTTP %{http_code}\\n\" -A \"AnimationR",
+      "",
+      328
+     ],
+     [
+      30,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/*.md source/ledger.py",
+      "ls notes/ledger/*.md | head -40; python3 source/ledger.py 2>&1 | head -30",
+      "",
+      1334
+     ],
+     [
+      31,
+      "other",
+      "film notes",
+      "notes/ledger/ notes/ledger/brexit-is-done.md",
+      "stage",
+      "",
+      705
+     ],
+     [
+      32,
+      "other",
+      "film notes",
+      "notes/ledger/brexit-is-done.md notes/ledger/milburn.md notes/archive/brexit-is-d",
+      "^## \\|Estimate\\|estimate",
+      "",
+      3483
+     ],
+     [
+      33,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^| .*| \\(KNOWN\\|NEW\\|known\\|new\\)",
+      "",
+      1043
+     ],
+     [
+      34,
+      "other",
+      "film notes",
+      "notes/proposals/estimates.md notes/*.md notes/archive/*.md",
+      "option 1\\|option 2\\|^## \\|^1\\.\\|^2\\.",
+      "",
+      807
+     ],
+     [
+      35,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py guides/pose-gallery.md guides/kit-catalogue.md",
+      "sitting on\\|shoulders",
+      "",
+      1174
+     ],
+     [
+      37,
+      "other",
+      "film notes",
+      "notes/patriots-5.md notes/archive/FILM-handovers.md guides/job-packs.md guides/f",
+      "python3 - <<'EOF' p='notes/patriots-5.md'; t=open(p).read() a=t.index('## Where ",
+      "",
+      294
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      373
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "notes/ledger notes/logs",
+      "git status --short | head; git add -A notes/ledger notes/logs 2>/dev/null; git s",
+      "",
+      113
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "git commit -qm \"Tool health log (film start) Co-Authored-By: Claude Opus 5.5 <no",
+      "",
+      602
+     ],
+     [
+      41,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git diff --name-only --cached | head -30; git show FETCH_HEAD:story/status.md | ",
+      "",
+      903
+     ],
+     [
+      42,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "^## \\|^# ",
+      "",
+      3323
+     ],
+     [
+      43,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/kittest-films.tsv notes/ledger",
+      "^$",
+      "",
+      2277
+     ],
+     [
+      44,
+      "other",
+      "film notes",
+      "notes/patriots-5.md notes/patriots5.md notes/kittest-films.tsv notes/ledger/patr",
+      "estimate\\|stage",
+      "",
+      86
+     ],
+     [
+      48,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py",
+      "usage\\|python3",
+      "",
+      280
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git add -A notes source story 2>/dev/null; git commit",
+      "",
+      27
+     ],
+     [
+      55,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "git show 084c9f30:notes/patriots5.md | sed -n '/## The brief as a checklist/,/##",
+      "",
+      242
+     ],
+     [
+      56,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "python3 - <<'EOF' p='notes/patriots5.md'; t=open(p).read() old='|---|------|----",
+      "",
+      31
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      174
+     ],
+     [
+      59,
+      "other",
+      "film notes",
+      "notes/kittest-stamps.tsv notes/patriots5.md",
+      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit test stamps Co-Authored-",
+      "",
+      177
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "git status --short | head -3; git fetch -q origin claude/create-claude-md-oe8z4g",
+      "",
+      450
+     ],
+     [
+      62,
+      "other",
+      "other",
+      "",
+      "https://ichef.bbci.co.uk/[^\" ]*\\.\\(jpg\\|png\\|webp\\)",
+      "",
+      44
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "ichef.bbci.co.uk/[^\" ,]*",
+      "",
+      2887
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "https://i2-prod.mirror.co.uk/[^\" ]*\\.jpg",
+      "",
+      1954
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "https://i2-prod.mirror.co.uk/[^\" ]*\\.jpg",
+      "",
+      344
+     ],
+     [
+      67,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "python3\\|usage",
+      "",
+      129
+     ],
+     [
+      68,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "facepick.py\\|argv\\|add_argument",
+      "",
+      478
+     ],
+     [
+      69,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "sed -n 20,40p source/facepick.py; cd references/faces/tommo && for f in 0[1-3]*.",
+      "",
+      2366
+     ],
+     [
+      70,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "cd /home/user/Animation- && mv references/faces/tommo/05-smiling-mirror.jpg refe",
+      "",
+      2600
+     ],
+     [
+      72,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/kittest-stamps.tsv",
+      "S=/tmp/claude-0/-home-user-Animation-/345bd082-1f87-5516-878c-330826bf9bf4/scrat",
+      "",
+      51
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "import urllib.parse,sys;print(urllib.parse.quote(sys.argv[1]))",
+      "",
+      7524
+     ],
+     [
+      77,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/refs && head -c 300 tower/t1.jpg; echo; curl -s -m 20 -o /dev/n",
+      "",
+      52
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/refs && curl -s -m 30 -w \"\\n%{http_code}\\n\" \"https://api.openve",
+      "",
+      344
+     ],
+     [
+      85,
+      "other",
+      "film notes",
+      "notes/learn/shoulder-tower notes/learn/shoulder-tower/refs-sheet.jpg notes/learn",
+      "s weight must stay over the base man",
+      "",
+      219
+     ],
+     [
+      86,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/learn/shoulder-tower notes/kittest-stamps.tsv",
+      "python3 - <<'EOF' p='notes/patriots5.md'; t=open(p).read() old=[l for l in t.spl",
+      "",
+      45
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin && git log --oneline -1 && git rev-parse --short origin/clau",
+      "",
+      144
+     ],
+     [
+      90,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py notes/learn/plain-words/ source/kittests*.py",
+      "^def \\|^[A-Z_]* = \\|blame\\|long chat",
+      "",
+      6612
+     ],
+     [
+      91,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py",
+      "sed -n 89,142p source/plainwords.py",
+      "",
+      3089
+     ],
+     [
+      92,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py notes/learn/plain-words/bad-7-hook-suggest-27nov.md source/",
+      "python3 - <<'EOF' p='source/plainwords.py'; t=open(p).read() t=t.replace(\"\"\" if ",
+      "",
+      285
+     ],
+     [
+      93,
+      "other",
+      "guides",
+      "guides/tiktok-design.md",
+      "Hook Text is mine",
+      "",
+      216
+     ],
+     [
+      94,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "tail -8 guides/film-quality-rules.md | cut -c1-250",
+      "",
+      1199
+     ],
+     [
+      95,
+      "other",
+      "shared:maps.py",
+      "guides/film-quality-rules.md notes/learn/plain-words/bad-7-hook-suggest-27nov.md",
+      "python3 - <<'EOF' p='guides/film-quality-rules.md'; t=open(p).read() i=t.index('",
+      "",
+      161
+     ],
+     [
+      96,
+      "other",
+      "shared:kittests_proposals.py",
+      "source/kittests_proposals.py source/plainwords.py source/maps.py",
+      "hook_text_never_suggested\\|hook_suggested",
+      "",
+      365
+     ],
+     [
+      97,
+      "other",
+      "shared:plainwords.py",
+      "source/plainwords.py source/kittests_proposals.py notes/learn/plain-words notes/",
+      "https://(i2-prod\\.mirror\\.co\\.uk|static\\.standard\\.co\\.uk)/[^\" ]*\\.(jpg|jpeg)",
+      "",
+      1745
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "https://i2-prod\\.mirror\\.co\\.uk/[^\" ]*\\.jpg",
+      "",
+      46
+     ],
+     [
+      100,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/learn/shoulder-tower/lesson.md",
+      "\n     ",
+      "",
+      174
+     ],
+     [
+      102,
+      "other",
+      "film notes",
+      "notes/patriots5.md story/status.md notes/kittest-stamps.tsv notes/logs",
+      "git add -A notes/patriots5.md story/status.md references/patriots-5 notes/kittes",
+      "",
+      27
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/345bd082-1f87-5516-878c-330826bf9bf4/tas",
+      "",
+      31
+     ],
+     [
+      105,
+      "other",
+      "film notes",
+      "notes/kittest-stamps.tsv notes/patriots5.md",
+      "Ask permission for big uk",
+      "",
+      441
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git merge --no-edit FETCH_HEAD 2>&1 | tail -5",
+      "",
+      385
+     ],
+     [
+      107,
+      "other",
+      "film notes",
+      "",
+      "handover.py|kittests|watcher",
+      "",
+      6632
+     ],
+     [
+      109,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
+      "",
+      86
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:claude/create-claude-md-oe8z4g 2>&1|tail -1; git push -q",
+      "",
+      210
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      73
+     ],
+     [
+      114,
+      "other",
+      "other",
+      "notes/logs/kittest-reds.log notes/logs",
+      "kittests|handover.py",
+      "",
+      389
+     ],
+     [
+      115,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py",
+      "how long\\|seconds\\|wait",
+      "",
+      2389
+     ],
+     [
+      117,
+      "other",
+      "shared:rule_proofs.py",
+      "source/rule_proofs.json source/rule_proofs.py",
+      "def .*claude_md\\|anchor",
+      "",
+      755
+     ],
+     [
+      118,
+      "other",
+      "shared:ruleproofs.py",
+      "source/rule_proofs.json source/ruleproofs.py",
+      "anchor",
+      "",
+      1226
+     ],
+     [
+      119,
+      "other",
+      "shared:ruleproofs.py",
+      "source/ruleproofs.py",
+      "sed -n 70,100p source/ruleproofs.py",
+      "",
+      1933
+     ],
+     [
+      120,
+      "other",
+      "shared:kittests.py",
+      "source/rule_proofs.json notes/learn/plain-words/bad-7-hook-suggest-27nov.md sour",
+      "python3 - <<'EOF' import json, sys sys.path.insert(0,'source'); import ruleproof",
+      "",
+      234
+     ],
+     [
+      121,
+      "other",
+      "shared:handover.py",
+      "source/rule_proofs.json notes/kittest-stamps.tsv source/handover.py",
+      "git add source/rule_proofs.json notes/kittest-stamps.tsv && git commit -qm \"Rule",
+      "",
+      267
+     ],
+     [
+      122,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g; git stash -q 2>/dev/null; gi",
+      "",
+      271
+     ],
+     [
+      123,
+      "other",
+      "shared:kittests.py",
+      "source/rule_proofs.json notes/learn/plain-words/bad-7-hook-suggest-27nov.md sour",
+      "^M \\|^A ",
+      "",
+      247
+     ],
+     [
+      124,
+      "other",
+      "other",
+      "",
+      "git status --short | head -5; git stash list | head -3; git push -q origin HEAD:",
+      "",
+      234
+     ],
+     [
+      125,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "git diff notes/patriots5.md | head -40",
+      "",
+      1133
+     ],
+     [
+      126,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "python3 - <<'EOF' import re p='notes/patriots5.md'; t=open(p).read() t=re.sub(r'",
+      "",
+      540
+     ],
+     [
+      127,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv",
+      "git add notes/kittest-stamps.tsv && git commit -qm \"Handover cost line and ledge",
+      "",
+      27
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs notes/ledger",
+      "git add -A notes/kittest-stamps.tsv notes/logs notes/ledger 2>/dev/null; git com",
+      "",
+      115
+     ],
+     [
+      130,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A notes/kittest-stamps.tsv notes/logs story 2>/dev/null; git commit -qm",
+      "",
+      31
+     ],
+     [
+      131,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A notes/kittest-stamps.tsv notes/logs story 2>/dev/null; git commit -qm",
+      "",
+      74
+     ],
+     [
+      132,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      27
+     ],
+     [
+      134,
+      "other",
+      "film notes",
+      "notes/kittest-stamps.tsv notes/patriots5.md notes/archive/patriots5-kit-found.md",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git add -A notes/kittest-s",
+      "",
+      102
+     ],
+     [
+      136,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "^## \\|^Rehearsal clips sent\\|^Shot board sent\\|^\\",
+      "",
+      1702
+     ],
+     [
+      137,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/learn/shoulder-tower/ notes/_template.md",
+      "python3 - <<'EOF' import re p='notes/patriots5.md'; t=open(p).read() t=re.sub(r'",
+      "",
+      715
+     ],
+     [
+      138,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/archive/patriots5-kit-found.md notes/kittest-stamps.tsv",
+      "git add notes/patriots5.md notes/archive/patriots5-kit-found.md notes/kittest-st",
+      "",
+      74
+     ],
+     [
+      139,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      68
+     ],
+     [
+      140,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv",
+      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit stamps (test run in prog",
+      "",
+      31
+     ],
+     [
+      142,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs/kittests-last.log",
+      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit stamps (test run in prog",
+      "",
+      65
+     ],
+     [
+      148,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv",
+      "git add notes/kittest-stamps.tsv && git commit -qm \"Kit stamps (test run in prog",
+      "",
+      176
+     ],
+     [
+      154,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv",
+      "git add -A story notes/kittest-stamps.tsv && git commit -qm \"Pages and kit stamp",
+      "",
+      120
+     ],
+     [
+      155,
+      "other",
+      "other",
+      "",
+      "git status --short | head -5; git fetch -q origin claude/create-claude-md-oe8z4g",
+      "",
+      26
+     ],
+     [
+      159,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
+      "",
+      31
+     ],
+     [
+      160,
+      "other",
+      "other",
+      "",
+      "kittests.py --names",
+      "",
+      182
+     ],
+     [
+      163,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
+      "",
+      27
+     ],
+     [
+      164,
+      "other",
+      "other",
+      "notes/kittest-stamps.tsv notes/logs",
+      "git add -A story notes/kittest-stamps.tsv notes/logs 2>/dev/null; git commit -qm",
+      "",
+      31
+     ],
+     [
+      166,
+      "other",
+      "other",
+      "",
+      "git status --short | head -5; tail -25 /tmp/claude-0/hend.txt 2>/dev/null | cut ",
+      "",
+      2413
+     ],
+     [
+      168,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/patriots5.md",
+      "Branches the start listed",
+      "",
+      288
+     ],
+     [
+      169,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/archive",
+      "^## Kit found\\|^Moved to notes/archive",
+      "",
+      162
+     ],
+     [
+      170,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/archive/patriots5-kit-found.md",
+      "python3 - <<'EOF' import re p='notes/patriots5.md'; t=open(p).read() t=re.sub(r'",
+      "",
+      23
+     ],
+     [
+      175,
+      "other",
+      "other",
+      "",
+      "git status --short | head -5; git add -A notes story 2>/dev/null; git commit -qm",
+      "",
+      229
+     ],
+     [
+      177,
+      "other",
+      "other",
+      "notes/logs/plainwords.log",
+      "python3 - <<'EOF' import re p='notes/logs/plainwords.log'; t=open(p).read() t=re",
+      "",
+      31
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-28",
+   "chat": "fdfc43c3",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.09,
+   "src": "estimate",
+   "sid": "session_01J1JB7XUsQbH5qrBi8uUErs",
+   "steps": 160,
+   "hist_k": 352,
+   "kinds": {
+    "film-file search": 3.6,
+    "tool search": 22.8,
+    "renders": 6.7,
+    "pictures": 7.9,
+    "reading guides": 0.3,
+    "small shell commands (listing, moving, copying)": 0.4,
+    "edit results": 1.4,
+    "running checks and tools": 0.2,
+    "reading kit code": 0.1,
+    "helper results": 0.1,
+    "app tools (chats, files sent)": 0.1,
+    "Claude's words (thinking and writing)": 43.5,
+    "messages and reminders": 12.8,
+    "start-up reading": 0.1
+   },
+   "calls": {
+    "film-file search": 15,
+    "tool search": 96,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 20,
+    "pictures": 31,
+    "other": 15
+   },
+   "split": {
+    "usd": 11.0899,
+    "total": 11.0899,
+    "floor_k": 0,
+    "blocks": {
+     "carried history": 56.4,
+     "Claude's words": 22.9,
+     "new writes": 20.7
+    },
+    "origins": {
+     "Claude's words": 43.7,
+     "result: tool search": 30.1,
+     "messages and reminders": 12.9,
+     "result: pictures": 9.7,
+     "result: film-file search": 1.9,
+     "Claude's edits": 0.7,
+     "result: renders": 0.6,
+     "result: other": 0.3,
+     "start-up floor": 0.1
+    },
+    "named": {
+     "writing code": 18.4,
+     "thinking": 15.5,
+     "reading kit code": 13.6,
+     "messages and reminders": 12.9,
+     "looking at pictures": 9.7,
+     "commands": 7.3,
+     "reading notes": 6.0,
+     "start-up and handover tools": 3.8,
+     "reading guides": 3.7,
+     "renders": 3.4,
+     "messages to Sam": 2.0,
+     "reading film code": 1.5,
+     "writing notes": 1.0,
+     "running checks and tools": 0.7,
+     "helper and chat prompts": 0.2,
+     "git and saving": 0.2,
+     "start-up reading (rules, tools, first files)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 0,
+    "work_step": 11,
+    "work_pct": 0.15,
+    "reads": [
+     [
+      "notes/patriots5.md",
+      3.3,
+      0.1164
+     ],
+     [
+      "source/handover.py",
+      1.7,
+      0.0585
+     ]
+    ],
+    "base_pct": 0.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 15
+    },
+    "other": {
+     "other": 19,
+     "film notes": 5,
+     "shared:handover.py": 5,
+     "guides": 4,
+     "shared:facehouse.py": 6,
+     "shared:facehouse_b.py": 2,
+     "shared:views.py": 4,
+     "shared:people_famous.py": 1,
+     "shared:blessed_walliams.py": 1,
+     "shared:people.py": 10,
+     "shared:facehouse_c.py": 1,
+     "shared:likeness.py": 2,
+     "shared:facepick.py": 1,
+     "shared:sitting.py": 2,
+     "shared:sitting_c.py": 1,
+     "shared:posegallery.py": 2,
+     "shared:body.py": 2,
+     "shared:patriots3_cast.py": 3,
+     "shared:people_hats.py": 2,
+     "shared:views_d.py": 1,
+     "shared:blessed.py": 1,
+     "shared:facehouse_d.py": 3,
+     "shared:shoulder_tower.py": 1,
+     "shared:limbs.py": 3,
+     "shared:walking_boat.py": 2,
+     "shared:critique.py": 4,
+     "shared:kittests.py": 1,
+     "shared:kittests_body.py": 2,
+     "shared:castsheet.py": 3,
+     "shared:maps.py": 1,
+     "shared:disguise.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head -30 && git branch --show-current && git log --oneline ",
+      "",
+      461
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git log --oneline -1 HEAD && git log --oneline HEAD..origin/claude/create-claude",
+      "",
+      809
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "git merge-base --is-ancestor ad064def HEAD && echo ancestor; git log --oneline -",
+      "",
+      4710
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -q -B claude/pensive-hamilton-ncunk2 && git push -q -u origin claud",
+      "",
+      6151
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^|",
+      "",
+      6933
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "NOT CARRIED",
+      "",
+      150
+     ],
+     [
+      6,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 170,300p source/handover.py",
+      "",
+      6648
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "^## ",
+      "",
+      1112
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/patriots5.md",
+      "sed -n 22,56p notes/patriots5.md; sed -n 111,140p notes/patriots5.md",
+      "",
+      8521
+     ],
+     [
+      11,
+      "film",
+      "before show",
+      "source/patriots5_cast.py",
+      "head -80 source/patriots5_cast.py; wc -l source/patriots5_cast.py; ls references",
+      "",
+      3920
+     ],
+     [
+      12,
+      "film",
+      "before show",
+      "source/patriots5_cast.py",
+      "sed -n 80,126p source/patriots5_cast.py; cat references/faces/tommo/pick/tommo-p",
+      "",
+      3340
+     ],
+     [
+      13,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "face tool\\|facepick\\|pick.json\\|likeness",
+      "",
+      7274
+     ],
+     [
+      16,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py story/facetool-people.txt",
+      "^def \\|^CAST\\|^LOOKS\\|'walliams'",
+      "",
+      6693
+     ],
+     [
+      17,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse*.py source/facehouse.py",
+      "^def \\|^CAST\\|^LOOKS\\|^    '[a-z]*': dict\\|grey_sides\\|sides_grey\\|clip",
+      "",
+      7311
+     ],
+     [
+      18,
+      "other",
+      "shared:facehouse_b.py",
+      "source/facehouse_b.py",
+      "sed -n 580,700p source/facehouse_b.py",
+      "",
+      7544
+     ],
+     [
+      19,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse*.py source/facehouse.py",
+      "def person",
+      "",
+      3655
+     ],
+     [
+      20,
+      "other",
+      "shared:views.py",
+      "source/people*.py source/views.py source/body.py guides/kit-catalogue.md",
+      "tracksuit\\|'jumper'\\|hoodie\\|'tshirt'\\|outfit ==\\|outfit in",
+      "",
+      4344
+     ],
+     [
+      21,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py source/*.py story/blessed-people.txt",
+      "tracksuit",
+      "",
+      4566
+     ],
+     [
+      22,
+      "other",
+      "shared:blessed_walliams.py",
+      "source/blessed_walliams.py source/blessed_cast.py",
+      "TRACK\\b\\|TRACK =\\|def brand_torso",
+      "",
+      5866
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "source/people*.py source/facehouse*.py",
+      "zip_top\\|'zip'\\|EXTRAS *=\\|def extras",
+      "",
+      1858
+     ],
+     [
+      24,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^$",
+      "",
+      8051
+     ],
+     [
+      25,
+      "other",
+      "shared:people.py",
+      "source/people.py source/facehouse_c.py",
+      "'house'\\|house:",
+      "",
+      925
+     ],
+     [
+      26,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 590,625p source/people.py; sed -n 860,912p source/people.py",
+      "",
+      5280
+     ],
+     [
+      27,
+      "film",
+      "before show",
+      "story/patriots5-people.txt source/patriots5_cast.py. source/people.py",
+      "cat > story/patriots5-people.txt <<'E' # The Patriot 5's people (cast chat 4, 28",
+      "",
+      413
+     ],
+     [
+      28,
+      "film",
+      "before show",
+      "story/patriots5-people.txt source/people.py",
+      "sed -i 's/^beard: 150 104 74/beard: stubble 150 104 74/' story/patriots5-people.",
+      "",
+      457
+     ],
+     [
+      29,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "key == 'beard'",
+      "",
+      1473
+     ],
+     [
+      31,
+      "film",
+      "before show",
+      "story/patriots5-people.txt source/people.py",
+      "sed -i 's/^body: 1.70 m$/body: 1.70 m, man/; s/^body: 1.8 m, shoulders 168/body:",
+      "",
+      134
+     ],
+     [
+      33,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def \\|^    if cmd\\|sys.argv\\[1\\] ==",
+      "",
+      266
+     ],
+     [
+      34,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 1170,1208p source/people.py; sed -n 965,980p source/people.py",
+      "",
+      2929
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      37,
+      "other",
+      "shared:facehouse_c.py",
+      "source/facehouse_c.py",
+      "sed -n 437,460p source/facehouse_c.py; sed -n 517,560p source/facehouse_c.py",
+      "",
+      4221
+     ],
+     [
+      38,
+      "film",
+      "before show",
+      "source/facehouse_b.py source/facehouse_c.py story/patriots5-people.txt",
+      "\nnew=(",
+      "",
+      328
+     ],
+     [
+      39,
+      "film",
+      "before show",
+      "story/patriots5-people.txt",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      42,
+      "film",
+      "before show",
+      "source/turnhead.py story/patriots5-people.txt",
+      "^def hair(",
+      "",
+      481
+     ],
+     [
+      44,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "likeness",
+      "",
+      2471
+     ],
+     [
+      46,
+      "film",
+      "before show",
+      "source/facehouse_b.py story/patriots5-people.txt",
+      "python3 - <<'E' p='source/facehouse_b.py'; s=open(p).read() old=\"\"\" rt = [(_sil(",
+      "",
+      103
+     ],
+     [
+      48,
+      "other",
+      "shared:likeness.py",
+      "source/likeness.py guides/film-quality-rules.md",
+      "rule 49\\|^| 49",
+      "",
+      3973
+     ],
+     [
+      49,
+      "other",
+      "shared:likeness.py",
+      "source/likeness.py",
+      "def check",
+      "",
+      1494
+     ],
+     [
+      50,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/likeness.py",
+      "likeness\\|clean",
+      "",
+      673
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "source/facehouse*.py",
+      "cmd == \\|elif a\\[0\\] ==\\|sys.argv\\[1\\] ==",
+      "",
+      31
+     ],
+     [
+      52,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/facepick.py",
+      "__main__",
+      "",
+      119
+     ],
+     [
+      53,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/facepick.py",
+      "sed -n 375,392p source/facehouse.py; sed -n 1010,1040p source/facepick.py",
+      "",
+      1493
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      527
+     ],
+     [
+      55,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      813
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      530
+     ],
+     [
+      59,
+      "other",
+      "shared:facepick.py",
+      "source/facepick.py",
+      "average\\|_check(",
+      "",
+      1103
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "source/facehouse*.py",
+      "def caricature",
+      "",
+      1344
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "mirror",
+      "",
+      164
+     ],
+     [
+      62,
+      "other",
+      "other",
+      "source/facehouse*.py",
+      "'tommo'",
+      "",
+      171
+     ],
+     [
+      63,
+      "film",
+      "before show",
+      "story/patriots5-people.txt",
+      "mirror",
+      "",
+      165
+     ],
+     [
+      64,
+      "film",
+      "before show",
+      "story/patriots5-people.txt",
+      "mirror",
+      "",
+      164
+     ],
+     [
+      65,
+      "other",
+      "guides",
+      "guides/pose-gallery.md",
+      "slump\\|seated\\|sit\\b\\|sitting\\|reach up\\|arms up\\|hands up",
+      "",
+      3139
+     ],
+     [
+      66,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "^$",
+      "",
+      3645
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "source/sitting*.py",
+      "^def \\|^class \\|    def draw\\|    def __init__",
+      "",
+      3690
+     ],
+     [
+      68,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py source/sitting_b.py source/sitting*.py",
+      "def sheet",
+      "",
+      9938
+     ],
+     [
+      69,
+      "other",
+      "shared:sitting_c.py",
+      "source/sitting_c.py source/sitting_b.py",
+      "def draw_one",
+      "",
+      2718
+     ],
+     [
+      70,
+      "other",
+      "shared:posegallery.py",
+      "guides/pose-gallery.md source/posegallery.py",
+      "reach\\|grip\\|bars\\|window",
+      "",
+      1780
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      335
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      74,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "'shoes'\\|'shoe'\\|hem",
+      "",
+      1179
+     ],
+     [
+      75,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "\nassert old in s; s=s.replace(old,new); open(p,'w').write(s)\nE\ngrep -n ",
+      "",
+      992
+     ],
+     [
+      76,
+      "film",
+      "before show",
+      "story/patriots5-people.txt",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      80,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "j.get('head_[a-z]*'",
+      "",
+      31
+     ],
+     [
+      81,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py",
+      "j\\.get('head[a-z_]*'\\|j\\['head[a-z_]*'\\]\\|'nod'\\|'tilt'",
+      "",
+      135
+     ],
+     [
+      82,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py",
+      "head_dy",
+      "",
+      1313
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      85,
+      "other",
+      "shared:patriots3_cast.py",
+      "source/people*.py source/facehouse*.py source/patriots3_cast.py",
+      "HATS\\s*=\\|def .*hat\\|'beanie'\\|'cap'",
+      "",
+      3723
+     ],
+     [
+      86,
+      "other",
+      "shared:people_hats.py",
+      "source/people_hats.py source/views.py",
+      "body_props\\|face_props\\|head_props",
+      "",
+      2577
+     ],
+     [
+      87,
+      "other",
+      "shared:people_hats.py",
+      "source/people_hats.py source/views.py",
+      "sed -n 30,92p source/people_hats.py; sed -n 44,60p source/views.py",
+      "",
+      4282
+     ],
+     [
+      88,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "body_props\\|head_props\\|HEAD_WEAR\\|over_props\\|top_props",
+      "",
+      116
+     ],
+     [
+      89,
+      "other",
+      "shared:body.py",
+      "source/views*.py source/body.py source/people_parts.py",
+      "body_props\\|head_props\\|HEAD_WEAR",
+      "",
+      904
+     ],
+     [
+      90,
+      "other",
+      "shared:views_d.py",
+      "source/views_d.py",
+      "sed -n 440,500p source/views_d.py; sed -n 600,630p source/views_d.py",
+      "",
+      6654
+     ],
+     [
+      91,
+      "other",
+      "shared:posegallery.py",
+      "source/*.py source/posegallery.py source/grips.py",
+      "def .*(p, j2",
+      "",
+      390
+     ],
+     [
+      92,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py",
+      "sed -n 715,760p source/blessed.py",
+      "",
+      2100
+     ],
+     [
+      93,
+      "other",
+      "shared:facehouse_d.py",
+      "source/facehouse_d.py",
+      "sed -n 16,60p source/facehouse_d.py",
+      "",
+      2326
+     ],
+     [
+      94,
+      "other",
+      "shared:facehouse_d.py",
+      "source/facehouse_d.py",
+      "sed -n 60,240p source/facehouse_d.py",
+      "",
+      6994
+     ],
+     [
+      95,
+      "other",
+      "shared:facehouse_b.py",
+      "source/facehouse_b.py source/facehouse_c.py source/facehouse_d.py",
+      "balaclava",
+      "",
+      2438
+     ],
+     [
+      96,
+      "other",
+      "shared:facehouse_d.py",
+      "source/facehouse_d.py source/facehouse_b.py source/facehouse_c.py source/turnhea",
+      "s own opening, a tie band over the brow, soft folds.\n                       Pers",
+      "",
+      1274
+     ],
+     [
+      97,
+      "other",
+      "shared:patriots3_cast.py",
+      "source/patriots3_cast.py",
+      "^[A-Z_]* = dict\\|^CREW\\|^MEN",
+      "",
+      3612
+     ],
+     [
+      98,
+      "other",
+      "shared:shoulder_tower.py",
+      "source/shoulder_tower.py source/walking_boat.py",
+      "def crew\\|CREW\\|balaclava\\|patriot(",
+      "",
+      2130
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "source/views*.py",
+      "def torso_outline",
+      "",
+      1394
+     ],
+     [
+      111,
+      "other",
+      "shared:limbs.py",
+      "source/limbs.py",
+      "NOJOIN\\|hard_shoulder\\|seam",
+      "",
+      932
+     ],
+     [
+      112,
+      "other",
+      "shared:limbs.py",
+      "source/limbs.py",
+      "sed -n 300,360p source/limbs.py",
+      "",
+      4171
+     ],
+     [
+      115,
+      "other",
+      "shared:limbs.py",
+      "source/limbs.py",
+      "sed -n 255,270p source/limbs.py",
+      "",
+      1328
+     ],
+     [
+      118,
+      "other",
+      "shared:walking_boat.py",
+      "source/walking_boat.py",
+      "^$",
+      "",
+      2327
+     ],
+     [
+      119,
+      "other",
+      "shared:walking_boat.py",
+      "source/walking_boat.py",
+      "class Boat",
+      "",
+      2777
+     ],
+     [
+      120,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/fdfc43c3-339d-5e2d-a7d6-950918656211/scrat",
+      "",
+      31
+     ],
+     [
+      127,
+      "other",
+      "shared:patriots3_cast.py",
+      "source/patriots3_cast.py",
+      "def scale_for",
+      "",
+      358
+     ],
+     [
+      133,
+      "film",
+      "before show",
+      "source/patriots5_cast.py source/critique.py",
+      "python3 - <<'E' p='source/patriots5_cast.py'; s=open(p).read() s=s.replace(\"img ",
+      "",
+      2865
+     ],
+     [
+      134,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/ source/data/critique source/critique.py",
+      "def pack",
+      "",
+      410
+     ],
+     [
+      135,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "^PARTS",
+      "",
+      4835
+     ],
+     [
+      136,
+      "other",
+      "shared:critique.py",
+      "source/critique.py guides/critique-checklist.md",
+      "def _film_module",
+      "",
+      1122
+     ],
+     [
+      139,
+      "other",
+      "other",
+      "source/data/critique/patriots5/r1-p1",
+      "D=source/data/critique/patriots5/r1-p1; cat $D/result.md | head -60",
+      "",
+      2988
+     ],
+     [
+      140,
+      "film",
+      "before show",
+      "source/patriots5_cast.py source/disguise.py",
+      "^import\\|^from",
+      "",
+      412
+     ],
+     [
+      148,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/patriots5/r1-p1 source/critique.py source/kittests.py",
+      "^def kt_\\|^@kit\\|^TESTS\\|def test_",
+      "",
+      465
+     ],
+     [
+      149,
+      "other",
+      "shared:kittests.py",
+      "source/kit*.py source/kittests*/ source/kittests.py",
+      "walking_boat_joins",
+      "",
+      1149
+     ],
+     [
+      150,
+      "other",
+      "shared:kittests_body.py",
+      "source/kittests_body.py",
+      "^from\\|^import\\|^test = \\|^def test",
+      "",
+      2715
+     ],
+     [
+      151,
+      "other",
+      "shared:kittests_body.py",
+      "source/kittests_body.py source/disguise.py source/kittests.py",
+      "cat >> source/kittests_body.py <<'E' @test def disguise_worn_over(): \"\"\"The smal",
+      "",
+      75
+     ],
+     [
+      153,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "walking_boat",
+      "",
+      1106
+     ],
+     [
+      156,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^|",
+      "",
+      2435
+     ],
+     [
+      157,
+      "other",
+      "shared:people.py",
+      "source/people.py notes/learn/kemi-build/ notes/learn/kemi-build/judge.py",
+      "'hem'",
+      "",
+      1691
+     ],
+     [
+      160,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "def crotch_line",
+      "",
+      1545
+     ],
+     [
+      161,
+      "other",
+      "film notes",
+      "story/*.txt",
+      "extras:.*zip",
+      "",
+      51
+     ],
+     [
+      162,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 1018,1022p source/people.py; sed -n 1033,1037p source/people.py; sed -n 1",
+      "",
+      725
+     ],
+     [
+      163,
+      "film",
+      "before show",
+      "source/people.py source/people_famous.py story/patriots5-people.txt",
+      "\nassert a in s; s=s.replace(a, a+",
+      "",
+      348
+     ],
+     [
+      164,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "BUILD\\|build.json\\|never measured",
+      "",
+      739
+     ],
+     [
+      165,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "^\\s*$",
+      "",
+      5452
+     ],
+     [
+      168,
+      "other",
+      "film notes",
+      "notes/patriots5.md notes/learn/kemi-build/measure.py notes/judge/patriots5-cast.",
+      "python3 - <<'E' p='notes/patriots5.md'; s=open(p).read() a=\"- **Next:** Sam's no",
+      "",
+      460
+     ],
+     [
+      169,
+      "other",
+      "shared:maps.py",
+      "story/status.md source/maps.py source/kittests_body.py source/touch.py",
+      "cat > story/status.md <<'E' patriots5 (The Patriot 5): cast sheets sent (Danny, ",
+      "",
+      579
+     ],
+     [
+      170,
+      "other",
+      "shared:disguise.py",
+      "source/disguise.py",
+      "git commit -q -m \"Patriot 5 cast chat 4: cast sheets (Danny, officers, crew, dis",
+      "",
+      83
      ]
     ]
    },
