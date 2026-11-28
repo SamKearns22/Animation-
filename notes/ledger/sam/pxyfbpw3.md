@@ -8,3 +8,6 @@ Hello. You appear to have built Tommy Robinson, not Danny Tommo. Different peopl
 
 The other people in the boat and tower need to be Patriot Platform members just like our main character. All white British men, different but in the same or similar outfit to the Patriot. Analyse Dover protests for references. Include The Patriot in the boat, at the front, not outside it.
 
+### 2026-11-28T07:14:48
+Forgive me, you just uploaded a character sheet with all the PP people. I hadn't seen that. Give them all the black outfit used in the protests and remove the scarf. Keep life jacket. Otherwise good work there.
+
