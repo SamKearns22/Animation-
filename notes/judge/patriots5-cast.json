@@ -1,0 +1,383 @@
+{
+ "sheet": "notes/judge/patriots5/outlines-v1.jpg",
+ "made_by": "source/castjudge.py",
+ "judges": {
+  "A": [
+   {
+    "n": "1",
+    "said": "man",
+    "conf": 4,
+    "why": "boxy straight torso, no waist, broad shoulders, straight trousers"
+   },
+   {
+    "n": "2",
+    "said": "woman",
+    "conf": 5,
+    "why": "clear nipped-in waist, flared hips, tapered trousers, narrow shoulders"
+   },
+   {
+    "n": "3",
+    "said": "woman",
+    "conf": 5,
+    "why": "strong waist curve, flared hip, fitted jacket, tapered legs"
+   },
+   {
+    "n": "4",
+    "said": "man",
+    "conf": 4,
+    "why": "broad square shoulders, straight torso, no waist, straight legs"
+   },
+   {
+    "n": "5",
+    "said": "man",
+    "conf": 3,
+    "why": "rectangular torso, little waist, straight legs, but slightly narrower shoulders"
+   },
+   {
+    "n": "6",
+    "said": "man",
+    "conf": 4,
+    "why": "wide shoulders, boxy straight torso, straight legs"
+   },
+   {
+    "n": "7",
+    "said": "man",
+    "conf": 3,
+    "why": "seated, blocky torso, no visible waist or hip flare"
+   },
+   {
+    "n": "8",
+    "said": "man",
+    "conf": 4,
+    "why": "broad shoulders, boxy torso, straight trousers"
+   },
+   {
+    "n": "9",
+    "said": "woman",
+    "conf": 3,
+    "why": "turned three-quarter, narrower shoulders, slight waist, flared lower hem"
+   },
+   {
+    "n": "10",
+    "said": "man",
+    "conf": 3,
+    "why": "seated, blocky torso, broad shoulders, no waist"
+   },
+   {
+    "n": "11",
+    "said": "man",
+    "conf": 5,
+    "why": "very broad square shoulders, straight boxy torso, straight legs"
+   },
+   {
+    "n": "12",
+    "said": "man",
+    "conf": 3,
+    "why": "seated, boxy torso, broad block shape, no waist"
+   }
+  ],
+  "B": [
+   {
+    "n": "1",
+    "said": "man",
+    "conf": 3,
+    "why": "Boxy rectangular torso, no waist, straight narrow legs"
+   },
+   {
+    "n": "2",
+    "said": "woman",
+    "conf": 5,
+    "why": "Clear waist taper, flared hips, narrower shoulders, curved hourglass torso"
+   },
+   {
+    "n": "3",
+    "said": "woman",
+    "conf": 5,
+    "why": "Strong hourglass with nipped waist, wide hips, narrow shoulders"
+   },
+   {
+    "n": "4",
+    "said": "man",
+    "conf": 4,
+    "why": "Broad straight shoulders, wide boxy torso, no waist shaping"
+   },
+   {
+    "n": "5",
+    "said": "man",
+    "conf": 3,
+    "why": "Straight rectangular torso, no waist, slight shoulder bulk"
+   },
+   {
+    "n": "6",
+    "said": "man",
+    "conf": 4,
+    "why": "Wide shoulders tapering slightly, straight torso, thick straight legs"
+   },
+   {
+    "n": "7",
+    "said": "man",
+    "conf": 2,
+    "why": "Seated, boxy torso, no visible waist or hip curve"
+   },
+   {
+    "n": "8",
+    "said": "man",
+    "conf": 4,
+    "why": "Broad shoulders, rectangular torso, straight legs"
+   },
+   {
+    "n": "9",
+    "said": "woman",
+    "conf": 2,
+    "why": "Angled 3/4 view, narrower build, slight waist and flared lower hem"
+   },
+   {
+    "n": "10",
+    "said": "man",
+    "conf": 2,
+    "why": "Seated, blocky torso, broad shoulders, no waist curve"
+   },
+   {
+    "n": "11",
+    "said": "man",
+    "conf": 4,
+    "why": "Wide shoulders, boxy straight torso, thick legs"
+   },
+   {
+    "n": "12",
+    "said": "man",
+    "conf": 2,
+    "why": "Seated, blocky straight torso, no waist or hip shaping"
+   }
+  ],
+  "C": [
+   {
+    "n": "1",
+    "said": "man",
+    "conf": 3,
+    "why": "boxy wide torso, straight sides, no waist, straight trousers"
+   },
+   {
+    "n": "2",
+    "said": "woman",
+    "conf": 5,
+    "why": "clear nipped-in waist, flared hips, tapered flared trousers, narrower shoulders"
+   },
+   {
+    "n": "3",
+    "said": "woman",
+    "conf": 5,
+    "why": "strong waist curve, hip flare, fitted jacket, narrow shoulders"
+   },
+   {
+    "n": "4",
+    "said": "man",
+    "conf": 4,
+    "why": "broad shoulders, straight torso with no waist, straight legs"
+   },
+   {
+    "n": "5",
+    "said": "man",
+    "conf": 3,
+    "why": "boxy torso, little waist, straight trousers, flat shoes"
+   },
+   {
+    "n": "6",
+    "said": "man",
+    "conf": 4,
+    "why": "wide shoulders tapering slightly, straight trunk, no hip flare"
+   },
+   {
+    "n": "7",
+    "said": "man",
+    "conf": 3,
+    "why": "seated, boxy straight torso, no visible waist or hip curve"
+   },
+   {
+    "n": "8",
+    "said": "man",
+    "conf": 4,
+    "why": "broad square shoulders, straight sides, straight trousers"
+   },
+   {
+    "n": "9",
+    "said": "woman",
+    "conf": 3,
+    "why": "turned three-quarter body, narrower shoulders, slight waist and hip flare, skirt-like taper"
+   },
+   {
+    "n": "10",
+    "said": "man",
+    "conf": 3,
+    "why": "seated, boxy torso, wide shoulders, no waist"
+   },
+   {
+    "n": "11",
+    "said": "man",
+    "conf": 4,
+    "why": "broad shoulders, straight rectangular torso, straight legs"
+   },
+   {
+    "n": "12",
+    "said": "man",
+    "conf": 3,
+    "why": "seated, boxy straight torso, no waist shaping"
+   }
+  ]
+ },
+ "judge": "3 fresh helpers, none told the cast; each verdict the middle",
+ "verdicts": [
+  {
+   "who": "tommo",
+   "view": "three-quarter",
+   "said": "man",
+   "conf": 3,
+   "why": "boxy wide torso, straight sides, no waist, straight trousers",
+   "of": [
+    "man 4",
+    "man 3",
+    "man 3"
+   ]
+  },
+  {
+   "who": "guard2",
+   "view": "back",
+   "said": "woman",
+   "conf": 5,
+   "why": "Clear waist taper, flared hips, narrower shoulders, curved hourglass torso",
+   "of": [
+    "woman 5",
+    "woman 5",
+    "woman 5"
+   ]
+  },
+  {
+   "who": "guard2",
+   "view": "front",
+   "said": "woman",
+   "conf": 5,
+   "why": "Strong hourglass with nipped waist, wide hips, narrow shoulders",
+   "of": [
+    "woman 5",
+    "woman 5",
+    "woman 5"
+   ]
+  },
+  {
+   "who": "officer",
+   "view": "back",
+   "said": "man",
+   "conf": 4,
+   "why": "Broad straight shoulders, wide boxy torso, no waist shaping",
+   "of": [
+    "man 4",
+    "man 4",
+    "man 4"
+   ]
+  },
+  {
+   "who": "officer",
+   "view": "three-quarter",
+   "said": "man",
+   "conf": 3,
+   "why": "Straight rectangular torso, no waist, slight shoulder bulk",
+   "of": [
+    "man 3",
+    "man 3",
+    "man 3"
+   ]
+  },
+  {
+   "who": "tommo",
+   "view": "back",
+   "said": "man",
+   "conf": 4,
+   "why": "Wide shoulders tapering slightly, straight torso, thick straight legs",
+   "of": [
+    "man 4",
+    "man 4",
+    "man 4"
+   ]
+  },
+  {
+   "who": "officer",
+   "view": "seated 3/4",
+   "said": "man",
+   "conf": 3,
+   "why": "seated, blocky torso, no visible waist or hip flare",
+   "of": [
+    "man 3",
+    "man 2",
+    "man 3"
+   ]
+  },
+  {
+   "who": "officer",
+   "view": "front",
+   "said": "man",
+   "conf": 4,
+   "why": "Broad shoulders, rectangular torso, straight legs",
+   "of": [
+    "man 4",
+    "man 4",
+    "man 4"
+   ]
+  },
+  {
+   "who": "guard2",
+   "view": "three-quarter",
+   "said": "woman",
+   "conf": 3,
+   "why": "turned three-quarter body, narrower shoulders, slight waist and hip flare, skirt-like taper",
+   "of": [
+    "woman 3",
+    "woman 2",
+    "woman 3"
+   ]
+  },
+  {
+   "who": "guard2",
+   "view": "seated 3/4",
+   "said": "man",
+   "conf": 3,
+   "why": "seated, blocky torso, broad shoulders, no waist",
+   "of": [
+    "man 3",
+    "man 2",
+    "man 3"
+   ]
+  },
+  {
+   "who": "tommo",
+   "view": "front",
+   "said": "man",
+   "conf": 4,
+   "why": "broad shoulders, straight rectangular torso, straight legs",
+   "of": [
+    "man 5",
+    "man 4",
+    "man 4"
+   ]
+  },
+  {
+   "who": "tommo",
+   "view": "seated 3/4",
+   "said": "man",
+   "conf": 3,
+   "why": "seated, boxy torso, broad block shape, no waist",
+   "of": [
+    "man 3",
+    "man 2",
+    "man 3"
+   ]
+  }
+ ],
+ "not_in_film": [
+  {
+   "who": "guard2",
+   "view": "seated 3/4",
+   "why": "she only stands at the gatehouse (shots 7-11); the shared seated woman's body reads as a man (man 3/2/3): a kit fault for the next film where a woman sits, logged in notes/patriots5.md"
+  }
+ ],
+ "date": "2026-11-28"
+}

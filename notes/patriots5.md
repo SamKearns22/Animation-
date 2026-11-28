@@ -146,4 +146,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 
 Screenplay and title: given 27 Nov 2026 (the film's start: kit tests, rule 90)
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 17.22% of a week (2026-11-28)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 17.74% of a week (2026-11-28)

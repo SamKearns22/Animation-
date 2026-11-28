@@ -923,9 +923,15 @@ def judge_faults(film, who=None):
     #   (chat 7: Kemi's turned and seated views sat on the line, 3/3/3 one round and 2/2/2 the next on the
     #   same drawing; Sam, shown cast sheet v3: "Y to Kemi, cast sheet is ready"). Bound to the record, so a
     #   later drawing change makes it stale with the rest (above).
+    skip = {(o['who'], o['view']) for o in rec.get('not_in_film', [])}   # Patriots 5 chat 6: a view the film never
+    #   shows (guard2 never sits) is listed with its reason in the record; the fault stays visible as a NOT IN FILM line
     for v in rec['verdicts']:
         sex = cast.get(v['who'], {}).get('sex')
         if (v['who'], v['view']) in sam:
+            continue
+        if (v['who'], v['view']) in skip:
+            if sex and (v['said'] != sex or v['conf'] < JUDGE_MIN):
+                print(f"JUDGE NOT IN FILM: {v['who']} {v['view']} read as {v['said']} ({v['conf']}): kit fault logged")
             continue
         if sex and (v['said'] != sex or v['conf'] < JUDGE_MIN):
             out.append(f"JUDGE: {v['who']} ({sex}) {v['view']}: the blind judge said {v['said']} ({v['conf']} of 5): "
