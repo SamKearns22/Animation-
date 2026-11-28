@@ -1,79 +1,79 @@
 {
- "sheet": "notes/judge/patriots5/outlines-v1.jpg",
+ "sheet": "notes/judge/patriots5/outlines-v2.jpg",
  "made_by": "source/castjudge.py",
  "judges": {
   "A": [
    {
     "n": "1",
     "said": "man",
-    "conf": 4,
-    "why": "boxy straight torso, no waist, broad shoulders, straight trousers"
+    "conf": 3,
+    "why": "Straight boxy torso, no waist, broad shoulders, straight trousers."
    },
    {
     "n": "2",
     "said": "woman",
     "conf": 5,
-    "why": "clear nipped-in waist, flared hips, tapered trousers, narrow shoulders"
+    "why": "Clear waist, flared hips, narrower shoulders, tapered legs."
    },
    {
     "n": "3",
     "said": "woman",
     "conf": 5,
-    "why": "strong waist curve, flared hip, fitted jacket, tapered legs"
+    "why": "Pinched waist, hip curve, fitted jacket, narrow legs."
    },
    {
     "n": "4",
     "said": "man",
     "conf": 4,
-    "why": "broad square shoulders, straight torso, no waist, straight legs"
+    "why": "Wide shoulders, boxy straight torso, no waist, straight legs."
    },
    {
     "n": "5",
     "said": "man",
     "conf": 3,
-    "why": "rectangular torso, little waist, straight legs, but slightly narrower shoulders"
+    "why": "Straight torso, shoulders wide relative to hips, shoes, no waist."
    },
    {
     "n": "6",
     "said": "man",
     "conf": 4,
-    "why": "wide shoulders, boxy straight torso, straight legs"
+    "why": "Broad squared shoulders, rectangular torso, straight legs."
    },
    {
     "n": "7",
     "said": "man",
-    "conf": 3,
-    "why": "seated, blocky torso, no visible waist or hip flare"
+    "conf": 2,
+    "why": "Seated, boxy torso, no visible waist; hard to tell."
    },
    {
     "n": "8",
     "said": "man",
     "conf": 4,
-    "why": "broad shoulders, boxy torso, straight trousers"
+    "why": "Wide shoulders, boxy trunk, straight legs."
    },
    {
     "n": "9",
     "said": "woman",
-    "conf": 3,
-    "why": "turned three-quarter, narrower shoulders, slight waist, flared lower hem"
+    "conf": 2,
+    "why": "Slimmer torso, arm bent, slight taper; ambiguous."
    },
    {
     "n": "10",
     "said": "man",
-    "conf": 3,
-    "why": "seated, blocky torso, broad shoulders, no waist"
+    "conf": 2,
+    "why": "Seated, bulky boxy torso, no waist."
    },
    {
     "n": "11",
     "said": "man",
-    "conf": 5,
-    "why": "very broad square shoulders, straight boxy torso, straight legs"
+    "conf": 4,
+    "why": "Very broad shoulders, rectangular torso, straight legs."
    },
    {
     "n": "12",
     "said": "man",
     "conf": 3,
-    "why": "seated, boxy torso, broad block shape, no waist"
+    "why": "Seated, straight boxy trunk, no waist definition."
    }
   ],
   "B": [
@@ -81,37 +81,37 @@
     "n": "1",
     "said": "man",
     "conf": 3,
-    "why": "Boxy rectangular torso, no waist, straight narrow legs"
+    "why": "Boxy torso, straight sides, no waist, thick straight legs"
    },
    {
     "n": "2",
     "said": "woman",
     "conf": 5,
-    "why": "Clear waist taper, flared hips, narrower shoulders, curved hourglass torso"
+    "why": "Clear waist, flared hips, narrow shoulders, tapered legs"
    },
    {
     "n": "3",
     "said": "woman",
     "conf": 5,
-    "why": "Strong hourglass with nipped waist, wide hips, narrow shoulders"
+    "why": "Pinched waist, curved hips, narrow shoulders, slim legs"
    },
    {
     "n": "4",
     "said": "man",
     "conf": 4,
-    "why": "Broad straight shoulders, wide boxy torso, no waist shaping"
+    "why": "Wide shoulders, straight boxy torso, no waist, straight legs"
    },
    {
     "n": "5",
     "said": "man",
     "conf": 3,
-    "why": "Straight rectangular torso, no waist, slight shoulder bulk"
+    "why": "Rectangular torso, straight sides, sturdy legs, no waist"
    },
    {
     "n": "6",
     "said": "man",
     "conf": 4,
-    "why": "Wide shoulders tapering slightly, straight torso, thick straight legs"
+    "why": "Broad shoulders, blocky torso, no waist definition"
    },
    {
     "n": "7",
@@ -123,31 +123,31 @@
     "n": "8",
     "said": "man",
     "conf": 4,
-    "why": "Broad shoulders, rectangular torso, straight legs"
+    "why": "Broad shoulders, straight torso, straight legs"
    },
    {
     "n": "9",
     "said": "woman",
     "conf": 2,
-    "why": "Angled 3/4 view, narrower build, slight waist and flared lower hem"
+    "why": "Narrower torso, slightly tapered legs, arm bent, slim build"
    },
    {
     "n": "10",
     "said": "man",
     "conf": 2,
-    "why": "Seated, blocky torso, broad shoulders, no waist curve"
+    "why": "Seated, boxy torso, broad back, no waist curve"
    },
    {
     "n": "11",
     "said": "man",
     "conf": 4,
-    "why": "Wide shoulders, boxy straight torso, thick legs"
+    "why": "Wide shoulders, blocky torso, straight legs"
    },
    {
     "n": "12",
     "said": "man",
     "conf": 2,
-    "why": "Seated, blocky straight torso, no waist or hip shaping"
+    "why": "Seated, rectangular torso, no waist shaping"
    }
   ],
   "C": [
@@ -155,73 +155,73 @@
     "n": "1",
     "said": "man",
     "conf": 3,
-    "why": "boxy wide torso, straight sides, no waist, straight trousers"
+    "why": "Straight boxy torso, no waist, wide shoulders, straight legs"
    },
    {
     "n": "2",
     "said": "woman",
     "conf": 5,
-    "why": "clear nipped-in waist, flared hips, tapered flared trousers, narrower shoulders"
+    "why": "Pinched waist, flared hips, narrow shoulders, curved fitted shape"
    },
    {
     "n": "3",
     "said": "woman",
     "conf": 5,
-    "why": "strong waist curve, hip flare, fitted jacket, narrow shoulders"
+    "why": "Strong waist taper, hip flare, narrow shoulders, hourglass"
    },
    {
     "n": "4",
     "said": "man",
     "conf": 4,
-    "why": "broad shoulders, straight torso with no waist, straight legs"
+    "why": "Broad square shoulders, straight torso, no waist"
    },
    {
     "n": "5",
     "said": "man",
     "conf": 3,
-    "why": "boxy torso, little waist, straight trousers, flat shoes"
+    "why": "Straight blocky torso, no waist definition, straight legs"
    },
    {
     "n": "6",
     "said": "man",
     "conf": 4,
-    "why": "wide shoulders tapering slightly, straight trunk, no hip flare"
+    "why": "Wide shoulders, rectangular torso, straight trousers"
    },
    {
     "n": "7",
     "said": "man",
     "conf": 3,
-    "why": "seated, boxy straight torso, no visible waist or hip curve"
+    "why": "Seated, boxy torso, no waist curve visible"
    },
    {
     "n": "8",
     "said": "man",
     "conf": 4,
-    "why": "broad square shoulders, straight sides, straight trousers"
+    "why": "Wide shoulders, straight boxy torso, straight legs"
    },
    {
     "n": "9",
     "said": "woman",
-    "conf": 3,
-    "why": "turned three-quarter body, narrower shoulders, slight waist and hip flare, skirt-like taper"
+    "conf": 2,
+    "why": "Narrower torso, slightly tapered shape, turned stance"
    },
    {
     "n": "10",
     "said": "man",
     "conf": 3,
-    "why": "seated, boxy torso, wide shoulders, no waist"
+    "why": "Seated, broad blocky torso, no waist"
    },
    {
     "n": "11",
     "said": "man",
     "conf": 4,
-    "why": "broad shoulders, straight rectangular torso, straight legs"
+    "why": "Broad shoulders, rectangular torso, straight legs"
    },
    {
     "n": "12",
     "said": "man",
     "conf": 3,
-    "why": "seated, boxy straight torso, no waist shaping"
+    "why": "Seated, straight boxy torso, no waist curve"
    }
   ]
  },
@@ -232,9 +232,9 @@
    "view": "three-quarter",
    "said": "man",
    "conf": 3,
-   "why": "boxy wide torso, straight sides, no waist, straight trousers",
+   "why": "Boxy torso, straight sides, no waist, thick straight legs",
    "of": [
-    "man 4",
+    "man 3",
     "man 3",
     "man 3"
    ]
@@ -244,7 +244,7 @@
    "view": "back",
    "said": "woman",
    "conf": 5,
-   "why": "Clear waist taper, flared hips, narrower shoulders, curved hourglass torso",
+   "why": "Clear waist, flared hips, narrow shoulders, tapered legs",
    "of": [
     "woman 5",
     "woman 5",
@@ -256,7 +256,7 @@
    "view": "front",
    "said": "woman",
    "conf": 5,
-   "why": "Strong hourglass with nipped waist, wide hips, narrow shoulders",
+   "why": "Pinched waist, curved hips, narrow shoulders, slim legs",
    "of": [
     "woman 5",
     "woman 5",
@@ -268,7 +268,7 @@
    "view": "back",
    "said": "man",
    "conf": 4,
-   "why": "Broad straight shoulders, wide boxy torso, no waist shaping",
+   "why": "Wide shoulders, straight boxy torso, no waist, straight legs",
    "of": [
     "man 4",
     "man 4",
@@ -280,7 +280,7 @@
    "view": "three-quarter",
    "said": "man",
    "conf": 3,
-   "why": "Straight rectangular torso, no waist, slight shoulder bulk",
+   "why": "Rectangular torso, straight sides, sturdy legs, no waist",
    "of": [
     "man 3",
     "man 3",
@@ -292,7 +292,7 @@
    "view": "back",
    "said": "man",
    "conf": 4,
-   "why": "Wide shoulders tapering slightly, straight torso, thick straight legs",
+   "why": "Broad shoulders, blocky torso, no waist definition",
    "of": [
     "man 4",
     "man 4",
@@ -303,10 +303,10 @@
    "who": "officer",
    "view": "seated 3/4",
    "said": "man",
-   "conf": 3,
-   "why": "seated, blocky torso, no visible waist or hip flare",
+   "conf": 2,
+   "why": "Seated, boxy torso, no visible waist or hip curve",
    "of": [
-    "man 3",
+    "man 2",
     "man 2",
     "man 3"
    ]
@@ -316,7 +316,7 @@
    "view": "front",
    "said": "man",
    "conf": 4,
-   "why": "Broad shoulders, rectangular torso, straight legs",
+   "why": "Broad shoulders, straight torso, straight legs",
    "of": [
     "man 4",
     "man 4",
@@ -327,22 +327,22 @@
    "who": "guard2",
    "view": "three-quarter",
    "said": "woman",
-   "conf": 3,
-   "why": "turned three-quarter body, narrower shoulders, slight waist and hip flare, skirt-like taper",
+   "conf": 2,
+   "why": "Narrower torso, slightly tapered legs, arm bent, slim build",
    "of": [
-    "woman 3",
     "woman 2",
-    "woman 3"
+    "woman 2",
+    "woman 2"
    ]
   },
   {
    "who": "guard2",
    "view": "seated 3/4",
    "said": "man",
-   "conf": 3,
-   "why": "seated, blocky torso, broad shoulders, no waist",
+   "conf": 2,
+   "why": "Seated, boxy torso, broad back, no waist curve",
    "of": [
-    "man 3",
+    "man 2",
     "man 2",
     "man 3"
    ]
@@ -352,9 +352,9 @@
    "view": "front",
    "said": "man",
    "conf": 4,
-   "why": "broad shoulders, straight rectangular torso, straight legs",
+   "why": "Wide shoulders, blocky torso, straight legs",
    "of": [
-    "man 5",
+    "man 4",
     "man 4",
     "man 4"
    ]
@@ -364,7 +364,7 @@
    "view": "seated 3/4",
    "said": "man",
    "conf": 3,
-   "why": "seated, boxy torso, broad block shape, no waist",
+   "why": "Seated, straight boxy trunk, no waist definition.",
    "of": [
     "man 3",
     "man 2",
@@ -377,6 +377,11 @@
    "who": "guard2",
    "view": "seated 3/4",
    "why": "she only stands at the gatehouse (shots 7-11); the shared seated woman's body reads as a man (man 3/2/3): a kit fault for the next film where a woman sits, logged in notes/patriots5.md"
+  },
+  {
+   "who": "officer",
+   "view": "seated 3/4",
+   "why": "he only stands at the gatehouse (shots 7-11); the shared seated man reads man 2/2/3 (round 2, chat 8; round 1 man 3): a weak read on a view the film never shows"
   }
  ],
  "date": "2026-11-28"
