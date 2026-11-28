@@ -20103,6 +20103,172 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-28",
+   "chat": "5bc59df0",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.1,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZcsR24UpeKz7BzaGt",
+   "steps": 9,
+   "hist_k": 102,
+   "kinds": {
+    "tool search": 22.9,
+    "reading notes": 8.0,
+    "start-up reading": 38.5,
+    "Claude's words (thinking and writing)": 28.7,
+    "messages and reminders": 1.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 7,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.3538,
+    "total": 0.3538,
+    "floor_k": 83,
+    "blocks": {
+     "start-up floor": 46.8,
+     "Claude's words": 28.8,
+     "new writes": 22.2,
+     "carried history": 2.2
+    },
+    "origins": {
+     "start-up floor": 46.8,
+     "Claude's words": 34.8,
+     "result: tool search": 11.2,
+     "result: other": 4.9,
+     "messages and reminders": 2.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 46.8,
+     "reading notes": 16.1,
+     "thinking": 14.2,
+     "writing code": 11.5,
+     "messages to Sam": 5.0,
+     "commands": 4.2,
+     "messages and reminders": 2.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "guides/job-packs.md",
+      1.4,
+      0.0061
+     ],
+     [
+      "notes/session-value.md",
+      0.9,
+      0.0043
+     ],
+     [
+      "notes/ledger/grand-theft-autism.json",
+      0.9,
+      0.0043
+     ],
+     [
+      "notes/proposals/session-value.md",
+      0.9,
+      0.0038
+     ]
+    ],
+    "base_pct": 18.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "guides": 2,
+     "film notes": 3
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "opus",
+      "",
+      2146
+     ],
+     [
+      1,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "opus|sonnet",
+      "",
+      436
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/session-value.md notes/ledger notes/ledger/grand-theft-autism.json notes/r",
+      "opus|sonnet",
+      "",
+      7462
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "notes/ledger/*.json guides/job-packs.md",
+      "python3 - <<'E' import json,glob,collections keys=collections.Counter();ck=colle",
+      "",
+      5585
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/ledger/*.json notes/proposals/session-value.md",
+      "sonnet",
+      "",
+      1021
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals/session-value.md notes/cost-diagnosis.md notes/real-cost-answer.",
+      "routine|bundled",
+      "",
+      3630
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "notes/archive notes/*.md",
+      "^[-* ]*\\**Next\\**[^:]{0,5}\\(?(Opus|Sonnet)[^)]*\\)?:?.{0,110}",
+      "",
+      3651
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
