@@ -9,6 +9,11 @@ MAP
   balaclava_turned() . The same hood from three-quarter, the side, three-quarter behind and behind: the turned
                        head's silhouette (with the nose) thickened by the knit, the opening carried round the face,
                        the ribs on the head's meridians.
+  niqab_front/turned . Patriots 5 (brief row 17, Sam: "at least two" in black face veils over the balaclavas): a
+                       black veil over the knit, a hood over the crown falling past the chin onto the chest and
+                       shoulders, the eye slit the balaclava's own opening, a tie band over the brow, soft folds.
+                       Person line: `niqab`.
+  kufi_front/turned .. Patriots 5: a white knitted prayer cap on the crown, over the balaclava (`kufi`).
   _knit() ............ Paints a knit layer kept inside the hood's shape and out of the opening, then inks both.
   tables: BALA, BALA_RIB, BALA_EDGE
 """
@@ -43,7 +48,7 @@ def _slot_uv(L, kh):
             for u, v in pts]
 
 
-def _knit(img, p, outer, slot, ribs, mouth=None, lw=2.6, dilate=0, soften=0):
+def _knit(img, p, outer, slot, ribs, mouth=None, lw=2.6, dilate=0, soften=0, fill=None, edge=None):
     """outer, slot: polygons in pen units (slot may be None); ribs(pen) draws the ribs; mouth: a polygon of the jaw
     working under the knit. The knit is kept inside `outer` (grown by `dilate` pixels) and out of `slot`."""
     from PIL import Image, ImageDraw
@@ -72,7 +77,7 @@ def _knit(img, p, outer, slot, ribs, mouth=None, lw=2.6, dilate=0, soften=0):
     keep = np.where(hole > 0, 0, a).astype(np.uint8)          # far edge held on the head's outline)
     layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
     pen = B.Pen(layer, cam)
-    ImageDraw.Draw(layer).bitmap((0, 0), Image.fromarray(keep), fill=BALA + (255,))
+    ImageDraw.Draw(layer).bitmap((0, 0), Image.fromarray(keep), fill=tuple(fill or BALA) + (255,))
     ribs(pen)
     if mouth:
         pen.poly(mouth, (16, 16, 19), None)
@@ -97,7 +102,7 @@ def _knit(img, p, outer, slot, ribs, mouth=None, lw=2.6, dilate=0, soften=0):
             k = max(2, len(c) // 100)
             c = np.array([c[np.arange(i - k, i + k + 1) % len(c)].mean(0) for i in range(len(c))])[::2]
             q = [(x, y) for x, y in c]
-            d.line(q + q[:1], fill=BALA_EDGE, width=base.w(lw * 2.6), joint='curve')
+            d.line(q + q[:1], fill=tuple(edge or BALA_EDGE), width=base.w(lw * 2.6), joint='curve')
             d.line(q + q[:1], fill=INK, width=base.w(2.2), joint='curve')
 
 
@@ -182,3 +187,101 @@ def balaclava_turned(img, p, f, L, sp, view):
     base = p.pen if hasattr(p, 'pen') else p
     _knit(img, p, outer, slot, ribs, mouth, dilate=max(2, int(round(base.cam.S(0.022 * H)))),
           soften=max(2, int(round(base.cam.S(0.08 * H)))) if view in ('three_back', 'back') else 0)
+
+
+# ---------------------------------------------------------------------------------------------- disguise (Patriots 5)
+NIQAB, NIQAB_FOLD, NIQAB_EDGE = (14, 14, 17), (40, 40, 48), (26, 26, 30)
+KUFI, KUFI_KNIT = (238, 236, 228), (196, 194, 186)
+
+
+def _veil_uv(L, W, top):
+    """The niqab's outline in face units: over the crown a little above the knit, down past the ears, flaring onto
+    the shoulders and chest, its lower edge a soft curve below the chin."""
+    right = [(W * math.cos(a), 0.12 - (0.12 - top) * math.sin(a)) for a in np.linspace(math.pi / 2, 0, 12)]
+    right += [(W + 0.03, 0.3), (W + 0.07, 0.6), (W + 0.16, 0.95), (W + 0.26, 1.28), (W + 0.2, 1.42), (0.5 * W, 1.5)]
+    return [(0.0, top)] + right + [(-u, v) for u, v in right[::-1]]
+
+
+def niqab_front(img, p, f, L, kh, sp):
+    W = max(_face_u(L, 0.0) + 0.14, L['fw'] * 0.5 + 0.12)
+    top = kh.get('bala_top', -0.5) - 0.05
+    outer = curve(f.pts(_veil_uv(L, W, top)), 4)
+    slot = curve(f.pts(_slot_uv(L, dict(kh, slot=dict(above=0.07, below=0.07, side=0.06)))), 3)
+
+    def folds(pen):
+        for u in (-0.55, -0.3, 0.3, 0.55):                 # soft folds down from the chin
+            pen.line(f.pts([(u * W, 0.75), (u * W * 1.12, 1.1), (u * W * 1.25, 1.4)]), NIQAB_FOLD, 1.6)
+        bv = L['brow_y'] - 0.1                              # the tie band over the brow
+        pen.line(f.pts([(-W + 0.02, bv + 0.02), (0.0, bv - 0.01), (W - 0.02, bv + 0.02)]), NIQAB_FOLD, 2.2)
+    _knit(img, p, [outer], slot, folds, fill=NIQAB, edge=NIQAB_EDGE)
+
+
+def niqab_turned(img, p, f, L, sp, view):
+    import turnhead as TH
+    H = TH.H
+    kh = sp['kit_house']
+    sil = [(x, y) for x, y, _, _ in TH.silhouette(f)]
+    xs = [x for x, _ in sil]
+    yb = f.top + f.v1 * H
+    l, r = min(xs), max(xs)
+    drape = [(l - 0.04 * H, f.top + 0.45 * H), (r + 0.04 * H, f.top + 0.45 * H), (r + 0.22 * H, yb + 0.32 * H),
+             (0.5 * (l + r), yb + 0.42 * H), (l - 0.22 * H, yb + 0.32 * H)]
+    slot = None
+    if view in ('three', 'side'):
+        slot = curve(f.pts(_slot_uv(L, dict(kh, slot=dict(above=0.07, below=0.07, side=0.06)))), 3)
+
+    def folds(pen):
+        for k in (0.25, 0.5, 0.75):
+            x = l + (r - l) * k
+            pen.line([(x, yb - 0.05 * H), (x + (k - 0.5) * 0.3 * H, yb + 0.3 * H)], NIQAB_FOLD, 1.6)
+    base = p.pen if hasattr(p, 'pen') else p
+    _knit(img, p, [sil, drape], slot, folds, dilate=max(3, int(round(base.cam.S(0.05 * H)))),
+          soften=max(2, int(round(base.cam.S(0.08 * H)))), fill=NIQAB, edge=NIQAB_EDGE)
+
+
+def kufi_front(img, p, f, L, kh, sp):
+    """The cap follows the knit's own crown (the balaclava's top curve), a touch bigger, down to a third of the way
+    to the brows: it sits ON the head, never a lid above it."""
+    W = max(_face_u(L, 0.0) + 0.1, L['fw'] * 0.5 + 0.08) + 0.018
+    top = kh.get('bala_top', -0.5) - 0.022
+    vc = 0.12
+    foot = top + 0.26
+    hw = lambda v: W * math.sqrt(max(0.0, 1 - ((vc - v) / (vc - top)) ** 2))   # noqa: E731
+    vs = np.linspace(foot, top, 10)
+    pts = [(hw(v), v) for v in vs] + [(-hw(v), v) for v in vs[::-1]]
+    pts += [(-hw(foot) - 0.004, foot + 0.03), (hw(foot) + 0.004, foot + 0.03)]
+    p.poly(curve(f.pts(pts), 3), KUFI, INK, 2.4)
+    p.line(curve(f.pts([(-hw(foot), foot), (0.0, foot + 0.008), (hw(foot), foot)]), 3), KUFI_KNIT, 2.0)   # the band
+    for v in np.arange(top + 0.045, foot - 0.01, 0.04):     # the knit's rows of small holes
+        for u in np.arange(-hw(v) + 0.035, hw(v) - 0.03, 0.05):
+            p.ell(*f(u, v), 1.8, 1.8, KUFI_KNIT, None)
+
+
+def kufi_turned(img, p, f, L, sp, view):
+    """The head's turned outline above the cap's foot, pushed out a little from the head's middle: it hugs the
+    crown from every side."""
+    import turnhead as TH
+    H = TH.H
+    sil = [(x, y) for x, y, _, _ in TH.silhouette(f)]
+    top = min(y for _, y in sil)
+    cut = top + 0.27 * H
+    cx = sum(x for x, _ in sil) / len(sil)
+    cy = top + 0.45 * H
+    cap = [(x, y) for x, y in sil if y <= cut]
+    if len(cap) < 3:
+        return
+    grow = 0.022 * H
+    cap = [(x + grow * (x - cx) / (math.hypot(x - cx, y - cy) or 1), y + grow * (y - cy) / (math.hypot(x - cx, y - cy) or 1))
+           for x, y in cap]
+    cap = sorted(cap, key=lambda q: math.atan2(q[1] - cy, q[0] - cx))
+    xs = [x for x, _ in cap]
+    l, r = min(xs), max(xs)
+    poly = cap + [(r, cut + 0.03 * H), (l, cut + 0.03 * H)]
+    poly = sorted(poly, key=lambda q: math.atan2(q[1] - cy, q[0] - cx))
+    p.poly(poly, KUFI, INK, 2.4)
+    for y in np.arange(top + 0.04 * H, cut, 0.04 * H):
+        row = [x for x, yy in cap if abs(yy - y) < 0.03 * H]
+        if not row:
+            continue
+        for x in np.arange(min(row) + 0.035 * H, max(row) - 0.03 * H, 0.05 * H):
+            p.ell(x, y, 1.8, 1.8, KUFI_KNIT, None)

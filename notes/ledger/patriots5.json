@@ -3727,11 +3727,90 @@
   {
    "date": "2026-11-27",
    "spent": 7.99
+  },
+  {
+   "date": "2026-11-28",
+   "spent": 12.75
+  },
+  {
+   "date": "2026-11-28",
+   "spent": 12.75
   }
  ],
  "notes_tags": {
   "1": "none: I looked at the sheet at phone size only, not each body at full size (Seeing like Sam, 1); no check sees pieces drawn for an old body landing inside a new one",
   "2": "none: the shoulder join (limbs.py, the arm fading into the body near the shoulder) assumes the sleeve is the jacket's cloth; a grey sleeve on a black body fades as a smear",
-  "3": "none (I named them myself, unfixed)"
+  "3": "none (I named them myself, unfixed)",
+  "4": "none: my turned knit neck was shortened (note 3) and uncovered Patriots 3's flat lighter collar block; I looked at the collar side on only"
+ },
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "cast",
+    "date": "2026-11-28",
+    "hunt": 1,
+    "faults": 11,
+    "cant_tell": 2,
+    "open": [
+     "2 A2 P4 P1: Danny's face - no ginger-brown stubble (brief says so; photos show it), face narrower and softer than the photos' square jaw; the front tile reads a",
+     "3 P2: slumped poses - head sits upright and the face is neutral in front and side view; not \"downcast\".",
+     "3 P7 O5: he sits on a stool/bench, not a cot's edge; the bar poses have both feet on bare floor, no bunk under him.",
+     "3 P1: window poses - fists do not grip the bars (hands rest on top bar or head); the side view has a hand at his brow, reads as saluting or shading eyes.",
+     "3 O3 O5: the \"wall\" in the side view is a thin brown pole, not a wall or window; the back view's moonlit window is a small blue box and no bars show, so he read",
+     "6-7 A1 O3: back-view rows are flat dark blobs; no jacket shade, sleeve or badge tells the eight apart.",
+     "6 P2 A1: front row jackets (Patriot, Nick, Dean and others) are near-identical navy/black; not eight clearly different men at phone size.",
+     "7 A2 P13: the red-and-white blanket is drawn as flat horizontal red stripes over the whole torso (and the back); it reads as a striped jumper, not a blanket dra",
+     "7 A2: puffer jackets and hoodies with the hood down are missing; prayer beads in a hand are missing (none visible).",
+     "7 A1: the black niqabs read as long black hair or a hooded shape, the eyes slit is hard to see at phone size.",
+     "3,5-7 O1 O3: labels are tiny and unreadable at phone size, and use internal words (\"shot 5: bars\", \"walking-boat practice crew\", \"shot 8 puts our eight men in i",
+     "5 P7: how legs pass through the boat floor; a close crop of the boat bottom would show it.",
+     "5 P10: whether the front man touches or overlaps the Patriot."
+    ]
+   }
+  ],
+  "lines": {
+   "A2": {
+    "faults": 3,
+    "false": 1
+   },
+   "P4": {
+    "faults": 1,
+    "false": 0
+   },
+   "P1": {
+    "faults": 2,
+    "false": 0
+   },
+   "P2": {
+    "faults": 2,
+    "false": 0
+   },
+   "P7": {
+    "faults": 1,
+    "false": 0
+   },
+   "O5": {
+    "faults": 2,
+    "false": 0
+   },
+   "O3": {
+    "faults": 3,
+    "false": 0
+   },
+   "A1": {
+    "faults": 3,
+    "false": 0
+   },
+   "P13": {
+    "faults": 1,
+    "false": 0
+   },
+   "O1": {
+    "faults": 1,
+    "false": 0
+   }
+  }
  }
 }

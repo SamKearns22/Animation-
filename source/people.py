@@ -703,7 +703,9 @@ def _fact(d, key, val, people):
             d['brow_' + {'width': 'w', 'thick': 'thick'}[w]] = float(v)
     elif key == 'beard':
         kind, _, rest = parts[0].partition(' ')
-        if kind == 'stubble':
+        if kind == 'stubble' and len(rest.split()) == 3:   # Patriots 5: a house head's stubble in its own colour
+            d['beard'] = colour(rest)                          # (Danny's ginger-brown, not the photo's grey read)
+        elif kind == 'stubble':
             d['stub'] = float(rest or 0.84)
         elif kind == 'boxed':
             d['beard'] = colour(rest)
@@ -890,6 +892,8 @@ def _house(d):
         sp['sleeve'] = tuple(d['sleeve'])                                                    # of their own colour
     if 'trousers' in d:                           # the line's trousers (a suit with a tie: the jacket's cloth, chat 38)
         sp['trousers'] = tuple(d['trousers'])
+    if 'shoe' in d:                               # Patriots 5 (Danny): the line's shoes were dropped for a face tool
+        sp['shoe'] = tuple(d['shoe'])             # person (his white trainers came out black)
     if 'skin' in d:                               # replay test 2 (Sam's Y, 27 Nov): the file's skin, lips and beard
         sp['skin'] = tuple(d['skin'])             # lines were dropped for a face tool person, so a pale-measured
     if 'lips' in d:                               # El-Sayed could not be put right; they now win over the pick's
@@ -1017,7 +1021,7 @@ def _extras():
     import people_famous as PF
     return {'wig': ('head', PP.wig_head), 'robe': ('torso', PP.robe_torso), 'officer': ('torso', PP.officer_torso),
             'open shirt': ('torso', PF.open_shirt), 'crucifix': ('torso', PF.crucifix), 'scarf': ('torso', PF.scarf),
-            'zip': ('torso', PF.zip_top), 'open collar': ('torso', PP.collar_torso),
+            'zip': ('torso', PF.zip_top), 'tracksuit': ('torso', PF.tracksuit_top), 'open collar': ('torso', PP.collar_torso),
             'flowers': ('torso', PP.flowers_torso), 'crest': ('torso', PP.crest_torso),
             'skirt': ('torso', PP.skirt_torso), 'palms': ('torso', PP.palms_torso),
             'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso),
@@ -1032,7 +1036,7 @@ def turned():
     import people_parts as PP
     import people_famous as PF
     return {'robe': dict(back=PP.robe_back), 'officer': dict(back=PP.officer_back), 'open shirt': dict(back=None),
-            'crucifix': dict(back=None), 'scarf': dict(back=PF.scarf_back), 'zip': dict(back=PF.zip_back),
+            'crucifix': dict(back=None), 'scarf': dict(back=PF.scarf_back), 'zip': dict(back=PF.zip_back), 'tracksuit': dict(back=PF.tracksuit_back),
             'open collar': dict(back=None, own={'three': PP.collar_three}), 'flowers': dict(back=PP.flowers_torso),
             'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso), 'palms': dict(back=PP.palms_torso),
             'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None),
@@ -1086,7 +1090,7 @@ def _head_parts():
 
 
 
-EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
+EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'tracksuit', 'flowers', 'crest', 'skirt', 'palms',
           'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank', 'workwear', 'pattern')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 

@@ -492,7 +492,12 @@ def _turn_hair(img, p, f, L, sp):
         turned_hat(p, f, kh, _hair(L, kh)['crown'] if kh['hair'] in ('braids', 'long') else -0.46)
     if kh.get('balaclava'):                               # Patriots 5: the knit over the turned head
         yaw = abs(math.degrees(f.th))
-        balaclava_turned(img, p, f, L, sp, min(TH.YAW, key=lambda k: abs(TH.YAW[k] - yaw)))
+        view = min(TH.YAW, key=lambda k: abs(TH.YAW[k] - yaw))
+        balaclava_turned(img, p, f, L, sp, view)
+        if kh.get('niqab'):                               # (the disguise, brief row 17)
+            niqab_turned(img, p, f, L, sp, view)
+        if kh.get('kufi'):
+            kufi_turned(img, p, f, L, sp, view)
 
 
 def hair_shell(cap, step=0.02, upto=0.1):
@@ -539,10 +544,15 @@ def _turn_hair0(img, p, f, L, sp):
     if kh['hair'] == 'swept':
         sh = _swept_shapes(L, kh, hc)
         TH.hair(img, p, f, [], sh['grey'], f.prof, 2.2)        # the clipped back and sides, greying
-        if yaw <= 90:
+        if kh.get('fade'):                                       # Patriots 5 (Danny): a faded back and sides, a band
+            mid = blend(hc, sh['grey'], 0.5)                     # between the top and the skin-pale clip (flat steps)
+            TH.hair(img, p, f, [], mid, dict(f.prof, hair_low=kh.get('top_low', -0.16) + kh['fade'],
+                                             nape=kh.get('top_nape', 0.12) + kh['fade'], volume=0.02), 0)
+        if yaw <= 90 and not kh.get('fade'):                     # (faded: the clip hugs the skull, no side pieces)
             for sd in sh['sides']:
                 p.poly(curve(f.pts(sd), 2), sh['grey'], INK, 2.2)
-        top = dict(f.prof, hair_low=-0.16, nape=0.12, volume=0.03)   # the thick dark top over the crown, down the back
+        top = dict(f.prof, hair_low=kh.get('top_low', -0.16), nape=kh.get('top_nape', 0.12), volume=0.03)   # the thick
+        #     dark top over the crown, down the back (Patriots 5: 'top_nape' shorter for a faded back and sides)
         fronts = [f.pts(TH.dense(curve(sh['cap'], 2)))] if yaw <= 90 else []
         mask = TH.hair(img, p, f, fronts, hc, top)
         if yaw <= 90:

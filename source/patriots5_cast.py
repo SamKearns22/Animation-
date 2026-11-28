@@ -10,15 +10,24 @@ thick-set (references/faces/patriot/pick, made by hand).
   draw(img, cam, x, y, s, sp, j, yaw) .. one drawing of him
   sheet(OUT) ........ every view full length on one floor at 1.78 m, beside a 1.75 m person, the five turns of his
                       head large, his moods large (python3 source/patriots5_cast.py sheet OUT.jpg)
-  tables: LINES, MOODS
+  crew(i, disguised) the seven more men (CREW: Nick and six), plain or in brief row 17's disguise (DISGUISE,
+                      source/disguise.py); grey_man() the grey test man; patriot_disguised(mood)
+  cast_sheets(OUT_DIR) the cast sheet (cast chat 4, 28 Nov): sheet 1 Danny (front, side, back; slumped on the cot,
+                      at the window bars from outside, the side and behind; his head turned beside his photo), the two
+                      officers, the boat beside the Patriot; sheet 2 the eight men plain and disguised, front, side,
+                      back, true heights (python3 source/patriots5_cast.py cast OUT_DIR)
+  tables: LINES, MOODS, CREW, DISGUISE, COT, SAD
 """
 import os
 import sys
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from PIL import Image, ImageDraw, ImageFont   # noqa: E402
+from ink import INK                            # noqa: E402
 import facehouse as F                         # noqa: E402
 import patriots3_cast as P3                   # noqa: E402  (his clothes; it also hangs the badges and cargo pockets)
 import people_parts as PP                     # noqa: E402
@@ -46,6 +55,92 @@ def patriot(mood='rest'):
     j['body_props'] = [P3.patriot_jacket] + j.get('body_props', [])
     j['_dressed'] = True
     return sp, j
+
+
+# The seven more Patriot Platform men (cast chat 4, 28 Nov; brief row 7: eight in the tower, one is Nick): the house
+# head under the balaclava (only eyes and brows show, so each man's eyes, brows and the skin round them differ), the
+# Patriot's jacket cut in each man's own dark shade, varied heights and builds, so eight read as eight at phone size.
+CREW = [   # name, height, build (figure, shoulders), jacket, sleeve, trousers, eyes, brows, skin round the eyes, eye size
+    dict(name='Nick', height=1.86, figure=None, shoulders=158, jacket=(40, 54, 92), sleeve=(40, 54, 92),
+         trousers=(40, 44, 50), iris=(70, 110, 150), brow=(150, 110, 70), skin=(244, 206, 186), eye=1.15),
+    dict(name='Gaz', height=1.70, figure='stout', shoulders=176, jacket=(74, 80, 50), sleeve=(74, 80, 50),
+         trousers=P3.COMBAT, iris=(70, 50, 36), brow=(40, 30, 26), skin=(236, 190, 160), eye=1.05),
+    dict(name='Kev', height=1.80, figure=None, shoulders=150, jacket=(24, 24, 28), sleeve=(120, 122, 128),
+         trousers=(28, 30, 36), iris=(90, 120, 90), brow=(196, 160, 110), skin=(250, 214, 198), eye=1.3),
+    dict(name='Wayne', height=1.66, figure=None, shoulders=146, jacket=(96, 98, 104), sleeve=(96, 98, 104),
+         trousers=(54, 56, 46), iris=(60, 44, 34), brow=(60, 44, 34), skin=(226, 178, 148), eye=1.0),
+    dict(name='Dean', height=1.92, figure='stout', shoulders=184, jacket=(34, 66, 48), sleeve=(34, 66, 48),
+         trousers=P3.COMBAT, iris=(80, 100, 130), brow=(120, 84, 56), skin=(240, 196, 176), eye=1.1),
+    dict(name='Lee', height=1.75, figure=None, shoulders=162, jacket=(92, 60, 40), sleeve=(92, 60, 40),
+         trousers=(36, 36, 40), iris=(56, 40, 30), brow=(30, 24, 22), skin=(214, 166, 134), eye=1.2),
+    dict(name='Darren', height=1.73, figure='stout', shoulders=170, jacket=(92, 30, 36), sleeve=(92, 30, 36),
+         trousers=(30, 32, 38), iris=(110, 130, 150), brow=(176, 120, 84), skin=(248, 210, 192), eye=0.95),
+]
+# Brief row 17 (Sam's words, the news photos): the disguise each wears in shot 8. At least two in niqabs; white caps
+# on some; the red-and-white blanket on some; prayer beads in one hand; orange life jackets on all; hoods, puffers.
+DISGUISE = {'Patriot': dict(kufi=True, beads='R'),
+            'Nick': dict(niqab=True, blanket=True),
+            'Gaz': dict(kufi=True, puffer=True, hood=True),
+            'Kev': dict(niqab=True, puffer=True),
+            'Wayne': dict(kufi=True, blanket=True, beads='R'),
+            'Dean': dict(hood=True, puffer=True),
+            'Lee': dict(kufi=True, beads='L', blanket=True),
+            'Darren': dict(hood=True, puffer=True)}   # (his red jacket would swallow the red blanket)
+
+
+def _jacket_in(col):
+    """The Patriot's jacket drawn in another man's shade (patriots3_cast reads its colour from JACKET)."""
+    def draw(p, view, sp):
+        old = P3.JACKET
+        P3.JACKET = col
+        try:
+            P3.patriot_jacket(p, view, sp)
+        finally:
+            P3.JACKET = old
+    return draw
+
+
+def crew(i, disguised=False):
+    """Crew man i (0-6: CREW) as (sp, j); disguised: brief row 17's kit over his outfit (DISGUISE)."""
+    import views as V
+    c = CREW[i]
+    sp = F.person('patriot', 'detail', **dict(LINES, height=c['height'], eye_scale=1.2 * c['eye'],
+                                                 iris_c=c['iris'], brow_c=c['brow']))
+    sp.update(BODY)
+    sp.update(name=c['name'], jacket=c['jacket'], sleeve=c['sleeve'], trousers=c['trousers'], skin=c['skin'],
+              shoulders=c['shoulders'], patches=i % 2 == 0)
+    if c['figure']:
+        sp['figure'] = c['figure']
+    else:
+        sp.pop('figure', None)
+        sp['belly'] = False
+    P3.HEIGHTS[c['name']] = c['height']               # his own height (scale_for reads it by name)
+    j = V.standing(sp)
+    j['body_props'] = [_jacket_in(c['jacket'])] + j.get('body_props', [])
+    j['_dressed'] = True
+    if disguised:
+        import disguise
+        sp, j = disguise.dress(sp, j, DISGUISE[c['name']])
+    return sp, j
+
+
+def grey_man():
+    """A plain grey test man under the house balaclava (rule 89: people in tests are the crowd pack or grey)."""
+    import views as V
+    sp = F.person('patriot', 'detail', **dict(LINES))
+    sp.update(BODY)
+    grey = (150, 150, 156)
+    sp.update(name='grey', jacket=grey, sleeve=grey, trousers=(120, 120, 126), patches=False, belly=False)
+    sp.pop('figure', None)
+    j = V.standing(sp)
+    j['_dressed'] = True
+    return sp, j
+
+
+def patriot_disguised(mood='rest'):
+    import disguise
+    sp, j = patriot(mood)
+    return disguise.dress(sp, j, DISGUISE['Patriot'])
 
 
 _READY = []
@@ -119,8 +214,195 @@ def sheet(out):
     return out
 
 
+# ---------------------------------------------------------------------------------------------- the cast sheets
+COT = dict(h=230, front=120, rear=-260, width=200, col=(96, 98, 104), top=(150, 156, 168))   # the cell's cot (a seat)
+SAD = dict(brow_up=0.012, frown=-0.05, lid4=0.55, smile=-0.8)    # Danny downcast (shot 1: sighing deeply)
+BARS = (60, 62, 70)
+
+
+def danny_slumped(sp):
+    """Shot 1: on the cot's edge, leaning forward, hands in his lap, head dropped."""
+    import sitting as ST
+    seat = ST.Seat('stool', **COT)
+    spec = ST.spec_upright(sp, seat, hands='lap')
+    spec['lean'] = 16.0
+    j = ST.realize(sp, seat, spec)
+    j['head_dy'] = j.get('head_dy', 0) + 14
+    return j
+
+
+def danny_window(sp):
+    """Shots 2, 5, 6: standing on the bunk, a fist round a bar of the grate either side of his face."""
+    import views as V
+    j = V.standing(sp)
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, (sg * 82.0, -150.0, 130.0), 'down', 'fist')
+    j['head_dy'] = -6
+    return j
+
+
+def _grate(p, x, y, s, view, front):
+    """The cell window's bars at his fists (body frame: fists at +-82 across, 150 up, 130 forward)."""
+    if view == 'side':                  # the cell wall, cut through: brick above and below the window's opening, the
+        wx = x + 136 * s                # bars in it where his fists hold them
+        brick = (150, 96, 74)
+        for y0, y1 in ((y - 400 * s, y - 250 * s), (y - 40 * s, y + 300 * s)):
+            p.poly([(wx, y0), (wx + 150 * s, y0), (wx + 150 * s, y1), (wx, y1)], brick, INK, 2.4)
+            for yy in np.arange(y0 + 34 * s, y1, 34 * s):
+                p.line([(wx, yy), (wx + 150 * s, yy)], (120, 74, 56), 1.4)
+        p.poly([(wx, y - 250 * s), (wx + 12 * s, y - 250 * s), (wx + 12 * s, y - 40 * s), (wx, y - 40 * s)], BARS, INK, 1.8)
+        return
+    top, bot = y - 270 * s, y - 30 * s
+    hw = 150 if front else 230
+    if not front:                       # from behind: the moonlit window beyond him (wider than his head), its bars
+        p.poly([(x - hw * s, top), (x + hw * s, top), (x + hw * s, bot), (x - hw * s, bot)], (40, 52, 84), INK, 3)
+    for bx in ((-82, -28, 28, 82) if front else (-190, -136, -82, 82, 136, 190)):
+        p.poly([(x + (bx - 6) * s, top), (x + (bx + 6) * s, top), (x + (bx + 6) * s, bot), (x + (bx - 6) * s, bot)],
+               BARS, INK, 1.8)
+    for by in (top, bot):
+        p.poly([(x - hw * s, by - 6 * s), (x + hw * s, by - 6 * s), (x + hw * s, by + 6 * s), (x - hw * s, by + 6 * s)],
+               BARS, INK, 1.8)
+
+
+def _crop(tile, bg):
+    import numpy as np
+    a = np.asarray(tile.convert('RGB')).astype(int)
+    m = (np.abs(a - np.array(bg)).sum(2) > 12)
+    ys, xs = np.nonzero(m)
+    return tile.crop((xs.min() - 6, ys.min() - 6, xs.max() + 7, ys.max() + 7))
+
+
+def boat_panel():
+    """The orange walking boat (source/walking_boat.py, its practice crew as stand-ins) beside the Patriot, for size."""
+    import walking_boat as WB
+    B = WB.B
+    bt = WB.practice_boat(x0=420.0)
+    ss, B.SS = B.SS, 2
+    img = B.canvas(WB.NIGHT)
+    cam = B.Cam(1.0, 540, 960)
+    WB.scene(img, cam, bt.X(0.0), bt)
+    bt.draw(img, cam, 0.0)
+    sp, j = patriot()
+    B.SS = 2
+    draw(img, cam, 940, WB.GROUND_Y - 928 * WB.S, WB.S, sp, j, 0)
+    B.SS = ss
+    return img.resize((1080, 1920), Image.LANCZOS).crop((0, 700, 1080, 1450)).convert('RGBA')
+
+
+def cast_sheets(out_dir):
+    import numpy as np
+    import body as B
+    import people
+    import views as V
+    from PIL import Image, ImageDraw
+    os.makedirs(out_dir, exist_ok=True)
+    install()
+    cast = people.install(people.load('patriots5'))
+    B.SS = 1
+    BG = (232, 228, 222)
+    big = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 40)
+    small = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 34)
+    S0 = 0.5                                            # a 1.78 m man's scale on the sheets
+
+    def fig(drawfn, yaw, s=S0, extra=None, under=None):
+        tile = Image.new('RGBA', (1400, 2600), BG + (255,))
+        y = 1000.0
+        if under:
+            under(B.Pen(tile, B.Cam(1.0, 540, 960)), 700, y, s)
+        drawfn(tile, 700, y, s, yaw)
+        if extra:
+            extra(B.Pen(tile, B.Cam(1.0, 540, 960)), 700, y, s)
+        return tile, y + 928 * s
+
+    def kit(sp, j=None):
+        return lambda img, x, y, s, yaw: V.person(img, B.Cam(1.0, 540, 960), x, y, s * sp['height'] / 1.78,
+                                                  dict(sp), 0.0, float(yaw), j)
+
+    def lay(img, row, floor, d):                         # row: [(tile, foot_y, label)], one floor, left to right
+        x = 30
+        for tile, foot, label in row:
+            part = _crop(tile, BG)                       # (the whole figure: a taller man's feet are lower)
+            img.alpha_composite(part, (x, floor - part.height + 6))
+            d.text((x + 4, floor + 12), label, font=small, fill=(30, 30, 30))
+            x += part.width + 30
+        return x
+
+    # ---- sheet 1: Danny, the officers, the boat
+    W, H = 2600, 2760
+    img = Image.new('RGBA', (W, H), BG + (255,))
+    d = ImageDraw.Draw(img)
+    d.text((30, 16), 'THE PATRIOT 5: Danny Tommo, the prison officers, the boat', font=big, fill=(30, 30, 30))
+    img.alpha_composite(Image.new('RGBA', (1, 1), BG + (255,)), (0, 0))
+    row = []
+    for who, lab in (('tommo', 'Danny'), ('officer', 'officer 1'), ('guard2', 'officer 2')):
+        sp = cast[who]
+        for yaw, vn in ((0, 'front'), (90, 'side'), (180, 'back')):
+            t, f = fig(kit(sp), yaw)
+            row.append((t, f, lab if vn == 'front' else ''))
+    lay(img, row, 780, d)
+    d.text((1900, 740), 'each: front, side, back', font=small, fill=(90, 90, 90))
+    sp = dict(cast['tommo'], **SAD)
+    row = []
+    for yaw, lab in ((0, 'on his cot'), (90, '')):
+        t, f = fig(kit(sp, danny_slumped(sp)), yaw)
+        row.append((t, f, lab))
+    sp = cast['tommo']
+    for yaw, lab, front in ((0, 'at the bars', True), (90, '', None), (180, 'from behind', False)):
+        t, f = fig(kit(sp, danny_window(sp)), yaw,
+                   extra=(lambda p, x, y, s, fr=front, yw=yaw: _grate(p, x, y, s, 'side' if yw == 90 else 'front', True))
+                   if front else None,
+                   under=(lambda p, x, y, s: _grate(p, x, y, s, 'side' if yaw == 90 else 'back', False))
+                   if not front else None)
+        row.append((t, f, lab))
+    x = lay(img, row, 1500, d)
+    # his head turned, beside his photo
+    T = 300
+    for k, yaw in enumerate((0, 45, 90, 135, 180)):
+        tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, float(yaw))
+        img.alpha_composite(tile.crop((300, 300, 780, 780)).resize((T, T)), (30 + k * (T + 14), 1580))
+    ph = Image.open(os.path.join(HERE, '..', 'references', 'faces', 'tommo', 'm02-front-mirror.jpg')).convert('RGBA')
+    ph.thumbnail((2 * T, T))
+    img.alpha_composite(ph, (30 + 5 * (T + 14), 1580))
+    d.text((30, 1580 + T + 8), "Danny's head beside his photo", font=small, fill=(30, 30, 30))
+    boat = boat_panel()
+    if boat is not None:
+        boat.thumbnail((1100, 760))
+        img.alpha_composite(boat, (30, 1960))
+        d.text((30 + boat.width + 20, 1980), 'the orange boat beside\nthe Patriot, for size\n(stand-in men inside)', font=small, fill=(30, 30, 30))
+    out1 = os.path.join(out_dir, 'patriot-5-cast-sheet-1.jpg')
+    a = img.convert('RGB')
+    a.crop((0, 0, W, min(H, 1960 + (boat.height + 20 if boat is not None else 0)))).save(out1, quality=86)
+
+    # ---- sheet 2: the eight men, plain and disguised
+    men = [('Patriot', lambda dis: patriot_disguised() if dis else patriot())]
+    men += [(c['name'], (lambda dis, i=i: crew(i, dis))) for i, c in enumerate(CREW)]
+    rows = [(False, 0, 'front'), (False, 90, 'side'), (False, 180, 'back'),
+            (True, 0, 'disguised front'), (True, 90, 'disguised side'), (True, 180, 'disguised back')]
+    W2 = 2700
+    img = Image.new('RGBA', (W2, 120 + len(rows) * 640), BG + (255,))
+    d = ImageDraw.Draw(img)
+    d.text((30, 16), 'THE PATRIOT 5: the eight Patriot Platform men (true heights), plain and in the shot 8 disguise',
+           font=big, fill=(30, 30, 30))
+    for r, (dis, yaw, rname) in enumerate(rows):
+        row = []
+        for name, make in men:
+            sp, j = make(dis)
+            t, f = fig(lambda img_, x, y, s, yw, sp=sp, j=j: draw(img_, B.Cam(1.0, 540, 960), x, y, s, sp, j, yw), yaw,
+                       s=0.42)
+            row.append((t, f, name if r in (0, 3) else ''))
+        floor = 120 + (r + 1) * 640 - 60
+        lay(img, row, floor, d)
+        d.text((W2 - 330, floor - 40), rname, font=small, fill=(90, 90, 90))
+    out2 = os.path.join(out_dir, 'patriot-5-cast-sheet-2.jpg')
+    img.convert('RGB').save(out2, quality=86)
+    return out1, out2
+
+
 if __name__ == '__main__':
-    if len(sys.argv) > 2 and sys.argv[1] == 'sheet':
+    if len(sys.argv) > 2 and sys.argv[1] == 'cast':
+        print(cast_sheets(sys.argv[2]))
+    elif len(sys.argv) > 2 and sys.argv[1] == 'sheet':
         print(sheet(sys.argv[2]))
     else:
         print(__doc__)
