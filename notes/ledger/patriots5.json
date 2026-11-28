@@ -1262,70 +1262,72 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.21,
+   "cost": 0.49,
    "src": "estimate",
    "sid": "session_01J1JB7XBkFnh8wsjoozo2sD",
-   "steps": 19,
-   "hist_k": 103,
+   "steps": 41,
+   "hist_k": 115,
    "kinds": {
-    "tool search": 14.8,
-    "renders": 3.8,
-    "pictures": 2.8,
-    "small shell commands (listing, moving, copying)": 0.7,
-    "reading notes": 3.8,
-    "running checks and tools": 1.1,
-    "app tools (chats, files sent)": 1.7,
-    "start-up reading": 47.7,
-    "Claude's words (thinking and writing)": 22.7,
-    "messages and reminders": 0.8
+    "tool search": 11.2,
+    "renders": 1.7,
+    "pictures": 1.5,
+    "small shell commands (listing, moving, copying)": 0.8,
+    "reading notes": 1.7,
+    "running checks and tools": 0.7,
+    "app tools (chats, files sent)": 1.6,
+    "start-up reading": 39.2,
+    "memory lapses (re-paying for the whole chat after a gap)": 19.8,
+    "Claude's words (thinking and writing)": 18.2,
+    "messages and reminders": 3.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 10,
+    "tool search": 21,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 2,
     "pictures": 2,
-    "other": 6
+    "other": 10
    },
    "split": {
-    "usd": 0.7838,
-    "total": 0.7838,
+    "usd": 1.7966,
+    "total": 1.7966,
     "floor_k": 85,
     "blocks": {
-     "start-up floor": 57.8,
-     "Claude's words": 20.3,
-     "new writes": 17.8,
-     "carried history": 4.1
+     "start-up floor": 43.9,
+     "new writes": 35.4,
+     "Claude's words": 13.9,
+     "carried history": 6.8
     },
     "origins": {
-     "start-up floor": 57.8,
-     "Claude's words": 27.5,
-     "result: tool search": 11.2,
-     "result: pictures": 1.5,
-     "messages and reminders": 1.0,
-     "result: renders": 0.7,
-     "result: other": 0.3
+     "start-up floor": 43.9,
+     "cache re-write": 22.2,
+     "Claude's words": 20.4,
+     "result: tool search": 7.0,
+     "messages and reminders": 3.9,
+     "result: other": 1.1,
+     "result: pictures": 0.9,
+     "result: renders": 0.4
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 57.8,
+     "start-up reading (rules, tools, first files)": 43.9,
+     "memory lapses (re-paying for the whole chat)": 22.2,
      "commands": 8.5,
-     "writing code": 6.7,
-     "start-up and handover tools": 4.7,
-     "thinking": 4.2,
-     "writing notes": 4.1,
-     "reading notes": 3.6,
-     "reading kit code": 2.5,
-     "messages to Sam": 2.2,
-     "helper and chat prompts": 1.8,
-     "looking at pictures": 1.5,
-     "messages and reminders": 1.0,
-     "renders": 0.8,
-     "git and saving": 0.2,
-     "app tools (chats, files sent)": 0.2,
-     "small shell commands (listing, moving, copying)": 0.1,
-     "running checks and tools": 0.1
+     "messages and reminders": 3.9,
+     "thinking": 3.4,
+     "writing code": 3.3,
+     "start-up and handover tools": 2.8,
+     "messages to Sam": 2.4,
+     "reading notes": 2.2,
+     "writing notes": 2.0,
+     "reading kit code": 1.7,
+     "looking at pictures": 0.9,
+     "helper and chat prompts": 0.9,
+     "app tools (chats, files sent)": 0.7,
+     "small shell commands (listing, moving, copying)": 0.5,
+     "renders": 0.5,
+     "git and saving": 0.2
     },
     "leftover": 0.0
    },
@@ -1337,15 +1339,15 @@
      [
       "source/shoulder_tower.py",
       1.7,
-      0.0176
+      0.0243
      ],
      [
       "notes/learn/shoulder-tower/lesson.md",
       0.9,
-      0.0095
+      0.0131
      ]
     ],
-    "base_pct": 35.5
+    "base_pct": 34.5
    },
    "search": {
     "show": 0,
@@ -1353,9 +1355,11 @@
      "no show": 0
     },
     "other": {
-     "other": 3,
+     "other": 12,
      "shared:handover.py": 1,
-     "shared:shoulder_tower.py": 6
+     "shared:shoulder_tower.py": 6,
+     "shared:kittests.py": 1,
+     "film notes": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -1449,6 +1453,105 @@
       "git add -A && git commit -qm \"patriots5 tower notes: take out the middle men's a",
       "",
       305
+     ],
+     [
+      20,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "time python3 source/kittests.py --stale 2>&1 | tail -30",
+      "",
+      701
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      "",
+      59
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "git diff --stat && git add -A && git commit -qm \"kit tests (--stale, Sam's Y): s",
+      "",
+      206
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "git add -A && (git diff --cached --quiet || git commit -qm \"kit tests: stamps so",
+      "",
+      213
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "notes/kittest-stamps.tsv story/blessed-page-shared.md",
+      "git checkout -- notes/kittest-stamps.tsv story/blessed-page-shared.md && git mer",
+      "",
+      118
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit FET",
+      "",
+      21
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git fetch -q origin claude/create-claude-md-oe8z4g &&",
+      "",
+      148
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      "",
+      28
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"plain-words log Co-Authored-By: Claude Opus 5.5 <n",
+      "",
+      78
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "git push origin HEAD:claude/patriots5-tower-notes 2>&1|tail -3; git fetch -q ori",
+      "",
+      166
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit FET",
+      "",
+      31
      ]
     ]
    },
@@ -1856,72 +1959,78 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.33,
+   "cost": 1.73,
    "src": "estimate",
    "sid": "session_01J1JB7Xctbsw7fYYqMC2yQM",
-   "steps": 70,
-   "hist_k": 210,
+   "steps": 76,
+   "hist_k": 215,
    "kinds": {
-    "tool search": 26.7,
-    "renders": 3.4,
-    "pictures": 2.9,
-    "small shell commands (listing, moving, copying)": 4.6,
-    "edit results": 6.4,
-    "running checks and tools": 1.2,
+    "tool search": 21.0,
+    "renders": 2.6,
+    "pictures": 2.4,
+    "small shell commands (listing, moving, copying)": 3.5,
+    "edit results": 4.9,
+    "running checks and tools": 0.9,
     "reading chat records": 0.2,
-    "app tools (chats, files sent)": 0.2,
-    "Claude's words (thinking and writing)": 36.3,
-    "start-up reading": 17.4,
-    "messages and reminders": 0.7
+    "app tools (chats, files sent)": 0.4,
+    "reading notes": 0.1,
+    "tool lookups": 0.1,
+    "Claude's words (thinking and writing)": 32.8,
+    "start-up reading": 16.1,
+    "memory lapses (re-paying for the whole chat after a gap)": 14.1,
+    "messages and reminders": 0.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 46,
+    "tool search": 47,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 7,
     "pictures": 8,
-    "other": 10
+    "other": 14
    },
    "split": {
-    "usd": 4.8679,
-    "total": 4.8679,
+    "usd": 6.3319,
+    "total": 6.3319,
     "floor_k": 86,
     "blocks": {
-     "Claude's words": 34.3,
-     "start-up floor": 25.7,
-     "new writes": 20.4,
-     "carried history": 19.6
+     "new writes": 34.8,
+     "Claude's words": 27.2,
+     "start-up floor": 21.2,
+     "carried history": 16.9
     },
     "origins": {
-     "Claude's words": 53.6,
-     "start-up floor": 25.7,
-     "result: tool search": 14.3,
-     "result: pictures": 2.9,
-     "Claude's edits": 1.6,
-     "messages and reminders": 1.0,
+     "Claude's words": 43.1,
+     "start-up floor": 21.2,
+     "cache re-write": 18.5,
+     "result: tool search": 11.6,
+     "result: pictures": 2.4,
+     "Claude's edits": 1.3,
+     "messages and reminders": 1.1,
      "result: other": 0.7,
      "result: renders": 0.1
     },
     "named": {
-     "thinking": 31.0,
-     "start-up reading (rules, tools, first files)": 25.7,
-     "writing code": 14.6,
-     "reading kit code": 8.7,
-     "commands": 5.3,
-     "looking at pictures": 2.9,
-     "reading notes": 2.7,
-     "messages to Sam": 2.6,
-     "start-up and handover tools": 1.5,
+     "thinking": 24.5,
+     "start-up reading (rules, tools, first files)": 21.2,
+     "memory lapses (re-paying for the whole chat)": 18.5,
+     "writing code": 11.5,
+     "reading kit code": 7.0,
+     "commands": 4.3,
+     "messages to Sam": 2.4,
+     "looking at pictures": 2.4,
+     "reading notes": 2.2,
      "writing notes": 1.4,
-     "messages and reminders": 1.0,
-     "small shell commands (listing, moving, copying)": 0.7,
-     "reading guides": 0.6,
+     "start-up and handover tools": 1.2,
+     "messages and reminders": 1.1,
+     "small shell commands (listing, moving, copying)": 0.6,
+     "reading guides": 0.5,
      "renders": 0.3,
-     "helper and chat prompts": 0.3,
-     "git and saving": 0.3,
+     "git and saving": 0.2,
+     "helper and chat prompts": 0.2,
      "reading chat records": 0.2,
+     "app tools (chats, files sent)": 0.2,
      "running checks and tools": 0.1
     },
     "leftover": 0.0
@@ -1934,45 +2043,45 @@
      [
       "source/shoulder_tower.py",
       6.6,
-      0.1232
+      0.1303
      ],
      [
       "notes/learn/shoulder-tower/lesson.md",
       3.7,
-      0.0716
+      0.0756
      ],
      [
       "source/moves.py",
       2.8,
-      0.0513
+      0.0544
      ],
      [
       "notes/learn/shoulder-tower/neck-fixed-27nov.png",
       1.6,
-      0.0258
+      0.0275
      ],
      [
       "source/views.py",
       0.8,
-      0.0133
+      0.0141
      ],
      [
       "guides/job-packs.md",
       0.2,
-      0.0042
+      0.0045
      ],
      [
       "/home/user/Animation-/notes/learn/walking-boat/lesson.md",
       0.2,
-      0.0028
+      0.003
      ],
      [
       "source/ink.py",
       0.1,
-      0.0019
+      0.002
      ]
     ],
-    "base_pct": 22.0
+    "base_pct": 18.4
    },
    "search": {
     "show": 0,
@@ -1980,7 +2089,7 @@
      "no show": 0
     },
     "other": {
-     "other": 9,
+     "other": 10,
      "shared:handover.py": 3,
      "shared:shoulder_tower.py": 3,
      "shared:people_parts.py": 1,
@@ -2411,6 +2520,15 @@
       "cp /tmp/claude-0/-home-user-Animation-/b4eecb27-e981-572b-9715-482fbf1bf1fc/scra",
       "",
       20
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "git status --short | head -5; git fetch -q origin claude/patriots5-walking-boat ",
+      "",
+      229
      ]
     ]
    },
