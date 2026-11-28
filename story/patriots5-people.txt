@@ -1,10 +1,13 @@
 # The Patriot 5's people (cast chat 4, 28 Nov). The Patriot and his crew are drawn by source/patriots5_cast.py.
 
 # tommo: Danny Tommo
-# (a real person's stand-in: face tool pick B, references/faces/tommo; prison: the grey tracksuit)
+# (Daniel Thomas, "Danny Tommo": face tool pick B on his BBC, Mirror and Searchlight photos, references/faces/tommo,
+#  likeness 85%, first of 15 in the line-up (28 Nov; the first build used Tommy Robinson's photos by mistake). His
+#  look is dark brown hair slicked back on top, the sides faded very short; a short full beard, dark brown with ginger;
+#  in prison, the grey tracksuit)
 head: house tommo, hair swept, look detail
-house: hair_c 112 84 64, grey 176 140 122, cap_foot 0.04, top_nape 0.06, quiff 0.0, fade 0.12, cap_in 0.035, flecks 0
-beard: stubble 150 104 74
+house: hair_c 58 44 38, grey 150 120 104, cap_foot 0.04, top_nape 0.06, quiff 0.0, fade 0.14, cap_in 0.035, flecks 0
+beard: boxed 92 64 48
 outfit: jumper 134 136 140, shirt 134 136 140, no tie, trousers 134 136 140, shoes 236 236 236
 extras: tracksuit
 body: 1.70 m, man, hem 470

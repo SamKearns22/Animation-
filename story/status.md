@@ -1,3 +1,3 @@
-patriots5 (The Patriot 5): notes chat 5: crew in black protest gear, Patriot in the boat at the front; Danny is Daniel Thomas (right photos found).
-Done: notes 5-8; whophotos check (whose face a photo shows) built and tested.
-Next: Danny face from straight-on photos (waiting on Sam), then sets in film order toward the animatic.
+patriots5 (The Patriot 5): notes chat 5 done: crew in black, Patriot at the bow, Danny rebuilt as the right man (85% likeness).
+Done: notes 5-9; whophotos check.
+Next: chat 6 (Opus high): sets in film order, the new night cell first; then the film file and the shot board.

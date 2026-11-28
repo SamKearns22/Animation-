@@ -407,7 +407,7 @@ def cast_sheets(out_dir):
         tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
         V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, float(yaw))
         img.alpha_composite(tile.crop((300, 300, 780, 780)).resize((T, T)), (30 + k * (T + 14), 1580))
-    ph = Image.open(os.path.join(HERE, '..', 'references', 'faces', 'tommo', 'm02-front-mirror.jpg')).convert('RGBA')
+    ph = Image.open(os.path.join(HERE, '..', 'references', 'faces', 'tommo', '04-front-mirror.jpg')).convert('RGBA')
     ph.thumbnail((2 * T, T))
     img.alpha_composite(ph, (30 + 5 * (T + 14), 1580))
     d.text((30, 1580 + T + 8), "Danny's head beside his photo", font=small, fill=(30, 30, 30))
@@ -415,7 +415,7 @@ def cast_sheets(out_dir):
     if boat is not None:
         boat.thumbnail((1100, 760))
         img.alpha_composite(boat, (30, 1960))
-        d.text((30 + boat.width + 20, 1980), 'the orange boat beside\nthe Patriot, for size\n(stand-in men inside)', font=small, fill=(30, 30, 30))
+        d.text((30 + boat.width + 20, 1980), 'the orange boat: the eight\nin disguise, the Patriot\nat the front (right)', font=small, fill=(30, 30, 30))
     out1 = os.path.join(out_dir, 'patriot-5-cast-sheet-1.jpg')
     a = img.convert('RGB')
     a.crop((0, 0, W, min(H, 1960 + (boat.height + 20 if boat is not None else 0)))).save(out1, quality=86)

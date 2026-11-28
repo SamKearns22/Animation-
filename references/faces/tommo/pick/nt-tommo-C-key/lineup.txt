@@ -1,0 +1,3 @@
+Step 2: keep your step-1 guesses as they are. Now rank this line-up, best match first: Tommy Robinson.
+Rewrite /home/user/Animation-/review/np/616ae32d/answer.json adding "ranking": [all names in order] and "what_would_make_it_obvious": "one sentence". Reply with the
+JSON only.

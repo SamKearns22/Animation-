@@ -2,3 +2,6 @@ name: Danny Tommo / Daniel Thomas
 01-front-bbc.jpg: "Daniel Thomas, known as Danny Tommo, on September 09, 2026, in London, England." (BBC News, "Daniel Thomas denies entering restricted area of Dover migrant site"; cropped)
 02-front-bbc.jpg: "Patriot Platform leader Daniel Thomas, known as Danny Tommo, leaves the offices of the Daily..." (BBC News; cropped)
 03-threequarter-bbc.jpg: "Daniel Thomas appearing at an anti-migrant protest in June" (BBC News; cropped to him, right of centre)
+04-front-mirror.jpg: "Patriot Platform leader Danny Tommo Thomas plans to lay siege to asylum centres" (the Mirror, its lead photo; cropped to him, centre)
+05-front-searchlight.jpg: "Is Danny Tommo a threat or a clown? Actually, he's a bit of both" (Searchlight, its lead photo: his own video, at night; cropped)
+06-threequarter-independent.jpg: "Who is Danny Tommo? The far-right activist who brought protests to Portsmouth" (the Independent, its lead photo; cropped)
