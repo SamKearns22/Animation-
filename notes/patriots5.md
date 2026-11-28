@@ -78,10 +78,7 @@ benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark
 
 Rehearsal clips sent (rule 8): the shoulder tower, practice v1 and v2, 27 Nov (notes/learn/shoulder-tower/); the walking boat: chat 3 (session_01J1JB7Xctbsw7fYYqMC2yQM); the climb onto the bunk: not yet.
 
-Shot board sent: (rule 11: every shot on one board before any move is written: `rough.py board FILM OUT.jpg`, send
-it, then `rough.py sent FILM OUT.jpg --delivered --board`, which records it. Pre-flight refuses to run until the record
-holds every shot, each with someone in SHOT_CAST, sent before the first move; and while any "done?" box below is blank:
-rule 14)
+Shot board sent (rule 11; rough.py board, then rough.py sent --delivered --board): not yet.
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
@@ -141,14 +138,13 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi). (redesign chat 1)
 - One film name, patriots5 (the redesign chat's); the plan chat's patriots-5 files folded in, 27 Nov.
 - The template's held estimates note is already settled: Sam said Y to option 1 on 17 Nov (notes/archive/milburn-handovers.md); not asked again.
-- Branches the start listed (also named by the redesign chat) (jolly-ramanujan, upbeat-dirac, gta-v5-sound-draft, gta-chat46-build, dreamy-fermi, gta-chat31): logs, an archive note and old Grand Theft Autism files only, nothing for this film; left as they are.
+- Branches named at the start, not merged (logs, an archive note and old Grand Theft Autism files only, nothing for this film): claude/jolly-ramanujan-2lcl2o, claude/upbeat-dirac-w16tn9, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+- Plan chat's start-of-film kit run (27 Nov): 4 red, all Open Wounds tests none of this film's chats touched (early_move_size, head_moves_not_comic, movers_never_meet_head_on, side_by_side_out_of_reach): left for the Open Wounds lessons; named here.
 - Photos of the real man Danny Tommo stands for: Sam (27 Nov): "Ask permission for big uk news sites and I'll grant it"; the network was already fully open (nothing to grant). Guardian, Sky, Reuters, AP and the Telegraph refuse automated visits themselves; the Mirror's topic page gave 5 press photos, filed in references/faces/tommo (2 front, 2 three-quarter, 1 smiling). Face tool run: A 73%, B 78%, C 72%, all first in the line-up; my look: the hair piece reads as a boxy block with the sides too long (his are faded short) and the stubble should be ginger-brown. Sent to Sam to pick.
 - The small boat "see patriots 2" = Patriots 2's grey inflatable (source/patriots2.py, shot_dinghy).
 - 
 
 Screenplay and title: given 27 Nov 2026 (the film's start: kit tests, rule 90)
 
-## Kit found at the start
-Moved to notes/archive/patriots5-kit-found.md (27 Nov). The useful rows are in the estimate table above.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.18% of a week (2026-11-27)
