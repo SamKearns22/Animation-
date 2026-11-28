@@ -1,3 +1,3 @@
-patriots5 (The Patriot 5): notes chat 5 done: crew in black, Patriot at the bow, Danny rebuilt as the right man (85% likeness).
-Done: notes 5-9; whophotos check.
-Next: chat 6 (Opus high): sets in film order, the new night cell first; then the film file and the shot board.
+patriots5 (The Patriot 5): sets chat 6: the new night cell (shot 1) built and sent; cast checks settled but one (officer 2 build, asked Sam).
+Done: blind judge on the cast; shot 1 cell with moonlight; downcast pose on the cot.
+Next: chat 7 (Opus high): Danny's seated band fix, the cell's other views, the gatehouse, the film file, the shot board.
