@@ -5061,14 +5061,16 @@
   {
    "date": "2026-11-28",
    "spent": 17.74
+  },
+  {
+   "date": "2026-11-28",
+   "spent": 17.74
   }
  ],
  "notes_tags": {
   "2": "none: the shoulder join (limbs.py, the arm fading into the body near the shoulder) assumes the sleeve is the jacket's cloth; a grey sleeve on a black body fades as a smear",
-  "5": "none: the plan chat searched the Mirror for \"Tommo\", got Tommy Robinson's photos and filed them as Danny's; nothing asked whose face a photo shows. Check built: source/whophotos.py (every photo's published caption must name the person; facepick refuses a new person otherwise), kittest real_person_photos_named, its saved example references/faces/robinson-not-danny",
-  "9": "-",
   "10": "-",
-  "11": "the seated front view's layering (people_famous._rib_hem is a torso piece; the forearms in the lap draw before it)",
+  "11": "seated front layering (people_famous._rib_hem, a torso piece, after the lap arms)",
   "12": "-",
   "13": "-"
  },
