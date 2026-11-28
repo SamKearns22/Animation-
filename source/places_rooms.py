@@ -622,22 +622,27 @@ def cot_along_wall(p, img, cam, a, t):
 
 
 @kind('grated window', params={'frame': 'c', 'sky': 'c', 'reveal': 'c', 'sill': 'c', 'bars': 'n', 'bar': 'c',
-                               'mesh': 'c', 'deep': 'n', 'mesh pitch': 'n', 'moon': 'n'},
+                               'mesh': 'c', 'deep': 'n', 'mesh pitch': 'n', 'moon': 'n', 'inside': 'c'},
       defaults={'frame': (150, 156, 164), 'sky': (40, 58, 110), 'reveal': (226, 216, 190), 'sill': (206, 196, 170),
                 'bars': 3, 'bar': (70, 74, 80), 'mesh': (120, 126, 134), 'deep': 0.45, 'mesh pitch': 0.045,
-                'moon': 1}, plan=True)
+                'moon': 1, 'inside': (120, 112, 96)}, plan=True)
 def grated_window(p, img, cam, a, t):
     """(A turned camera, chat 7: drawn on its own layer, cut to the opening's room face, so the sky and bars seen at
     an angle never paint over the wall beside it; nothing when the lens is behind the wall.)"""
     pc = a['piece']
     # chat 8: every camera, turned or not, cuts to the opening (the square-on branch drew the reveal's lower edge
     # below the opening, through the wall: a wedge under shot 1's window; the turned test caught the difference)
-    if not pc.sees(pc.x0, pc.z0, pc.d0, 0, 0, -1):
+    # chat 8: from outside (the lens beyond the outer face: shots 4 and 5) the opening shows the dark cell and whoever
+    # is in it (`through`), the reveal running away, the mesh, the bars nearest; cut to the OUTER opening
+    D = pc.d0 + a['deep']
+    outside = pc.turned and pc.sees(pc.x0, pc.z0, D, 0, 0, 1)
+    if not outside and not pc.sees(pc.x0, pc.z0, pc.d0, 0, 0, -1):
         return
     import body as B
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    _grated_window(B.Pen(lay, cam), lay, cam, a, t)
-    hole = pc.poly3([(pc.x0, pc.z0, pc.d0), (pc.x1, pc.z0, pc.d0), (pc.x1, pc.z1, pc.d0), (pc.x0, pc.z1, pc.d0)])
+    _grated_window(B.Pen(lay, cam), lay, cam, a, t, outside)
+    fd, zb = (D, pc.z0 + 0.06) if outside else (pc.d0, pc.z0)
+    hole = pc.poly3([(pc.x0, zb, fd), (pc.x1, zb, fd), (pc.x1, pc.z1, fd), (pc.x0, pc.z1, fd)])
     m = Image.new('L', img.size, 0)
     ImageDraw.Draw(m).polygon([cam.P(*q) for q in hole], fill=255)
     m = m.filter(ImageFilter.MaxFilter(5))             # its ink outline stays
@@ -646,7 +651,7 @@ def grated_window(p, img, cam, a, t):
     img.alpha_composite(lay)
 
 
-def _grated_window(p, img, cam, a, t):
+def _grated_window(p, img, cam, a, t, outside=False):
     """A small cell window high in a thick wall, in true depth (x, z: the opening on the room's face of the wall,
     depth: that face; `deep`: the wall's thickness). The sky at the outer face (night blue, the moon's glow), steel
     bars at the outer face, a steel mesh grille just inside them, the reveal's sides, top and sloping sill running back
@@ -655,61 +660,79 @@ def _grated_window(p, img, cam, a, t):
     x0, x1, z0, z1, d = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0
     D = d + a['deep']
     out = [P(x0, z0 + 0.06, D), P(x1, z0 + 0.06, D), P(x1, z1, D), P(x0, z1, D)]
-    p.poly(out, a['sky'], None)
-    if a['moon']:                                      # the moon's glow in the top corner of the sky
+    if outside:                                        # chat 8: from outside, the dark cell beyond the opening
+        p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z1, d), P(x0, z1, d)], a['inside'], None)
+    else:
+        p.poly(out, a['sky'], None)
+    if a['moon'] and not outside:                                      # the moon's glow in the top corner of the sky
         _soft(img, cam, (P(x1 - 0.25, z1 + 0.1, D)[0], P(x1, z1 + 0.1, D)[1], P(x1 + 0.15, z1 - 0.15, D)[0],
                          P(x1, z1 - 0.15, D)[1]), MOON, 0.55, 30)
-    # the mesh grille: a fine diamond lattice across the opening, just inside the bars
-    dm = D - 0.04
-    pitch = a['mesh pitch']
-    n = int((x1 - x0 + z1 - z0) / pitch) + 2
-    for k in range(n):
-        s = k * pitch
-        for sg in (1, -1):
-            pts = []
-            for u in (0.0, 1.0):
-                xx = x0 + s - u * (z1 - z0) if sg > 0 else x1 - s + u * (z1 - z0)
-                zz = z0 + u * (z1 - z0)
-                pts.append((xx, zz))
-            (ax, az), (bx, bz) = pts
-            # clip to the opening
-            def clip(ax, az, bx, bz):
-                tl, th = 0.0, 1.0
-                for v0, dv, lo, hi in ((ax, bx - ax, x0, x1), (az, bz - az, z0 + 0.06, z1)):
-                    if abs(dv) < 1e-9:
-                        if v0 < lo or v0 > hi:
-                            return None
-                        continue
-                    t0, t1 = (lo - v0) / dv, (hi - v0) / dv
-                    if t0 > t1:
-                        t0, t1 = t1, t0
-                    tl, th = max(tl, t0), min(th, t1)
-                return (tl, th) if tl < th else None
-            c = clip(ax, az, bx, bz)
-            if c:
-                q0 = (ax + (bx - ax) * c[0], az + (bz - az) * c[0])
-                q1 = (ax + (bx - ax) * c[1], az + (bz - az) * c[1])
-                p.line([P(q0[0], q0[1], dm), P(q1[0], q1[1], dm)], a['mesh'], max(1.0, 0.008 * ppm(dm)))
-    nb = int(a['bars'])                                # the bars, upright at the outer face
-    for k in range(nb):
-        xx = x0 + (x1 - x0) * (k + 1) / (nb + 1)
-        p.poly([P(xx - 0.012, z0 + 0.06, D), P(xx + 0.012, z0 + 0.06, D), P(xx + 0.012, z1, D),
-                P(xx - 0.012, z1, D)], a['bar'], INK, 1.2)
-    p.poly([P(x0, z1 - 0.03, D), P(x1, z1 - 0.03, D), P(x1, z1, D), P(x0, z1, D)], a['bar'], INK, 1.2)
+    for fn in a.get('through') or []:                  # chat 8: who stands outside (paint_with's `beyond`, as the
+        fn(img)                                        # double doors), behind the bars and mesh, cut to the opening
+    def mesh_():
+        # the mesh grille: a fine diamond lattice across the opening, just inside the bars
+        dm = D - 0.04
+        pitch = a['mesh pitch']
+        n = int((x1 - x0 + z1 - z0) / pitch) + 2
+        for k in range(n):
+            s = k * pitch
+            for sg in (1, -1):
+                pts = []
+                for u in (0.0, 1.0):
+                    xx = x0 + s - u * (z1 - z0) if sg > 0 else x1 - s + u * (z1 - z0)
+                    zz = z0 + u * (z1 - z0)
+                    pts.append((xx, zz))
+                (ax, az), (bx, bz) = pts
+                # clip to the opening
+                def clip(ax, az, bx, bz):
+                    tl, th = 0.0, 1.0
+                    for v0, dv, lo, hi in ((ax, bx - ax, x0, x1), (az, bz - az, z0 + 0.06, z1)):
+                        if abs(dv) < 1e-9:
+                            if v0 < lo or v0 > hi:
+                                return None
+                            continue
+                        t0, t1 = (lo - v0) / dv, (hi - v0) / dv
+                        if t0 > t1:
+                            t0, t1 = t1, t0
+                        tl, th = max(tl, t0), min(th, t1)
+                    return (tl, th) if tl < th else None
+                c = clip(ax, az, bx, bz)
+                if c:
+                    q0 = (ax + (bx - ax) * c[0], az + (bz - az) * c[0])
+                    q1 = (ax + (bx - ax) * c[1], az + (bz - az) * c[1])
+                    p.line([P(q0[0], q0[1], dm), P(q1[0], q1[1], dm)], a['mesh'], max(1.0, 0.008 * ppm(dm)))
+
+    def bars_():
+        nb = int(a['bars'])                                # the bars, upright at the outer face
+        for k in range(nb):
+            xx = x0 + (x1 - x0) * (k + 1) / (nb + 1)
+            p.poly([P(xx - 0.012, z0 + 0.06, D), P(xx + 0.012, z0 + 0.06, D), P(xx + 0.012, z1, D),
+                    P(xx - 0.012, z1, D)], a['bar'], INK, 1.2)
+        p.poly([P(x0, z1 - 0.03, D), P(x1, z1 - 0.03, D), P(x1, z1, D), P(x0, z1, D)], a['bar'], INK, 1.2)
+
+    def reveal_():
+        # the reveal: top, sides and the sloping sill, from the room's face back to the outer face
+        rv = a['reveal']
+        see = (lambda x, z, dd, n: pc.sees(x, z, dd, *n)) if pc.turned else (lambda *q: True)   # turned: faces it sees
+        if see(x0, z1, d, (0, -1, 0)):
+            p.poly([P(x0, z1, d), P(x1, z1, d), P(x1, z1, D), P(x0, z1, D)], dk(rv, 0.72), INK, 2.0)
+        if see(x0, z0, d, (1, 0, 0)):
+            p.poly([P(x0, z0, d), P(x0, z1, d), P(x0, z1, D), P(x0, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
+        if see(x1, z0, d, (-1, 0, 0)):
+            p.poly([P(x1, z0, d), P(x1, z1, d), P(x1, z1, D), P(x1, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
+        # the sloping sill (rising 0.06 m to the outer face): seen only from above its slope, any camera (chat 8: drawn
+        # always, a lens below it got a sliver under the opening, a sill seen from beneath; the turned test caught it)
+        if pc.sees(x0, z0, d, 0, a['deep'], -0.06):
+            p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z0 + 0.06, D), P(x0, z0 + 0.06, D)], a['sill'], INK, 2.0)
+    # chat 8: far to near for each side of the wall: from inside the bars (outer face) then the mesh (just inside
+    # them) then the reveal is round us; from outside the reveal runs away from us, then the mesh, the bars nearest
+    if outside:
+        reveal_(); mesh_(); bars_()
+    else:
+        bars_(); mesh_()
     p.poly(out, None, INK, 1.8)
-    # the reveal: top, sides and the sloping sill, from the room's face back to the outer face
-    rv = a['reveal']
-    see = (lambda x, z, dd, n: pc.sees(x, z, dd, *n)) if pc.turned else (lambda *q: True)   # turned: faces it sees
-    if see(x0, z1, d, (0, -1, 0)):
-        p.poly([P(x0, z1, d), P(x1, z1, d), P(x1, z1, D), P(x0, z1, D)], dk(rv, 0.72), INK, 2.0)
-    if see(x0, z0, d, (1, 0, 0)):
-        p.poly([P(x0, z0, d), P(x0, z1, d), P(x0, z1, D), P(x0, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
-    if see(x1, z0, d, (-1, 0, 0)):
-        p.poly([P(x1, z0, d), P(x1, z1, d), P(x1, z1, D), P(x1, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
-    # the sloping sill (rising 0.06 m to the outer face): seen only from above its slope, any camera (chat 8: drawn
-    # always, a lens below it got a sliver under the opening, a sill seen from beneath; the turned test caught it)
-    if pc.sees(x0, z0, d, 0, a['deep'], -0.06):
-        p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z0 + 0.06, D), P(x0, z0 + 0.06, D)], a['sill'], INK, 2.0)
+    if not outside:
+        reveal_()
 
 
 @kind('night', params={'colour': 'nums'}, defaults={'colour': NIGHT}, overall=True)
@@ -910,6 +933,39 @@ def plan_room(p, img, cam, a, t):
                 b = pc.poly3([on(name, uu, z_), on(name, uu + du, z_), on(name, uu + du, z_ - bh), on(name, uu, z_ - bh)])
                 if b:
                     p.poly(b, None, a['course colour'], 0.8)
+
+
+@kind('outer wall', params={'colour': 'c', 'course colour': 'c', 'every': 'n', 'bricks': 'n', 'brick': 'nums',
+                            'line': 'n'},
+      defaults={'colour': (88, 80, 74), 'course colour': (66, 60, 56), 'every': 0.3, 'bricks': 40,
+                'brick': (0.215, 0.075), 'line': 2.4}, plan=True)
+def outer_wall(p, img, cam, a, t):
+    """Patriots 5 chat 8 (shots 4 and 5): a building's outside face in true depth (x, z: its extent; depth: the
+    face, seen from beyond it, the lens at a greater depth), sooty brick ruled in courses `every` m with patches of
+    brick; a window on it ('grated window', listed after) draws its own opening over the face."""
+    import random
+    pc = a['piece']
+    x0, x1, z0, z1, d = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0
+    if not pc.sees(x0, z0, d, 0, 0, 1):
+        return
+    q = pc.poly3([(x0, z0, d), (x1, z0, d), (x1, z1, d), (x0, z1, d)])
+    if q:
+        p.poly(q, a['colour'], INK, a['line'])
+    z = z0 + a['every']
+    while z < z1 - 0.02:
+        seg = pc.poly3([(x0, z, d), (x1, z, d), (x1, z + 0.006, d), (x0, z + 0.006, d)])
+        if seg:
+            p.poly(seg, a['course colour'], a['course colour'], 1.0)
+        z += a['every']
+    rnd = random.Random(int(a.get('seed', 7)))
+    bw, bh = a['brick'][:2]
+    for _ in range(int(a['bricks'])):
+        u, zz = rnd.uniform(x0 + 0.1, x1 - 0.3), rnd.uniform(z0 + 0.2, z1 - 0.2)
+        for k in range(rnd.randint(1, 3)):
+            uu, z_ = u + (k % 2) * bw / 2, zz - k * bh
+            b = pc.poly3([(uu, z_, d), (uu + bw, z_, d), (uu + bw, z_ - bh, d), (uu, z_ - bh, d)])
+            if b:
+                p.poly(b, None, a['course colour'], 0.8)
 
 
 @kind('solid', params={'colour': 'c', 'line': 'n', 'faces': 's'},

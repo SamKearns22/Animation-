@@ -16,6 +16,7 @@ thick-set (references/faces/patriot/pick, made by hand).
                       at the window bars from outside, the side and behind; his head turned beside his photo), the two
                       officers, the boat beside the Patriot; sheet 2 the eight men plain and disguised, front, side,
                       back, true heights (python3 source/patriots5_cast.py cast OUT_DIR)
+  danny_sill(sp) .... his palms on the window's inner sill (shots 5, 6: the bars are out of reach in the plan)
   tables: LINES, MOODS, CREW, DISGUISE, COT, SAD
 """
 import os
@@ -242,6 +243,18 @@ def danny_window(sp):
     j = V.standing(sp)
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, (sg * 82.0, -150.0, 130.0), 'down', 'fist')
+    j['head_dy'] = -6
+    return j
+
+
+def danny_sill(sp):
+    """Shots 5 and 6 (chat 8): up on the cot on his toes, both palms flat on the window's inner sill (the cell plan:
+    the sill 2.05 m up at the wall's room face, 0.2 m in front of his face; the bars 0.45 m further out, out of his
+    reach, so danny_window's fists round the bars cannot happen in this wall)."""
+    import views as V
+    j = V.standing(sp)
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, (sg * 100.0, -30.0, 150.0), 'down', 'palm')
     j['head_dy'] = -6
     return j
 

@@ -42,3 +42,38 @@ solid: x -0.9 to -0.74, z 1.36 to 1.6, depth 4.0 to 4.16, colour 150 60 50, line
 cot along wall: x -0.95 to 0.95, z 0 to 0.45, depth 3.45 to 4.18, frame steel, mattress mattress, blanket blanket, layer back (the cot)
 night: layer over (the night)
 moonbeam: x -0.3 to 0.3, z 2.11 to 2.55, depth 4.65, travel 0.02 -0.88 -1, floor 0, strength 0.7, wall 0.45, layer over (the moonlight)
+
+## view: cell_grate_in (shot 3: close-up of the grate and the Patriot, from inside; chat 8)
+# The same cell plan. The lens stands where Danny's eyes are once he is up on the cot (plan x 0, depth 3.5, 2.1 m up:
+# the cot top 0.45 + his eyes 1.63), 0.7 m short of the back wall, looking level at the window: the reveal fills the
+# frame, the outer opening and its bars about 780 px across, the Patriot's head just outside the bars (depth 4.75),
+# his face through the mesh. Nothing of the room but the wall round the window.
+camera: up 2.1, horizon 1150, lens 1500, at 0 3.5, facing 0
+people: patriot 4.75
+plan room: x -1.2 to 1.2, z 0 to 2.9, depth 0.6 to 4.2, back cell, left cell dark, right cell dark * 0.95, floor cell floor, ceiling cell / 255 255 255 0.2, courses back right left, course colour cell dark, bricks 14, brick colour cell dark, seed 51, layer back (the cell)
+grated window: x -0.3 to 0.3, z 2.05 to 2.55, depth 4.2, deep 0.45, layer back (the window)
+night: layer over (the night)
+moonbeam: x -0.3 to 0.3, z 2.11 to 2.55, depth 4.65, travel 0.02 -0.88 -1, floor 0, strength 0.7, wall 0.45, layer over (the moonlight)
+
+## view: cell_grate_out (shot 5: close-up on the grate, looking through at Danny, from outside; chat 8)
+# The same plan from the yard side: the lens where the Patriot's eyes are (plan x 0, depth 5.6, 2.3 m up: 0.95 m out
+# from the wall's outer face at 4.65), turned to face the cell (facing 180: plan x runs the other way on screen).
+# Outside, the moon is behind the lens: the wall and bars face it, so the night here is moonlit (lighter); the cell
+# beyond the opening is dark, Danny's face in the light that comes through. He stands on the cot (top 0.45 m) at
+# depth 4.0, his face at the opening.
+camera: up 2.3, horizon 1060, lens 1500, at 0 5.6, facing 180
+people: danny 4.0
+outer wall: x -3 to 3, z 0 to 4.2, depth 4.65, layer back (the wing's outside wall)
+grated window: x -0.3 to 0.3, z 2.05 to 2.55, depth 4.2, deep 0.45, inside 60 56 52, layer back (the window)
+night: colour 140 156 205, layer over (moonlit night outside)
+
+## view: cell_behind (shot 6: from behind Danny's head, the Patriot swaying behind the grate; chat 8)
+# The same plan. The lens stands 0.8 m behind Danny's head and a little to his left as we look (plan x 0.25, depth
+# 3.2, 2.15 m up: his eye level up on the cot), turned 10 degrees back towards the window: the back of his head fills
+# the left of the frame, the window and the Patriot beyond it the middle, so neither hides the other.
+camera: up 2.2, horizon 1000, lens 1500, at 0.35 2.75, facing -11
+people: danny 4.0, patriot 4.75
+plan room: x -1.2 to 1.2, z 0 to 2.9, depth 0.6 to 4.2, back cell, left cell dark, right cell dark * 0.95, floor cell floor, ceiling cell / 255 255 255 0.2, courses back right left, course colour cell dark, bricks 14, brick colour cell dark, seed 51, layer back (the cell)
+grated window: x -0.3 to 0.3, z 2.05 to 2.55, depth 4.2, deep 0.45, layer back (the window)
+night: layer over (the night)
+moonbeam: x -0.3 to 0.3, z 2.11 to 2.55, depth 4.65, travel 0.02 -0.88 -1, floor 0, strength 0.7, wall 0.45, layer over (the moonlight)

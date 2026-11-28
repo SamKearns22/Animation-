@@ -448,6 +448,7 @@ def paint_with(img, desc, view, cam, t, actors, layers=('back', 'mid'), feed=Non
             it(img)
     for p in rest:
         p.args['feed'] = feed
+        p.args['through'] = beyond                    # chat 8: a window on its own layer still shows who is beyond
         with cover.piece(img, p):
             p.draw(img, cam, t)
 

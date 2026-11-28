@@ -1,3 +1,3 @@
-patriots5 (The Patriot 5): sets chat 7: Danny's band fixed; turned cameras built (any angle on one plan); shot 2's side view in progress.
-Done: band fix + test; officer 2 photo search (asked Sam); turned camera, true-depth room and box pieces + test.
-Next: chat 8 (Opus high): fix the side view's three faults, then the other cell views, the gatehouse, the film file, the shot board.
+patriots5 (The Patriot 5): sets chat 8: cast judge passed Danny; shot 2's side view fixed; shots 3, 5, 6 drafted (6 needs work).
+Done: side view (new angle, no edge gap, window and moonlight right); window close-ups from inside and outside; outside wall kind; 2 new tests.
+Next: chat 9 (Opus high): the cot test difference, shot 6's body from behind, shot 4's wall and tower, the gatehouse, the film file, the shot board.
