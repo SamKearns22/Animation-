@@ -153,6 +153,7 @@ class Tower:
         js = []
         for i, sp in enumerate(self.men):
             j = V.standing(sp)
+            j.update({k: (list(v) if isinstance(v, list) else v) for k, v in sp.get('_dress', {}).items()})
             j['hand'] = {}
             j['lean'] = LEAN
             if i == 0:

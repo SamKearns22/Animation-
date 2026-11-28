@@ -66,6 +66,12 @@ def _rot(p, a):
     return (p[0] * c - p[1] * s, p[0] * s + p[1] * c)
 
 
+def _dress(sp):
+    """The pose extras a film's man brings with him (sp['_dress']: body_props, head_props, props, kit), copied so a
+    pose never shares a list with another drawing."""
+    return {k: (list(v) if isinstance(v, list) else v) for k, v in sp.get('_dress', {}).items()}
+
+
 class Boat:
     def __init__(self, men, s, ground_y, x0, speed=None):
         """men: 8 person descriptions (near row first 4, far row last 4). s: scale for a 1.78 m man (as views.person).
@@ -123,6 +129,7 @@ class Boat:
             hw = self.W(cx, cy, ang, self.u[i], self.vh[i])
             fr = ST.Frame(k, (0.0, V.HIP_Y), hw, ang)
             j = dict(g)
+            j.update(_dress(self.men[i]))                  # a film's own clothes and kit on the man (sp['_dress'])
             ft = {}
             for sd, sg in (('L', -1), ('R', 1)):
                 fx, fy, fz = g['foot' + sd]

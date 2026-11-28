@@ -695,7 +695,7 @@ def _leg(p, j, side, yaw, sp, from_u=0.0):
         w = 26
         q = [(c0[0] + nx * w, c0[1] + ny * w), (c1[0] + nx * w, c1[1] + ny * w), (c1[0] - nx * w, c1[1] - ny * w),
              (c0[0] - nx * w, c0[1] - ny * w)]
-        p.poly(q, B.dk(COMBAT, 0.86), INK, 2.0)
+        p.poly(q, B.dk(tuple(sp.get('trousers') or COMBAT), 0.86), INK, 2.0)   # the pocket in its own trousers' cloth
         f = (c0[0] + ux * 16, c0[1] + uy * 16)
         p.line([(f[0] + nx * w, f[1] + ny * w), (f[0] - nx * w, f[1] - ny * w)], INK, 1.6)
 

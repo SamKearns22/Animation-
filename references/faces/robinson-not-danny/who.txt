@@ -1,0 +1,8 @@
+name: Danny Tommo / Daniel Thomas
+# The plan chat's photos (27 Nov), found by searching the Mirror for "Tommo": they show Tommy Robinson, not Danny
+# Tommo (Sam, 28 Nov). Kept as whophotos' saved example of its own fault; never used for Danny.
+m01-front-mirror.jpg: Tommy Robinson (Mirror topic page)
+m02-front-mirror.jpg: Tommy Robinson (Mirror topic page)
+m03-close-mirror.jpg: Tommy Robinson (Mirror topic page)
+m04-threequarter-mirror.jpg: Tommy Robinson (Mirror topic page)
+m05-smiling-mirror.jpg: Tommy Robinson (Mirror topic page)

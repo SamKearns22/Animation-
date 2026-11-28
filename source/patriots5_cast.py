@@ -61,31 +61,36 @@ def patriot(mood='rest'):
 # head under the balaclava (only eyes and brows show, so each man's eyes, brows and the skin round them differ), the
 # Patriot's jacket cut in each man's own dark shade, varied heights and builds, so eight read as eight at phone size.
 CREW = [   # name, height, build (figure, shoulders), jacket, sleeve, trousers, eyes, brows, skin round the eyes, eye size
-    dict(name='Nick', height=1.86, figure=None, shoulders=158, jacket=(40, 54, 92), sleeve=(40, 54, 92),
-         trousers=(40, 44, 50), iris=(70, 110, 150), brow=(150, 110, 70), skin=(244, 206, 186), eye=1.15),
-    dict(name='Gaz', height=1.70, figure='stout', shoulders=176, jacket=(74, 80, 50), sleeve=(74, 80, 50),
-         trousers=P3.COMBAT, iris=(70, 50, 36), brow=(40, 30, 26), skin=(236, 190, 160), eye=1.05),
-    dict(name='Kev', height=1.80, figure=None, shoulders=150, jacket=(24, 24, 28), sleeve=(120, 122, 128),
-         trousers=(28, 30, 36), iris=(90, 120, 90), brow=(196, 160, 110), skin=(250, 214, 198), eye=1.3),
-    dict(name='Wayne', height=1.66, figure=None, shoulders=146, jacket=(96, 98, 104), sleeve=(96, 98, 104),
-         trousers=(54, 56, 46), iris=(60, 44, 34), brow=(60, 44, 34), skin=(226, 178, 148), eye=1.0),
-    dict(name='Dean', height=1.92, figure='stout', shoulders=184, jacket=(34, 66, 48), sleeve=(34, 66, 48),
-         trousers=P3.COMBAT, iris=(80, 100, 130), brow=(120, 84, 56), skin=(240, 196, 176), eye=1.1),
-    dict(name='Lee', height=1.75, figure=None, shoulders=162, jacket=(92, 60, 40), sleeve=(92, 60, 40),
-         trousers=(36, 36, 40), iris=(56, 40, 30), brow=(30, 24, 22), skin=(214, 166, 134), eye=1.2),
-    dict(name='Darren', height=1.73, figure='stout', shoulders=170, jacket=(92, 30, 36), sleeve=(92, 30, 36),
-         trousers=(30, 32, 38), iris=(110, 130, 150), brow=(176, 120, 84), skin=(248, 210, 192), eye=0.95),
+    # Sam, 28 Nov: "Give them all the black outfit used in the protests" (references/patriots5/dover: black hoodies and
+    # jackets, black joggers, black trainers, faces covered): every man in near-black, each a slightly different black
+    # so they still read as eight; all white British men (Sam, 28 Nov), so the skin round the eyes stays fair.
+    dict(name='Nick', height=1.86, figure=None, shoulders=158, jacket=(30, 31, 36), sleeve=(30, 31, 36),
+         trousers=(24, 24, 28), iris=(70, 110, 150), brow=(150, 110, 70), skin=(244, 206, 186), eye=1.15),
+    dict(name='Gaz', height=1.70, figure='stout', shoulders=176, jacket=(22, 22, 24), sleeve=(22, 22, 24),
+         trousers=(30, 30, 34), iris=(70, 50, 36), brow=(40, 30, 26), skin=(236, 190, 160), eye=1.05),
+    dict(name='Kev', height=1.80, figure=None, shoulders=150, jacket=(26, 26, 30), sleeve=(40, 40, 46),
+         trousers=(22, 22, 26), iris=(90, 120, 90), brow=(196, 160, 110), skin=(250, 214, 198), eye=1.3),
+    dict(name='Wayne', height=1.66, figure=None, shoulders=146, jacket=(36, 36, 40), sleeve=(36, 36, 40),
+         trousers=(26, 26, 30), iris=(60, 44, 34), brow=(60, 44, 34), skin=(238, 196, 172), eye=1.0),
+    dict(name='Dean', height=1.92, figure='stout', shoulders=184, jacket=(18, 18, 20), sleeve=(18, 18, 20),
+         trousers=(32, 32, 36), iris=(80, 100, 130), brow=(120, 84, 56), skin=(240, 196, 176), eye=1.1),
+    dict(name='Lee', height=1.75, figure=None, shoulders=162, jacket=(32, 30, 32), sleeve=(32, 30, 32),
+         trousers=(20, 20, 24), iris=(56, 40, 30), brow=(30, 24, 22), skin=(242, 202, 180), eye=1.2),
+    dict(name='Darren', height=1.73, figure='stout', shoulders=170, jacket=(28, 28, 34), sleeve=(28, 28, 34),
+         trousers=(24, 24, 28), iris=(110, 130, 150), brow=(176, 120, 84), skin=(248, 210, 192), eye=0.95),
 ]
+HOOD = (34, 34, 38)          # their hoods black too (the protest photos: black hoods up over the face coverings)
 # Brief row 17 (Sam's words, the news photos): the disguise each wears in shot 8. At least two in niqabs; white caps
-# on some; the red-and-white blanket on some; prayer beads in one hand; orange life jackets on all; hoods, puffers.
+# on some; prayer beads in one hand; orange life jackets on all. Sam, 28 Nov: "remove the scarf. Keep life jacket"
+# (the red-and-white blanket round the shoulders is gone from everyone).
 DISGUISE = {'Patriot': dict(kufi=True, beads='R'),
-            'Nick': dict(niqab=True, blanket=True),
-            'Gaz': dict(kufi=True, puffer=True, hood=True),
+            'Nick': dict(niqab=True),
+            'Gaz': dict(kufi=True, puffer=True, hood=HOOD),
             'Kev': dict(niqab=True, puffer=True),
-            'Wayne': dict(kufi=True, blanket=True, beads='R'),
-            'Dean': dict(hood=True, puffer=True),
-            'Lee': dict(kufi=True, beads='L', blanket=True),
-            'Darren': dict(hood=True, puffer=True)}   # (his red jacket would swallow the red blanket)
+            'Wayne': dict(kufi=True, beads='R', hood=HOOD),
+            'Dean': dict(hood=HOOD, puffer=True),
+            'Lee': dict(kufi=True, beads='L'),
+            'Darren': dict(hood=HOOD, puffer=True)}
 
 
 def _jacket_in(col):
@@ -100,7 +105,7 @@ def _jacket_in(col):
     return draw
 
 
-def crew(i, disguised=False):
+def crew(i, disguised=False, kit=None):
     """Crew man i (0-6: CREW) as (sp, j); disguised: brief row 17's kit over his outfit (DISGUISE)."""
     import views as V
     c = CREW[i]
@@ -120,7 +125,7 @@ def crew(i, disguised=False):
     j['_dressed'] = True
     if disguised:
         import disguise
-        sp, j = disguise.dress(sp, j, DISGUISE[c['name']])
+        sp, j = disguise.dress(sp, j, kit if kit is not None else DISGUISE[c['name']])
     return sp, j
 
 
@@ -137,10 +142,10 @@ def grey_man():
     return sp, j
 
 
-def patriot_disguised(mood='rest'):
+def patriot_disguised(mood='rest', kit=None):
     import disguise
     sp, j = patriot(mood)
-    return disguise.dress(sp, j, DISGUISE['Patriot'])
+    return disguise.dress(sp, j, kit if kit is not None else DISGUISE['Patriot'])
 
 
 _READY = []
@@ -272,19 +277,60 @@ def _crop(tile, bg):
     return tile.crop((xs.min() - 6, ys.min() - 6, xs.max() + 7, ys.max() + 7))
 
 
+def _carry(sp, j):
+    """The man as the boat and the tower take him: his clothes and kit ride in sp['_dress'] (they rebuild his pose)."""
+    sp = dict(sp)
+    sp['_dress'] = {k: j[k] for k in ('body_props', 'head_props', 'props', '_dressed') if k in j}
+    return sp
+
+
+def boat_men():
+    """Shot 8's eight in the boat (Sam, 28 Nov: "Include The Patriot in the boat, at the front"), disguised: the near
+    row first (left to right), the far row after. The far row stands half a place ahead, so its last place is the
+    very front of the boat (the boat walks left to right): the Patriot's, with Wayne (the shortest) in front of him in
+    the near row so his head and badges show. The tall men stand in the far row, their heads over the near row."""
+    order = ['Darren', 'Gaz', 'Lee', 'Wayne', 'Kev', 'Nick', 'Dean', 'Patriot']
+
+    def kit(name, near):
+        # beads only in a hand we see: the near row's near (right) hand on the tube; a far hand is inside the boat,
+        # and beads drawn there would show through the tube (seen 28 Nov, Lee's beads over the near tube)
+        k = dict(DISGUISE[name])
+        k.pop('beads', None)
+        if near and DISGUISE[name].get('beads'):
+            k['beads'] = 'R'
+        return k
+    men = {}
+    for n in order:
+        near = order.index(n) < 4
+        if n == 'Patriot':
+            men[n] = _carry(*patriot_disguised(kit=kit(n, near)))
+        else:
+            men[n] = _carry(*crew([c['name'] for c in CREW].index(n), True, kit=kit(n, near)))
+    return [men[n] for n in order]
+
+
+def tower_men():
+    """Shot 4's tower (brief row 7: all eight), plain: the heaviest at the base, Nick under the Patriot ("Nick's
+    head is up my arse"), the Patriot on top at the window."""
+    sp, j = patriot()
+    men = {c['name']: _carry(*crew(i, False)) for i, c in enumerate(CREW)}
+    men['Patriot'] = _carry(sp, j)
+    order = ['Dean', 'Gaz', 'Darren', 'Lee', 'Kev', 'Wayne', 'Nick', 'Patriot']
+    return [men[n] for n in order]
+
+
 def boat_panel():
-    """The orange walking boat (source/walking_boat.py, its practice crew as stand-ins) beside the Patriot, for size."""
+    """The orange walking boat (source/walking_boat.py) with shot 8's crew in it, disguised, the Patriot at the bow
+    (Sam, 28 Nov: "Include The Patriot in the boat, at the front, not outside it")."""
     import walking_boat as WB
+    install()
     B = WB.B
-    bt = WB.practice_boat(x0=420.0)
+    bt = WB.Boat(boat_men(), WB.S, WB.GROUND_Y, 540.0)
     ss, B.SS = B.SS, 2
     img = B.canvas(WB.NIGHT)
     cam = B.Cam(1.0, 540, 960)
     WB.scene(img, cam, bt.X(0.0), bt)
     bt.draw(img, cam, 0.0)
-    sp, j = patriot()
-    B.SS = 2
-    draw(img, cam, 940, WB.GROUND_Y - 928 * WB.S, WB.S, sp, j, 0)
     B.SS = ss
     return img.resize((1080, 1920), Image.LANCZOS).crop((0, 700, 1080, 1450)).convert('RGBA')
 

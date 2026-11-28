@@ -1037,6 +1037,18 @@ def walking_boat_joins():
 
 
 @test
+def real_person_photos_named():
+    """A real person's photos are OF that person (whophotos, Patriot 5, 28 Nov; Sam: "You appear to have built Tommy
+    Robinson, not Danny Tommo. Different people."): the saved wrong folder (Tommy Robinson's photos filed for Danny
+    Tommo) is refused photo by photo; Danny's BBC photos, captioned with his name, pass."""
+    import whophotos
+    root = os.path.join(os.path.dirname(HERE), 'references', 'faces')
+    wrong = whophotos.faults(os.path.join(root, 'robinson-not-danny'))
+    right = whophotos.faults(os.path.join(root, 'tommo'))
+    return len(wrong) == 5 and not right, f'wrong man refused {len(wrong)}/5, right man faults {right}'
+
+
+@test
 def disguise_worn_over():
     """The small-boat disguise (Patriot 5 cast chat 4, 28 Nov; source/disguise.py): (1) the arm stays in front of the
     life jacket: with the shoulder join's KEEP_OVER the side view shows less orange through the upper arm than without

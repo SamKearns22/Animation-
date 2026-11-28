@@ -833,6 +833,12 @@ def _others(name, fronts, most=14):
 
 
 def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=print, rounds=ROUNDS):
+    folder = os.path.dirname(os.path.abspath(_split(fronts[0])[0]))
+    if not os.path.isdir(os.path.join(folder, 'pick')):          # a new person (whophotos, Patriot 5, 28 Nov)
+        import whophotos
+        bad = whophotos.faults(folder)
+        if bad:
+            raise SystemExit('facepick: whose face is this? ' + '; '.join(bad))
     os.makedirs(out_dir, exist_ok=True)
     says = says or {}
     F = [_split(a) for a in fronts]
