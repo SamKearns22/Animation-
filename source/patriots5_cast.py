@@ -445,10 +445,42 @@ def cast_sheets(out_dir):
     return out1, out2
 
 
+def disguise_sheet(out):
+    """Each piece alone on a grey test person (rule 89; people in tests are grey), five turns."""
+    from PIL import Image, ImageDraw
+    import disguise as D
+    import sys as _s
+    P5 = _s.modules[__name__]
+    P5.install()
+    B = D.B
+    B.SS = 1
+    rows = [('life jacket', dict(life=True)), ('puffer + hood + life jacket', dict(puffer=True, hood=True)),
+            ('blanket + beads', dict(life=False, blanket=True, beads='R')), ('niqab', dict(life=False, niqab=True)),
+            ('kufi', dict(life=False, kufi=True))]
+    T = 300
+    img = Image.new('RGB', (5 * T + 220, len(rows) * (T + 30) + 20), (232, 228, 222))
+    d = ImageDraw.Draw(img)
+    for r, (name, kit) in enumerate(rows):
+        d.text((10, 20 + r * (T + 30) + T // 2), name, fill=(0, 0, 0))
+        for k, yaw in enumerate((0, 45, 90, 135, 180)):
+            sp, j = P5.grey_man()
+            sp, j = D.dress(sp, j, kit)
+            tile = Image.new('RGBA', (1080, 2600), (232, 228, 222, 255))
+            P5.draw(tile, B.Cam(1.0, 540, 960), 540, 1500, 0.62, sp, j, yaw)
+            t = tile.crop((290, 1250, 790, 2110)).convert('RGB')
+            t.thumbnail((T, T))
+            img.paste(t, (220 + k * T, 20 + r * (T + 30)))
+    img.save(out, quality=88)
+    return out
+
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 2 and sys.argv[1] == 'cast':
         print(cast_sheets(sys.argv[2]))
     elif len(sys.argv) > 2 and sys.argv[1] == 'sheet':
         print(sheet(sys.argv[2]))
+    elif len(sys.argv) > 2 and sys.argv[1] == 'disguise':
+        print(disguise_sheet(sys.argv[2]))
     else:
         print(__doc__)

@@ -12,7 +12,8 @@
   beads(side) ....... prop: prayer beads (a loop of small beads and a tassel, no cross) hanging from one fist
   The head pieces live with the balaclava (facehouse_d): `niqab` (black face veil), `kufi` (white knitted prayer cap).
   dress(sp, j, kit) . puts a kit dict on a person (keys: life, puffer, hood, blanket, beads, niqab, kufi)
-  python3 source/disguise.py sheet OUT.jpg   each piece alone on a grey test person, five turns (rule 89)
+  The test sheet (each piece on a grey person, five turns) lives with the film that first used it:
+  python3 source/patriots5_cast.py disguise OUT.jpg (freeze rule: a kit file never loads a film's file).
 No writing anywhere (Sam). The joke targets the fascists, never Muslims or migrants (Sam).
 """
 import math
@@ -257,34 +258,5 @@ def dress(sp, j, kit):
     return sp, j
 
 
-def sheet(out):
-    """Each piece alone on a grey test person (rule 89; people in tests are grey), five turns."""
-    from PIL import Image, ImageDraw
-    import patriots5_cast as P5
-    P5.install()
-    B.SS = 1
-    rows = [('life jacket', dict(life=True)), ('puffer + hood + life jacket', dict(puffer=True, hood=True)),
-            ('blanket + beads', dict(life=False, blanket=True, beads='R')), ('niqab', dict(life=False, niqab=True)),
-            ('kufi', dict(life=False, kufi=True))]
-    T = 300
-    img = Image.new('RGB', (5 * T + 220, len(rows) * (T + 30) + 20), (232, 228, 222))
-    d = ImageDraw.Draw(img)
-    for r, (name, kit) in enumerate(rows):
-        d.text((10, 20 + r * (T + 30) + T // 2), name, fill=(0, 0, 0))
-        for k, yaw in enumerate((0, 45, 90, 135, 180)):
-            sp, j = P5.grey_man()
-            sp, j = dress(sp, j, kit)
-            tile = Image.new('RGBA', (1080, 2600), (232, 228, 222, 255))
-            P5.draw(tile, B.Cam(1.0, 540, 960), 540, 1500, 0.62, sp, j, yaw)
-            t = tile.crop((290, 1250, 790, 2110)).convert('RGB')
-            t.thumbnail((T, T))
-            img.paste(t, (220 + k * T, 20 + r * (T + 30)))
-    img.save(out, quality=88)
-    return out
-
-
 if __name__ == '__main__':
-    if len(sys.argv) > 2 and sys.argv[1] == 'sheet':
-        print(sheet(sys.argv[2]))
-    else:
-        print(__doc__)
+    print(__doc__)
