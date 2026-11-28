@@ -20,11 +20,10 @@ eyes: 46 32 24 | lips: 120 72 62 | brows: 30 26 24, width 4.6
 outfit: jumper 244 244 246, shirt 244 244 246, tie 20 20 24, trousers 24 24 28, shoes 16 14 14
 extras: officer
 
-# guard2: Prison officer (Blessed's)
-body: 1.68 m, woman, shoulders 150, head 70 x 90, hem 500
-skin: 236 196 170 | hair: bob, 170 120 70
-face: face_wide -0.04, jaw_wide -0.06, eye_size +0.012, mouth_wide -0.05, chin_long -0.01
-eyes: 84 110 80 | lips: 196 120 116 | brows: 150 106 64, width 4.6
-lashes
+# guard2: Prison officer 2 (Sam, 28 Nov: "make another man": Blessed's officer kit, a different man)
+body: 1.74 m, man, shoulders 158, head 70 x 90, hem 500
+skin: 236 196 170 | hair: crop, 176 132 84
+face: face_wide -0.03, jaw_wide -0.02, nose_wide -0.05, mouth_wide -0.04, brow_high +0.05
+eyes: 84 110 80 | lips: 200 124 112 | brows: 150 106 64, width 4.6
 outfit: jumper 244 244 246, shirt 244 244 246, tie 20 20 24, trousers 24 24 28, shoes 16 14 14
 extras: officer

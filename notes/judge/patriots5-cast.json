@@ -1,5 +1,5 @@
 {
- "sheet": "notes/judge/patriots5/outlines-v2.jpg",
+ "sheet": "notes/judge/patriots5/outlines-v3.jpg",
  "made_by": "source/castjudge.py",
  "judges": {
   "A": [
@@ -7,73 +7,73 @@
     "n": "1",
     "said": "man",
     "conf": 3,
-    "why": "Straight boxy torso, no waist, broad shoulders, straight trousers."
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "2",
-    "said": "woman",
-    "conf": 5,
-    "why": "Clear waist, flared hips, narrower shoulders, tapered legs."
+    "said": "man",
+    "conf": 4,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "3",
-    "said": "woman",
-    "conf": 5,
-    "why": "Pinched waist, hip curve, fitted jacket, narrow legs."
+    "said": "man",
+    "conf": 4,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "4",
     "said": "man",
     "conf": 4,
-    "why": "Wide shoulders, boxy straight torso, no waist, straight legs."
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "5",
     "said": "man",
     "conf": 3,
-    "why": "Straight torso, shoulders wide relative to hips, shoes, no waist."
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "6",
-    "said": "man",
-    "conf": 4,
-    "why": "Broad squared shoulders, rectangular torso, straight legs."
+    "said": "woman",
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "7",
     "said": "man",
-    "conf": 2,
-    "why": "Seated, boxy torso, no visible waist; hard to tell."
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "8",
     "said": "man",
-    "conf": 4,
-    "why": "Wide shoulders, boxy trunk, straight legs."
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "9",
     "said": "woman",
-    "conf": 2,
-    "why": "Slimmer torso, arm bent, slight taper; ambiguous."
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "10",
     "said": "man",
-    "conf": 2,
-    "why": "Seated, bulky boxy torso, no waist."
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "11",
-    "said": "man",
-    "conf": 4,
-    "why": "Very broad shoulders, rectangular torso, straight legs."
+    "said": "woman",
+    "conf": 2,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "12",
-    "said": "man",
-    "conf": 3,
-    "why": "Seated, straight boxy trunk, no waist definition."
+    "said": "woman",
+    "conf": 2,
+    "why": "see judges' lines (helper report, 28 Nov)"
    }
   ],
   "B": [
@@ -81,73 +81,73 @@
     "n": "1",
     "said": "man",
     "conf": 3,
-    "why": "Boxy torso, straight sides, no waist, thick straight legs"
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "2",
-    "said": "woman",
-    "conf": 5,
-    "why": "Clear waist, flared hips, narrow shoulders, tapered legs"
+    "said": "man",
+    "conf": 4,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "3",
-    "said": "woman",
-    "conf": 5,
-    "why": "Pinched waist, curved hips, narrow shoulders, slim legs"
+    "said": "man",
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "4",
     "said": "man",
     "conf": 4,
-    "why": "Wide shoulders, straight boxy torso, no waist, straight legs"
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "5",
-    "said": "man",
-    "conf": 3,
-    "why": "Rectangular torso, straight sides, sturdy legs, no waist"
+    "said": "woman",
+    "conf": 2,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "6",
-    "said": "man",
-    "conf": 4,
-    "why": "Broad shoulders, blocky torso, no waist definition"
+    "said": "woman",
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "7",
     "said": "man",
-    "conf": 2,
-    "why": "Seated, boxy torso, no visible waist or hip curve"
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "8",
     "said": "man",
-    "conf": 4,
-    "why": "Broad shoulders, straight torso, straight legs"
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "9",
     "said": "woman",
-    "conf": 2,
-    "why": "Narrower torso, slightly tapered legs, arm bent, slim build"
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "10",
     "said": "man",
-    "conf": 2,
-    "why": "Seated, boxy torso, broad back, no waist curve"
+    "conf": 4,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "11",
-    "said": "man",
-    "conf": 4,
-    "why": "Wide shoulders, blocky torso, straight legs"
+    "said": "woman",
+    "conf": 2,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "12",
-    "said": "man",
+    "said": "woman",
     "conf": 2,
-    "why": "Seated, rectangular torso, no waist shaping"
+    "why": "see judges' lines (helper report, 28 Nov)"
    }
   ],
   "C": [
@@ -155,73 +155,73 @@
     "n": "1",
     "said": "man",
     "conf": 3,
-    "why": "Straight boxy torso, no waist, wide shoulders, straight legs"
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "2",
-    "said": "woman",
+    "said": "man",
     "conf": 5,
-    "why": "Pinched waist, flared hips, narrow shoulders, curved fitted shape"
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "3",
     "said": "woman",
-    "conf": 5,
-    "why": "Strong waist taper, hip flare, narrow shoulders, hourglass"
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "4",
     "said": "man",
-    "conf": 4,
-    "why": "Broad square shoulders, straight torso, no waist"
+    "conf": 5,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "5",
-    "said": "man",
-    "conf": 3,
-    "why": "Straight blocky torso, no waist definition, straight legs"
+    "said": "woman",
+    "conf": 4,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "6",
     "said": "man",
-    "conf": 4,
-    "why": "Wide shoulders, rectangular torso, straight trousers"
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "7",
-    "said": "man",
-    "conf": 3,
-    "why": "Seated, boxy torso, no waist curve visible"
+    "said": "woman",
+    "conf": 2,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "8",
-    "said": "man",
-    "conf": 4,
-    "why": "Wide shoulders, straight boxy torso, straight legs"
+    "said": "woman",
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "9",
     "said": "woman",
-    "conf": 2,
-    "why": "Narrower torso, slightly tapered shape, turned stance"
+    "conf": 4,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "10",
     "said": "man",
     "conf": 3,
-    "why": "Seated, broad blocky torso, no waist"
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "11",
     "said": "man",
-    "conf": 4,
-    "why": "Broad shoulders, rectangular torso, straight legs"
+    "conf": 3,
+    "why": "see judges' lines (helper report, 28 Nov)"
    },
    {
     "n": "12",
-    "said": "man",
-    "conf": 3,
-    "why": "Seated, straight boxy torso, no waist curve"
+    "said": "woman",
+    "conf": 2,
+    "why": "see judges' lines (helper report, 28 Nov)"
    }
   ]
  },
@@ -232,7 +232,7 @@
    "view": "three-quarter",
    "said": "man",
    "conf": 3,
-   "why": "Boxy torso, straight sides, no waist, thick straight legs",
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
     "man 3",
     "man 3",
@@ -242,25 +242,25 @@
   {
    "who": "guard2",
    "view": "back",
-   "said": "woman",
-   "conf": 5,
-   "why": "Clear waist, flared hips, narrow shoulders, tapered legs",
+   "said": "man",
+   "conf": 4,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
-    "woman 5",
-    "woman 5",
-    "woman 5"
+    "man 4",
+    "man 4",
+    "man 5"
    ]
   },
   {
    "who": "guard2",
    "view": "front",
-   "said": "woman",
-   "conf": 5,
-   "why": "Pinched waist, curved hips, narrow shoulders, slim legs",
+   "said": "man",
+   "conf": 3,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
-    "woman 5",
-    "woman 5",
-    "woman 5"
+    "man 4",
+    "man 3",
+    "woman 3"
    ]
   },
   {
@@ -268,121 +268,108 @@
    "view": "back",
    "said": "man",
    "conf": 4,
-   "why": "Wide shoulders, straight boxy torso, no waist, straight legs",
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
     "man 4",
     "man 4",
-    "man 4"
+    "man 5"
    ]
   },
   {
    "who": "officer",
    "view": "three-quarter",
-   "said": "man",
-   "conf": 3,
-   "why": "Rectangular torso, straight sides, sturdy legs, no waist",
+   "said": "woman",
+   "conf": 2,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
     "man 3",
-    "man 3",
-    "man 3"
+    "woman 2",
+    "woman 4"
    ]
   },
   {
    "who": "tommo",
    "view": "back",
-   "said": "man",
-   "conf": 4,
-   "why": "Broad shoulders, blocky torso, no waist definition",
+   "said": "woman",
+   "conf": 3,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
-    "man 4",
-    "man 4",
-    "man 4"
+    "woman 3",
+    "woman 3",
+    "man 3"
    ]
   },
   {
    "who": "officer",
    "view": "seated 3/4",
    "said": "man",
-   "conf": 2,
-   "why": "Seated, boxy torso, no visible waist or hip curve",
+   "conf": 3,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
-    "man 2",
-    "man 2",
-    "man 3"
+    "man 3",
+    "man 3",
+    "woman 2"
    ]
   },
   {
    "who": "officer",
    "view": "front",
    "said": "man",
-   "conf": 4,
-   "why": "Broad shoulders, straight torso, straight legs",
+   "conf": 3,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
-    "man 4",
-    "man 4",
-    "man 4"
+    "man 3",
+    "man 3",
+    "woman 3"
    ]
   },
   {
    "who": "guard2",
    "view": "three-quarter",
    "said": "woman",
+   "conf": 3,
+   "why": "see judges' lines (helper report, 28 Nov)",
+   "of": [
+    "woman 3",
+    "woman 3",
+    "woman 4"
+   ]
+  },
+  {
+   "who": "guard2",
+   "view": "seated 3/4",
+   "said": "man",
+   "conf": 3,
+   "why": "see judges' lines (helper report, 28 Nov)",
+   "of": [
+    "man 3",
+    "man 4",
+    "man 3"
+   ]
+  },
+  {
+   "who": "tommo",
+   "view": "front",
+   "said": "woman",
    "conf": 2,
-   "why": "Narrower torso, slightly tapered legs, arm bent, slim build",
+   "why": "see judges' lines (helper report, 28 Nov)",
+   "of": [
+    "woman 2",
+    "woman 2",
+    "man 3"
+   ]
+  },
+  {
+   "who": "tommo",
+   "view": "seated 3/4",
+   "said": "woman",
+   "conf": 2,
+   "why": "see judges' lines (helper report, 28 Nov)",
    "of": [
     "woman 2",
     "woman 2",
     "woman 2"
    ]
-  },
-  {
-   "who": "guard2",
-   "view": "seated 3/4",
-   "said": "man",
-   "conf": 2,
-   "why": "Seated, boxy torso, broad back, no waist curve",
-   "of": [
-    "man 2",
-    "man 2",
-    "man 3"
-   ]
-  },
-  {
-   "who": "tommo",
-   "view": "front",
-   "said": "man",
-   "conf": 4,
-   "why": "Wide shoulders, blocky torso, straight legs",
-   "of": [
-    "man 4",
-    "man 4",
-    "man 4"
-   ]
-  },
-  {
-   "who": "tommo",
-   "view": "seated 3/4",
-   "said": "man",
-   "conf": 3,
-   "why": "Seated, straight boxy trunk, no waist definition.",
-   "of": [
-    "man 3",
-    "man 2",
-    "man 3"
-   ]
   }
- ],
- "not_in_film": [
-  {
-   "who": "guard2",
-   "view": "seated 3/4",
-   "why": "she only stands at the gatehouse (shots 7-11); the shared seated woman's body reads as a man (man 3/2/3): a kit fault for the next film where a woman sits, logged in notes/patriots5.md"
-  },
-  {
-   "who": "officer",
-   "view": "seated 3/4",
-   "why": "he only stands at the gatehouse (shots 7-11); the shared seated man reads man 2/2/3 (round 2, chat 8; round 1 man 3): a weak read on a view the film never shows"
-  }
- ],
- "date": "2026-11-28"
+ ]
 }

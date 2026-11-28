@@ -23,3 +23,18 @@
 
 ## Archived by sets chat 9 (28 Nov): note 10, approved
 | 10 | sets | cell | "You can use the prison gate but we will need a different cell due to the scene layout/mood of the opening moment" | new | - | - | APPROVED: Sam, 28 Nov, "Y" to the cell picture. Shot 1 view built (chat 6), sent: notes/patriots5-sets/cell-front-v1.jpg (story/patriots5-places.txt view cell_front; new shared kinds cot along wall, grated window, night, moonbeam + moon_on rim light and cast shadow in places_rooms.py; sitting pose 'downcast' on Seat('cot')); other views to do. (the ask: note's own words) |
+
+
+## Decisions made (moved from the film notes, 28 Nov, chat 10)
+Decisions made (kept so a long session or a new session never has to rediscover them):
+- Sam's words to the plan chat, 27 Nov, carried: "Ask permission for big uk news sites and I'll grant it" (reference photos: ask him first; the Mirror photos were used); "It is a joke that targets them, not the Muslims" (row 17, the disguise); the tower "has been used in animation plenty" (row 7); the Hook Text: "Leave that blank until I provide it"; "Make the Allahu Akbar stumbling yet sincere. Like he's trying to play a role he's not used to, all of a sudden" (row 19, acting list).
+- Sam, 27 Nov 22:14-22:27, answered by the plan chat: "Why are you doing these tests?" (the start-of-film kit tests); "two chats running the same checks": "Stop the one that started second" (done); "Are you 'the planning chat'" (yes); "You can run the tests in the background, no reason to stop"; "schedule all work in this Patriots 5 project to pick back up at 01:51" (done: cast chat 4 picked up at 01:54).
+- The Patriot's face under the knit is made by hand (no photos: he is fictional), the average face pushed thick-set; only his eyes and brows show, in the house look (as May and Kemi). (redesign chat 1)
+- One film name, patriots5 (the redesign chat's); the plan chat's patriots-5 files folded in, 27 Nov.
+- The template's held estimates note is already settled: Sam said Y to option 1 on 17 Nov (notes/archive/milburn-handovers.md); not asked again.
+- Branches named at the start, not merged (logs, an archive note and old Grand Theft Autism files only, nothing for this film): claude/jolly-ramanujan-2lcl2o, claude/upbeat-dirac-w16tn9, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+- Plan chat's start-of-film kit run (27 Nov): 4 red, all Open Wounds tests none of this film's chats touched (early_move_size, head_moves_not_comic, movers_never_meet_head_on, side_by_side_out_of_reach): left for the Open Wounds lessons; named here.
+- Photos of the real man Danny Tommo stands for: Sam (27 Nov): "Ask permission for big uk news sites and I'll grant it"; the network was already fully open (nothing to grant). Guardian, Sky, Reuters, AP and the Telegraph refuse automated visits themselves; the Mirror's topic page gave 5 press photos, filed in references/faces/tommo (2 front, 2 three-quarter, 1 smiling). Face tool run: A 73%, B 78%, C 72%, all first in the line-up; my look: the hair piece reads as a boxy block with the sides too long (his are faded short) and the stubble should be ginger-brown. Sent to Sam to pick.
+- The small boat "see patriots 2" = Patriots 2's grey inflatable (source/patriots2.py, shot_dinghy).
+- 
+
