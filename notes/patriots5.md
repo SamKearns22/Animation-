@@ -15,7 +15,7 @@ The joke (Sam): The Patriot and his crew of balaclava'd PP men try to break Tomm
 - **Needs Sam:** officer 2's photo (numbered question sent 28 Nov); notes on the new Danny; tower clip v2 and boat practice notes; the Hook Text (blank until he gives it).
 - **Read:** guides/job-packs.md, Build (Sets lines); guides/fix-pack.md (for the three faults); brief rows 1-22; notes 10-13; "The world" (the cell plan; the door wall at depth 0.6).
 - **Open rule requests:** none. Branches named, not merged (old, unrelated): claude/lucid-archimedes-z91suc, claude/jolly-ramanujan-2lcl2o, claude/upbeat-dirac-w16tn9, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31. Handover STOP still open: guard2's build (note 12, waiting on Sam).
-- **For Claude:** places.Piece: turned, cam_at, cam_xd, cam_d, poly3 (near-plane cut), sees(x,z,d,normal); kinds plan=True; places_rooms 'plan room' (walls by plan side, courses, bricks), 'solid'; _box(..., pc) picks faces; notes/patriots5-sets/view_still.py VIEW OUT [YAW] draws any cell view with Danny.
+- **For Claude:** places.Piece turned/cam_xd/poly3/sees; kinds plan=True; places_rooms 'plan room', 'solid', _box(..., pc); notes/patriots5-sets/view_still.py VIEW OUT [YAW].
 ## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
 its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees
 break; eyelines and holds per shot; every sound effect (what, when, needed by); bleeped words (said, or a gap left?)
