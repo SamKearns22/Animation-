@@ -652,13 +652,16 @@
 - 470: `in_shot_faults` 
 - 489: `run` 
 
-## costline.py (55 lines)
-- 14: DIR (data)
-- 15: ROOT (data)
-- 17: MARK (data)
-- 19: `line` 'film so far X% of a week'.
-- 26: `record` Record the line (ledger + notes), quietly. Returns None (nothing is ever shown).
-- 44: `faults` For handover.py end: the line is recorded here, so the only fault is a film that cannot record it.
+## costline.py (100 lines)
+- 24: DIR (data)
+- 25: ROOT (data)
+- 27: MARK (data)
+- 29: `line` 'film so far X% of a week'.
+- 36: `record` Record the line (ledger + notes), quietly. Returns None (nothing is ever shown).
+- 54: SHOW_FILE (data)
+- 57: `shown` Films Sam asked to see the cost line for after every chat (one name a line in notes/cost-line-to-sam.txt).
+- 66: `for_sam` The plain line for Sam: the film's cost so far against the plan, the last chat's cost, where most of it went.
+- 81: `faults` For handover.py end: the line is recorded here; for a film Sam asked to see (Sam's Y, 28 Nov), the line to put
 
 ## cover.py (583 lines)
 - 32: HERE (data)
@@ -956,13 +959,13 @@
 - 1198: KEPT (data)
 - 1208: `_fit` 
 
-## facehouse_d.py (182 lines)
+## facehouse_d.py (184 lines)
 - 20: `_talk_level` How far his jaw is open behind the knit (0 shut .. 1 wide), from the mouth shape the film gives him.
 - 29: `_slot_uv` The eye opening in face units: a soft-cornered band from above the brows to under the eyes, out past the
 - 46: `_knit` outer, slot: polygons in pen units (slot may be None); ribs(pen) draws the ribs; mouth: a polygon of the jaw
 - 104: `_mouth_uv` The jaw working under the knit: a soft dark hollow over the mouth, taller as it opens.
 - 111: `balaclava_front` 
-- 134: `balaclava_turned` 
+- 136: `balaclava_turned` 
 
 ## facepick.py (1053 lines)
 - 58: HERE (data)
@@ -4201,17 +4204,21 @@
 - 610: `_span` The outline's left and right edges at height y (None above or below it).
 - 619: `class WrapPen` A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
 
-## views_d.py (580 lines)
-- 16: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.
-- 25: `_beard_col` 
-- 31: `_sits` Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in fron
-- 39: TURNED_HEADS (data)
-- 40: NOT_MINE (data)
-- 43: `head_view` The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head.
-- 54: `plain_head_view` The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
-- 254: TAP (data)
-- 257: `person` Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
-- 274: `_person` 
+## views_d.py (654 lines)
+- 19: `_hair` (top colour, clipped-side colour, kind, length below the ear), from the person's front design.
+- 28: `_beard_col` 
+- 34: `_sits` Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in fron
+- 42: TURNED_HEADS (data)
+- 43: NOT_MINE (data)
+- 46: `head_view` The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head.
+- 57: `plain_head_view` The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
+- 257: TAP (data)
+- 260: `person` Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
+- 283: BENT_NECK (data)
+- 287: `class _Px` A pen frame for points already on the canvas.
+- 299: `_bent_neck` 
+- 311: `bent_neck_fault` The check for Sam's 27 Nov note ("the neck is separated from the head"): one person side-on with the head tipp
+- 345: `_person` 
 
 ## voices.py (709 lines)
 - 97: `syllables_in` A rough count of spoken syllables (vowel groups per word, silent final e, numbers as words).
