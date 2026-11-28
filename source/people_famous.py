@@ -522,6 +522,26 @@ def zip_top(img, p, sp, t):
     p.poly([(-5, 30), (5, 30), (5, 50), (-5, 50)], (180, 180, 184), INK, 1.2)
 
 
+def _rib_hem(p, sp):
+    """A tracksuit top's ribbed waistband: a darker band across the hem with a few ribs (Patriots 5, Danny)."""
+    top, b = sp['jacket'], sp.get('bottom', 505)
+    sw = sp.get('shoulders', 150) * 0.98
+    p.poly([(-sw, b - 26), (sw, b - 26), (sw, b), (-sw, b)], dk(top, 0.82), INK, 2.0)
+    for k in range(-6, 7):
+        p.line([(k * sw / 7, b - 22), (k * sw / 7, b - 3)], dk(top, 0.7), 1.2)
+
+
+def tracksuit_top(img, p, sp, t):
+    """A tracksuit top (Patriots 5, Danny's prison greys): the zip top with a ribbed waistband at the hem."""
+    zip_top(img, p, sp, t)
+    _rib_hem(p, sp)
+
+
+def tracksuit_back(img, p, sp, t):
+    zip_back(img, p, sp, t)
+    _rib_hem(p, sp)
+
+
 def scarf_back(img, p, sp, t):
     """The scarf from behind (face tool chat 15): round the back of the neck, its two ends gone over the shoulders."""
     p.poly(curve([(-50, -8), (0, -12), (50, -8), (54, 18), (0, 14), (-54, 18)], 3), SCARF, INK, 2.2)

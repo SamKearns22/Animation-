@@ -59,6 +59,8 @@ def _lit(c):
 LENS = {}                                                   # {'side': 'L'}: that arm reaches towards the camera
 DRAW, NEXT = [0], [0]   # which person is being drawn (views.person counts up): an arm joins only the body drawn with it
 NOJOIN = [0]            # > 0: an arm drawn whole (round top, full outline), joining no body (views: over long hair)
+KEEP_OVER = set()       # colours of things worn OVER the clothes (disguise.life_jacket's orange): the shoulder join
+#                         never hides the arm over them (Patriots 5: the jacket showed through the upper arm)
 HEAD = [0]              # > 0 while views draws a head: its long hair is never the body an arm fades into (Sam, 16 Nov,
 #                         Protest Tiers A25: a raised arm's sleeve top melted into a woman's long hair with a soft blur)
 
@@ -337,6 +339,12 @@ def install(B):
                         - np.asarray(bm.filter(ImageFilter.MinFilter(k))))[pad:pad + H, pad:pad + W]
                 inside = np.asarray(bm)[pad:pad + H, pad:pad + W] / 255.0
                 a = np.asarray(lay.getchannel('A')).astype(float)
+                if KEEP_OVER:                                 # over a worn-over piece the arm stays whole (in front)
+                    under = np.asarray(p.img.crop((bx0, by0, bx0 + W, by0 + H)).convert('RGB')).astype(int)
+                    over = np.zeros((H, W), bool)
+                    for c in KEEP_OVER:
+                        over |= np.abs(under - np.array(c)).sum(2) < 60
+                    zone = np.where(over, 0.0, zone)
                 lay.putalpha(Image.fromarray(np.clip(a * (1 - zone * inside), 0, 255).astype(np.uint8)))
                 fill_m = Image.new('L', (W, H), 0)                 # the arm's own fill (without its outline)
                 fm = ImageDraw.Draw(fill_m)

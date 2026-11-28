@@ -391,6 +391,10 @@ def _head(img, p, sp, t, hx, hy):
         glasses(p, FF.lens, L, kh['glasses'])
     if kh.get('balaclava'):                               # Patriots 5: the knit over it all but the eyes
         balaclava_front(img, p, f, L, kh, sp)
+        if kh.get('niqab'):                               # (the disguise, brief row 17: a veil, a prayer cap)
+            niqab_front(img, p, f, L, kh, sp)
+        if kh.get('kufi'):
+            kufi_front(img, p, f, L, kh, sp)
     return fx
 
 
@@ -616,16 +620,19 @@ def _swept_measured(L, kh, hc):
     crown = hd['crown']
     lift = kh.get('quiff', 0.02)                         # the photos hold his quiff already: a touch more only
     grey = kh.get('grey') or blend(hc, (150, 146, 142), 0.35)
-    c = _sil(L, hl)
-    cb = min(hl + 0.1, 0.0)                               # the dark cap's foot at the side; the grey below
+    c = _sil(L, hl) - kh.get('cap_in', 0.0)
+    cb = min(hl + kh.get('cap_foot', 0.1), 0.0)           # the dark cap's foot at the side; the grey below (Patriots 5:
+    #                                                     Danny's faded sides: 'cap_foot 0.04' stops the top higher)
     low = min(max(hd['side_low'], cb + 0.12), 0.34)
     k = (hl - crown) / 0.42                              # the hair's own depth against the house cap's
     vs = [v for v in np.arange(round(cb, 2), crown + 0.04, -0.03)]
     up = lambda u: lift * 0.8 * max(0.0, min(1.0, (u + 0.1 * c) / (0.7 * c))) * (1 - max(0.0, u / c - 0.75) * 2)  # noqa: E731
-    rt = [(_sil(L, v) + 0.006, v) for v in vs]
+    ci = kh.get('cap_in', 0.0)                            # Patriots 5 (Danny): a faded crop's top hugs the skull,
+    sw = lambda v: _sil(L, v) + 0.006 - ci * max(0.0, min(1.0, (v - crown) / max(1e-6, cb - crown)))  # noqa: E731
+    rt = [(sw(v), v) for v in vs]                         # narrower towards its foot (not the photo's box)
     top_mid = [(c * x, crown + 0.02 * x * x - up(c * x)) for x in (0.55, 0.3, 0.0, -0.3, -0.55)]
     rt = [(u, v - (up(u) if v < hl else 0.0)) for u, v in rt]
-    lt = [(-(_sil(L, v) + 0.006), v) for v in vs]       # our left, from its foot up
+    lt = [(-sw(v), v) for v in vs]                      # our left, from its foot up
     top = lt + sorted(top_mid, key=lambda q: q[0]) + rt[::-1]   # over the crown, down to our right foot
     h = lambda u: float(np.interp(abs(u), sorted(hm), [hm[x] for x in sorted(hm)]))   # noqa: E731
     fe = _face_u(L, cb)
@@ -642,7 +649,8 @@ def _swept_measured(L, kh, hc):
         pts = outer + [(_face_u(L, low) - 0.02, low + 0.02)] + inner
         sides.append([(-sgn * u, v) for u, v in pts])
     roof = sorted([q for q in top if q[1] < hl], key=lambda q: q[0])
-    return dict(c=c, hl=hl, lift=lift, grey=grey, sides=sides, cap=cap, k=k, crown=crown, roof=roof)
+    return dict(c=c, hl=hl, lift=lift, grey=grey, sides=sides, cap=cap, k=k, crown=crown, roof=roof,
+                flecks=kh.get('flecks', True))           # (Danny: no grey flecks, he is not greying)
 
 
 class _Squeeze:
@@ -678,7 +686,7 @@ def _swept_strokes(p, f, hc, sh, lk):
                           3), light if k % 2 else dk(hc, 0.6), 1.6)
     p.poly(curve(f.pts([(-c * 0.05, hl - 0.04), (c * 0.05, -0.3), (c * 0.3, -0.42 - lift * 0.6), (c * 0.18, -0.3),
                         (c * 0.08, hl - 0.04)]), 3), blend(hc, light, 0.5), None)   # the light on the quiff
-    if lk['flecks']:                                     # grey flecks through the dark (his salt in the pepper)
+    if lk['flecks'] and sh.get('flecks', True):          # grey flecks through the dark (his salt in the pepper)
         rng = np.random.default_rng(17)
         for _ in range(26):
             u, v = rng.uniform(-c * 0.85, c * 0.85), rng.uniform(-0.4, hl - 0.05)
