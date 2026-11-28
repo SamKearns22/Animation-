@@ -20,10 +20,17 @@ MOOD = sys.argv[4] if len(sys.argv) > 4 else 'rest'
 def who_at(who):
     """(sp, pose, plan x, depth, facing on the plan (0: towards shot 1's lens), neck height m)."""
     if who == 'patriot':
-        sp, j = PC.patriot(MOOD)
-        return sp, j, 0.07, 4.75, 0.0, 2.06
+        import os                        # chat 9: T (seconds) gives him the tower's sway and, with TALK=1, his
+        if 'T' not in os.environ:        # talking hands (shot 6, brief rows 11-12)
+            sp, j = PC.patriot(MOOD)
+            return sp, j, 0.07, 4.75, 0.0, 2.06
+        t = float(os.environ['T'])
+        sp, j = PC.patriot_talk(t) if os.environ.get('TALK') else PC.patriot(MOOD)
+        toward, side = PC.top_sway(t)
+        return sp, j, 0.07 + side, PC.window_depth(t), 0.0, 2.06
     sp = dict(CAST['tommo'])
-    return sp, PC.danny_sill(sp), -0.02, 4.0, 180.0, 2.0
+    import os                            # DANNY_X: where along the cot he stands (plan x, m)
+    return sp, PC.danny_sill(sp), float(os.environ.get('DANNY_X', '-0.02')), 4.0, 180.0, 2.0
 L = PL.LevelCam.of(D, VIEW)
 pcs = {p.it['kind']: p for p in PL.pieces(D, VIEW)}
 win = pcs['grated window']
@@ -38,6 +45,14 @@ for w in (['patriot', 'danny'] if WHO == 'both' else [WHO]):
     yaw = (D['views'][VIEW]['camera'].get('facing', 0.0) - pf) % 360   # 0: facing us
     s = L.ppm(cd) * sp['height'] * 0.84 / 928.0
     X, neck_y = L.p(cx, cd, nz)
+    if w == 'danny':                     # chat 9: his palms land ON the inner sill as the set draws it (contact by
+        want = {}                          # screen: the hand's centre half a hand above the sill, 0.1 m onto it)
+        for sd, sg in (('L', -1), ('R', 1)):
+            hx_ = px - sg * 0.17           # facing the window (plan facing 180) his left hand is at plan +x
+            sx_, sy_ = L.p(*win.cam_xd(hx_, win.d0 + 0.1), win.z0)
+            want[sd] = (sx_, sy_ - 0.6 * 26 * s)
+        j, miss = V.hands_onto(cam, X, neck_y, s, dict(sp, full=True, pose='custom'), yaw, j, want)
+        print('hands on the sill, miss (px):', {k: None if v is None else round(v, 1) for k, v in miss.items()})
     fn = (lambda X, neck_y, s, sp, yaw, j: lambda im: V.person(im, cam, X, neck_y, s, dict(sp, full=True,
                                                                   pose='custom'), 0.0, yaw, j))(X, neck_y, s, sp, yaw, j)
     beyond = win.cam_d(px, pd) > win.cam_d(0.0, win.d0 + win.args['deep'] / 2)   # the far side of the wall

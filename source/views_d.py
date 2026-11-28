@@ -228,11 +228,14 @@ def plain_head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
                          (hx + hw, hy - 10), (hx + hw * 0.92, hy + hh * 0.42), (hx + hw * 0.66, hy + hh * 0.72), (hx, hy + hh * 0.8),
                          (hx - hw * 0.66, hy + hh * 0.72), (hx - hw * 0.92, hy + hh * 0.42)], 4)
         p.poly(outline, skin, INK, 2.6)
-        nw, ny = 32.0, hy + hh * 0.55               # the same neck the body draws
-        nf = min(hy + 132, sp.get('neck_to', hy + 132))  # lying_flat: stop at the collar (Job I, a nearer head)
-        p.poly([(hx - nw, ny), (hx + nw, ny), (hx + nw, nf), (hx - nw, nf)], skin, None)
+        ny = hy + hh * 0.55                         # the same neck the body draws (chat 9: views.back_neck, thick
+        nf = min(hy + 132, sp.get('neck_to', hy + 132))  # and flaring); lying_flat: stop at the collar (Job I)
+        nw = sp.get('neck_w', 1.0)
+        ys = [ny + (nf - ny) * k / 8 for k in range(9)]
+        bw = lambda y: back_neck(y - hy - 150.0, nw)    # body y (the head's centre sits 150 over the neck's base)
+        p.poly([(hx - bw(y), y) for y in ys] + [(hx + bw(y), y) for y in ys[::-1]], skin, None)
         for sg in (-1, 1):
-            p.line([(hx + sg * nw, hy + hh * 0.66), (hx + sg * nw, nf)], INK, 2.6)
+            p.line([(hx + sg * bw(y), y) for y in ys if y >= hy + hh * 0.66] + [(hx + sg * bw(nf), nf)], INK, 2.6)
         if bt > 0:                                  # the near ear, come round towards us
             p.poly(oval(hx + hw * (1 - 0.42 * bt), hy + 6, 12, 22), skin, INK, 2.4)
         if kind == 'bald':

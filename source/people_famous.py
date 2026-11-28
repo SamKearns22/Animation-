@@ -564,8 +564,11 @@ def scarf_back(img, p, sp, t):
 
 
 def zip_back(img, p, sp, t):
-    """The tracksuit top from behind (chat 15): its collar round the neck, as the front's."""
-    p.poly([(-42, -6), (42, -6), (46, 26), (-46, 26)], sp['jacket'], INK, 2.2)
+    """The tracksuit top from behind (chat 15): its collar round the neck, as the front's (Patriots 5 chat 9: as wide
+    as the neck's flare there, views.back_neck, so it wraps the neck instead of the neck spilling past it)."""
+    nw = sp.get('neck_w', 1.0)
+    w0, w1 = max(42, PP.V.back_neck(-6, nw) + 6), max(46, PP.V.back_neck(10, nw) + 10)
+    p.poly([(-w0, -6), (w0, -6), (w1, 26), (-w1, 26)], sp['jacket'], INK, 2.2)
 
 
 # ---------------------------------------------------------------------------------------------- install

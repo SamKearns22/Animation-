@@ -19,6 +19,7 @@ thick-set (references/faces/patriot/pick, made by hand).
   danny_sill(sp) .... his palms on the window's inner sill (shots 5, 6: the bars are out of reach in the plan)
   tables: LINES, MOODS, CREW, DISGUISE, COT, SAD
 """
+import math
 import os
 import sys
 
@@ -140,6 +141,71 @@ def grey_man():
     sp.pop('figure', None)
     j = V.standing(sp)
     j['_dressed'] = True
+    return sp, j
+
+
+# The tower's sway as the window sees it (chat 9; brief rows 8 and 11): the Patriot is the top of the tower, so at the
+# window he moves exactly as shot 4's top man does (shoulder_tower.sway: the column pivots about the base's feet, each
+# tier a little later and further). Tier heights from the lesson: base shoulders 1.45 m, 0.6 m a tier. Side-on in
+# shot 4 that sway is towards and away from the wall, so from inside he nears and leaves the bars; a small sideways
+# wobble too (a real stack wobbles both ways; side-on at 6 m it is too small to see, so the shots agree).
+NEAR_PAST_BARS = 0.1         # his neck at the sway's near end (m past the bars): chat 8's place, his face at the bars
+#                              (between two of them); the sway only ever carries him back from there, never through
+WOBBLE = (0.03, 3.1)         # the sideways wobble at the top: metres either way, seconds a cycle
+
+
+def top_sway(t, n=8):
+    """The top man's movement at time t (m): (towards the wall +, sideways +)."""
+    import shoulder_tower as ST
+    toward = 1.45 * math.sin(ST.sway(0, t)) + sum(0.6 * math.sin(ST.sway(i, t)) for i in range(1, n))
+    return toward, WOBBLE[0] * math.sin(2 * math.pi * t / WOBBLE[1] + 0.8)
+
+
+def window_depth(t, bars=4.65):
+    """The Patriot's plan depth at the window at time t: the near end of the sway puts his neck NEAR_PAST_BARS past
+    the bars (his face at them); every other moment is further back by the sway."""
+    near = max(top_sway(k / 50.0)[0] for k in range(200))
+    return bars + NEAR_PAST_BARS + (near - top_sway(t)[0])
+
+
+# Brief row 12 (shot 6, "He is exaggerating with his hands"): talking hands up in the window's opening, beside his face
+# (his body is below the sill, out of sight), behind the bars (never past them: z under 60, the bars 0.15 m out). Each
+# gesture is held, then moved to the next over GESTURE_MOVE s, eased; the beats are laid on Sam's recorded line later.
+GESTURES = {   # (left hand, right hand) targets, torso frame (x across, y down from the neck, z forward); shape
+    # chat 9: over and beside his face (pale hands read on the black balaclava), inside the opening's sides and above
+    # its sill (both hands always in view), never past his own face (z under 55: at the sway's near end his face is
+    # at the bars, so the hands stay behind them)
+    'open':  (((-90, -115, 52), 'palm'), ((90, -115, 52), 'palm')),       # "we've got a plan": palms out, wide
+    'point': (((-95, -100, 45), 'palm'), ((30, -125, 55), 'point')),      # "boss": a finger at Danny
+    'chop':  (((-95, -100, 45), 'palm'), ((75, -215, 50), 'palm')),       # "infiltration": a hand up, chopping down
+    'wide':  (((-115, -185, 48), 'palm'), ((115, -185, 48), 'palm')),     # "completely invisible": spread by his eyes
+    'hush':  (((-95, -100, 45), 'palm'), ((10, -130, 55), 'point')),      # "British authorities": finger to the mask
+}
+GESTURE_ORDER = ['open', 'point', 'chop', 'wide', 'hush']
+GESTURE_HOLD, GESTURE_MOVE = 0.9, 0.3
+
+
+def gesture_at(t, order=None):
+    """(name before, name after, 0..1 eased) at time t through the gesture list."""
+    order = order or GESTURE_ORDER
+    step = GESTURE_HOLD + GESTURE_MOVE
+    k = int(t // step)
+    u = max(0.0, (t - k * step - GESTURE_HOLD) / GESTURE_MOVE)
+    a, b = order[k % len(order)], order[(k + 1) % len(order)]
+    return a, b, u * u * (3 - 2 * u)
+
+
+def patriot_talk(t, mood='talking', order=None):
+    """The Patriot at the window, talking with his hands at time t (shot 6; the same in 3 and 5 if they need it)."""
+    import views as V
+    sp, j = patriot(mood)
+    a, b, u = gesture_at(t, order)
+    for k, sd in enumerate(('L', 'R')):
+        (pa, sa), (pb, sb) = GESTURES[a][k], GESTURES[b][k]
+        tgt = tuple(pa[i] + (pb[i] - pa[i]) * u for i in range(3))
+        shape = sa if u < 0.5 else sb
+        # elbows out: hands inside his shoulders' width (the rig's check: an elbow never folds across the chest)
+        V.arm_to(j, sd, tgt, 'out', shape)
     return sp, j
 
 

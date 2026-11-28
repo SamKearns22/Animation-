@@ -465,16 +465,19 @@ def clipped(img, p, mask, draw):
     img.alpha_composite(layer)
 
 
-def neck_over(p, f, view, skin, v_top=0.7, lw=2.6):
+def neck_over(p, f, view, skin, v_top=0.7, lw=2.6, nw=1.0):
     """From behind, the neck is nearer than the jaw: its top drawn again over the head's lower half (up to the nape),
     so only the near cheek shows beside it."""
-    n0, n1 = NECK.get(view, (-32, 32))
+    import views as V
     y0, y1 = f.top + v_top * H, f.top + (f.v1 + 0.04) * H     # down past the head's lowest row
     hx = f.hx
-    out = lambda x, y: hx + x + (1 if x > 0 else -1) * 4 * (y + 80) / 90    # the body's neck widens 4 a 90 down
-    p.poly([(out(n0, y0), y0), (out(n1, y0), y0), (out(n1, y1), y1), (out(n0, y1), y1)], skin, None)
-    for x in (n0, n1):
-        p.line([(out(x, y0), y0), (out(x, y1), y1)], INK, lw)
+    # chat 9: the body's own neck from behind (views.back_neck: thick, flaring into the shoulders), the same edge
+    ys = [y0 + (y1 - y0) * k / 8 for k in range(9)]
+    left = [(hx - V.back_neck(y, nw), y) for y in ys]
+    right = [(hx + V.back_neck(y, nw), y) for y in ys]
+    p.poly(left + right[::-1], skin, None)
+    for edge in (left, right):
+        p.line(edge, INK, lw)
 
 
 def dense(uv, step=0.01):
@@ -588,7 +591,7 @@ def draw(img, p, sp, t, view, hx, hy):
         inside(img, p, head, lambda pen: P.face(pen, f, L, sp))
     outline(p, f, view, skin, fill=False)
     if view in ('three_back', 'back') and not sp.get('nape_in_head'):   # lying (lying_flat): its own neck bends up
-        neck_over(p, f, view, sp.get('neck_c', skin))                   # from the collar; drawn again over a tipped head it was a
+        neck_over(p, f, view, sp.get('neck_c', skin), nw=sp.get('neck_w', 1.0))                 # from the collar; drawn again over a tipped head it was a
         #                                               square block, a blindfold with his hair band (Sam, 11 Nov, 18)
     if P.over:
         P.over(img, p, f, L, sp, view)

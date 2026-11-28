@@ -378,17 +378,24 @@ def torso_view(img, p, sp, view, seated=False):
     else:
         k, off = (0.9, -0.22 * sw) if view == 'three_back' else (1.0, 0.0)
         nx, ny = (sp.get('head_dx', 0.0), sp.get('head_dy', 0.0)) if sp.get('neck_lean') else (0.0, 0.0)
+        nw = sp.get('neck_w', 1.0)                    # a bigger head on a thicker neck (Blessed note 23: Brand's
         if not sp.get('neck_off'):
-            nw = sp.get('neck_w', 1.0)                # a bigger head on a thicker neck (Blessed note 23: Brand's
-            p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (36 * nw, 10), (-36 * nw, 10)], sp.get('neck_c', skin), INK, 2.6)
+            ys = [-80 + 10 * k for k in range(10)]    # chat 9: flaring into the shoulders (views.back_neck)
+            ys.append(10)
+            off = [((10 - y) / 90 * nx, y + (10 - y) / 90 * ny) for y in ys]          # a leaning neck: its top moves
+            left = [(o - back_neck(y, nw), yy) for (o, yy), y in zip(off, ys)]
+            right = [(o + back_neck(y, nw), yy) for (o, yy), y in zip(off, ys)]
+            p.poly(left + right[::-1], sp.get('neck_c', skin), INK, 2.6)
             if sp.get('neck_shade'):                  # the jaw's shadow on it: the neck sits under the head
-                p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (30 * nw, -40 + ny), (0, -28 + ny),
-                        (-30 * nw, -40 + ny)], B.dk(sp.get('neck_c', skin), 0.82), None)
+                b0, b1 = back_neck(-80, nw), back_neck(-40, nw) - 2
+                p.poly([(-b0 + nx, -80 + ny), (b0 + nx, -80 + ny), (b1, -40 + ny), (0, -28 + ny),
+                        (-b1, -40 + ny)], B.dk(sp.get('neck_c', skin), 0.82), None)
         body = torso_outline(sp, view, bottom, B.ink_units(p))
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             if not sp.get('collar_off'):              # lying_flat draws it round the neck's foot instead (Job I, 18)
-                p.poly([(-40, -12), (40, -12), (44, 8), (-44, 8)], sc, INK, 2.0)        # the collar round the neck
+                cw0, cw1 = back_neck(-12, nw) + 6, back_neck(8, nw) + 6                  # the collar round the neck
+                p.poly([(-cw0, -12), (cw0, -12), (cw1, 8), (-cw1, 8)], sc, INK, 2.0)     # (chat 9: round its flare)
             if not sp.get('collar_off'):
                 p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
             p.line([(off, 26), (off, bottom - 110)], jd, 2.2)
