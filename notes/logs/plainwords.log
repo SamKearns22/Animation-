@@ -34,3 +34,4 @@
 {"chat": "345bd082", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-27 21:39"}
 {"chat": "38fe1c77", "event": "block", "faults": [["word", "handover"], ["word", "rig"], ["word", "guard"], ["word", "ledger"], ["word", "finder"]], "t": "2026-11-27 21:44"}
 {"chat": "22904d63", "event": "block", "faults": [["word", "guard"], ["word", "main line"]], "t": "2026-11-27 22:05"}
+{"chat": "345bd082", "event": "block", "faults": [["word", "cast sheet"]], "t": "2026-11-28 01:53"}
