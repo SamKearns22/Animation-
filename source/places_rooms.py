@@ -608,6 +608,11 @@ def cot_along_wall(p, img, cam, a, t):
     bx0, bx1 = (x0 + (x1 - x0) * u, x1) if pe == 'left' else (x0, x1 - (x1 - x0) * u)
     bz = z1 + 0.035
     top = [P(bx0, bz, d0 - 0.01), P(bx1 + 0.01, bz, d0 - 0.01), P(bx1 + 0.01, bz, d1 - 0.02), P(bx0, bz, d1 - 0.02)]
+    if pc.turned:                                      # chat 8: the folded edge's thickness, where the lens sees it
+        for ex, sg in ((bx0, -1), (bx1 + 0.01, 1)):    # (seen side-on, the top alone floated like a loose sheet)
+            if pc.sees(ex, bz, (d0 + d1) / 2, sg, 0, 0):
+                p.poly([P(ex, z1, d0 - 0.01), P(ex, bz, d0 - 0.01), P(ex, bz, d1 - 0.02), P(ex, z1, d1 - 0.02)],
+                       dk(a['blanket'], 0.7), INK, 1.6)
     p.poly(top, a['blanket'], INK, 2.0)
     hang = [P(bx0, bz, d0 - 0.01), P(bx1 + 0.01, bz, d0 - 0.01), P(bx1 + 0.01, zr - 0.06, d0 - 0.015),
             P((bx0 + bx1) / 2, zr - 0.09, d0 - 0.015), P(bx0, zr - 0.05, d0 - 0.015)]
@@ -625,8 +630,8 @@ def grated_window(p, img, cam, a, t):
     """(A turned camera, chat 7: drawn on its own layer, cut to the opening's room face, so the sky and bars seen at
     an angle never paint over the wall beside it; nothing when the lens is behind the wall.)"""
     pc = a['piece']
-    if not pc.turned:
-        return _grated_window(p, img, cam, a, t)
+    # chat 8: every camera, turned or not, cuts to the opening (the square-on branch drew the reveal's lower edge
+    # below the opening, through the wall: a wedge under shot 1's window; the turned test caught the difference)
     if not pc.sees(pc.x0, pc.z0, pc.d0, 0, 0, -1):
         return
     import body as B
@@ -701,7 +706,9 @@ def _grated_window(p, img, cam, a, t):
         p.poly([P(x0, z0, d), P(x0, z1, d), P(x0, z1, D), P(x0, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
     if see(x1, z0, d, (-1, 0, 0)):
         p.poly([P(x1, z0, d), P(x1, z1, d), P(x1, z1, D), P(x1, z0 + 0.06, D)], dk(rv, 0.86), INK, 2.0)
-    if see(x0, z0, d, (0, 1, 0)):
+    # the sloping sill (rising 0.06 m to the outer face): seen only from above its slope, any camera (chat 8: drawn
+    # always, a lens below it got a sliver under the opening, a sill seen from beneath; the turned test caught it)
+    if pc.sees(x0, z0, d, 0, a['deep'], -0.06):
         p.poly([P(x0, z0, d), P(x1, z0, d), P(x1, z0 + 0.06, D), P(x0, z0 + 0.06, D)], a['sill'], INK, 2.0)
 
 
@@ -715,9 +722,9 @@ def night(p, img, cam, a, t):
 
 
 @kind('moonbeam', params={'travel': 'nums', 'floor': 'n', 'strength': 'n', 'haze': 'n', 'bars': 'n', 'blur': 'n',
-                          'pool': 'n', 'lit': 'n'},
+                          'pool': 'n', 'lit': 'n', 'wall': 'n'},
       defaults={'travel': (0.0, -0.5, -1.0), 'floor': 0.0, 'strength': 0.55, 'haze': 0.16, 'bars': 3, 'blur': 0.03,
-                'pool': 1.0, 'lit': 0.0}, overall=True, plan=True)
+                'pool': 1.0, 'lit': 0.0, 'wall': 0.0}, overall=True, plan=True)
 def moonbeam(p, img, cam, a, t):
     """One shaft of moonlight through a window (x, z: the window's opening, depth: its outer face), in true depth:
     the light travels `travel` (x, depth, z per metre) until it meets the level `floor` (m: the cot's top, the floor).
@@ -739,7 +746,10 @@ def moonbeam(p, img, cam, a, t):
     W, H = img.size
     shaft = Image.new('L', (W, H), 0)
     dr = ImageDraw.Draw(shaft)
-    pts = [scr(x, z, d) for x, z in win] + [scr(*q) for q in near]
+    # chat 8: the haze starts at the wall's room face (`wall` m in from the outer face): seen from the side, a shaft
+    # from the outer face rose out of the solid wall beside the window; where it lands is unchanged (the same plan)
+    ds = d - a['wall']
+    pts = [scr(x, z, ds) for x, z in win] + [scr(*q) for q in near]
     from scipy.spatial import ConvexHull
     hull = ConvexHull(np.array(pts))
     dr.polygon([tuple(pts[i]) for i in hull.vertices], fill=255)
@@ -836,10 +846,10 @@ def moon_on(layer, piece, cam, t=0.0, lit=0.3, rim=0.95, rim_px=12):
 # set's removed wall) is not drawn, as a film set leaves it out.
 @kind('plan room', params={'back': 'c', 'front': 'c', 'left': 'c', 'right': 'c', 'floor': 'c', 'ceiling': 'c',
                            'line': 'n', 'courses': 's', 'first': 'n', 'every': 'n', 'course colour': 'c',
-                           'bricks': 'n', 'brick': 'nums', 'brick colour': 'c'},
+                           'bricks': 'n', 'brick': 'nums', 'brick colour': 'c', 'beyond': 'n'},
       defaults={'back': None, 'front': None, 'left': None, 'right': None, 'floor': None, 'ceiling': None, 'line': 2.4,
                 'courses': '', 'first': 0.128, 'every': 0.2816, 'course colour': (198, 186, 160), 'bricks': 0,
-                'brick': (0.128, 0.0704), 'brick colour': (226, 216, 190)}, plan=True)
+                'brick': (0.128, 0.0704), 'brick colour': (226, 216, 190), 'beyond': 1.0}, plan=True)
 def plan_room(p, img, cam, a, t):
     """A box room seen from inside, in the plan's metres (x: its left and right walls, z: floor to ceiling, depth: its
     front and back walls). Each surface with a colour is drawn where the lens is inside it; `courses` names the walls
@@ -848,6 +858,14 @@ def plan_room(p, img, cam, a, t):
     import random
     pc = a['piece']
     x0, x1, z0, z1, d0, d1 = pc.x0, pc.x1, pc.z0, pc.z1, pc.d0, pc.d1
+    # Patriots 5 chat 8 (the pale strip down shot 2's left edge): past a removed wall the lens saw empty canvas
+    # beside the back wall's end. The building goes on: the floor, the ceiling and the walls that meet a removed
+    # wall run `beyond` metres past it (the next cell's floor, the wing's outer wall), so no frame edge shows a gap.
+    cx_, cd_, _ = pc.cam_at
+    gone = {n for n, out in (('left', cx_ < x0), ('right', cx_ > x1), ('front', cd_ < d0), ('back', cd_ > d1)) if out}
+    b = a['beyond']
+    x0, x1 = x0 - b * ('left' in gone), x1 + b * ('right' in gone)
+    d0, d1 = d0 - b * ('front' in gone), d1 + b * ('back' in gone)
     walls = {'floor': ([(x0, z0, d0), (x1, z0, d0), (x1, z0, d1), (x0, z0, d1)], (0, 1, 0)),
              'ceiling': ([(x0, z1, d0), (x1, z1, d0), (x1, z1, d1), (x0, z1, d1)], (0, -1, 0)),
              'back': ([(x0, z0, d1), (x1, z0, d1), (x1, z1, d1), (x0, z1, d1)], (0, 0, -1)),
@@ -867,7 +885,7 @@ def plan_room(p, img, cam, a, t):
     for name in ('floor', 'ceiling', 'left', 'right', 'front', 'back'):
         col = a[name]
         pts, n = walls[name]
-        if col is None or not pc.sees(*pts[0], *n):
+        if col is None or name in gone or not pc.sees(*pts[0], *n):
             continue
         q = pc.poly3(pts)
         if q:
